@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dust.Platform.Storage", "Du
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dust.Platform.Service", "Dust.Platform.Service\Dust.Platform.Service.csproj", "{60A30693-EE66-44CA-851A-A176A73F3250}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtocolService", "..\WDYunPlatform\ProtocolService\ProtocolService.csproj", "{CFFD96FF-629E-4E23-903D-80B0082B591A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NatioanalEnvirmentEncoder", "NatioanalEnvirmentEncoder\NatioanalEnvirmentEncoder.csproj", "{69245F64-BE93-4760-AF56-14AAA89CACF1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{60A30693-EE66-44CA-851A-A176A73F3250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60A30693-EE66-44CA-851A-A176A73F3250}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60A30693-EE66-44CA-851A-A176A73F3250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFFD96FF-629E-4E23-903D-80B0082B591A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFD96FF-629E-4E23-903D-80B0082B591A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFFD96FF-629E-4E23-903D-80B0082B591A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFFD96FF-629E-4E23-903D-80B0082B591A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69245F64-BE93-4760-AF56-14AAA89CACF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69245F64-BE93-4760-AF56-14AAA89CACF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69245F64-BE93-4760-AF56-14AAA89CACF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69245F64-BE93-4760-AF56-14AAA89CACF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

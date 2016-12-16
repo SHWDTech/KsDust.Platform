@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtocolService", "..\WDYun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NatioanalEnvirmentEncoder", "NatioanalEnvirmentEncoder\NatioanalEnvirmentEncoder.csproj", "{69245F64-BE93-4760-AF56-14AAA89CACF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.Platform.TestConsole", "Ks.Dust.Platform.TestConsole\Ks.Dust.Platform.TestConsole.csproj", "{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{69245F64-BE93-4760-AF56-14AAA89CACF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69245F64-BE93-4760-AF56-14AAA89CACF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69245F64-BE93-4760-AF56-14AAA89CACF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

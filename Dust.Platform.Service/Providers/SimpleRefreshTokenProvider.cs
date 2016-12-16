@@ -54,7 +54,7 @@ namespace Dust.Platform.Service.Providers
             var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
-            string hashedTokenId = Helper.GetHash(context.Token);
+            var hashedTokenId = Helper.GetHash(context.Token);
 
             using (var repo = new AuthRepository())
             {

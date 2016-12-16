@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{69245F64-BE93-4760-AF56-14AAA89CACF1}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NatioanalEnvirmentEncoder</RootNamespace>
-    <AssemblyName>NatioanalEnvirmentEncoder</AssemblyName>
+    <RootNamespace>Ks.Dust.Platform.TestConsole</RootNamespace>
+    <AssemblyName>Ks.Dust.Platform.TestConsole</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,17 +43,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NationalEnvirmentEncoder.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\WDYunPlatform\Platform.Utility\Platform.Utility.csproj">
+      <Project>{95b28f0d-c7d4-479c-aabf-e0f8b4b0e06c}</Project>
+      <Name>Platform.Utility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\WDYunPlatform\ProtocolService\ProtocolService.csproj">
       <Project>{cffd96ff-629e-4e23-903d-80b0082b591a}</Project>
       <Name>ProtocolService</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\WDYunPlatform\SHWDTech.Platform.StorageConstrains\SHWDTech.Platform.StorageConstrains.csproj">
-      <Project>{6B3823B8-0540-43AF-9F41-498287D2DD4E}</Project>
+      <Project>{6b3823b8-0540-43af-9f41-498287d2dd4e}</Project>
       <Name>SHWDTech.Platform.StorageConstrains</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dust.Platform.Service\Dust.Platform.Service.csproj">
+      <Project>{60a30693-ee66-44ca-851a-a176a73f3250}</Project>
+      <Name>Dust.Platform.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dust.Platform.Storage\Dust.Platform.Storage.csproj">
+      <Project>{e9ac4c39-d38e-4570-9faa-c62dc1c82f83}</Project>
+      <Name>Dust.Platform.Storage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NatioanalEnvirmentEncoder\NatioanalEnvirmentEncoder.csproj">
+      <Project>{69245f64-be93-4760-af56-14aaa89cacf1}</Project>
+      <Name>NatioanalEnvirmentEncoder</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

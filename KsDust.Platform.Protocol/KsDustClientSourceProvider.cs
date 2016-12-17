@@ -5,7 +5,7 @@ using SHWDTech.Platform.ProtocolService.ProtocolEncoding;
 
 namespace KsDust.Platform.Protocol
 {
-    class KsDustClientSourceProvider : IClientSourceProvider
+    public class KsDustClientSourceProvider : IClientSourceProvider
     {
         private readonly KsDustDbContext _ctx;
 
@@ -18,11 +18,7 @@ namespace KsDust.Platform.Protocol
         {
             var device = _ctx.KsDustDevices.FirstOrDefault(dev => dev.NodeId == nodeId.ToString());
             if (device == null) return null;
-            var clientSource = new KsDustClientSource
-            {
-                ClientIdentity = $"{device.Id}",
-                BusinessName = Properties.Resource.BusinessName
-            };
+            var clientSource = new KsDustClientSource(Properties.Resource.BusinessName, device);
 
             return clientSource;
         }

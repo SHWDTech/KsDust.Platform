@@ -68,5 +68,77 @@ namespace KsDust.Platform.Protocol.Properties {
                 return ResourceManager.GetString("BusinessName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a01002-Avg.
+        /// </summary>
+        internal static string HUMIDITY {
+            get {
+                return ResourceManager.GetString("HUMIDITY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a50001-Avg.
+        /// </summary>
+        internal static string NOISE {
+            get {
+                return ResourceManager.GetString("NOISE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a34005-Avg.
+        /// </summary>
+        internal static string PM100 {
+            get {
+                return ResourceManager.GetString("PM100", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a34004-Avg.
+        /// </summary>
+        internal static string PM25 {
+            get {
+                return ResourceManager.GetString("PM25", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a01001-Avg.
+        /// </summary>
+        internal static string TEMPERATURE {
+            get {
+                return ResourceManager.GetString("TEMPERATURE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a34001-Avg.
+        /// </summary>
+        internal static string TSP {
+            get {
+                return ResourceManager.GetString("TSP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a01008-Avg.
+        /// </summary>
+        internal static string WINDDIRECTION {
+            get {
+                return ResourceManager.GetString("WINDDIRECTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a01007-Avg.
+        /// </summary>
+        internal static string WINDSPEED {
+            get {
+                return ResourceManager.GetString("WINDSPEED", resourceCulture);
+            }
+        }
     }
 }

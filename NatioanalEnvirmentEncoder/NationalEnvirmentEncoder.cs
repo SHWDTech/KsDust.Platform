@@ -1,27 +1,36 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using SHWDTech.Platform.ProtocolService;
 using SHWDTech.Platform.ProtocolService.DataBase;
 using SHWDTech.Platform.ProtocolService.ProtocolEncoding;
 using SHWDTech.Platform.ProtocolService.ProtocolEncoding.Generics;
 
 namespace NatioanalEnvirmentEncoder
 {
-    public class NationalEnvirmentEncoder : IProtocolEncoder
+    public class NationalEnvirmentEncoder : ProtocolEncoder
     {
-        public IProtocolPackage Decode(byte[] bufferBytes, IProtocol protocol)
+        private readonly IProtocol _protocol;
+
+        public NationalEnvirmentEncoder()
         {
-            return DecodeProtocol(bufferBytes, protocol);
+            
         }
 
-        private IProtocolPackage DecodeProtocol(byte[] bufferBytes, IProtocol matchedProtocol)
+        public NationalEnvirmentEncoder(IProtocol protocol)
+        {
+            _protocol = protocol;
+        }
+
+        public override IProtocolPackage Decode(byte[] bufferBytes)
+            => Decode(bufferBytes, _protocol);
+
+        public override IProtocolPackage Decode(byte[] bufferBytes, IProtocol protocol)
         {
             var protocolString = Encoding.ASCII.GetString(bufferBytes);
 
-            var package = new StringProtocolPackage { Protocol = matchedProtocol, ReceiveDateTime = DateTime.Now };
+            var package = new StringProtocolPackage { Protocol = protocol, ReceiveDateTime = DateTime.Now };
 
-            var structures = matchedProtocol.ProtocolStructures.ToList();
+            var structures = protocol.ProtocolStructures.ToList();
 
             var currentIndex = 0;
 
@@ -43,7 +52,7 @@ namespace NatioanalEnvirmentEncoder
 
                 if (structure.StructureName == StructureNames.Data)
                 {
-                    DetectCommand(package, matchedProtocol);
+                    DetectCommand(package, protocol);
                     if (package.Command == null)
                     {
                         package.Status = PackageStatus.InvalidHead;
@@ -72,7 +81,7 @@ namespace NatioanalEnvirmentEncoder
             return package;
         }
 
-        private void DecodeCommand(IProtocolPackage<string> package)
+        protected override void DecodeCommand(IProtocolPackage<string> package)
         {
             var container = package[StructureNames.Data].ComponentContent;
 
@@ -101,12 +110,12 @@ namespace NatioanalEnvirmentEncoder
                 package.AppendData(component);
             }
 
-            package.DeviceNodeId = (string)DataConverter.DecodeComponentData(package[StructureNames.NodeId]);
+            package.DeviceNodeId = package[StructureNames.NodeId].ComponentContent;
 
             package.Finalization();
         }
 
-        private void DetectCommand(IProtocolPackage<string> package, IProtocol matchedProtocol)
+        protected override void DetectCommand(IProtocolPackage<string> package, IProtocol matchedProtocol)
         {
             foreach (var command in matchedProtocol.ProtocolCommands.Where(command =>
             (package[StructureNames.CmdType].ComponentValue == Encoding.ASCII.GetString(command.CommandTypeCode))
@@ -134,11 +143,6 @@ namespace NatioanalEnvirmentEncoder
             }
 
             return structureString;
-        }
-
-        public void Delive(IProtocolPackage package, IActiveClient client)
-        {
-            throw new NotImplementedException();
         }
     }
 }

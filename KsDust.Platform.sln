@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NatioanalEnvirmentEncoder",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.Platform.TestConsole", "Ks.Dust.Platform.TestConsole\Ks.Dust.Platform.TestConsole.csproj", "{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KsDust.Platform.Protocol", "KsDust.Platform.Protocol\KsDust.Platform.Protocol.csproj", "{206D7430-93E4-421A-95F4-F01981235C55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC3594F8-F53E-4E15-8F8E-43E82F45CBEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{206D7430-93E4-421A-95F4-F01981235C55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{206D7430-93E4-421A-95F4-F01981235C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{206D7430-93E4-421A-95F4-F01981235C55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{206D7430-93E4-421A-95F4-F01981235C55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

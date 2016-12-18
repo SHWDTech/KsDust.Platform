@@ -94,6 +94,7 @@ namespace SHWDTech.Platform.NatioanalEnvirmentEncoder
                     ComponentIndex = commandData.DataIndex,
                     ComponentContent = commandDataDic.Value
                 };
+                component.ComponentValue = component.ComponentContent;
 
                 package.AppendData(component);
             }

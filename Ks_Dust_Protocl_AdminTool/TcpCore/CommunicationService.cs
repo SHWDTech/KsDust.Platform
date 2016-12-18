@@ -45,6 +45,7 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
         protected override void AddClient(IActiveClient client)
         {
             client.ClientAuthenticated += ClientAuthenticated;
+            client.ClientAuthenticateFailed += ClientAuthenticaFaild;
             client.ClientDisconnect += ClientDisconnected;
             client.ClientDecodeFalied += ClientDecodeFailed;
             base.AddClient(client);
@@ -65,6 +66,11 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
         private void ClientAuthenticated(ActiveClientEventArgs args)
         {
             ReportService.Instance.Info($"客户端授权通过，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}");
+        }
+
+        private void ClientAuthenticaFaild(ActiveClientEventArgs args)
+        {
+            ReportService.Instance.Info($"客户端授权失败，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}");
         }
 
         private void ClientDisconnected(ActiveClientEventArgs args)

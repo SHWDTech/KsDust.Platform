@@ -16,7 +16,7 @@ namespace KsDust.Platform.Protocol
 
         public IClientSource GetClientSource(object nodeId)
         {
-            var device = _ctx.KsDustDevices.FirstOrDefault(dev => dev.NodeId == nodeId.ToString());
+            var device = _ctx.KsDustDevices.Include("Project").FirstOrDefault(dev => dev.NodeId == nodeId.ToString());
             if (device == null) return null;
             var clientSource = new KsDustClientSource(Properties.Resource.BusinessName, device);
 

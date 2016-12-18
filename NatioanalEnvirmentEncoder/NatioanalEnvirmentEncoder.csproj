@@ -7,7 +7,7 @@
     <ProjectGuid>{69245F64-BE93-4760-AF56-14AAA89CACF1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NatioanalEnvirmentEncoder</RootNamespace>
+    <RootNamespace>SHWDTech.Platform.NatioanalEnvirmentEncoder</RootNamespace>
     <AssemblyName>NatioanalEnvirmentEncoder</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

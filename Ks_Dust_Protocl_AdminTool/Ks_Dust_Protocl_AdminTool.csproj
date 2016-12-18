@@ -118,6 +118,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Unity.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

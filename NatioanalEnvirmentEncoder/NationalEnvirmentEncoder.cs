@@ -5,24 +5,12 @@ using SHWDTech.Platform.ProtocolService.DataBase;
 using SHWDTech.Platform.ProtocolService.ProtocolEncoding;
 using SHWDTech.Platform.ProtocolService.ProtocolEncoding.Generics;
 
-namespace NatioanalEnvirmentEncoder
+namespace SHWDTech.Platform.NatioanalEnvirmentEncoder
 {
     public class NationalEnvirmentEncoder : ProtocolEncoder
     {
-        private readonly IProtocol _protocol;
-
-        public NationalEnvirmentEncoder()
-        {
-            
-        }
-
-        public NationalEnvirmentEncoder(IProtocol protocol)
-        {
-            _protocol = protocol;
-        }
-
         public override IProtocolPackage Decode(byte[] bufferBytes)
-            => Decode(bufferBytes, _protocol);
+            => Decode(bufferBytes, Protocol);
 
         public override IProtocolPackage Decode(byte[] bufferBytes, IProtocol protocol)
         {
@@ -110,7 +98,7 @@ namespace NatioanalEnvirmentEncoder
                 package.AppendData(component);
             }
 
-            package.DeviceNodeId = package[StructureNames.NodeId].ComponentContent;
+            package.DeviceNodeId = package[StructureNames.NodeId].ComponentValue;
 
             package.Finalization();
         }

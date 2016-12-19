@@ -17,8 +17,12 @@ namespace Dust.Platform.Service.Models
 
         public double pm100 { get; set; }
 
+        public int rate { get; set; }
+
         public string longitude { get; set; }
 
         public string latitude { get; set; }
+
+        public bool isOnline { get; set; }
     }
 }

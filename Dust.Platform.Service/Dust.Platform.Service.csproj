@@ -144,11 +144,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DistrictAvgController.cs" />
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Entities\Client.cs" />
     <Compile Include="Entities\RefreshToken.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Models\DeviceMapViewModel.cs" />
+    <Compile Include="Models\DistrictAvgViewModel.cs" />
     <Compile Include="Models\Enum.cs" />
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Providers\SimpleRefreshTokenProvider.cs" />

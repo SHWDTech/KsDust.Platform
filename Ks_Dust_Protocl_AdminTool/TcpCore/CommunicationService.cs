@@ -2,6 +2,7 @@
 using System.Net;
 using Ks_Dust_Protocl_AdminTool.Common;
 using SHWDTech.Platform.ProtocolService;
+using SHWDTech.Platform.ProtocolService.DataBase;
 
 namespace Ks_Dust_Protocl_AdminTool.TcpCore
 {
@@ -48,6 +49,7 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
             client.ClientAuthenticateFailed += ClientAuthenticaFaild;
             client.ClientDisconnect += ClientDisconnected;
             client.ClientDecodeFalied += ClientDecodeFailed;
+            client.ClientDecoded += ClientDecoded;
             base.AddClient(client);
         }
 
@@ -61,6 +63,13 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
         {
             base.OnClientAcceptFailed(ex);
             ReportService.Instance.Info($"接收客户端连接请求失败,服务已经尝试重启。{ex}");
+        }
+
+        private void ClientDecoded(ActiveClientEventArgs args)
+        {
+            var ctx = new ProtocolContext();
+            ctx.ProtocolDatas.Add((ProtocolData) args.ProtocolData);
+            ctx.SaveChanges();
         }
 
         private void ClientAuthenticated(ActiveClientEventArgs args)

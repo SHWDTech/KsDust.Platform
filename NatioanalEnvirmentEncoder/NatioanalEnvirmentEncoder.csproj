@@ -52,6 +52,14 @@
       <Project>{6B3823B8-0540-43AF-9F41-498287D2DD4E}</Project>
       <Name>SHWDTech.Platform.StorageConstrains</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Dust.Platform.Storage\Dust.Platform.Storage.csproj">
+      <Project>{E9AC4C39-D38E-4570-9FAA-C62DC1C82F83}</Project>
+      <Name>Dust.Platform.Storage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KsDust.Platform.Protocol\KsDust.Platform.Protocol.csproj">
+      <Project>{206D7430-93E4-421A-95F4-F01981235C55}</Project>
+      <Name>KsDust.Platform.Protocol</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

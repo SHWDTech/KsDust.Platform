@@ -18,6 +18,11 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
         /// </summary>
         public int AliveConnection => ActiveClients.Count;
 
+        /// <summary>
+        /// 已经解析成功的协议总数
+        /// </summary>
+        public int DecodedProtocol { get; private set; }
+
         public override void Start()
         {
             try
@@ -67,6 +72,7 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
 
         private void ClientDecoded(ActiveClientEventArgs args)
         {
+            DecodedProtocol++;
             var ctx = new ProtocolContext();
             ctx.ProtocolDatas.Add((ProtocolData) args.ProtocolData);
             ctx.SaveChanges();
@@ -84,12 +90,12 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
 
         private void ClientDisconnected(ActiveClientEventArgs args)
         {
-            ReportService.Instance.Info($"客户端连接断开，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}，异常信息：{args.ExceptionMessage}");
+            ReportService.Instance.Info($"客户端连接断开，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}，异常信息：{args.ExceptionMessage}", args.Exception);
         }
 
         private void ClientDecodeFailed(ActiveClientEventArgs args)
         {
-            ReportService.Instance.Info($"客户端解码失败，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}，异常信息：{args.ExceptionMessage}");
+            ReportService.Instance.Error($"客户端解码失败，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}，异常信息：{args.ExceptionMessage}", args.Exception);
         }
     }
 }

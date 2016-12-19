@@ -92,6 +92,8 @@ namespace Ks_Dust_Protocl_AdminTool.Views
                                         : $"{(int)runningTime.TotalHours}h {runningTime.Minutes}m {runningTime.Seconds}s";
 
             AliveConnection.Text = $"{_tcpService.AliveConnection}";
+
+            DecodeProtocolCount.Text = $"{_tcpService.DecodedProtocol}";
         }
 
         /// <summary>

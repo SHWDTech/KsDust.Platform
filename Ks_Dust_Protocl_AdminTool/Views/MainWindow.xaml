@@ -79,6 +79,12 @@
                     <StatusBarItem FontSize="16">
                         <TextBlock Name="AliveConnection"></TextBlock>
                     </StatusBarItem>
+                    <StatusBarItem FontSize="16">
+                        <TextBlock>ProtocolCount:</TextBlock>
+                    </StatusBarItem>
+                    <StatusBarItem FontSize="16">
+                        <TextBlock Name="DecodeProtocolCount"></TextBlock>
+                    </StatusBarItem>
                 </StatusBar>
             </DockPanel>
         </Grid>

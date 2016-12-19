@@ -7,16 +7,10 @@ namespace KsDust.Platform.Protocol
 {
     public class KsDustClientSourceProvider : IClientSourceProvider
     {
-        private readonly KsDustDbContext _ctx;
-
-        public KsDustClientSourceProvider()
-        {
-            _ctx = new KsDustDbContext();
-        }
-
         public IClientSource GetClientSource(object nodeId)
         {
-            var device = _ctx.KsDustDevices.Include("Project").FirstOrDefault(dev => dev.NodeId == nodeId.ToString());
+            var ctx = new KsDustDbContext();
+            var device = ctx.KsDustDevices.Include("Project").FirstOrDefault(dev => dev.NodeId == nodeId.ToString());
             if (device == null) return null;
             var clientSource = new KsDustClientSource(Properties.Resource.BusinessName, device);
 

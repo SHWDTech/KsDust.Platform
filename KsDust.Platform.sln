@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KsDust.Platform.Protocol", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks_Dust_Protocl_AdminTool", "Ks_Dust_Protocl_AdminTool\Ks_Dust_Protocl_AdminTool.csproj", "{F2089FB9-1B91-4014-8834-CB31D4EC0E03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.Protocol.Tester", "Ks.Dust.Protocol.Tester\Ks.Dust.Protocol.Tester.csproj", "{BB68B547-1281-4AA8-BE6E-7EDD55AB71A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{F2089FB9-1B91-4014-8834-CB31D4EC0E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2089FB9-1B91-4014-8834-CB31D4EC0E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2089FB9-1B91-4014-8834-CB31D4EC0E03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB68B547-1281-4AA8-BE6E-7EDD55AB71A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB68B547-1281-4AA8-BE6E-7EDD55AB71A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB68B547-1281-4AA8-BE6E-7EDD55AB71A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB68B547-1281-4AA8-BE6E-7EDD55AB71A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
+using SHWDTech.Platform.Utility;
 
 namespace Ks.Dust.Platform.TestConsole
 {
@@ -10,7 +12,8 @@ namespace Ks.Dust.Platform.TestConsole
         static void Main(string[] args)
         {
             if (args == null) return;
-            TestData();
+            //TestData();
+            GenCrcModBus();
         }
 
         static void TestData()
@@ -248,6 +251,15 @@ namespace Ks.Dust.Platform.TestConsole
             });
             ctx.SaveChanges();
             Console.WriteLine("Done");
+            Console.ReadKey();
+        }
+
+        static void GenCrcModBus()
+        {
+            var str =
+                "QN=20161001094000000;ST=22;CN=2011;PW=123456;MN=V87AS7F0000001;CP=&&DataTime=20161001094000;a34001-Avg=0.346,a34001-Max=0.346,a34001-Min=0.346,a34001-Flag=N;a34004-Avg=0.086,a34004-Max=0.086,a34004-Min=0.086,a34004-Flag=N;a34005-Avg=0.126,a34005-Max=0.126,a34005-Min=0.126,a34005-Flag=N;a50001-Avg=62.2,a50001-Max=64.8,a50001-Min=57.3,a50001-Flag=N;a01001-Avg=24.6,a01001-Max=24.8,a01001-Min=24.3,a01001-Flag=N;a01002-Avg=72.8,a01002-Max=74.0,a01002-Min=71.3,a01002-Flag=N;a01007-Avg=0.0,a01007-Max=0.0,a01007-Min=0.0,a01007-Flag=N;a01008-Avg=128.0,a01008-Max=128.0,a01008-Min=128.0,a01008-Flag=N&&";
+            var crc = Globals.GetCrcModBus(Encoding.ASCII.GetBytes(str));
+            Console.WriteLine(crc);
             Console.ReadKey();
         }
     }

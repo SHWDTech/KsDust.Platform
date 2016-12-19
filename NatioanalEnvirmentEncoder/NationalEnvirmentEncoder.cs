@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SHWDTech.Platform.ProtocolService.DataBase;
@@ -75,10 +76,8 @@ namespace SHWDTech.Platform.NatioanalEnvirmentEncoder
 
             container = container.Replace("CP=&&", string.Empty).Replace("&&", string.Empty);
 
-            var dataGroups = container.Split(';');
-
-            var commandDataDicts = (from dataGroup in dataGroups
-                                    where dataGroup.Contains(",")
+            var sectionGroups = container.Split(';');
+            var commandDataDicts = (from dataGroup in sectionGroups
                                     from data in dataGroup.Split(',')
                                     select data.Split('='))
                                 .ToDictionary(dataKeyValuePair => dataKeyValuePair[0], dataKeyValuePair => dataKeyValuePair[1]);

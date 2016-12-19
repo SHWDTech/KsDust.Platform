@@ -85,6 +85,10 @@
     <Compile Include="Migrations\201612191057228_AddAvgMonitorData.Designer.cs">
       <DependentUpon>201612191057228_AddAvgMonitorData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612191117034_AddAverageDateTime.cs" />
+    <Compile Include="Migrations\201612191117034_AddAverageDateTime.Designer.cs">
+      <DependentUpon>201612191117034_AddAverageDateTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -126,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612191057228_AddAvgMonitorData.resx">
       <DependentUpon>201612191057228_AddAvgMonitorData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612191117034_AddAverageDateTime.resx">
+      <DependentUpon>201612191117034_AddAverageDateTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

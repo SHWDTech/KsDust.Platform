@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Http;
 using Dust.Platform.Service.Models;
+using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 
 namespace Dust.Platform.Service.Controllers
@@ -22,7 +23,12 @@ namespace Dust.Platform.Service.Controllers
             var districts = _ctx.Districts.Select(d => new {d.Id, d.Name}).ToList();
             foreach (var district in districts)
             {
-                
+                districtAvgs.Add(new DistrictAvgViewModel
+                {
+                    name = district.Name,
+                    count = _ctx.KsDustDevices.Count(d => d.Project.DistrictId == district.Id),
+                    tspAvg = _ctx.AverageMonitorDatas.First(tsp => tsp.Type == AverageType.FifteenAvg && tsp.Category == AverageCategory.District).ParticulateMatter
+                });
             }
 
             return districtAvgs;

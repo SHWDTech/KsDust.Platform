@@ -39,5 +39,10 @@ namespace Dust.Platform.Storage.Model
         /// PM10均值
         /// </summary>
         public double Pm100 { get; set; }
+
+        /// <summary>
+        /// 均值时间
+        /// </summary>
+        public DateTime AverageDateTime { get; set; }
     }
 }

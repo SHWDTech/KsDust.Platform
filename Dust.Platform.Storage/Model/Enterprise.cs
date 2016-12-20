@@ -23,5 +23,12 @@ namespace Dust.Platform.Storage.Model
         [Display(Name = "联系电话")]
         [MaxLength(100)]
         public string Mobile { get; set; }
+
+        /// <summary>
+        /// 安监平台ID
+        /// </summary>
+        [Required]
+        [Display(Name = "安监平台ID")]
+        public string OuterId { get; set; }
     }
 }

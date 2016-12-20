@@ -15,5 +15,14 @@ namespace Dust.Platform.Service
 
             return Convert.ToBase64String(byteHash);
         }
+
+        public static int GetRate(double value)
+        {
+            if(value < 0.4) return 0;
+
+            if (value > 0.4 && value < 1.0) return 1;
+
+            return 2;
+        }
     }
 }

@@ -60,5 +60,10 @@ namespace Dust.Platform.Storage.Repository
         /// 报警值
         /// </summary>
         public virtual DbSet<KsDustAlarm> KsDustAlarms { get; set; }
+
+        /// <summary>
+        /// 均值
+        /// </summary>
+        public virtual DbSet<AverageMonitorData> AverageMonitorDatas { get; set; }
     }
 }

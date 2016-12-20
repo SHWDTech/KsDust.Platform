@@ -33,6 +33,19 @@ namespace Dust.Platform.Storage.Model
         public KsDustProject Project { get; set; }
 
         /// <summary>
+        /// 所属供应商ID
+        /// </summary>
+        [Required]
+        public Guid VendorId { get; set; }
+
+        /// <summary>
+        /// 所属供应商
+        /// </summary>
+        [Display(Name = "所属供应商")]
+        [ForeignKey("VendorId")]
+        public Vendor Vendor { get; set; }
+
+        /// <summary>
         /// 设备名称
         /// </summary>
         [Display(Name = "设备名称")]

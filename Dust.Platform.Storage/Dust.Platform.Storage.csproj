@@ -93,6 +93,26 @@
     <Compile Include="Migrations\201612200609127_AddEnterpriseOuterId.Designer.cs">
       <DependentUpon>201612200609127_AddEnterpriseOuterId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612200648286_AddDeviceVendorInfo.cs" />
+    <Compile Include="Migrations\201612200648286_AddDeviceVendorInfo.Designer.cs">
+      <DependentUpon>201612200648286_AddDeviceVendorInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612200651549_AddDeviceVendorForeignKey.cs" />
+    <Compile Include="Migrations\201612200651549_AddDeviceVendorForeignKey.Designer.cs">
+      <DependentUpon>201612200651549_AddDeviceVendorForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612200658005_AddProjectAudited.cs" />
+    <Compile Include="Migrations\201612200658005_AddProjectAudited.Designer.cs">
+      <DependentUpon>201612200658005_AddProjectAudited.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612200702557_AddProjectContracRecord.cs" />
+    <Compile Include="Migrations\201612200702557_AddProjectContracRecord.Designer.cs">
+      <DependentUpon>201612200702557_AddProjectContracRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612200710192_AddProjectStopped.cs" />
+    <Compile Include="Migrations\201612200710192_AddProjectStopped.Designer.cs">
+      <DependentUpon>201612200710192_AddProjectStopped.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -140,6 +160,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612200609127_AddEnterpriseOuterId.resx">
       <DependentUpon>201612200609127_AddEnterpriseOuterId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612200648286_AddDeviceVendorInfo.resx">
+      <DependentUpon>201612200648286_AddDeviceVendorInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612200651549_AddDeviceVendorForeignKey.resx">
+      <DependentUpon>201612200651549_AddDeviceVendorForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612200658005_AddProjectAudited.resx">
+      <DependentUpon>201612200658005_AddProjectAudited.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612200702557_AddProjectContracRecord.resx">
+      <DependentUpon>201612200702557_AddProjectContracRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612200710192_AddProjectStopped.resx">
+      <DependentUpon>201612200710192_AddProjectStopped.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

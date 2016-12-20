@@ -61,6 +61,12 @@ namespace Dust.Platform.Storage.Model
         public string Name { get; set; }
 
         /// <summary>
+        /// 合同备案号
+        /// </summary>
+        [Display(Name = "合同备案号")]
+        public string ContracRecord { get; set; }
+
+        /// <summary>
         /// 工程地址
         /// </summary>
         [Display(Name = "工程地质")]
@@ -98,5 +104,17 @@ namespace Dust.Platform.Storage.Model
         /// </summary>
         [Display(Name = "是否完成安装")]
         public bool Installed { get; set; }
+
+        /// <summary>
+        /// 是否已经审核
+        /// </summary>
+        [Display(Name = "是否已经审核")]
+        public bool Audited { get; set; }
+
+        /// <summary>
+        /// 项目已经停工
+        /// </summary>
+        [Display(Name = "项目已经停工")]
+        public bool Stopped { get; set; }
     }
 }

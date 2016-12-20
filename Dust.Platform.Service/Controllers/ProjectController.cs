@@ -8,7 +8,7 @@ using SHWDTech.Platform.Utility;
 
 namespace Dust.Platform.Service.Controllers
 {
-    [RoutePrefix("api/DistrictAvg")]
+    [RoutePrefix("api/Project")]
     [AllowAnonymous]
     public class ProjectController : ApiController
     {
@@ -25,10 +25,41 @@ namespace Dust.Platform.Service.Controllers
             {
                 Result = "failed"
             };
+
+            if (model == null)
+            {
+                result.Message = "系统未收到任何信息。";
+                return result;
+            }
+
+            if (string.IsNullOrWhiteSpace(model.ContracRecord))
+            {
+                result.Message = "未提供工程合同备案号。";
+                return result;
+            }
+
+            if (_ctx.KsDustProjects.Any(prj => prj.ContracRecord == model.ContracRecord))
+            {
+                result.Message = "该工程已经存在";
+                return result;
+            }
+
+            if (model.Devices == null || model.Devices.Length == 0)
+            {
+                result.Message = "未提供设备信息。";
+                return result;
+            }
+
             var district = _ctx.Districts.FirstOrDefault(d => d.Name == model.District);
             if (district == null)
             {
                 result.Message = "所属区县不存在。";
+                return result;
+            }
+
+            if (string.IsNullOrWhiteSpace(model.EnterpriseId))
+            {
+                result.Message = "未提供施工单位信息";
                 return result;
             }
 
@@ -47,6 +78,7 @@ namespace Dust.Platform.Service.Controllers
 
             var project = new KsDustProject
             {
+                Id = Guid.NewGuid(),
                 Name = model.Project,
                 ContracRecord = model.ContracRecord,
                 Address = model.Address,

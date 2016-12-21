@@ -117,6 +117,10 @@
     <Compile Include="Migrations\201612210516200_AlertContractRecord.Designer.cs">
       <DependentUpon>201612210516200_AlertContractRecord.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612210950024_ContractRecordRequired.cs" />
+    <Compile Include="Migrations\201612210950024_ContractRecordRequired.Designer.cs">
+      <DependentUpon>201612210950024_ContractRecordRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -182,6 +186,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612210516200_AlertContractRecord.resx">
       <DependentUpon>201612210516200_AlertContractRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612210950024_ContractRecordRequired.resx">
+      <DependentUpon>201612210950024_ContractRecordRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

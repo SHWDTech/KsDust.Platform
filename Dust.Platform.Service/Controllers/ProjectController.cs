@@ -35,6 +35,11 @@ namespace Dust.Platform.Service.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"不存在此区县：{model.District}"));
             }
 
+            if (_ctx.KsDustProjects.Any(prj => prj.ContractRecord == model.ContractRecord))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"合同备案号已经存在：{model.ContractRecord}"));
+            }
+
             var enterprise = _ctx.Enterprises.FirstOrDefault(e => e.OuterId == model.EnterpriseId);
             if (enterprise == null)
             {

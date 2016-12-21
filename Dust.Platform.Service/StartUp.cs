@@ -13,10 +13,9 @@ namespace Dust.Platform.Service
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new HttpConfiguration();
-
             ConfigureOAuth(app);
 
+            var config = new HttpConfiguration();
             WebApiConfig.Register(config);
             app.UseCors(CorsOptions.AllowAll);
             app.UseWebApi(config);

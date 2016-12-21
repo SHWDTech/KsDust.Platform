@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Dust.Platform.Service.Models;
@@ -17,21 +18,22 @@ namespace Dust.Platform.Service.Controllers
             _ctx = new KsDustDbContext();
         }
 
-        public List<DistrictAvgViewModel> Post()
+        [Authorize]
+        public List<DistrictAvgViewModel> Post([FromBody]DistrictAvgPostParams model)
         {
-            var districtAvgs = new List<DistrictAvgViewModel>();
-            var districts = _ctx.Districts.Select(d => new {d.Id, d.Name}).ToList();
-            foreach (var district in districts)
-            {
-                districtAvgs.Add(new DistrictAvgViewModel
-                {
-                    name = district.Name,
-                    count = _ctx.KsDustDevices.Count(d => d.Project.DistrictId == district.Id),
-                    tspAvg = _ctx.AverageMonitorDatas.First(tsp => tsp.Type == AverageType.FifteenAvg && tsp.Category == AverageCategory.District).ParticulateMatter
-                });
-            }
+            var districts = _ctx.Districts.Where(dis => dis.Id != Guid.Empty).Select(d => new { d.Id, d.Name }).ToList();
 
-            return districtAvgs;
+            return (from district in districts
+                    let avg = _ctx.AverageMonitorDatas.FirstOrDefault(tsp => tsp.Type == AverageType.FifteenAvg 
+                    && tsp.TargetId == district.Id
+                    && tsp.Category == AverageCategory.District 
+                    && tsp.ProjectType == (ProjectType)model.projectType)
+                    select new DistrictAvgViewModel
+                    {
+                        name = district.Name,
+                        count = _ctx.KsDustDevices.Count(d => d.Project.DistrictId == district.Id && d.Project.ProjectType == (ProjectType)model.projectType),
+                        tspAvg = avg?.ParticulateMatter ?? 0
+                    }).ToList();
         }
     }
 }

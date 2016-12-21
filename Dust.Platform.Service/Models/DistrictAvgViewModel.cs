@@ -1,5 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
 
+using Dust.Platform.Storage.Model;
+
 namespace Dust.Platform.Service.Models
 {
     public class DistrictAvgViewModel
@@ -15,5 +17,10 @@ namespace Dust.Platform.Service.Models
         public double pm100 { get; set; }
 
         public int rate { get; set; }
+    }
+
+    public class DistrictAvgPostParams
+    {
+        public int projectType { get; set; }
     }
 }

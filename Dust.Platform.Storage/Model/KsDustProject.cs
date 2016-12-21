@@ -12,6 +12,13 @@ namespace Dust.Platform.Storage.Model
     public class KsDustProject : GuidModel
     {
         /// <summary>
+        /// 工程类型
+        /// </summary>
+        [Required]
+        [Display(Name = "工程类型")]
+        public ProjectType ProjectType { get; set; }
+
+        /// <summary>
         /// 所属区县ID
         /// </summary>
         [Required]

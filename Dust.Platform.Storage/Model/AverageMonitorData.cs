@@ -8,6 +8,11 @@ namespace Dust.Platform.Storage.Model
     public class AverageMonitorData : LongModel
     {
         /// <summary>
+        /// 工程类型
+        /// </summary>
+        public ProjectType ProjectType { get; set; }
+
+        /// <summary>
         /// 对象ID
         /// </summary>
         [Required]

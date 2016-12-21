@@ -12,6 +12,11 @@ namespace Dust.Platform.Storage.Model
     public class KsDustMonitorData : LongModel
     {
         /// <summary>
+        /// 工程类型
+        /// </summary>
+        public ProjectType ProjectType { get; set; }
+
+        /// <summary>
         /// 数据类型
         /// </summary>
         [Index("Ix_MonitorType_DistrictId_EnterpriseId_ProjectId_DeviceId_UpdateTime", 0)]

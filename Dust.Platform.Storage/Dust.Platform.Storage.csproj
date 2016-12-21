@@ -121,6 +121,14 @@
     <Compile Include="Migrations\201612210950024_ContractRecordRequired.Designer.cs">
       <DependentUpon>201612210950024_ContractRecordRequired.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612211103346_AddProjectType.cs" />
+    <Compile Include="Migrations\201612211103346_AddProjectType.Designer.cs">
+      <DependentUpon>201612211103346_AddProjectType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612211109279_AddProjectType1.cs" />
+    <Compile Include="Migrations\201612211109279_AddProjectType1.Designer.cs">
+      <DependentUpon>201612211109279_AddProjectType1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -133,6 +141,7 @@
     <Compile Include="Model\KsDustMonitorData.cs" />
     <Compile Include="Model\KsDustProject.cs" />
     <Compile Include="Model\MonitorType.cs" />
+    <Compile Include="Model\ProjectType.cs" />
     <Compile Include="Model\Vendor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AlarmRepository.cs" />
@@ -189,6 +198,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612210950024_ContractRecordRequired.resx">
       <DependentUpon>201612210950024_ContractRecordRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612211103346_AddProjectType.resx">
+      <DependentUpon>201612211103346_AddProjectType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612211109279_AddProjectType1.resx">
+      <DependentUpon>201612211109279_AddProjectType1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

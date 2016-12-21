@@ -26,6 +26,7 @@ namespace KsDust.Platform.Protocol
             if (!package.Command.DeliverParams.Contains("Store")) return;
             var monitorData = new KsDustMonitorData
             {
+                ProjectType = ksDevice.Project.ProjectType,
                 DeviceId = Guid.Parse(package.ClientSource.ClientIdentity),
                 ProjectId = ksDevice.ProjectId,
                 EnterpriseId = ksDevice.Project.EnterpriseId,

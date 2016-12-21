@@ -64,7 +64,7 @@ namespace Dust.Platform.Storage.Model
         /// 合同备案号
         /// </summary>
         [Display(Name = "合同备案号")]
-        public string ContracRecord { get; set; }
+        public string ContractRecord { get; set; }
 
         /// <summary>
         /// 工程地址

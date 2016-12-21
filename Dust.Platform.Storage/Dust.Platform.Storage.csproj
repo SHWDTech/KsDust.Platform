@@ -113,6 +113,10 @@
     <Compile Include="Migrations\201612200710192_AddProjectStopped.Designer.cs">
       <DependentUpon>201612200710192_AddProjectStopped.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612210516200_AlertContractRecord.cs" />
+    <Compile Include="Migrations\201612210516200_AlertContractRecord.Designer.cs">
+      <DependentUpon>201612210516200_AlertContractRecord.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -175,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612200710192_AddProjectStopped.resx">
       <DependentUpon>201612200710192_AddProjectStopped.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612210516200_AlertContractRecord.resx">
+      <DependentUpon>201612210516200_AlertContractRecord.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

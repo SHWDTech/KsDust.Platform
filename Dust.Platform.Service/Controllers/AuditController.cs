@@ -25,7 +25,7 @@ namespace Dust.Platform.Service.Controllers
                 Result = "failed"
             };
 
-            var project = _ctx.KsDustProjects.FirstOrDefault(p => p.ContracRecord == model.ContractRecord);
+            var project = _ctx.KsDustProjects.FirstOrDefault(p => p.ContractRecord == model.ContractRecord);
             if (project == null)
             {
                 result.Message = "未找到合同备案号对应的工程。";

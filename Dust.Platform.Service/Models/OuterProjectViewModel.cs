@@ -27,7 +27,7 @@ namespace Dust.Platform.Service.Models
         public string Address { get; set; }
 
         [Required(ErrorMessage = "工程所在区域不能为空。")]
-        public CityArea CityArea { get; set; }
+        public CityArea? CityArea { get; set; }
 
         [Required(ErrorMessage = "联系人姓名不能为空。")]
         public string Superintend { get; set; }

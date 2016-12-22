@@ -7,13 +7,13 @@ namespace Dust.Platform.Storage.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddSystemConfigTable : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddSystemConfigTable));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201612220818277_AddSystemConfigTable"; }
+            get { return "201612220858380_Initial"; }
         }
         
         string IMigrationMetadata.Source

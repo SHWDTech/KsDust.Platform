@@ -35,7 +35,7 @@ namespace KsDust.Platform.Protocol
                 Pm25 = double.Parse(package.GetDataValueString(Properties.Resource.PM25)),
                 Pm100 = double.Parse(package.GetDataValueString(Properties.Resource.PM100)),
                 Noise = double.Parse(package.GetDataValueString(Properties.Resource.NOISE)),
-                Templeture = double.Parse(package.GetDataValueString(Properties.Resource.TEMPERATURE)),
+                Temperature = double.Parse(package.GetDataValueString(Properties.Resource.TEMPERATURE)),
                 Humidity = double.Parse(package.GetDataValueString(Properties.Resource.HUMIDITY)),
                 WindSpeed = double.Parse(package.GetDataValueString(Properties.Resource.WINDSPEED)),
                 WindDirection = (int)double.Parse(package.GetDataValueString(Properties.Resource.WINDDIRECTION)),

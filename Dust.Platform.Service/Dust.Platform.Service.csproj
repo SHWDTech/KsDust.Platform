@@ -144,21 +144,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AuditController.cs" />
+    <Compile Include="Controllers\CascadeElementController.cs" />
+    <Compile Include="Controllers\DeviceCurrentController.cs" />
     <Compile Include="Controllers\DistrictAvgController.cs" />
+    <Compile Include="Controllers\DistrictDetailController.cs" />
+    <Compile Include="Controllers\HistoryDataController.cs" />
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Entities\Client.cs" />
     <Compile Include="Entities\RefreshToken.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Models\AuditInfo.cs" />
+    <Compile Include="Models\CascadeElementViewModel.cs" />
+    <Compile Include="Models\DeviceCurrentViewModel.cs" />
     <Compile Include="Models\DeviceMapViewModel.cs" />
     <Compile Include="Models\DistrictAvgViewModel.cs" />
+    <Compile Include="Models\DistrictDetailViewModel.cs" />
     <Compile Include="Models\Enum.cs" />
+    <Compile Include="Models\HistoryDataViewModel.cs" />
     <Compile Include="Models\OuterPlatformExecuteResult.cs" />
     <Compile Include="Models\OuterProjectViewModel.cs" />
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />

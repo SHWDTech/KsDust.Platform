@@ -117,7 +117,7 @@ namespace Dust.Platform.Storage.Model
         /// 温度值
         /// </summary>
         [Display(Name = "温度值")]
-        public double Templeture { get; set; }
+        public double Temperature { get; set; }
 
         /// <summary>
         /// 湿度

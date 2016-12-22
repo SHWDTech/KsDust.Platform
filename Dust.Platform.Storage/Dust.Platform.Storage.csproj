@@ -129,6 +129,10 @@
     <Compile Include="Migrations\201612211109279_AddProjectType1.Designer.cs">
       <DependentUpon>201612211109279_AddProjectType1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612220255470_ModifyColumnNames.cs" />
+    <Compile Include="Migrations\201612220255470_ModifyColumnNames.Designer.cs">
+      <DependentUpon>201612220255470_ModifyColumnNames.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -204,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612211109279_AddProjectType1.resx">
       <DependentUpon>201612211109279_AddProjectType1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612220255470_ModifyColumnNames.resx">
+      <DependentUpon>201612220255470_ModifyColumnNames.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

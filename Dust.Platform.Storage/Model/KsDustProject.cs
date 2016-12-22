@@ -89,6 +89,13 @@ namespace Dust.Platform.Storage.Model
         public string ConstructionUnit { get; set; }
 
         /// <summary>
+        /// 工程负责人
+        /// </summary>
+        [Display(Name = "工程负责人")]
+        [MaxLength(100)]
+        public string SuperIntend { get; set; }
+
+        /// <summary>
         /// 工程负责人联系电话
         /// </summary>
         [Display(Name = "工程负责人联系电话")]

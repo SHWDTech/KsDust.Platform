@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Dust.Platform.Storage.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dust.Platform.Service.Models
 {
@@ -24,6 +25,9 @@ namespace Dust.Platform.Service.Models
 
         [Required(ErrorMessage = "工程地址不能为空。")]
         public string Address { get; set; }
+
+        [Required(ErrorMessage = "工程所在区域不能为空。")]
+        public CityArea CityArea { get; set; }
 
         [Required(ErrorMessage = "联系人姓名不能为空。")]
         public string Superintend { get; set; }

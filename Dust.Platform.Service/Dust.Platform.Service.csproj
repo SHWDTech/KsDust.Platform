@@ -150,7 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BasicConfig.cs" />
     <Compile Include="Controllers\AuditController.cs" />
+    <Compile Include="Controllers\CameraLoginController.cs" />
     <Compile Include="Controllers\CascadeElementController.cs" />
     <Compile Include="Controllers\DeviceCurrentController.cs" />
     <Compile Include="Controllers\DistrictAvgController.cs" />

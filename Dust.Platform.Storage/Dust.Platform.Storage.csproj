@@ -133,10 +133,24 @@
     <Compile Include="Migrations\201612220255470_ModifyColumnNames.Designer.cs">
       <DependentUpon>201612220255470_ModifyColumnNames.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612220818277_AddSystemConfigTable.cs" />
+    <Compile Include="Migrations\201612220818277_AddSystemConfigTable.Designer.cs">
+      <DependentUpon>201612220818277_AddSystemConfigTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612220820388_AlertSystemConfigTableConfigValueColumn.cs" />
+    <Compile Include="Migrations\201612220820388_AlertSystemConfigTableConfigValueColumn.Designer.cs">
+      <DependentUpon>201612220820388_AlertSystemConfigTableConfigValueColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612220854561_AddCityArea.cs" />
+    <Compile Include="Migrations\201612220854561_AddCityArea.Designer.cs">
+      <DependentUpon>201612220854561_AddCityArea.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
     <Compile Include="Model\AverageType.cs" />
+    <Compile Include="Model\CameraLogin.cs" />
+    <Compile Include="Model\CityArea.cs" />
     <Compile Include="Model\District.cs" />
     <Compile Include="Model\Enterprise.cs" />
     <Compile Include="Model\KsDustAlarm.cs" />
@@ -146,6 +160,7 @@
     <Compile Include="Model\KsDustProject.cs" />
     <Compile Include="Model\MonitorType.cs" />
     <Compile Include="Model\ProjectType.cs" />
+    <Compile Include="Model\SystemConfiguration.cs" />
     <Compile Include="Model\Vendor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AlarmRepository.cs" />
@@ -211,6 +226,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612220255470_ModifyColumnNames.resx">
       <DependentUpon>201612220255470_ModifyColumnNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612220818277_AddSystemConfigTable.resx">
+      <DependentUpon>201612220818277_AddSystemConfigTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612220820388_AlertSystemConfigTableConfigValueColumn.resx">
+      <DependentUpon>201612220820388_AlertSystemConfigTableConfigValueColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612220854561_AddCityArea.resx">
+      <DependentUpon>201612220854561_AddCityArea.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

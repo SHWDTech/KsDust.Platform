@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Owin;
 using Owin;
 using System.Web.Http;
 using Dust.Platform.Service.Providers;
+using Dust.Platform.Storage.Repository;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.OAuth;
 
@@ -19,6 +21,8 @@ namespace Dust.Platform.Service
             WebApiConfig.Register(config);
             app.UseCors(CorsOptions.AllowAll);
             app.UseWebApi(config);
+
+            LoadSystemConfiguaration();
         }
 
         public void ConfigureOAuth(IAppBuilder app)
@@ -36,6 +40,16 @@ namespace Dust.Platform.Service
             app.UseOAuthAuthorizationServer(oAuthServerOptions);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
+        }
+
+        private static void LoadSystemConfiguaration()
+        {
+            var ctx = new KsDustDbContext();
+            var firstOrDefault = ctx.SystemConfigurations.FirstOrDefault(cfg => cfg.ConfigType == "RsaKeys" && cfg.ConfigName == "RsaPrivate");
+            if (firstOrDefault != null)
+            {
+                BasicConfig.RsaPrivateKey = firstOrDefault.ConfigValue;
+            }
         }
     }
 }

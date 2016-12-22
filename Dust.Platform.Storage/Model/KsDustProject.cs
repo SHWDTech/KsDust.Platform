@@ -61,6 +61,12 @@ namespace Dust.Platform.Storage.Model
         public Vendor Vendor { get; set; }
 
         /// <summary>
+        /// 工程所在区域
+        /// </summary>
+        [Display(Name = "工程所在区域")]
+        public CityArea CityArea { get; set; }
+
+        /// <summary>
         /// 工程名称
         /// </summary>
         [Display(Name = "工程名称")]

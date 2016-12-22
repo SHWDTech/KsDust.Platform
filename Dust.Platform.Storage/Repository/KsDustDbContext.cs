@@ -65,5 +65,10 @@ namespace Dust.Platform.Storage.Repository
         /// 均值
         /// </summary>
         public virtual DbSet<AverageMonitorData> AverageMonitorDatas { get; set; }
+
+        /// <summary>
+        /// 系统配置
+        /// </summary>
+        public virtual DbSet<SystemConfiguration> SystemConfigurations { get; set; }
     }
 }

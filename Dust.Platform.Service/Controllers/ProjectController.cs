@@ -57,6 +57,7 @@ namespace Dust.Platform.Service.Controllers
             {
                 Id = Guid.NewGuid(),
                 Name = model.Project,
+                CityArea = model.CityArea,
                 SuperIntend = model.Superintend,
                 ContractRecord = model.ContractRecord,
                 Address = model.Address,

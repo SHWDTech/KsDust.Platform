@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Dust.Platform.Service.Models;
 using Dust.Platform.Storage.Repository;
@@ -18,18 +20,17 @@ namespace Dust.Platform.Service.Controllers
             _ctx = new KsDustDbContext();
         }
 
-        public OuterPlatformExecuteResult Post([FromBody] AuditInfo model)
+        public HttpResponseMessage Post([FromBody] AuditInfo model)
         {
-            var result = new OuterPlatformExecuteResult
+            if (model == null || !ModelState.IsValid)
             {
-                Result = "failed"
-            };
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult(ModelState));
+            }
 
             var project = _ctx.KsDustProjects.FirstOrDefault(p => p.ContractRecord == model.ContractRecord);
             if (project == null)
             {
-                result.Message = "未找到合同备案号对应的工程。";
-                return result;
+                return Request.CreateResponse(HttpStatusCode.OK,new OuterPlatformExecuteResult($"未找到合同备案号对应的工程。{model.ContractRecord}"));
             }
             project.Audited = model.AuditResult;
             if (project.Audited)
@@ -44,12 +45,10 @@ namespace Dust.Platform.Service.Controllers
             {
                 var errorCode = $"{DateTime.Now: yyyyMMddHHmmss}";
                 LogService.Instance.Error($"审核工程失败，错误号：{errorCode}", ex);
-                result.Message = $"系统内部错误，错误号：{errorCode}";
-                return result;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"系统内部错误，错误号：{errorCode}");
             }
 
-            result.Result = "success";
-            return result;
+            return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult().Success());
         }
     }
 }

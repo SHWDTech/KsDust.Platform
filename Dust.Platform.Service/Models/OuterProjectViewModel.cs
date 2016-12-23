@@ -46,4 +46,9 @@ namespace Dust.Platform.Service.Models
         [Required(ErrorMessage = "设备信息不能为空")]
         public string[] Devices { get; set; }
     }
+
+    public class ProjectDeleteParams
+    {
+        public string ContractRecord { get; set; }
+    }
 }

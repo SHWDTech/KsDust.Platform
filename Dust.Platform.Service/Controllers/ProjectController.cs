@@ -28,6 +28,7 @@ namespace Dust.Platform.Service.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult(ModelState));
             }
+            model.Trim();
 
             var district = _ctx.Districts.FirstOrDefault(d => d.Name == model.District);
             if (district == null)
@@ -37,10 +38,10 @@ namespace Dust.Platform.Service.Controllers
 
             if (_ctx.KsDustProjects.Any(prj => prj.ContractRecord == model.ContractRecord))
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"合同备案号已经存在：{model.ContractRecord}"));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"合同备案号已经存在：{model.ContractRecord.Trim()}"));
             }
 
-            var enterprise = _ctx.Enterprises.FirstOrDefault(e => e.OuterId == model.EnterpriseId);
+            var enterprise = _ctx.Enterprises.FirstOrDefault(e => e.OuterId == model.EnterpriseId.Trim());
             if (enterprise == null)
             {
                 enterprise = new Enterprise
@@ -106,6 +107,7 @@ namespace Dust.Platform.Service.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult(ModelState));
             }
+            model.Trim();
 
             var district = _ctx.Districts.FirstOrDefault(d => d.Name == model.District);
             if (district == null)
@@ -181,7 +183,8 @@ namespace Dust.Platform.Service.Controllers
             if (model == null || !ModelState.IsValid)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult(ModelState));
-            } 
+            }
+            model.ContractRecord = model.ContractRecord.Trim();
 
             var project = _ctx.KsDustProjects.FirstOrDefault(p => p.ContractRecord == model.ContractRecord);
             if (project == null)

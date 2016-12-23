@@ -6,6 +6,7 @@ using System.Web.Http;
 using Dust.Platform.Service.Models;
 using Dust.Platform.Storage.Repository;
 using SHWDTech.Platform.Utility;
+// ReSharper disable PossibleInvalidOperationException
 
 namespace Dust.Platform.Service.Controllers
 {
@@ -32,7 +33,7 @@ namespace Dust.Platform.Service.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK,new OuterPlatformExecuteResult($"未找到合同备案号对应的工程。{model.ContractRecord}"));
             }
-            project.Audited = model.AuditResult;
+            project.Audited = model.AuditResult.Value;
             if (project.Audited)
             {
                 //TODO 添加备案失败的逻辑

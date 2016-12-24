@@ -175,6 +175,8 @@
     <Compile Include="Models\OuterPlatformExecuteResult.cs" />
     <Compile Include="Models\OuterProjectViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Process\ApiControllerExtensionMethod.cs" />
+    <Compile Include="Process\AuthFilterProcess.cs" />
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Providers\SimpleRefreshTokenProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />

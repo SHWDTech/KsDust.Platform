@@ -80,6 +80,8 @@ namespace Dust.Platform.Service.Providers
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
+            IList<string> roles;
+            IList<Claim> claims;
             using (var repo = new AuthRepository())
             {
                 var user = await repo.FindUser(context.UserName, context.Password);
@@ -89,10 +91,17 @@ namespace Dust.Platform.Service.Providers
                     context.SetError("invalid_grant", "The user name or password is incorrect.");
                     return;
                 }
+                roles = await repo.GetUserRoles(user);
+                claims = await repo.GetUserClaims(user);
             }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+            foreach (var role in roles)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+            identity.AddClaims(claims);
             identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
             identity.AddClaim(new Claim("sub", context.UserName));
 

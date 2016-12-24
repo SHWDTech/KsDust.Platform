@@ -1,4 +1,7 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Dust.Platform.Storage.Model;
+
 // ReSharper disable InconsistentNaming
 
 namespace Dust.Platform.Service.Models
@@ -24,5 +27,11 @@ namespace Dust.Platform.Service.Models
         public string latitude { get; set; }
 
         public bool isOnline { get; set; }
+    }
+
+    public class MapPostParams
+    {
+        [Required(ErrorMessage = "必须提供工程类型")]
+        public ProjectType? projectType { get; set; }
     }
 }

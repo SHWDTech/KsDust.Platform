@@ -70,5 +70,10 @@ namespace Dust.Platform.Storage.Repository
         /// 系统配置
         /// </summary>
         public virtual DbSet<SystemConfiguration> SystemConfigurations { get; set; }
+
+        /// <summary>
+        /// 用户关联的实体（区域、施工单位、工程、设备）
+        /// </summary>
+        public virtual DbSet<UserRelatedEntity> UserRelatedEntities { get; set; }
     }
 }

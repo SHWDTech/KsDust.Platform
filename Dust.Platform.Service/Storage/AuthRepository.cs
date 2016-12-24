@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Dust.Platform.Service.Entities;
 using Dust.Platform.Service.Models;
@@ -40,6 +41,21 @@ namespace Dust.Platform.Service.Storage
 
             return user;
         }
+
+        public async Task<IList<string>> GetUserRoles(IdentityUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user.Id);
+
+            return roles;
+        }
+
+        public async Task<IList<Claim>> GetUserClaims(IdentityUser user)
+        {
+            var claims = await _userManager.GetClaimsAsync(user.Id);
+
+            return claims;
+        }
+
 
         public Client FindClient(string clientId)
         {

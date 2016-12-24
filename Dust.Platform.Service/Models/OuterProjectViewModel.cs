@@ -8,6 +8,9 @@ namespace Dust.Platform.Service.Models
         [Required(ErrorMessage = "区县信息不能为空。")]
         public string District { get; set; }
 
+        [Required(ErrorMessage = "工程类型不能为空")]
+        public ProjectType? ProjectType { get; set; }
+
         [Required(ErrorMessage = "建设单位不能为空。")]
         public string ConstructionUnit { get; set; }
 

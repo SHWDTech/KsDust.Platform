@@ -57,6 +57,7 @@ namespace Dust.Platform.Service.Controllers
             var project = new KsDustProject
             {
                 Id = Guid.NewGuid(),
+                ProjectType = model.ProjectType.Value,
                 Name = model.Project,
                 CityArea = model.CityArea.Value,
                 SuperIntend = model.Superintend,

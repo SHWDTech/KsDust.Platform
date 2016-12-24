@@ -81,6 +81,10 @@
     <Compile Include="Migrations\201612220858380_Initial.Designer.cs">
       <DependentUpon>201612220858380_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612240301588_Add-Table-UserEntities.cs" />
+    <Compile Include="Migrations\201612240301588_Add-Table-UserEntities.Designer.cs">
+      <DependentUpon>201612240301588_Add-Table-UserEntities.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -97,6 +101,7 @@
     <Compile Include="Model\MonitorType.cs" />
     <Compile Include="Model\ProjectType.cs" />
     <Compile Include="Model\SystemConfiguration.cs" />
+    <Compile Include="Model\UserRelatedEntity.cs" />
     <Compile Include="Model\Vendor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AlarmRepository.cs" />
@@ -123,6 +128,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201612220858380_Initial.resx">
       <DependentUpon>201612220858380_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612240301588_Add-Table-UserEntities.resx">
+      <DependentUpon>201612240301588_Add-Table-UserEntities.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

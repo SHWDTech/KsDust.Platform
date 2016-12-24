@@ -3,7 +3,10 @@ using System.Web.Http;
 using Dust.Platform.Storage.Repository;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using Dust.Platform.Service.Models;
+using Dust.Platform.Service.Process;
 using Dust.Platform.Storage.Model;
 
 namespace Dust.Platform.Service.Controllers
@@ -18,12 +21,12 @@ namespace Dust.Platform.Service.Controllers
             _ctx = new KsDustDbContext();
         }
 
-        public IEnumerable<DeviceMapViewModel> Post()
+        public HttpResponseMessage Get([FromUri]MapPostParams model)
         {
             var mapList = new List<DeviceMapViewModel>();
-            var devices =
-                _ctx.KsDustDevices.Select(
-                        dev => new { id = dev.Id, name = dev.Name, longitude = dev.Longitude, latitude = dev.Latitude })
+            var devices = this.CreateFilterProcess()
+                    .GetAuthedDevices(obj => obj.Project.ProjectType == model.projectType.Value)
+                    .Select(dev => new { id = dev.Id, name = dev.Name, longitude = dev.Longitude, latitude = dev.Latitude })
                     .ToList();
 
             foreach (var device in devices)
@@ -63,7 +66,7 @@ namespace Dust.Platform.Service.Controllers
                 }
             }
 
-            return mapList;
+            return Request.CreateResponse(HttpStatusCode.OK, mapList);
         }
     }
 }

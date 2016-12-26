@@ -31,7 +31,6 @@ namespace Dust.Platform.Service.Models
 
     public class MapPostParams
     {
-        [Required(ErrorMessage = "必须提供工程类型")]
         public ProjectType? projectType { get; set; }
     }
 }

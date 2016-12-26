@@ -24,8 +24,10 @@ namespace Dust.Platform.Service.Controllers
         public HttpResponseMessage Get([FromUri]MapPostParams model)
         {
             var mapList = new List<DeviceMapViewModel>();
-            var devices = this.CreateFilterProcess()
-                    .GetAuthedDevices(obj => obj.Project.ProjectType == model.projectType.Value)
+            var authedDevices = model.projectType == null
+                ? this.CreateFilterProcess().GetAuthedDevices(null)
+                : this.CreateFilterProcess().GetAuthedDevices(dev => dev.Project.ProjectType == model.projectType.Value);
+            var devices = authedDevices
                     .Select(dev => new { id = dev.Id, name = dev.Name, longitude = dev.Longitude, latitude = dev.Latitude })
                     .ToList();
 

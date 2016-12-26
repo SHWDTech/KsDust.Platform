@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Dust.Platform.Service.Models;
+using Dust.Platform.Service.Process;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 
@@ -25,7 +26,7 @@ namespace Dust.Platform.Service.Controllers
             {
                     case AverageCategory.District:
                     var enterprises =
-                        _ctx.KsDustProjects.Where(prj => prj.DistrictId == model.CascadeElementId)
+                        this.CreateFilterProcess().GetAuthedProjects(null).Where(prj => prj.DistrictId == model.CascadeElementId)
                             .Select(obj => obj.Enterprise)
                             .Distinct()
                             .Select(
@@ -39,7 +40,7 @@ namespace Dust.Platform.Service.Controllers
                     return Request.CreateResponse(HttpStatusCode.OK, enterprises);
                     case AverageCategory.Enterprise:
                     var projects =
-                        _ctx.KsDustProjects.Where(obj => obj.EnterpriseId == model.CascadeElementId)
+                        this.CreateFilterProcess().GetAuthedProjects(null).Where(obj => obj.EnterpriseId == model.CascadeElementId)
                             .Select(item => new CascadeElementViewModel
                             {
                                 CascadeElementId = item.Id,
@@ -48,7 +49,8 @@ namespace Dust.Platform.Service.Controllers
                             });
                     return Request.CreateResponse(HttpStatusCode.OK, projects);
                     case AverageCategory.Project:
-                    var devices = _ctx.KsDustDevices.Where(obj => obj.ProjectId == model.CascadeElementId)
+                    var devices =
+                        this.CreateFilterProcess().GetAuthedDevices(null).Where(obj => obj.ProjectId == model.CascadeElementId)
                         .Select(item => new CascadeElementViewModel
                         {
                             CascadeElementId = item.Id,

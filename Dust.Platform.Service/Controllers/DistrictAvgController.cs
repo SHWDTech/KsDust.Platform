@@ -23,15 +23,24 @@ namespace Dust.Platform.Service.Controllers
         {
             var districts = _ctx.Districts.Where(dis => dis.Id != Guid.Empty).Select(d => new { d.Id, d.Name }).ToList();
 
+            var avgs = _ctx.AverageMonitorDatas.Where(tsp => tsp.Type == AverageType.FifteenAvg
+                                                                      && tsp.Category == AverageCategory.District);
+            if (model.projectType != null)
+            {
+                avgs = avgs.Where(item => item.ProjectType == model.projectType.Value);
+            }
+
+            var devs = model.projectType == null
+                ? _ctx.KsDustDevices
+                : _ctx.KsDustDevices.Where(c => c.Project.ProjectType == model.projectType);
+
             return (from district in districts
-                    let avg = _ctx.AverageMonitorDatas.FirstOrDefault(tsp => tsp.Type == AverageType.FifteenAvg 
-                    && tsp.TargetId == district.Id
-                    && tsp.Category == AverageCategory.District 
-                    && tsp.ProjectType == (ProjectType)model.projectType)
+                    let avg = avgs.OrderByDescending(a => a.AverageDateTime).FirstOrDefault(av => av.TargetId == district.Id)
+                    let dev = devs.Where(obj => obj.Project.DistrictId == district.Id)
                     select new DistrictAvgViewModel
                     {
                         name = district.Name,
-                        count = _ctx.KsDustDevices.Count(d => d.Project.DistrictId == district.Id && d.Project.ProjectType == (ProjectType)model.projectType),
+                        count = _ctx.KsDustDevices.Count(d => d.Project.DistrictId == district.Id && d.Project.ProjectType == model.projectType),
                         tspAvg = avg?.ParticulateMatter ?? 0
                     }).ToList();
         }

@@ -21,6 +21,6 @@ namespace Dust.Platform.Service.Models
 
     public class DistrictAvgPostParams
     {
-        public int projectType { get; set; }
+        public ProjectType? projectType { get; set; }
     }
 }

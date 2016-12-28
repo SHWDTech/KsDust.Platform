@@ -6,23 +6,23 @@
     public enum ProjectType : byte
     {
         /// <summary>
-        /// 所有工程类型
-        /// </summary>
-        AllType = 0x00,
-
-        /// <summary>
         /// 建筑工地
         /// </summary>
-        ConstructionSite = 0x01,
+        ConstructionSite = 0x00,
 
         /// <summary>
         /// 市政工地
         /// </summary>
-        MunicipalWorks = 0x02,
+        MunicipalWorks = 0x01,
 
         /// <summary>
         /// 搅拌站
         /// </summary>
-        MixingPlant = 0x03
+        MixingPlant = 0x02,
+
+        /// <summary>
+        /// 所有工程类型
+        /// </summary>
+        AllType = 0xFF
     }
 }

@@ -38,6 +38,14 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -91,8 +99,10 @@
     <Compile Include="Model\AverageType.cs" />
     <Compile Include="Model\CameraLogin.cs" />
     <Compile Include="Model\CityArea.cs" />
+    <Compile Include="Model\Client.cs" />
     <Compile Include="Model\District.cs" />
     <Compile Include="Model\Enterprise.cs" />
+    <Compile Include="Model\Enum.cs" />
     <Compile Include="Model\KsDustAlarm.cs" />
     <Compile Include="Model\KsDustCamera.cs" />
     <Compile Include="Model\KsDustDevice.cs" />
@@ -100,11 +110,15 @@
     <Compile Include="Model\KsDustProject.cs" />
     <Compile Include="Model\MonitorType.cs" />
     <Compile Include="Model\ProjectType.cs" />
+    <Compile Include="Model\RefreshToken.cs" />
     <Compile Include="Model\SystemConfiguration.cs" />
+    <Compile Include="Model\UserModel.cs" />
     <Compile Include="Model\UserRelatedEntity.cs" />
     <Compile Include="Model\Vendor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AlarmRepository.cs" />
+    <Compile Include="Repository\AuthContext.cs" />
+    <Compile Include="Repository\AuthRepository.cs" />
     <Compile Include="Repository\CameraRepository.cs" />
     <Compile Include="Repository\DeviceRepository.cs" />
     <Compile Include="Repository\DistrictRepository.cs" />

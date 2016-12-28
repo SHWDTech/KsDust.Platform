@@ -2,7 +2,7 @@
 using Dust.Platform.Service.Entities;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace Dust.Platform.Service.Storage
+namespace Dust.Platform.Storage.Repository
 {
     public class AuthContext : IdentityDbContext<IdentityUser>
     {

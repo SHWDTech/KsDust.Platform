@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using Dust.Platform.Service.Models;
-using Dust.Platform.Service.Storage;
+using Dust.Platform.Storage.Model;
+using Dust.Platform.Storage.Repository;
 using Microsoft.AspNet.Identity;
 
 namespace Dust.Platform.Service.Controllers

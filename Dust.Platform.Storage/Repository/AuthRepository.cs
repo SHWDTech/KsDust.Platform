@@ -4,11 +4,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Dust.Platform.Service.Entities;
-using Dust.Platform.Service.Models;
+using Dust.Platform.Storage.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace Dust.Platform.Service.Storage
+namespace Dust.Platform.Storage.Repository
 {
 
     public class AuthRepository : IDisposable

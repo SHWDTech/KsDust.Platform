@@ -31,11 +31,13 @@ namespace Dust.Platform.Service.Process
                     _dbContext.UserRelatedEntities.Where(ent => ent.User == userId).Select(id => id.Entity).ToList();
             if (user.IsInRole("DistrictManager"))
             {
-
                 authedQuery = authedQuery.Where(dev => userEntities.Contains(dev.Project.DistrictId));
             }
-
-            if (user.IsInRole("ProjectManager"))
+            else if (user.IsInRole("VendorManager"))
+            {
+                authedQuery = authedQuery.Where(dev => userEntities.Contains(dev.Id));
+            }
+            else if (user.IsInRole("ProjectManager"))
             {
                 authedQuery = authedQuery.Where(dev => userEntities.Contains(dev.ProjectId));
             }

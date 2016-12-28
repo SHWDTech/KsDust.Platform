@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Dust.Platform.Service.Entities;
-using Dust.Platform.Service.Storage;
+using Dust.Platform.Storage.Repository;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 
@@ -82,6 +82,7 @@ namespace Dust.Platform.Service.Providers
 
             IList<string> roles;
             IList<Claim> claims;
+            string userId;
             using (var repo = new AuthRepository())
             {
                 var user = await repo.FindUser(context.UserName, context.Password);
@@ -93,10 +94,12 @@ namespace Dust.Platform.Service.Providers
                 }
                 roles = await repo.GetUserRoles(user);
                 claims = await repo.GetUserClaims(user);
+                userId = user.Id;
             }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId));
             foreach (var role in roles)
             {
                 identity.AddClaim(new Claim(ClaimTypes.Role, role));

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Dust.Platform.Service.Entities;
-using Dust.Platform.Service.Storage;
+using Dust.Platform.Storage.Repository;
 using Microsoft.Owin.Security.Infrastructure;
 
 namespace Dust.Platform.Service.Providers

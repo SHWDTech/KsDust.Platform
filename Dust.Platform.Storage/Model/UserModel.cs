@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Dust.Platform.Service.Models
+namespace Dust.Platform.Storage.Model
 {
     [Serializable]
     public class UserModel

@@ -137,6 +137,7 @@ namespace Dust.Platform.Service.Controllers
 
             project = new KsDustProject
             {
+                ProjectType = model.ProjectType.Value,
                 Name = model.Project,
                 CityArea = model.CityArea.Value,
                 SuperIntend = model.Superintend,

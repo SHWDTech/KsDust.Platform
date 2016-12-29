@@ -9,11 +9,49 @@ body {
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     width: 100%;
 }
 
+.panel-heading {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+
+.panel {
+    margin-bottom: 0;
+}
+
+.panel-body {
+    padding: 2px;
+}
+
+.table > thead > tr > td {
+    padding: 4px !important;
+    font-size: 14px;
+    text-align: center;
+}
+
+.table > tbody > tr > td {
+    padding: 2px !important;
+    font-size: 13px;
+    text-align: center;
+}
+
+#main-container {
+    position: absolute;
+    bottom: 35px;
+    top: 50px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
@@ -28,8 +66,30 @@ textarea {
     max-width: 280px;
 }
 
+.tabBar {
+    width: 100%;
+    max-height: 30px;
+}
+
+.tabBar > .nav > li > a {
+    padding: 4px 10px;
+}
+
+.map {
+    height: 56%;
+    min-height: 56%;
+    max-height: 56%;
+    margin-bottom: 1%;
+}
+
+.targetInfo {
+    height: 40%;
+    min-height: 40%;
+    max-height: 40%;
+}
+
 .navbar-default {
-    background-color: #2ecc71;
+    background-color: #0767c8;
     border-color: #fff;
     border-bottom-width: 3px;
 }
@@ -60,23 +120,23 @@ textarea {
     .navbar-default .navbar-nav > .active > a:hover,
     .navbar-default .navbar-nav > .active > a:focus {
         color: #d1ffed;
-        background-color: #2ecc71;
+        background-color: #0767c8;
     }
 
     .navbar-default .navbar-nav > .open > a,
     .navbar-default .navbar-nav > .open > a:hover,
     .navbar-default .navbar-nav > .open > a:focus {
         color: #d1ffed;
-        background-color: #2ecc71;
+        background-color: #0767c8;
     }
 
     .navbar-default .navbar-toggle {
-        border-color: #2ecc71;
+        border-color: #0767c8;
     }
 
         .navbar-default .navbar-toggle:hover,
         .navbar-default .navbar-toggle:focus {
-            background-color: #2ecc71;
+            background-color: #0767c8;
         }
 
         .navbar-default .navbar-toggle .icon-bar {
@@ -110,6 +170,6 @@ textarea {
     .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
     .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
         color: #d1ffed;
-        background-color: #2ecc71;
+        background-color: #0767c8;
     }
 }

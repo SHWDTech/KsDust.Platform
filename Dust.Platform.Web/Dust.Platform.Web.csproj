@@ -159,6 +159,9 @@
     <Compile Include="Models\Account\LoginViewModel.cs" />
     <Compile Include="Models\Account\SignInResult.cs" />
     <Compile Include="Models\Account\SignInStatus.cs" />
+    <Compile Include="Models\Home\IndexViewModel.cs" />
+    <Compile Include="Models\Home\MonitorContentViewModel.cs" />
+    <Compile Include="Models\Home\MonitorViewModel.cs" />
     <Compile Include="Process\AccountProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -170,6 +173,11 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\line_conn.gif" />
+    <Content Include="Content\img\loading.gif" />
+    <Content Include="Content\img\zTreeStandard.gif" />
+    <Content Include="Content\img\zTreeStandard.png" />
+    <Content Include="Content\zTreeStyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -233,11 +241,16 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\Page\index.js" />
     <Content Include="Scripts\Page\Login.js" />
+    <Content Include="Scripts\Page\monitor.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Utility\chartsOption.js" />
+    <Content Include="Scripts\Utility\echarts.min.js" />
+    <Content Include="Scripts\Utility\jquery.ztree.all.min.js" />
     <Content Include="Scripts\Utility\sha.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -253,6 +266,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Monitor.cshtml" />
+    <Content Include="Views\Home\MonitorContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -266,6 +281,10 @@
     <ProjectReference Include="..\..\WDYunPlatform\Platform.Utility\Platform.Utility.csproj">
       <Project>{95b28f0d-c7d4-479c-aabf-e0f8b4b0e06c}</Project>
       <Name>Platform.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WDYunPlatform\SHWDTech.Platform.StorageConstrains\SHWDTech.Platform.StorageConstrains.csproj">
+      <Project>{6B3823B8-0540-43AF-9F41-498287D2DD4E}</Project>
+      <Name>SHWDTech.Platform.StorageConstrains</Name>
     </ProjectReference>
     <ProjectReference Include="..\Dust.Platform.Storage\Dust.Platform.Storage.csproj">
       <Project>{e9ac4c39-d38e-4570-9faa-c62dc1c82f83}</Project>

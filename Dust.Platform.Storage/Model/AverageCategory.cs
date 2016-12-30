@@ -23,6 +23,11 @@
         /// <summary>
         /// 区县
         /// </summary>
-        District = 0x03
+        District = 0x03,
+
+        /// <summary>
+        /// 全市
+        /// </summary>
+        WholeCity = 0x04
     }
 }

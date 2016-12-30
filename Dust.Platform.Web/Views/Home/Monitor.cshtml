@@ -1,6 +1,6 @@
-﻿@using Dust.Platform.Web.Models.Home
+﻿@using Dust.Platform.Storage.Model
+@using Dust.Platform.Web.Models.Home
 @using Newtonsoft.Json
-@using ViewType = Dust.Platform.Web.Models.Home.ViewType
 @model MonitorViewModel
 @{
     ViewBag.Title = "首页";
@@ -28,8 +28,8 @@
             @{
                 Html.RenderAction("MonitorContent", new MonitorContentPost
                 {
-                    MapContainer = "mapContainer",
-                    ViewType = ViewType.City
+                    TargetName = "",
+                    ViewType = AverageCategory.WholeCity
                 });
             }
         </div>
@@ -38,6 +38,7 @@
 </div>
 @section scripts{
     <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
+    <script src="~/Scripts/Utility/chartsOption.js"></script>
     <script src="~/Scripts/Page/monitor.js"></script>
     <script type="text/javascript">
         var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.TreeNodes))');
@@ -48,5 +49,9 @@
         }
 
         zTreeObj = $.fn.zTree.init($('#treeNodes'), setting, treeNodes);
+        $(function () {
+            initMap('mapContainer', 10, [121.458911, 31.231119]);
+            updateMonitorChart(setupChart('chart', '', 4, 'Selecter'), '', 4, 1, 1, 24);
+        });
     </script>
 }

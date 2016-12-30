@@ -46,6 +46,26 @@ namespace Dust.Platform.Storage.Model
         public double Pm100 { get; set; }
 
         /// <summary>
+        /// 噪音值
+        /// </summary>
+        public double Noise { get; set; }
+
+        /// <summary>
+        /// 温度
+        /// </summary>
+        public double Temperature { get; set; }
+
+        /// <summary>
+        /// 湿度
+        /// </summary>
+        public double Humidity { get; set; }
+
+        /// <summary>
+        /// 风速
+        /// </summary>
+        public double WindSpeed { get; set; }
+
+        /// <summary>
         /// 均值时间
         /// </summary>
         public DateTime AverageDateTime { get; set; }

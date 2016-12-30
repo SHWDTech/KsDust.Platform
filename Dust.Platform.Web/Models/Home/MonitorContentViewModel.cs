@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Dust.Platform.Storage.Model;
 
 namespace Dust.Platform.Web.Models.Home
 {
@@ -6,21 +8,20 @@ namespace Dust.Platform.Web.Models.Home
     {
         public Guid TargetId { get; set; }
 
-        public string MapContainer { get; set; }
+        public string TargetName { get; set; }
 
-        public ViewType  ViewType { get; set; }
-    }
+        public string MapContainer => $"{TargetName}mapContainer";
 
-    public enum ViewType : byte
-    {
-        City = 0x00,
+        public string Chart => $"{TargetName}chart";
 
-        District = 0x01,
+        public string Selecter => $"{TargetName}Selecter";
 
-        Enterprise = 0x02,
+        public string Title { get; set; }
 
-        Project = 0x03,
+        public List<AverageMonitorData> MonitorDatas { get; set; }
 
-        Device = 0x04
+        public List<DistrictInfo> DistrictInfos { get; set; }
+
+        public AverageCategory  ViewType { get; set; }
     }
 }

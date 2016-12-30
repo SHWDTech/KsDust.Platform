@@ -148,6 +148,35 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult MonitorContent(MonitorContentPost model)
         {
+            if (model.ViewType == AverageCategory.WholeCity)
+            {
+                model.Title = "全市";
+            }
+
+            var checkDate = DateTime.Now.AddDays(-1);
+            model.MonitorDatas =
+                _ctx.AverageMonitorDatas.Where(obj => 
+                obj.Type == AverageType.HourAvg 
+                && obj.Category == model.ViewType
+                && obj.TargetId == model.TargetId
+                && obj.AverageDateTime > checkDate).ToList();
+
+            if (model.ViewType == AverageCategory.WholeCity)
+            {
+                model.DistrictInfos = new List<DistrictInfo>();
+                foreach (var district in _ctx.Districts.Select(obj => new { obj.Id, obj.Name }).ToList())
+                {
+                    var info = new DistrictInfo
+                    {
+                        DistrictName = district.Name,
+                        ProjectsCount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id),
+                        ProjectsInstalled = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id && obj.Installed)
+                    };
+                    info.InstallPercentage = info.ProjectsCount == 0 ? "0.0%" : $"{info.ProjectsInstalled * 100.00d / info.ProjectsCount:F1}%";
+                    model.DistrictInfos.Add(info);
+                }
+            }
+            
             return View(model);
         }
     }

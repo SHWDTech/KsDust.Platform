@@ -19,19 +19,21 @@
         </div>
     </div>
     <div class="col-lg-10" style="height: 100%; overflow-y: hidden;">
-        <div class="tabBar">
+        <div class="tabBar" style="overflow-x: hidden;">
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#">所有数据</a></li>
+                <li role="presentation" class="active"><a data-target="00000000-0000-0000-000000000000" href="#">所有数据</a></li>
             </ul>
         </div>
-        <div style="height: 100%; padding: 5px; border: 1px solid #bce8f1;">
-            @{
-                Html.RenderAction("MonitorContent", new MonitorContentPost
-                {
-                    TargetName = "",
-                    ViewType = AverageCategory.WholeCity
-                });
-            }
+        <div class="tab-content">
+            <div class="present" data-id="00000000-0000-0000-000000000000" style="height: 100%; padding: 5px; border: 1px solid #bce8f1;">
+                @{
+                    Html.RenderAction("MonitorContent", new MonitorContentPost
+                    {
+                        TargetName = "",
+                        ViewType = AverageCategory.WholeCity
+                    });
+                }
+            </div>
         </div>
     </div>
 
@@ -41,17 +43,56 @@
     <script src="~/Scripts/Utility/chartsOption.js"></script>
     <script src="~/Scripts/Page/monitor.js"></script>
     <script type="text/javascript">
+        var tabSwitch = function(a) {
+            $('.tabBar ul>li').removeClass('active');
+            $(a).parent('li').addClass('active');
+            $('.present').hide();
+            $('.present[data-id="' + $(a).attr('data-target') + '"]').show();
+        }
         var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.TreeNodes))');
+        var tabPopUp = function (event, treeid, treenode) {
+            var li = '<li role="presentation"><a data-target="' + treenode.id + '" href="#">' + treenode.name + '</a></li>';
+            $('.tabBar ul').append(li);
+            $('.tabBar ul>li').removeClass('active');
+            var currentli = $($('.tabBar ul>li')[$('.tabBar ul>li').length - 1]);
+            currentli.addClass('active');
+            var content =
+                '<div class="present" data-id="' + treenode.id + '" style="height: 100%; padding: 5px; border: 1px solid #bce8f1;"></div>';
+            $('.present').hide();
+            $('.tab-content').append(content);
+            var prefix = (new Date()).getTime();
+            $.get('/Home/MonitorContent',
+                {
+                    TargetId: treenode.id,
+                    TargetName: treenode.name,
+                    ViewType: treenode.viewType,
+                    PreFix: prefix
+                },
+                function (ret) {
+                    $($('.present')[$('.present').length - 1]).append(ret);
+                    initMap(prefix + treenode.id + 'mapContainer', 10, [121.458911, 31.231119]);
+                    updateMonitorChart(setupChart(prefix + treenode.id + 'chart', treenode.id, treenode.viewType, prefix + treenode.id + 'Selecter'), treenode.id, treenode.viewType, 1, 1, 24);
+                    currentli.find('a').click(function() {
+                        tabSwitch(currentli.find('a'));
+                    });
+                });
+        }
         var setting = {
             view: {
                 selectedMulti: false
+            },
+            callback: {
+                onClick: tabPopUp
             }
         }
 
         zTreeObj = $.fn.zTree.init($('#treeNodes'), setting, treeNodes);
         $(function () {
-            initMap('mapContainer', 10, [121.458911, 31.231119]);
-            updateMonitorChart(setupChart('chart', '', 4, 'Selecter'), '', 4, 1, 1, 24);
+            initMap('00000000-0000-0000-0000-000000000000mapContainer', 10, [121.458911, 31.231119]);
+            updateMonitorChart(setupChart('00000000-0000-0000-0000-000000000000chart', '', 4, 'Selecter'), '', 4, 1, 1, 24);
+            $('.tabBar ul>li>a').click(function() {
+                tabSwitch($('.tabBar ul>li>a'));
+            });
         });
     </script>
 }

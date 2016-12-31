@@ -101,6 +101,8 @@ namespace Dust.Platform.Web.Controllers
                 var disNodes = new Nodes
                 {
                     name = district.Name,
+                    id = district.Id.ToString(),
+                    viewType = AverageCategory.District
                 };
                 var devices = _ctx.KsDustDevices.Include("Project")
                     .Include("Project.District")
@@ -116,6 +118,8 @@ namespace Dust.Platform.Web.Controllers
                     var entNode = new Nodes
                     {
                         name = ent.Name,
+                        id = ent.Id.ToString(),
+                        viewType = AverageCategory.Enterprise,
                         children = new List<Nodes>()
                     };
                     foreach (var prj in devices.Where(obj => obj.Project.EnterpriseId == ent.Id).Select(dev => dev.Project).Distinct().ToList())
@@ -123,6 +127,8 @@ namespace Dust.Platform.Web.Controllers
                         var prjNode = new Nodes
                         {
                             name = prj.Name,
+                            id = prj.Id.ToString(),
+                            viewType = AverageCategory.Project,
                             children = new List<Nodes>()
                         };
 
@@ -130,7 +136,9 @@ namespace Dust.Platform.Web.Controllers
                         {
                             prjNode.children.Add(new Nodes
                             {
-                                name = dev.Name
+                                name = dev.Name,
+                                id = dev.Id.ToString(),
+                                viewType = AverageCategory.Device
                             });
                         }
 
@@ -148,35 +156,93 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult MonitorContent(MonitorContentPost model)
         {
-            if (model.ViewType == AverageCategory.WholeCity)
-            {
-                model.Title = "全市";
-            }
+            model.Title = model.ViewType == AverageCategory.WholeCity ? "全市" : model.TargetName;
 
             var checkDate = DateTime.Now.AddDays(-1);
             model.MonitorDatas =
-                _ctx.AverageMonitorDatas.Where(obj => 
-                obj.Type == AverageType.HourAvg 
+                _ctx.AverageMonitorDatas.Where(obj =>
+                obj.Type == AverageType.HourAvg
                 && obj.Category == model.ViewType
                 && obj.TargetId == model.TargetId
                 && obj.AverageDateTime > checkDate).ToList();
 
-            if (model.ViewType == AverageCategory.WholeCity)
+            switch (model.ViewType)
             {
-                model.DistrictInfos = new List<DistrictInfo>();
-                foreach (var district in _ctx.Districts.Select(obj => new { obj.Id, obj.Name }).ToList())
-                {
-                    var info = new DistrictInfo
+                case AverageCategory.WholeCity:
+                    model.DistrictInfos = new List<DistrictInfo>();
+                    foreach (var district in _ctx.Districts.Select(obj => new { obj.Id, obj.Name }).ToList())
                     {
-                        DistrictName = district.Name,
-                        ProjectsCount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id),
-                        ProjectsInstalled = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id && obj.Installed)
+                        var info = new DistrictInfo
+                        {
+                            DistrictName = district.Name,
+                            ProjectsCount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id),
+                            ProjectsInstalled = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id && obj.Installed)
+                        };
+                        info.InstallPercentage = info.ProjectsCount == 0 ? "0.0%" : $"{info.ProjectsInstalled * 100.00d / info.ProjectsCount:F1}%";
+                        model.DistrictInfos.Add(info);
+                    }
+                    break;
+                case AverageCategory.District:
+                    model.DistrictStatuses = new List<DistrictStatus>();
+                    var projects = _ctx.KsDustProjects.Where(prj => prj.DistrictId == model.TargetId).Select(obj => new { obj.Id, obj.Name, obj.OccupiedArea, obj.Floorage }).ToList();
+                    var total = new DistrictStatus
+                    {
+                        ProjectName = "全区",
+                        DevicesCount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == model.TargetId),
+                        TotalOccupiedArea = projects.Sum(obj => obj.OccupiedArea),
+                        TotalFloorage = projects.Sum(obj => obj.Floorage)
                     };
-                    info.InstallPercentage = info.ProjectsCount == 0 ? "0.0%" : $"{info.ProjectsInstalled * 100.00d / info.ProjectsCount:F1}%";
-                    model.DistrictInfos.Add(info);
-                }
+                    model.DistrictStatuses.Add(total);
+                    foreach (var project in projects)
+                    {
+                        var statu = new DistrictStatus
+                        {
+                            ProjectName = project.Name,
+                            DevicesCount = _ctx.KsDustDevices.Count(obj => obj.ProjectId == project.Id),
+                            TotalOccupiedArea = project.OccupiedArea,
+                            TotalFloorage = project.Floorage
+                        };
+                        model.DistrictStatuses.Add(statu);
+                    }
+                    break;
+                case AverageCategory.Enterprise:
+                    model.DistrictStatuses = new List<DistrictStatus>();
+                    var entprojects = _ctx.KsDustProjects.Where(prj => prj.EnterpriseId == model.TargetId).Select(obj => new { obj.Id, obj.Name, obj.OccupiedArea, obj.Floorage }).ToList();
+                    var enttotal = new DistrictStatus
+                    {
+                        ProjectName = "全区",
+                        DevicesCount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == model.TargetId),
+                        TotalOccupiedArea = entprojects.Sum(obj => obj.OccupiedArea),
+                        TotalFloorage = entprojects.Sum(obj => obj.Floorage)
+                    };
+                    model.DistrictStatuses.Add(enttotal);
+                    foreach (var project in entprojects)
+                    {
+                        var statu = new DistrictStatus
+                        {
+                            ProjectName = project.Name,
+                            DevicesCount = _ctx.KsDustDevices.Count(obj => obj.ProjectId == project.Id),
+                            TotalOccupiedArea = project.OccupiedArea,
+                            TotalFloorage = project.Floorage
+                        };
+                        model.DistrictStatuses.Add(statu);
+                    }
+                    break;
+                case AverageCategory.Project:
+                    model.Project = _ctx.KsDustProjects.Include("District")
+                        .Include("Vendor")
+                        .Include("Enterprise")
+                        .First(obj => obj.Id == model.TargetId);
+                    break;
+                case AverageCategory.Device:
+                    model.Device = _ctx.KsDustDevices.Include("Vendor")
+                        .Include("Project")
+                        .Include("Project.District")
+                        .Include("Project.Enterprise")
+                        .First(obj => obj.Id == model.TargetId);
+                    break;
             }
-            
+
             return View(model);
         }
     }

@@ -40,4 +40,39 @@ namespace Dust.Platform.Web.Models.Ajax
 
         WindSPeed = 0x06
     }
+
+    public class DevicePostData
+    {
+        public AverageCategory viewType { get; set; }
+
+        public Guid targetId { get; set; }
+    }
+
+    public class DeviceCurrentStatus
+    {
+        public string name { get; set; }
+
+        public double pm { get; set; }
+
+        public double noise { get; set; }
+
+        public DeviceStatus status { get; set; }
+
+        public string lat { get; set; }
+
+        public string lon { get; set; }
+
+        public string time { get; set; }
+    }
+
+    public enum DeviceStatus : byte
+    {
+        OffLine = 0x00,
+
+        Good = 0x01,
+
+        Alarm = 0x02,
+
+        Bad = 0x03
+    }
 }

@@ -1,10 +1,30 @@
 ﻿var zTreeObj;
-var initMap = function (mapdiv, zoom, center) {
+var initMap = function (mapdiv, zoom, center, targetId, viewType) {
     var map = new AMap.Map(mapdiv);
     map.setZoom(zoom);
     map.setCenter(center);
+    $.get('/Ajax/Devices', { targetId: targetId, viewType: viewType }, function (ret) {
+        getDeviceStatus(ret, 0, map);
+    });
     return map;
 };
+
+var getDeviceStatus = function(source, startIndex, map) {
+    var devs = source.slice(startIndex, 100);
+    startIndex += 100;
+    $.post('/Ajax/DeviceStatus', { 'deviceList': devs }, function (ret) {
+        $.each(ret, function(index, dev) {
+            var marker = new AMap.Marker({
+                position: [dev.lon, dev.lat],
+                title:dev.name
+            });
+            marker.setMap(map);
+        });
+        if (startIndex < source.length) {
+            getDeviceStatus(source, startIndex, map);
+        }
+    });
+}
 
 var setupChart = function (chartdiv, target, tType, select) {
     $('#' + chartdiv).height($($('#' + chartdiv).parents('.panel')[1]).height() - 28);

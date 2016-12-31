@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Dust.Platform.Web.Models.Ajax;
 using System.Collections.Generic;
 using System.Linq;
+using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 
 namespace Dust.Platform.Web.Controllers
@@ -61,5 +62,65 @@ namespace Dust.Platform.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Devices(DevicePostData model)
+        {
+            var devices = new List<Guid>();
+            switch (model.viewType)
+            {
+                    case AverageCategory.WholeCity:
+                    devices.AddRange(_ctx.KsDustDevices.Select(obj => obj.Id).ToList());
+                    break;
+                    case AverageCategory.District:
+                    devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.Project.DistrictId == model.targetId).Select(dev => dev.Id).ToList());
+                    break;
+                    case AverageCategory.Enterprise:
+                    devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.Project.EnterpriseId == model.targetId).Select(dev => dev.Id).ToList());
+                    break;
+                    case AverageCategory.Project:
+                    devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.ProjectId == model.targetId).Select(dev => dev.Id).ToList());
+                    break;
+                    case AverageCategory.Device:
+                    devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.Id == model.targetId).Select(dev => dev.Id).ToList());
+                    break;
+            }
+
+            return Json(devices, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeviceStatus(List<Guid> deviceList)
+        {
+            if (deviceList == null || deviceList.Count <= 0) return null;
+            var ret = new List<DeviceCurrentStatus>();
+            var devLocal =
+                _ctx.KsDustDevices.Where(obj => deviceList.Contains(obj.Id))
+                    .Select(dev => new {dev.Id, dev.Name, dev.Longitude, dev.Latitude}).ToList();
+            foreach (var dev in devLocal)
+            {
+                var last =
+                    _ctx.KsDustMonitorDatas.Where(obj => obj.DeviceId == dev.Id)
+                        .OrderByDescending(item => item.UpdateTime)
+                        .FirstOrDefault();
+                ret.Add(new DeviceCurrentStatus
+                {
+                    name = dev.Name,
+                    lat = dev.Latitude,
+                    lon = dev.Longitude,
+                    pm = last?.ParticulateMatter ?? 0,
+                    noise = last?.Noise ?? 0,
+                    time = last?.UpdateTime.ToString("yyyy-MM-dd HH:mm") ?? "无数据",
+                    status = last == null ? Models.Ajax.DeviceStatus.OffLine : GetDeviceStatus(last.ParticulateMatter, last.UpdateTime)
+                });
+            }
+
+            return Json(ret, JsonRequestBehavior.AllowGet);
+        }
+
+        private DeviceStatus GetDeviceStatus(double pm, DateTime time)
+        {
+            if ((DateTime.Now - time).TotalMinutes > 15) return Models.Ajax.DeviceStatus.OffLine;
+            if (pm < 0.4) return Models.Ajax.DeviceStatus.Good;
+            if(pm < 1) return Models.Ajax.DeviceStatus.Alarm;
+            return Models.Ajax.DeviceStatus.Bad;
+        }
     }
 }

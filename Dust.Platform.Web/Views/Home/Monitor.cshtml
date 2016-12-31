@@ -70,7 +70,7 @@
                 },
                 function (ret) {
                     $($('.present')[$('.present').length - 1]).append(ret);
-                    initMap(prefix + treenode.id + 'mapContainer', 10, [121.458911, 31.231119]);
+                    initMap(prefix + treenode.id + 'mapContainer', 10, [121.458911, 31.231119], treenode.id, treenode.viewType);
                     updateMonitorChart(setupChart(prefix + treenode.id + 'chart', treenode.id, treenode.viewType, prefix + treenode.id + 'Selecter'), treenode.id, treenode.viewType, 1, 1, 24);
                     currentli.find('a').click(function() {
                         tabSwitch(currentli.find('a'));
@@ -88,7 +88,7 @@
 
         zTreeObj = $.fn.zTree.init($('#treeNodes'), setting, treeNodes);
         $(function () {
-            initMap('00000000-0000-0000-0000-000000000000mapContainer', 10, [121.458911, 31.231119]);
+            initMap('00000000-0000-0000-0000-000000000000mapContainer', 10, [121.458911, 31.231119], '00000000-0000-0000-0000-000000000000', 4);
             updateMonitorChart(setupChart('00000000-0000-0000-0000-000000000000chart', '', 4, 'Selecter'), '', 4, 1, 1, 24);
             $('.tabBar ul>li>a').click(function() {
                 tabSwitch($('.tabBar ul>li>a'));

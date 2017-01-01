@@ -95,62 +95,7 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult Monitor()
         {
-            var model = new MonitorViewModel();
-            foreach (var district in _ctx.Districts.ToList())
-            {
-                var disNodes = new Nodes
-                {
-                    name = district.Name,
-                    id = district.Id.ToString(),
-                    viewType = AverageCategory.District
-                };
-                var devices = _ctx.KsDustDevices.Include("Project")
-                    .Include("Project.District")
-                    .Include("Project.Enterprise")
-                    .Where(dev => dev.Project.DistrictId == district.Id).ToList();
-                var ents = devices.Select(dev => dev.Project.Enterprise).Distinct().ToList();
-                if (ents.Any())
-                {
-                    disNodes.children = new List<Nodes>();
-                }
-                foreach (var ent in ents)
-                {
-                    var entNode = new Nodes
-                    {
-                        name = ent.Name,
-                        id = ent.Id.ToString(),
-                        viewType = AverageCategory.Enterprise,
-                        children = new List<Nodes>()
-                    };
-                    foreach (var prj in devices.Where(obj => obj.Project.EnterpriseId == ent.Id).Select(dev => dev.Project).Distinct().ToList())
-                    {
-                        var prjNode = new Nodes
-                        {
-                            name = prj.Name,
-                            id = prj.Id.ToString(),
-                            viewType = AverageCategory.Project,
-                            children = new List<Nodes>()
-                        };
-
-                        foreach (var dev in devices.Where(obj => obj.ProjectId == prj.Id).ToList())
-                        {
-                            prjNode.children.Add(new Nodes
-                            {
-                                name = dev.Name,
-                                id = dev.Id.ToString(),
-                                viewType = AverageCategory.Device
-                            });
-                        }
-
-                        entNode.children.Add(prjNode);
-                    }
-
-                    disNodes.children.Add(entNode);
-                }
-
-                model.TreeNodes.Add(disNodes);
-            }
-
+            var model = new MonitorViewModel {TreeNodes = GetMenuNodes()};
             return View(model);
         }
 
@@ -244,6 +189,85 @@ namespace Dust.Platform.Web.Controllers
             }
 
             return View(model);
+        }
+
+        public ActionResult Statistics()
+        {
+            var model = new StatisticsViewModel
+            {
+                MenuNodes = GetMenuNodes()
+            };
+            foreach (var menuNode in model.MenuNodes)
+            {
+                menuNode.ajaxurl = "/Statistics/History";
+                menuNode.routeValue = new
+                {
+                    menuNode.viewType,
+                    menuNode.id
+                };
+            }
+            return View(model);
+        }
+
+        private List<Nodes> GetMenuNodes()
+        {
+            var list = new List<Nodes>();
+            foreach (var district in _ctx.Districts.ToList())
+            {
+                var disNodes = new Nodes
+                {
+                    name = district.Name,
+                    id = district.Id.ToString(),
+                    viewType = AverageCategory.District
+                };
+                var devices = _ctx.KsDustDevices.Include("Project")
+                    .Include("Project.District")
+                    .Include("Project.Enterprise")
+                    .Where(dev => dev.Project.DistrictId == district.Id).ToList();
+                var ents = devices.Select(dev => dev.Project.Enterprise).Distinct().ToList();
+                if (ents.Any())
+                {
+                    disNodes.children = new List<Nodes>();
+                }
+                foreach (var ent in ents)
+                {
+                    var entNode = new Nodes
+                    {
+                        name = ent.Name,
+                        id = ent.Id.ToString(),
+                        viewType = AverageCategory.Enterprise,
+                        children = new List<Nodes>()
+                    };
+                    foreach (var prj in devices.Where(obj => obj.Project.EnterpriseId == ent.Id).Select(dev => dev.Project).Distinct().ToList())
+                    {
+                        var prjNode = new Nodes
+                        {
+                            name = prj.Name,
+                            id = prj.Id.ToString(),
+                            viewType = AverageCategory.Project,
+                            children = new List<Nodes>()
+                        };
+
+                        foreach (var dev in devices.Where(obj => obj.ProjectId == prj.Id).ToList())
+                        {
+                            prjNode.children.Add(new Nodes
+                            {
+                                name = dev.Name,
+                                id = dev.Id.ToString(),
+                                viewType = AverageCategory.Device
+                            });
+                        }
+
+                        entNode.children.Add(prjNode);
+                    }
+
+                    disNodes.children.Add(entNode);
+                }
+
+                list.Add(disNodes);
+            }
+
+            return list;
         }
     }
 }

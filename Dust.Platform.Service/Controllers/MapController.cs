@@ -21,7 +21,8 @@ namespace Dust.Platform.Service.Controllers
             _ctx = new KsDustDbContext();
         }
 
-        public HttpResponseMessage Get([FromUri]MapPostParams model)
+        [Authorize]
+        public HttpResponseMessage Post([FromUri]MapPostParams model)
         {
             var mapList = new List<DeviceMapViewModel>();
             var authedDevices = model.projectType == null
@@ -45,8 +46,8 @@ namespace Dust.Platform.Service.Controllers
                     {
                         id = device.id.ToString(),
                         name = device.name,
-                        longitude = device.longitude,
-                        latitude = device.latitude,
+                        longitude = double.Parse(device.longitude),
+                        latitude = double.Parse(device.latitude),
                         isOnline = false
                     });
                 }
@@ -61,8 +62,8 @@ namespace Dust.Platform.Service.Controllers
                         pm25 = last.Pm25,
                         pm100 = last.Pm100,
                         rate = Helper.GetRate(last.ParticulateMatter),
-                        longitude = device.longitude,
-                        latitude = device.latitude,
+                        longitude = double.Parse(device.longitude),
+                        latitude = double.Parse(device.latitude),
                         isOnline = true
                     });
                 }

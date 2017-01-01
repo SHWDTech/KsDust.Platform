@@ -177,3 +177,16 @@ textarea {
         background-color: #0767c8;
     }
 }
+
+.accroding-menu-item > .panel-body {
+    height: 0;
+    overflow-y: hidden;
+    -ms-transition: height 0.1s ease;
+    -o-transition: height 0.1s ease;
+    -webkit-transition: height 0.1s ease;
+    transition: height 0.1s ease;
+}
+
+.nopadding {
+    height: 0;
+}

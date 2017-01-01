@@ -154,6 +154,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -164,6 +165,10 @@
     <Compile Include="Models\Home\IndexViewModel.cs" />
     <Compile Include="Models\Home\MonitorContentViewModel.cs" />
     <Compile Include="Models\Home\MonitorViewModel.cs" />
+    <Compile Include="Models\Home\StatisticsViewModel.cs" />
+    <Compile Include="Models\Statistics\ProjectsViewModel.cs" />
+    <Compile Include="Models\Table\TablePost.cs" />
+    <Compile Include="Models\Table\TotalDistrictsTable.cs" />
     <Compile Include="Process\AccountProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -250,6 +255,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Utility\accrodingmenu.js" />
     <Content Include="Scripts\Utility\chartsOption.js" />
     <Content Include="Scripts\Utility\echarts.min.js" />
     <Content Include="Scripts\Utility\jquery.ztree.all.min.js" />
@@ -270,6 +276,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Monitor.cshtml" />
     <Content Include="Views\Home\MonitorContent.cshtml" />
+    <Content Include="Views\Home\Statistics.cshtml" />
+    <Content Include="Views\Statistics\Projects.cshtml" />
+    <Content Include="Views\Statistics\Districts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

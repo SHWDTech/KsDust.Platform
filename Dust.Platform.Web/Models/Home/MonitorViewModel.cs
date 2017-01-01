@@ -19,5 +19,11 @@ namespace Dust.Platform.Web.Models.Home
         public AverageCategory viewType { get; set; }
 
         public List<Nodes> children { get; set; }
+
+        public string ajaxurl { get; set; }
+
+        public object routeValue { get; set; }
+
+        public string calBack { get; set; }
     }
 }

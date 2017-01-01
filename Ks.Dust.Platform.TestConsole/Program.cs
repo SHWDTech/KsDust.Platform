@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Dust.Platform.Service;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 using SHWDTech.Platform.Utility;
@@ -13,7 +14,16 @@ namespace Ks.Dust.Platform.TestConsole
         {
             if (args == null) return;
             //TestData();
-            GenCrcModBus();
+            //GenCrcModBus();
+            GenerateSecret();
+        }
+
+        static void GenerateSecret()
+        {
+            var code = Globals.NewIdentityCode();
+            Console.WriteLine(code);
+            Console.WriteLine(Helper.GetHash(code));
+            Console.ReadKey();
         }
 
         static void TestData()

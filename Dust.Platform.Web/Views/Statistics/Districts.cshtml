@@ -1,0 +1,30 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div id="totalDistricts">
+    @using (Ajax.BeginForm("Districts", null, new AjaxOptions()
+    {
+        UpdateTargetId = "totalDistricts",
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST"
+    }, new { Id = "districtsForm", @class = "form-horizontal" }))
+    {
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                
+            </div>
+            <div class="panel-body">
+                @(Html.BootstrapTable(null, TablePaginationOption.server, new { id = "districtTable", data_page_size = 50 })
+                      .Column("区县名称", "Name")
+                      .Column("监控工程数", "ProjectsCount")
+                      .Column("监控点数", "DevicesCount")
+                      .Column("占地面积㎡", "TotalOccupiedArea")
+                      .Column("建筑面积", "TotalFloorage")
+                      .Column("昨日颗粒物均值mg/m³", "LastDayValue")
+                      .Column("上月颗粒物均值mg/m³", "LastMonthValue"))
+            </div>
+        </div>
+    }
+</div>

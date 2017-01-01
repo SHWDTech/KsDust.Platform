@@ -1,11 +1,14 @@
 ﻿// ReSharper disable InconsistentNaming
 
+using System;
 using Dust.Platform.Storage.Model;
 
 namespace Dust.Platform.Service.Models
 {
     public class DistrictAvgViewModel
     {
+        public Guid id { get; set; }
+
         public string name { get; set; }
 
         public int count { get; set; }

@@ -39,6 +39,7 @@ namespace Dust.Platform.Service.Controllers
                     let dev = devs.Where(obj => obj.Project.DistrictId == district.Id)
                     select new DistrictAvgViewModel
                     {
+                        id = district.Id,
                         name = district.Name,
                         count = _ctx.KsDustDevices.Count(d => d.Project.DistrictId == district.Id && d.Project.ProjectType == model.projectType),
                         tspAvg = avg?.ParticulateMatter ?? 0

@@ -1,0 +1,38 @@
+﻿@using Dust.Platform.Web.Models.Statistics
+@model ProjectsViewModel
+@{
+    Layout = null;
+}
+
+<div id="totalProjects">
+    @using (Ajax.BeginForm("Projects", null, new AjaxOptions()
+    {
+        UpdateTargetId = "totalProjects",
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST"
+    }, new { Id = "projectsForm", @class = "form-horizontal" }))
+    {
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <span>所属区县：</span>
+                @Html.DropDownListFor(m => m.DistrictId, Model.Districts, new { @class = "form-control", style = "display: inline-block; height: 24px; padding: 0; width: 200px; font-size: 14px;" })
+                <span>所属施工企业：</span>
+                @Html.DropDownListFor(m => m.EnterpriseId, Model.Enterprises, new { @class = "form-control", style = "display: inline-block; height: 24px; padding: 0; width: 200px; font-size: 14px;" })
+            </div>
+            <div class="panel-body">
+                @(Html.BootstrapTable(null, TablePaginationOption.server, new {id = "projectTable"})
+                      .Column("工程名称", "Name")
+                      .Column("工程地址", "Address")
+                      .Column("合同备案号", "ContractRecord")
+                      .Column("建设单位", "ConstructionUnit")
+                      .Column("所属区县", "DistrictName")
+                      .Column("施工单位", "EnterpriseName")
+                      .Column("供应商", "VendorName")
+                      .Column("联系人", "SuperIntend")
+                      .Column("联系电话", "Mobile")
+                      .Column("占地面积", "OccupiedArea")
+                      .Column("施工面积", "Floorage"))
+            </div>
+        </div>
+    }
+</div>

@@ -166,6 +166,8 @@
     <Compile Include="Models\Home\MonitorContentViewModel.cs" />
     <Compile Include="Models\Home\MonitorViewModel.cs" />
     <Compile Include="Models\Home\StatisticsViewModel.cs" />
+    <Compile Include="Models\Statistics\HistoryLineChartViewModel.cs" />
+    <Compile Include="Models\Statistics\HistoryQueryPost.cs" />
     <Compile Include="Models\Statistics\ProjectsViewModel.cs" />
     <Compile Include="Models\Table\TablePost.cs" />
     <Compile Include="Models\Table\TotalDistrictsTable.cs" />
@@ -280,6 +282,7 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <None Include="Properties\PublishProfiles\ks_dust_web.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Resources\Images\Site\swirl_pattern.png" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
@@ -366,6 +369,7 @@
     <Content Include="Views\Statistics\Projects.cshtml" />
     <Content Include="Views\Statistics\Districts.cshtml" />
     <Content Include="Views\Statistics\HistoryRank.cshtml" />
+    <Content Include="Views\Statistics\HistoryQuery.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

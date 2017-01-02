@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
+using Dust.Platform.Web.Models.Ajax;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Statistics;
 using Dust.Platform.Web.Models.Table;
@@ -140,6 +142,7 @@ namespace Dust.Platform.Web.Controllers
             var query =
                _ctx.AverageMonitorDatas.Where(
                    obj =>
+                       obj.Type == post.DateType &&
                        obj.Category == post.type && obj.AverageDateTime > post.start &&
                        obj.AverageDateTime < post.end);
             if (post.type == AverageCategory.District)
@@ -180,6 +183,125 @@ namespace Dust.Platform.Web.Controllers
                     rows = avgs.OrderByDescending(avg => avg.Tsp).Skip(post.offset).Take(post.limit).ToList()
                 }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult HistoryQuery(HistoryQueryPost model)
+        {
+            return View(model);
+        }
+
+        public ActionResult HistoryChart(HistoryQueryChartPost post)
+        {
+            var ret = new List<HistoryLineChartViewModel>();
+            var query =
+                _ctx.AverageMonitorDatas.Where(
+                    obj =>
+                        obj.Category == post.Type && obj.TargetId == post.Id && obj.AverageDateTime > post.Start &&
+                        obj.AverageDateTime < post.End);
+            switch (post.DataType)
+            {
+                case MonitorDataValueType.Pm:
+                    ret.AddRange(query.Select(q => new { q.AverageDateTime, q.ParticulateMatter }).ToList().Select(model => new HistoryLineChartViewModel
+                    {
+                        name = model.AverageDateTime.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
+                        value =
+                        {
+                            [0] = model.AverageDateTime.ToString("yyyy-MM-dd HH:mm"), [1] = model.ParticulateMatter
+                        }
+                    }));
+                    break;
+                case MonitorDataValueType.Pm25:
+                    ret.AddRange(query.Select(q => new { q.AverageDateTime, q.Pm25 }).ToList().Select(model => new HistoryLineChartViewModel
+                    {
+                        name = model.AverageDateTime.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
+                        value =
+                        {
+                            [0] = model.AverageDateTime.ToString("yyyy-MM-dd HH:mm"), [1] = model.Pm25
+                        }
+                    }));
+                    break;
+                case MonitorDataValueType.Pm100:
+                    ret.AddRange(query.Select(q => new { q.AverageDateTime, q.Pm100 }).ToList().Select(model => new HistoryLineChartViewModel
+                    {
+                        name = model.AverageDateTime.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
+                        value =
+                        {
+                            [0] = model.AverageDateTime.ToString("yyyy-MM-dd HH:mm"), [1] = model.Pm100
+                        }
+                    }));
+                    break;
+                case MonitorDataValueType.Noise:
+                    ret.AddRange(query.Select(q => new { q.AverageDateTime, q.Noise }).ToList().Select(model => new HistoryLineChartViewModel
+                    {
+                        name = model.AverageDateTime.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
+                        value =
+                        {
+                            [0] = model.AverageDateTime.ToString("yyyy-MM-dd HH:mm"), [1] = model.Noise
+                        }
+                    }));
+                    break;
+                case MonitorDataValueType.Temperature:
+                    ret.AddRange(query.Select(q => new { q.AverageDateTime, q.Temperature }).ToList().Select(model => new HistoryLineChartViewModel
+                    {
+                        name = model.AverageDateTime.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
+                        value =
+                        {
+                            [0] = model.AverageDateTime.ToString("yyyy-MM-dd HH:mm"), [1] = model.Temperature
+                        }
+                    }));
+                    break;
+                case MonitorDataValueType.Humidity:
+                    ret.AddRange(query.Select(q => new { q.AverageDateTime, q.Humidity }).ToList().Select(model => new HistoryLineChartViewModel
+                    {
+                        name = model.AverageDateTime.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
+                        value =
+                        {
+                            [0] = model.AverageDateTime.ToString("yyyy-MM-dd HH:mm"), [1] = model.Humidity
+                        }
+                    }));
+                    break;
+                case MonitorDataValueType.WindSPeed:
+                    ret.AddRange(query.Select(q => new { q.AverageDateTime, q.WindSpeed }).ToList().Select(model => new HistoryLineChartViewModel
+                    {
+                        name = model.AverageDateTime.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
+                        value =
+                        {
+                            [0] = model.AverageDateTime.ToString("yyyy-MM-dd HH:mm"), [1] = model.WindSpeed
+                        }
+                    }));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            return Json(ret, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult HistoryQueryTable(HistoryQueryTablePost post)
+        {
+            var query =
+               _ctx.AverageMonitorDatas.Where(
+                   obj =>
+                       obj.Type == AverageType.FifteenAvg &&
+                       obj.TargetId == post.id &&
+                       obj.Category == post.type && obj.AverageDateTime > post.start &&
+                       obj.AverageDateTime < post.end).OrderByDescending(o => o.AverageDateTime);
+
+            return Json(new
+            {
+                total = query.Count(),
+                rows = query.Skip(post.offset).Take(post.limit).ToList().Select(q => new
+                {
+                    q.ParticulateMatter,
+                    q.Pm25,
+                    q.Pm100,
+                    q.Noise,
+                    q.Temperature,
+                    q.Humidity,
+                    q.WindSpeed,
+                    AverageDateTime = q.AverageDateTime.ToString("yyyy-MM-dd HH:mm")
+                })
+            }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

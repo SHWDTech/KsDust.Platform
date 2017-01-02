@@ -30,7 +30,7 @@ namespace Dust.Platform.Web.Models.Home
 
         public KsDustDevice Device { get; set; }
 
-        public AverageCategory  ViewType { get; set; }
+        public AverageCategory ViewType { get; set; }
     }
 
     public class DistrictStatus

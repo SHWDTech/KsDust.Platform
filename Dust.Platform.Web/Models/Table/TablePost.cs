@@ -27,4 +27,15 @@ namespace Dust.Platform.Web.Models.Table
 
         public DateTime end { get; set; }
     }
+
+    public class HistoryQueryTablePost : TablePost
+    {
+        public AverageCategory type { get; set; }
+
+        public Guid id { get; set; }
+
+        public DateTime start { get; set; }
+
+        public DateTime end { get; set; }
+    }
 }

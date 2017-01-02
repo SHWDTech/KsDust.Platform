@@ -89,7 +89,7 @@
                             currentli.find('a').click(function () {
                                 tabSwitch(currentli.find('a'));
                             });
-                        });
+                        }, treenode);
                     }
                 });
         }
@@ -145,7 +145,7 @@
                         '?type=' +
                         par.type +
                         '&dataType=' +
-                        $('#historyRank_' + par.Uuid + ' .dataSelect').val +
+                        $('#historyRank_' + par.Uuid + ' .dataSelect').val() +
                         '&start=' +
                         $('#' + 'start_' + par.Uuid).data('DateTimePicker').date()._d.toJSON() +
                         '&end=' +
@@ -155,6 +155,54 @@
 
         });
             $('#historyRank_' + par.Uuid + ' .query-button').click();
+            callback();
+        }
+
+        var setupHistoryQuery = function (par, callback, node) {
+            var tarId = node.routeValue.TargetId;
+            $('#' + 'start_' + tarId).datetimepicker({
+                locale: 'zh-cn'
+            });
+            $('#' + 'end_' + tarId).datetimepicker({
+                locale: 'zh-cn'
+            });
+            $('#chart_' + tarId).height($('#chart_' + tarId).parents('.chartContainer').height() - 30);
+            var chart = echarts.init(document.getElementById('chart_' + tarId));
+            $('#historyQuery_' + tarId + ' .query-button').on('click', function () {
+                $.post('/Statistics/HistoryChart',
+                {
+                    Id: tarId,
+                    Type: node.viewType,
+                    DataType: $('#historyQuery_' + tarId + ' .dataSelect').val(),
+                    Start: $('#' + 'start_' + tarId).data('DateTimePicker').date()._d.toJSON(),
+                    End: $('#' + 'end_' + tarId).data('DateTimePicker').date()._d.toJSON()
+                }, function (ret) {
+                    chart.setOption(chartsOption.timelineOptions({
+                        title: node.name + '-' + dataType[$('#historyQuery_' + tarId + ' .dataSelect').val()],
+                        yAxisName: dataType[$('#historyQuery_' + tarId + ' .dataSelect').val()],
+                        data: ret
+                    }));
+                });
+            });
+            $('#table_' + tarId).bootstrapTable({
+                height: $('#table_' + tarId).parents('.panel').parent('div').height() - 50
+            });
+            $('#table_' + tarId)
+                .bootstrapTable('refresh',
+                {
+                    url: '/Statistics/HistoryQueryTable' +
+                        '?type=' +
+                        node.viewType +
+                        '&id=' +
+                        node.id +
+                        '&start=' +
+                        $('#' + 'start_' + tarId).data('DateTimePicker').date()._d.toJSON() +
+                        '&end=' +
+                        $('#' + 'end_' + tarId).data('DateTimePicker').date()._d.toJSON()
+
+        });
+            $('#historyQuery_' + tarId + ' .query-button').click();
+
             callback();
         }
 

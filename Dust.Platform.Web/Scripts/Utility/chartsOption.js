@@ -33,10 +33,6 @@ chartsOption.lineOptions = function (params) {
         },
         tooltip: {
             trigger: 'axis',
-            //formatter: function (params) {
-            //    params = params[0];
-            //    return params.date + ':' + params.value[1];
-            //},
             axisPointer: {
                 animation: false
             }
@@ -58,3 +54,43 @@ chartsOption.lineOptions = function (params) {
 
     return option;
 };
+
+chartsOption.timelineOptions = function(params) {
+    var option = {
+        color: ['#3398DB'],
+        title: {
+            text: params['title']
+        },
+        tooltip: {
+            trigger: 'axis',
+            formatter: function (params) {
+                params = params[0];
+                var date = new Date(params.name);
+                return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
+            },
+            axisPointer: {
+                animation: false
+            }
+        },
+        xAxis: {
+            type: 'time'
+        },
+        yAxis: {
+            type: 'value',
+            name: params['yAxisName'],
+            boundaryGap: [0, '100%'],
+            splitLine: {
+                show: false
+            }
+        },
+        series: [{
+            name: params['title'],
+            type: 'line',
+            showSymbol: false,
+            hoverAnimation: false,
+            data: params['data']
+        }]
+    };
+
+    return option;
+}

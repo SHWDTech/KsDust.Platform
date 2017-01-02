@@ -199,11 +199,13 @@ namespace Dust.Platform.Web.Controllers
             };
             foreach (var menuNode in model.MenuNodes)
             {
-                menuNode.ajaxurl = "/Statistics/History";
+                menuNode.ajaxurl = "/Statistics/HistoryQuery";
+                menuNode.callBack = "setupHistoryQuery";
                 menuNode.routeValue = new
                 {
-                    menuNode.viewType,
-                    menuNode.id
+                    ViewType = menuNode.viewType,
+                    TargetId = menuNode.id,
+                    TargetName = menuNode.name
                 };
             }
             return View(model);

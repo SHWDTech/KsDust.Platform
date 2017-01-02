@@ -15,7 +15,16 @@ namespace Ks.Dust.Platform.TestConsole
             if (args == null) return;
             //TestData();
             //GenCrcModBus();
-            GenerateSecret();
+            //GenerateSecret();
+            ParseDateString();
+        }
+
+        static void ParseDateString()
+        {
+            var str = "2016-12-29T04:22:00.000Z";
+            var date = DateTime.Parse(str);
+            Console.WriteLine(date.ToString("yyyy-MM-dd HH:mm:ss"));
+            Console.ReadKey();
         }
 
         static void GenerateSecret()

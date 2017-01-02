@@ -1,0 +1,66 @@
+﻿@model Dust.Platform.Web.Models.Home.HistoryViewModel
+@{
+    Layout = null;
+}
+
+<div id="@Model.FormId" style="height: 100%;">
+    <div class="chartContainer" style="height: 48%; min-height: 48%; margin-bottom: 0.5%;">
+        @using (Ajax.BeginForm("HistoryRank", new AjaxOptions
+        {
+            HttpMethod = "POST",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = Model.FormId
+        }))
+        {
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <select class="form-control dataSelect" style="display: inline-block; height: 24px; padding: 0; width: 150px; font-size: 14px;">
+                        <option value="0">粉尘(mg/m³)</option>
+                        <option value="1">PM2.5(mg/m³)</option>
+                        <option value="2">PM10(mg/m³)</option>
+                        <option value="3">噪音(dB)</option>
+                        <option value="4">温度(℃)</option>
+                        <option value="5">湿度(%)</option>
+                        <option value="6">风速(m/s)</option>
+                    </select>
+                    <select class="form-control dateSelect" style="display: inline-block; height: 24px; padding: 0; width: 80px; font-size: 14px;">
+                        <option value="1">小时</option>
+                        <option value="2">天</option>
+                        <option value="3">月</option>
+                    </select>
+                    <input type="text" class="form-control" id="@Model.StartDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss")" />
+                    <input type="text" class="form-control" id="@Model.EndDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" />
+                    <button type="button" class="query-button" style="border: 0; background: transparent;">
+                        <span class="glyphicon glyphicon-search" style="display: inline-block; cursor: pointer; width: 20px;"></span>
+                    </button>
+                </div>
+                <div class="panel-body">
+                    <div id="@Model.ChartId"></div>
+                </div>
+            </div>
+        }
+    </div>
+    <div style="height: 48%; min-height: 48%;">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                @Model.Title
+            </div>
+            <div class="panel-body">
+                @{ var table = Html.BootstrapTable(null, TablePaginationOption.server, new
+                    {
+                        id = Model.TableId,
+                        data_page_size = 50
+                    });
+                    var builder = table.Column(Model.Type == 0 ? "区县名称" : "工程名称", "Name");
+                    builder = builder.Column("粉尘(mg/m³)", "Tsp")
+                                       .Column("PM2.5(mg/m³)", "Pm25")
+                                       .Column("PM10(mg/m³)", "Pm100")
+                                       .Column("噪音(dB)", "Noise")
+                                       .Column("温度(℃)", "Temp")
+                                       .Column("湿度(%)", "Humidity");
+                }
+                @(builder)
+            </div>
+        </div>
+    </div>
+</div>

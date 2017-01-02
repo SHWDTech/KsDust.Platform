@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
+using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Statistics;
 using Dust.Platform.Web.Models.Table;
 
@@ -65,33 +65,121 @@ namespace Dust.Platform.Web.Controllers
         public ActionResult GetDistricts(TablePost model)
         {
             var total = _ctx.Districts.Count();
-            var districts = _ctx.Districts.Select(obj => new {obj.Id, obj.Name}).ToList();
+            var districts = _ctx.Districts.Select(obj => new { obj.Id, obj.Name }).ToList();
             var lastDay = DateTime.Now.AddDays(-1);
             var lastMonth = DateTime.Now.AddMonths(-1);
             var ret = (from district in districts
-                let query = _ctx.AverageMonitorDatas.Where(obj => obj.TargetId == district.Id)
-                let lastDayValue = query.FirstOrDefault(obj => obj.AverageDateTime > lastDay && obj.Type == AverageType.DayAvg)
-                let lastMonthValue = query.FirstOrDefault(obj => obj.AverageDateTime > lastMonth && obj.Type == AverageType.MonthAvg)
-                let pcount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id)
-                let dcount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == district.Id)
-                let toa = pcount == 0 ? 0 : _ctx.KsDustProjects.Where(item => item.DistrictId == district.Id).Sum(obj => obj.OccupiedArea)
-                let tfa = pcount == 0 ? 0 : _ctx.KsDustProjects.Where(item => item.DistrictId == district.Id).Sum(obj => obj.Floorage)
-                select new TotalDistrictsTable
-                {
-                    Name = district.Name,
-                    ProjectsCount = pcount,
-                    DevicesCount = dcount,
-                    TotalOccupiedArea = toa,
-                    TotalFloorage = tfa,
-                    LastDayValue = lastDayValue?.ParticulateMatter ?? 0d,
-                    LastMonthValue = lastMonthValue?.ParticulateMatter ?? 0d
-                }).ToList();
+                       let query = _ctx.AverageMonitorDatas.Where(obj => obj.TargetId == district.Id)
+                       let lastDayValue = query.FirstOrDefault(obj => obj.AverageDateTime > lastDay && obj.Type == AverageType.DayAvg)
+                       let lastMonthValue = query.FirstOrDefault(obj => obj.AverageDateTime > lastMonth && obj.Type == AverageType.MonthAvg)
+                       let pcount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id)
+                       let dcount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == district.Id)
+                       let toa = pcount == 0 ? 0 : _ctx.KsDustProjects.Where(item => item.DistrictId == district.Id).Sum(obj => obj.OccupiedArea)
+                       let tfa = pcount == 0 ? 0 : _ctx.KsDustProjects.Where(item => item.DistrictId == district.Id).Sum(obj => obj.Floorage)
+                       select new TotalDistrictsTable
+                       {
+                           Name = district.Name,
+                           ProjectsCount = pcount,
+                           DevicesCount = dcount,
+                           TotalOccupiedArea = toa,
+                           TotalFloorage = tfa,
+                           LastDayValue = lastDayValue?.ParticulateMatter ?? 0d,
+                           LastMonthValue = lastMonthValue?.ParticulateMatter ?? 0d
+                       }).ToList();
 
             return Json(new
             {
                 total,
                 rows = ret
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult HistoryRank(HistoryRankPost post)
+        {
+            var model = new HistoryViewModel
+            {
+                Title = post.Type == 0 ? "区县数据排名" : "工程颗粒排名",
+                Uuid = post.Uuid,
+                Type = post.Type
+            };
+            return View(model);
+        }
+
+        public ActionResult HistoryRankChart(HistoryRankChartPost post)
+        {
+            var query =
+                _ctx.AverageMonitorDatas.Where(
+                    obj =>
+                        obj.Category == post.Type && obj.AverageDateTime > post.Start &&
+                        obj.AverageDateTime < post.End);
+            if (post.Type == AverageCategory.District)
+            {
+                var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
+                {
+                    _ctx.Districts.FirstOrDefault(obj => obj.Id == item.Key).Name,
+                    Avg = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0
+                }).ToList();
+
+                return Json(avgs, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
+                {
+                    _ctx.KsDustProjects.FirstOrDefault(obj => obj.Id == item.Key).Name,
+                    Avg = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0
+                }).OrderByDescending(avg => avg.Avg).Take(10).ToList();
+
+                return Json(avgs, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult HistoryRankTable(HistoryTablePost post)
+        {
+
+            var query =
+               _ctx.AverageMonitorDatas.Where(
+                   obj =>
+                       obj.Category == post.type && obj.AverageDateTime > post.start &&
+                       obj.AverageDateTime < post.end);
+            if (post.type == AverageCategory.District)
+            {
+                var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
+                {
+                    _ctx.Districts.FirstOrDefault(obj => obj.Id == item.Key).Name,
+                    Tsp = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0,
+                    Pm25 = item.Any() ? Math.Round(item.Average(val => val.Pm25), 2) : 0,
+                    Pm100 = item.Any() ? Math.Round(item.Average(val => val.Pm100), 2) : 0,
+                    Noise = item.Any() ? Math.Round(item.Average(val => val.Noise), 2) : 0,
+                    Temp = item.Any() ? Math.Round(item.Average(val => val.Temperature), 2) : 0,
+                    Humidity = item.Any() ? Math.Round(item.Average(val => val.Humidity), 2) : 0
+                }).ToList();
+
+                return Json(new
+                {
+                    total = avgs.Count,
+                    rows = avgs
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
+                {
+                    _ctx.KsDustProjects.FirstOrDefault(obj => obj.Id == item.Key).Name,
+                    Tsp = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0,
+                    Pm25 = item.Any() ? Math.Round(item.Average(val => val.Pm25), 2) : 0,
+                    Pm100 = item.Any() ? Math.Round(item.Average(val => val.Pm100), 2) : 0,
+                    Noise = item.Any() ? Math.Round(item.Average(val => val.Noise), 2) : 0,
+                    Temp = item.Any() ? Math.Round(item.Average(val => val.Temperature), 2) : 0,
+                    Humidity = item.Any() ? Math.Round(item.Average(val => val.Humidity), 2) : 0
+                });
+
+                return Json(new
+                {
+                    total = avgs.Count(),
+                    rows = avgs.OrderByDescending(avg => avg.Tsp).Skip(post.offset).Take(post.limit).ToList()
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

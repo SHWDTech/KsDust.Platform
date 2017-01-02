@@ -9,6 +9,7 @@
 @section styles{
     <link href="/Content/zTreeStyle.css" rel="stylesheet">
     <link href="/Content/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 }
 <div style="position: relative; height: 100%;">
     <div class="col-lg-2 accroding-menu" style="height: 100%;">
@@ -33,8 +34,7 @@
     </div>
     <div class="col-lg-10" style="height: 100%; overflow-y: hidden;">
         <div class="tabBar" style="overflow-x: hidden;">
-            <ul class="nav nav-tabs" role="tablist">
-            </ul>
+            <ul class="nav nav-tabs" role="tablist"></ul>
         </div>
         <div class="tab-content">
         </div>
@@ -45,9 +45,21 @@
     <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
     <script src="/Scripts/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="/Scripts/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="/Scripts/moment-with-locales.min.js"></script>
+    <script src="/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/Utility/chartsOption.js"></script>
     <script src="/Scripts/Utility/accrodingmenu.js"></script>
     <script type="text/javascript">
         var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.MenuNodes))');
+        var dataType = {
+            0: '粉尘(mg/m³)',
+            1: 'Pm2.5(mg/m³)',
+            2: 'Pm10(mg/m³)',
+            3: '噪音(dB)',
+            4: '温度(℃)',
+            5: '湿度(%)',
+            6: '风速(m/s)'
+        }
         var tabSwitch = function (a) {
             $('.tabBar ul>li').removeClass('active');
             $(a).parent('li').addClass('active');
@@ -73,7 +85,7 @@
                 function (ret) {
                     $($('.present')[$('.present').length - 1]).append(ret);
                     if (treenode.callBack != null) {
-                        window[treenode.callBack](treenode.param, function() {
+                        window[treenode.callBack](treenode.param, function () {
                             currentli.find('a').click(function () {
                                 tabSwitch(currentli.find('a'));
                             });
@@ -99,14 +111,108 @@
             callback();
         }
 
+        var setupRankChart = function (par, callback) {
+            $('#' + 'start_' + par.Uuid).datetimepicker({
+                locale: 'zh-cn'
+            });
+            $('#' + 'end_' + par.Uuid).datetimepicker({
+                locale: 'zh-cn'
+            });
+            $('#chart_' + par.Uuid).height($('#chart_' + par.Uuid).parents('.chartContainer').height() - 30);
+            var chart = echarts.init(document.getElementById('chart_' + par.Uuid));
+            $('#historyRank_' + par.Uuid + ' .query-button').on('click', function () {
+                $.post('/Statistics/HistoryRankChart',
+                {
+                    Type: par.type,
+                    DataType: $('#historyRank_' + par.Uuid + ' .dataSelect').val(),
+                    DateType: $('#historyRank_' + par.Uuid + ' .dateSelect').val(),
+                    Start: $('#' + 'start_' + par.Uuid).data('DateTimePicker').date()._d.toJSON(),
+                    End: $('#' + 'end_' + par.Uuid).data('DateTimePicker').date()._d.toJSON()
+                }, function (ret) {
+                    chart.setOption(chartsOption.barOption({
+                        title: "昆山市区县颗粒物小时均值",
+                        xAxis: ret.map(function (d) { return d.Name }),
+                        yAxisName: dataType[$('#historyRank_' + par.Uuid + ' .dataSelect').val()],
+                        series: [{ name: $('#historyRank_' + par.Uuid + ' .dataSelect').find("option:selected").text(), type: 'bar', data: ret.map(function (d) { return d.Avg }) }]
+                    }));
+                });
+            });
+            $('#table_' + par.Uuid).bootstrapTable();
+            $('#table_' + par.Uuid)
+                .bootstrapTable('refresh',
+                {
+                    url: par.url +
+                        '?type=' +
+                        par.type +
+                        '&dataType=' +
+                        $('#historyRank_' + par.Uuid + ' .dataSelect').val +
+                        '&start=' +
+                        $('#' + 'start_' + par.Uuid).data('DateTimePicker').date()._d.toJSON() +
+                        '&end=' +
+                        $('#' + 'end_' + par.Uuid).data('DateTimePicker').date()._d.toJSON() +
+                        '&dateType=' +
+                        $('#historyRank_' + par.Uuid + ' .dateSelect').val()
+
+        });
+            $('#historyRank_' + par.Uuid + ' .query-button').click();
+            callback();
+        }
+
+        function guid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                  .toString(16)
+                  .substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+              s4() + '-' + s4() + s4() + s4();
+        }
+
+        var disGuid = guid();
+        var prjGuid = guid();
         var basicNodes = [
-            { name: "全市工地查询", id: 0, ajaxurl: '/Statistics/Projects', callBack: 'setupTable', param: { table: 'projectTable', url: '/Statistics/GetProjects' } },
-            { name: "各区县信息", id: 1, ajaxurl: '/Statistics/Districts', callBack: 'setupTable', param: { table: 'districtTable', url: '/Statistics/GetDistricts' } },
-            { name: "区县颗粒物排名", id: 2, ajaxurl: '/Statistics/DistrictRank' },
-            { name: "工地颗粒物排名", id: 3, ajaxurl: '/Statistics/ProjectRank' }
+            {
+                name: "全市工地查询",
+                id: 0,
+                ajaxurl: '/Statistics/Projects',
+                callBack: 'setupTable',
+                param: { table: 'projectTable', url: '/Statistics/GetProjects' }
+            },
+            {
+                name: "各区县信息",
+                id: 1,
+                ajaxurl: '/Statistics/Districts',
+                callBack: 'setupTable',
+                param: { table: 'districtTable', url: '/Statistics/GetDistricts' }
+            },
+            {
+                name: "区县颗粒物排名",
+                id: 2,
+                ajaxurl: '/Statistics/HistoryRank',
+                callBack: 'setupRankChart',
+                routeValue: { Type: 0, Uuid: disGuid },
+                param: {
+                    Uuid: disGuid,
+                    type: 3,
+                    url: '/Statistics/HistoryRankTable'
+                }
+            },
+            {
+                name: "工地颗粒物排名",
+                id: 3,
+                ajaxurl: '/Statistics/HistoryRank',
+                callBack: 'setupRankChart',
+                routeValue: { Type: 1, Uuid: prjGuid },
+                param: {
+                    Uuid: prjGuid,
+                    type: 1,
+                    url: '/Statistics/HistoryRankTable'
+                }
+            }
         ];
         $.fn.zTree.init($('#infotree'), setting, basicNodes);
         $.fn.zTree.init($('#querytree'), setting, treeNodes);
         $.fn.zTree.init($('#historytree'), setting, treeNodes);
+        $('#infotree_1_a').click();
     </script>
 }

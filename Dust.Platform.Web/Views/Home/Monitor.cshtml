@@ -51,6 +51,11 @@
         }
         var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.TreeNodes))');
         var tabPopUp = function (event, treeid, treenode) {
+            if ($('.tabBar a[data-target=' + treenode.id + ']').length !== 0) {
+                var existLi = $('.tabBar a[data-target=' + treenode.id + ']')[0];
+                tabSwitch($(existLi));
+                return;
+            }
             var li = '<li role="presentation"><a data-target="' + treenode.id + '" href="#">' + treenode.name + '</a></li>';
             $('.tabBar ul').append(li);
             $('.tabBar ul>li').removeClass('active');

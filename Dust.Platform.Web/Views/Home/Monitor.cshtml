@@ -8,6 +8,7 @@
 @section styles{
     <link href="/Content/zTreeStyle.css" rel="stylesheet">
     <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=bd6b099fe5ff4f6975776ea630775a02"></script>
+    <link href="/Content/bootstrap-table.min.css" rel="stylesheet" />
 }
 <div style="position: relative; height: 100%;">
     <div class="col-lg-2" style="height: 100%;">
@@ -21,11 +22,11 @@
     <div class="col-lg-10" style="height: 100%; overflow-y: hidden;">
         <div class="tabBar" style="overflow-x: hidden;">
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a data-target="00000000-0000-0000-000000000000" href="#">所有数据</a></li>
+                @*<li role="presentation" class="active"><a data-target="00000000-0000-0000-000000000000" href="#">所有数据</a></li>*@
             </ul>
         </div>
         <div class="tab-content">
-            <div class="present" data-id="00000000-0000-0000-000000000000" style="height: 100%; padding: 5px; border: 1px solid #bce8f1;">
+            @*<div class="present" data-id="00000000-0000-0000-000000000000" style="height: 100%; padding: 5px; border: 1px solid #bce8f1;">
                 @{
                     Html.RenderAction("MonitorContent", new MonitorContentPost
                     {
@@ -33,7 +34,7 @@
                         ViewType = AverageCategory.WholeCity
                     });
                 }
-            </div>
+            </div>*@
         </div>
     </div>
 
@@ -42,8 +43,10 @@
     <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
     <script src="~/Scripts/Utility/chartsOption.js"></script>
     <script src="~/Scripts/Page/monitor.js"></script>
+    <script src="/Scripts/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/Scripts/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
     <script type="text/javascript">
-        var tabSwitch = function(a) {
+        var tabSwitch = function (a) {
             $('.tabBar ul>li').removeClass('active');
             $(a).parent('li').addClass('active');
             $('.present').hide();
@@ -75,9 +78,17 @@
                 },
                 function (ret) {
                     $($('.present')[$('.present').length - 1]).append(ret);
+                    $('#gtable_' + treenode.id).attr('data-height', $('#gtable_' + treenode.id).parents('.targetInfo').height() - 28);
+                    $('#gtable_' + treenode.id).bootstrapTable();
+                    $('#dtable_' + treenode.id).attr('data-height', $('#dtable_' + treenode.id).parents('.panel-info').height() - 18);
+                    $('#dtable_' + treenode.id).bootstrapTable();
+                    $('#dtable_' + treenode.id).bootstrapTable('refresh',
+                    {
+                        url: $('#dtable_' + treenode.id).attr('url')
+                    });
                     initMap(prefix + treenode.id + 'mapContainer', 10, [121.458911, 31.231119], treenode.id, treenode.viewType);
                     updateMonitorChart(setupChart(prefix + treenode.id + 'chart', treenode.id, treenode.viewType, prefix + treenode.id + 'Selecter'), treenode.id, treenode.viewType, 1, 1, 24);
-                    currentli.find('a').click(function() {
+                    currentli.find('a').click(function () {
                         tabSwitch(currentli.find('a'));
                     });
                 });
@@ -93,11 +104,7 @@
 
         zTreeObj = $.fn.zTree.init($('#treeNodes'), setting, treeNodes);
         $(function () {
-            initMap('00000000-0000-0000-0000-000000000000mapContainer', 10, [121.458911, 31.231119], '00000000-0000-0000-0000-000000000000', 4);
-            updateMonitorChart(setupChart('00000000-0000-0000-0000-000000000000chart', '', 4, 'Selecter'), '', 4, 1, 1, 24);
-            $('.tabBar ul>li>a').click(function() {
-                tabSwitch($('.tabBar ul>li>a'));
-            });
+            tabPopUp(null, null, { name: '所有数据', viewType: 4, id: '00000000-0000-0000-0000-000000000000' });
         });
     </script>
 }

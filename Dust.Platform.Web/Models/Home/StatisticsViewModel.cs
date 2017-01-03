@@ -7,7 +7,9 @@ namespace Dust.Platform.Web.Models.Home
 {
     public class StatisticsViewModel
     {
-        public List<Nodes> MenuNodes { get; set; }
+        public List<Nodes> QueryMenuNodes { get; set; }
+
+        public List<Nodes> StatsMenuNodes { get; set; }
     }
 
     public class HistoryViewModel
@@ -27,6 +29,25 @@ namespace Dust.Platform.Web.Models.Home
         public string TableId => $"table_{Uuid}";
 
         public int Type { get; set; }
+    }
+
+    public class HistoryStatsViewModel
+    {
+        public Guid TargetId { get; set; }
+
+        public string TargetName { get; set; }
+
+        public AverageCategory ViewType { get; set; }
+
+        public string FormId => $"historyStats_{TargetId}";
+
+        public string ChartId => $"hschart_{TargetId}";
+
+        public string StartDateId => $"hsstart_{TargetId}";
+
+        public string EndDateId => $"hsend_{TargetId}";
+
+        public string TableId => $"hstable_{TargetId}";
     }
 
     public class HistoryRankPost

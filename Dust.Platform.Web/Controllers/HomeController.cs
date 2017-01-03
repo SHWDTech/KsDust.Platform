@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Home;
+using Dust.Platform.Web.Models.Table;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -195,20 +196,53 @@ namespace Dust.Platform.Web.Controllers
         {
             var model = new StatisticsViewModel
             {
-                MenuNodes = GetMenuNodes()
+                QueryMenuNodes = GetMenuNodes(),
+                StatsMenuNodes = GetMenuNodes()
             };
-            foreach (var menuNode in model.MenuNodes)
+
+            QueryMenuNodes(model.QueryMenuNodes);
+            StatisticsMenuNodes(model.StatsMenuNodes);
+            return View(model);
+        }
+
+        private void QueryMenuNodes(List<Nodes> nodes)
+        {
+            foreach (var menuNode in nodes)
             {
                 menuNode.ajaxurl = "/Statistics/HistoryQuery";
                 menuNode.callBack = "setupHistoryQuery";
+                menuNode.nodetype = "historyQuery";
                 menuNode.routeValue = new
                 {
                     ViewType = menuNode.viewType,
                     TargetId = menuNode.id,
                     TargetName = menuNode.name
                 };
+                if (menuNode.children != null)
+                {
+                    QueryMenuNodes(menuNode.children);
+                }
             }
-            return View(model);
+        }
+
+        private void StatisticsMenuNodes(List<Nodes> nodes)
+        {
+            foreach (var menuNode in nodes)
+            {
+                menuNode.ajaxurl = "/Statistics/HistoryStats";
+                menuNode.callBack = "setupHistoryStats";
+                menuNode.nodetype = "historyStats";
+                menuNode.routeValue = new
+                {
+                    ViewType = menuNode.viewType,
+                    TargetId = menuNode.id,
+                    TargetName = menuNode.name
+                };
+                if (menuNode.children != null)
+                {
+                    QueryMenuNodes(menuNode.children);
+                }
+            }
         }
 
         private List<Nodes> GetMenuNodes()
@@ -270,6 +304,33 @@ namespace Dust.Platform.Web.Controllers
             }
 
             return list;
+        }
+
+        public ActionResult MonitorLastDayData(HistoryQueryTablePost post)
+        {
+            var query =
+               _ctx.AverageMonitorDatas.Where(
+                   obj =>
+                       obj.Type == AverageType.HourAvg &&
+                       obj.TargetId == post.id &&
+                       obj.Category == post.type && obj.AverageDateTime > post.start &&
+                       obj.AverageDateTime < post.end).OrderByDescending(o => o.AverageDateTime);
+
+            return Json(new
+            {
+                total = query.Count(),
+                rows = query.Skip(post.offset).Take(post.limit).ToList().Select(q => new
+                {
+                    q.ParticulateMatter,
+                    q.Pm25,
+                    q.Pm100,
+                    q.Noise,
+                    q.Temperature,
+                    q.Humidity,
+                    q.WindSpeed,
+                    AverageDateTime = q.AverageDateTime.ToString("yyyy-MM-dd HH:mm")
+                })
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }

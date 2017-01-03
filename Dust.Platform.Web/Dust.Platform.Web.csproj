@@ -370,6 +370,7 @@
     <Content Include="Views\Statistics\Districts.cshtml" />
     <Content Include="Views\Statistics\HistoryRank.cshtml" />
     <Content Include="Views\Statistics\HistoryQuery.cshtml" />
+    <Content Include="Views\Statistics\HistoryStats.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

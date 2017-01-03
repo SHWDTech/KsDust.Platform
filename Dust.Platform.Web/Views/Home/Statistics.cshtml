@@ -50,7 +50,8 @@
     <script src="~/Scripts/Utility/chartsOption.js"></script>
     <script src="/Scripts/Utility/accrodingmenu.js"></script>
     <script type="text/javascript">
-        var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.MenuNodes))');
+        var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.QueryMenuNodes))');
+        var statsNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.StatsMenuNodes))');
         var dataType = {
             0: '粉尘(mg/m³)',
             1: 'Pm2.5(mg/m³)',
@@ -67,18 +68,18 @@
             $('.present[data-id="' + $(a).attr('data-target') + '"]').show();
         }
         var tabPopUp = function (event, treeid, treenode) {
-            if ($('.tabBar a[data-target=' + treenode.id + ']').length !== 0) {
-                var existLi = $('.tabBar a[data-target=' + treenode.id + ']')[0];
+            if ($('.tabBar a[data-target=' + treenode.id + '-' + treenode.nodetype + ']').length !== 0) {
+                var existLi = $('.tabBar a[data-target=' + treenode.id + '-' + treenode.nodetype + ']')[0];
                 tabSwitch($(existLi));
                 return;
             }
-            var li = '<li role="presentation"><a data-target="' + treenode.id + '" href="#">' + treenode.name + '</a></li>';
+            var li = '<li role="presentation"><a data-target="' + treenode.id + '-' + treenode.nodetype + '" href="#">' + treenode.name + '</a></li>';
             $('.tabBar ul').append(li);
             $('.tabBar ul>li').removeClass('active');
             var currentli = $($('.tabBar ul>li')[$('.tabBar ul>li').length - 1]);
             currentli.addClass('active');
             var content =
-                '<div class="present" data-id="' + treenode.id + '" style="height: 100%; padding: 5px; border: 1px solid #bce8f1;"></div>';
+                '<div class="present" data-id="' + treenode.id + '-' + treenode.nodetype + '" style="height: 100%; padding: 5px; border: 1px solid #bce8f1;"></div>';
             $('.present').hide();
             $('.tab-content').append(content);
             $.get(treenode.ajaxurl, treenode.routeValue,
@@ -121,6 +122,23 @@
             $('#chart_' + par.Uuid).height($('#chart_' + par.Uuid).parents('.chartContainer').height() - 30);
             var chart = echarts.init(document.getElementById('chart_' + par.Uuid));
             $('#historyRank_' + par.Uuid + ' .query-button').on('click', function () {
+                $('#table_' + par.Uuid).bootstrapTable();
+                $('#table_' + par.Uuid)
+                    .bootstrapTable('refresh',
+                    {
+                        url: par.url +
+                            '?type=' +
+                            par.type +
+                            '&dataType=' +
+                            $('#historyRank_' + par.Uuid + ' .dataSelect').val() +
+                            '&start=' +
+                            $('#' + 'start_' + par.Uuid).data('DateTimePicker').date()._d.toJSON() +
+                            '&end=' +
+                            $('#' + 'end_' + par.Uuid).data('DateTimePicker').date()._d.toJSON() +
+                            '&dateType=' +
+                            $('#historyRank_' + par.Uuid + ' .dateSelect').val()
+
+                    });
                 $.post('/Statistics/HistoryRankChart',
                 {
                     Type: par.type,
@@ -137,45 +155,47 @@
                     }));
                 });
             });
-            $('#table_' + par.Uuid).bootstrapTable();
-            $('#table_' + par.Uuid)
-                .bootstrapTable('refresh',
-                {
-                    url: par.url +
-                        '?type=' +
-                        par.type +
-                        '&dataType=' +
-                        $('#historyRank_' + par.Uuid + ' .dataSelect').val() +
-                        '&start=' +
-                        $('#' + 'start_' + par.Uuid).data('DateTimePicker').date()._d.toJSON() +
-                        '&end=' +
-                        $('#' + 'end_' + par.Uuid).data('DateTimePicker').date()._d.toJSON() +
-                        '&dateType=' +
-                        $('#historyRank_' + par.Uuid + ' .dateSelect').val()
 
-        });
             $('#historyRank_' + par.Uuid + ' .query-button').click();
             callback();
         }
 
         var setupHistoryQuery = function (par, callback, node) {
             var tarId = node.routeValue.TargetId;
-            $('#' + 'start_' + tarId).datetimepicker({
+            $('#' + 'hqstart_' + tarId).datetimepicker({
                 locale: 'zh-cn'
             });
-            $('#' + 'end_' + tarId).datetimepicker({
+            $('#' + 'hqend_' + tarId).datetimepicker({
                 locale: 'zh-cn'
             });
-            $('#chart_' + tarId).height($('#chart_' + tarId).parents('.chartContainer').height() - 30);
-            var chart = echarts.init(document.getElementById('chart_' + tarId));
+            $('#hqchart_' + tarId).height($('#hqchart_' + tarId).parents('.chartContainer').height() - 30);
+            var chart = echarts.init(document.getElementById('hqchart_' + tarId));
             $('#historyQuery_' + tarId + ' .query-button').on('click', function () {
+                $('#hqtable_' + tarId).bootstrapTable({
+                    height: $('#hqtable_' + tarId).parents('.panel').parent('div').height() - 50
+                });
+                $('#hqtable_' + tarId)
+                    .bootstrapTable('refresh',
+                    {
+                        url: '/Statistics/HistoryQueryTable' +
+                            '?type=' +
+                            node.viewType +
+                            '&id=' +
+                            node.id +
+                            '&start=' +
+                            $('#' + 'hqstart_' + tarId).data('DateTimePicker').date()._d.toJSON() +
+                            '&end=' +
+                            $('#' + 'hqend_' + tarId).data('DateTimePicker').date()._d.toJSON()
+
+                    });
                 $.post('/Statistics/HistoryChart',
                 {
                     Id: tarId,
                     Type: node.viewType,
                     DataType: $('#historyQuery_' + tarId + ' .dataSelect').val(),
-                    Start: $('#' + 'start_' + tarId).data('DateTimePicker').date()._d.toJSON(),
-                    End: $('#' + 'end_' + tarId).data('DateTimePicker').date()._d.toJSON()
+                    DateType: 1,
+                    Start: $('#' + 'hqstart_' + tarId).data('DateTimePicker').date()._d.toJSON(),
+                    End: $('#' + 'hqend_' + tarId).data('DateTimePicker').date()._d.toJSON()
                 }, function (ret) {
                     chart.setOption(chartsOption.timelineOptions({
                         title: node.name + '-' + dataType[$('#historyQuery_' + tarId + ' .dataSelect').val()],
@@ -184,24 +204,60 @@
                     }));
                 });
             });
-            $('#table_' + tarId).bootstrapTable({
-                height: $('#table_' + tarId).parents('.panel').parent('div').height() - 50
-            });
-            $('#table_' + tarId)
-                .bootstrapTable('refresh',
-                {
-                    url: '/Statistics/HistoryQueryTable' +
-                        '?type=' +
-                        node.viewType +
-                        '&id=' +
-                        node.id +
-                        '&start=' +
-                        $('#' + 'start_' + tarId).data('DateTimePicker').date()._d.toJSON() +
-                        '&end=' +
-                        $('#' + 'end_' + tarId).data('DateTimePicker').date()._d.toJSON()
 
-        });
             $('#historyQuery_' + tarId + ' .query-button').click();
+
+            callback();
+        }
+
+        var setupHistoryStats = function (par, callback, node) {
+            var tarId = node.routeValue.TargetId;
+            $('#' + 'hsstart_' + tarId).datetimepicker({
+                locale: 'zh-cn'
+            });
+            $('#' + 'hsend_' + tarId).datetimepicker({
+                locale: 'zh-cn'
+            });
+            $('#hschart_' + tarId).height($('#hschart_' + tarId).parents('.chartContainer').height() - 30);
+            var chart = echarts.init(document.getElementById('hschart_' + tarId));
+            $('#historyStats_' + tarId + ' .query-button').on('click', function () {
+                $('#hstable_' + tarId).bootstrapTable({
+                    height: $('#hstable_' + tarId).parents('.panel').parent('div').height() - 50
+                });
+                $('#hstable_' + tarId)
+                    .bootstrapTable('refresh',
+                    {
+                        url: '/Statistics/HistoryStatsTable' +
+                            '?type=' +
+                            node.viewType +
+                            '&dataType=' +
+                            $('#historyStats_' + tarId + ' .dateSelect').val() +
+                            '&id=' +
+                            node.id +
+                            '&start=' +
+                            $('#' + 'hsstart_' + tarId).data('DateTimePicker').date()._d.toJSON() +
+                            '&end=' +
+                            $('#' + 'hsend_' + tarId).data('DateTimePicker').date()._d.toJSON()
+
+                    });
+                $.post('/Statistics/HistoryChart',
+                {
+                    Id: tarId,
+                    Type: node.viewType,
+                    DateType: $('#historyStats_' + tarId + ' .dateSelect').val(),
+                    DataType: $('#historyStats_' + tarId + ' .dataSelect').val(),
+                    Start: $('#' + 'hsstart_' + tarId).data('DateTimePicker').date()._d.toJSON(),
+                    End: $('#' + 'hsend_' + tarId).data('DateTimePicker').date()._d.toJSON()
+                }, function (ret) {
+                    chart.setOption(chartsOption.timelineOptions({
+                        title: node.name + '-' + dataType[$('#historyStats_' + tarId + ' .dataSelect').val()],
+                        yAxisName: dataType[$('#historyStats_' + tarId + ' .dataSelect').val()],
+                        data: ret
+                    }));
+                });
+            });
+
+            $('#historyStats_' + tarId + ' .query-button').click();
 
             callback();
         }
@@ -260,7 +316,7 @@
         ];
         $.fn.zTree.init($('#infotree'), setting, basicNodes);
         $.fn.zTree.init($('#querytree'), setting, treeNodes);
-        $.fn.zTree.init($('#historytree'), setting, treeNodes);
+        $.fn.zTree.init($('#historytree'), setting, statsNodes);
         $('#infotree_1_a').click();
     </script>
 }

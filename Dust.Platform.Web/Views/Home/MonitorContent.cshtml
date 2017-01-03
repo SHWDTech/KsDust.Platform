@@ -8,22 +8,22 @@
 <div class="col-lg-6" style="height: 100%; padding: 2px;">
     <div class="map panel panel-info" id="@Model.MapContainer"></div>
     <div class="targetInfo">
-        <div class="panel panel-info" style="max-height: 100%;position: relative; display: flex; flex-direction: column;">
+        <div class="panel panel-info" style="max-height: 100%;">
             <div class="panel-heading">
                 <span>@Model.Title 统计信息</span>
             </div>
-            <div class="panel-body" style="bottom: 0; overflow-y: auto;">
+            <div class="panel-body">
 
                 @switch (Model.ViewType)
                 {
                     case AverageCategory.WholeCity:
-                        <table class="table table-bordered table-striped table-hover">
+                        <table id="@($"gtable_{Model.TargetId}")" data-page-size="100">
                             <thead>
                                 <tr>
-                                    <td>区县</td>
-                                    <td>工程总数</td>
-                                    <td>已安装数</td>
-                                    <td>安装率</td>
+                                    <th>区县</th>
+                                    <th>工程总数</th>
+                                    <th>已安装数</th>
+                                    <th>安装率</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,13 +42,13 @@
                         </table>
                         break;
                     case AverageCategory.District:
-                        <table class="table table-bordered table-striped table-hover">
+                        <table id="@($"gtable_{Model.TargetId}")" data-toggle="table" data-page-size="100">
                             <thead>
                                 <tr>
-                                    <td>工程</td>
-                                    <td>监控点数</td>
-                                    <td>占地面积(㎡)</td>
-                                    <td>建筑面积(㎡)</td>
+                                    <th>工程</th>
+                                    <th>监控点数</th>
+                                    <th>占地面积(㎡)</th>
+                                    <th>建筑面积(㎡)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -67,13 +67,13 @@
                         </table>
                         break;
                     case AverageCategory.Enterprise:
-                        <table class="table table-bordered table-striped table-hover">
+                        <table id="@($"gtable_{Model.TargetId}")" data-toggle="table" data-page-size="100">
                             <thead>
                                 <tr>
-                                    <td>工程</td>
-                                    <td>监控点数</td>
-                                    <td>占地面积(㎡)</td>
-                                    <td>建筑面积(㎡)</td>
+                                    <th>工程</th>
+                                    <th>监控点数</th>
+                                    <th>占地面积(㎡)</th>
+                                    <th>建筑面积(㎡)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -192,43 +192,24 @@
         </div>
     </div>
     <div class="panel panel-info" style="height: 48%;">
-        <div class="panel panel-info" style="max-height: 100%;position: relative; display: flex; flex-direction: column;">
-            <div class="panel-heading">
-                <span>@Model.Title 最近24小时监测数据</span>
-            </div>
-            <div class="panel-body" style="bottom: 0; overflow-y: auto;">
-                <table class="table table-bordered table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <td>粉尘(mg/m³)</td>
-                            <td>PM2.5(mg/m³)</td>
-                            <td>PM10(mg/m³)</td>
-                            <td>噪音(dB)</td>
-                            <td>温度(℃)</td>
-                            <td>湿度(%)</td>
-                            <td>风速(m/s)</td>
-                            <td>监测时间</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            foreach (var monitorData in Model.MonitorDatas)
-                            {
-                                <tr>
-                                    <td>@monitorData.ParticulateMatter</td>
-                                    <td>@monitorData.Pm25</td>
-                                    <td>@monitorData.Pm100</td>
-                                    <td>@monitorData.Noise</td>
-                                    <td>@monitorData.Temperature</td>
-                                    <td>@monitorData.Humidity</td>
-                                    <td>@monitorData.WindSpeed</td>
-                                    <td>@monitorData.AverageDateTime.ToString("yyyy-MM-dd HH:mm")</td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
+        <div class="panel-heading">
+            <span>@Model.Title 最近24小时监测数据</span>
         </div>
+        <div class="panel-body">
+            @(Html.BootstrapTable(null, TablePaginationOption.server, new
+            {
+                id = $"dtable_{Model.TargetId}",
+                data_page_size = 50,
+                url = $"/Home/MonitorLastDayData?id={Model.TargetId}&type={Model.ViewType}&start={DateTime.Now.AddDays(-1):yyyy-MM-dd HH:mm:ss}&end={DateTime.Now:yyyy-MM-dd HH:mm:ss}"
+            }).Column("粉尘", "ParticulateMatter")
+                                             .Column("PM2.5", "Pm25")
+                                             .Column("PM10", "Pm100")
+                                             .Column("噪音", "Noise")
+                                             .Column("温度", "Temperature")
+                                             .Column("湿度", "Humidity")
+                                             .Column("监测时间", "AverageDateTime")
+            )
+        </div>
+
     </div>
 </div>

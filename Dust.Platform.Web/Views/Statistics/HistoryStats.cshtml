@@ -1,12 +1,11 @@
-﻿@using Dust.Platform.Web.Models.Statistics
-@model HistoryQueryPost
+﻿@model Dust.Platform.Web.Models.Home.HistoryStatsViewModel
 @{
     Layout = null;
 }
 
 <div id="@Model.FormId" style="height: 100%;">
     <div class="chartContainer" style="height: 33%; min-height: 33%; margin-bottom: 0.5%;">
-        @using (Ajax.BeginForm("HistoryQuery", new AjaxOptions
+        @using (Ajax.BeginForm("HistoryStats", new AjaxOptions
         {
             HttpMethod = "POST",
             InsertionMode = InsertionMode.Replace,
@@ -24,6 +23,11 @@
                         <option value="5">湿度(%)</option>
                         <option value="6">风速(m/s)</option>
                     </select>
+                    <select class="form-control dateSelect" style="display: inline-block; height: 24px; padding: 0; width: 80px; font-size: 14px;">
+                        <option value="1">小时</option>
+                        <option value="2">天</option>
+                        <option value="3">月</option>
+                    </select>
                     <input type="text" class="form-control" id="@Model.StartDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss")" />
                     <input type="text" class="form-control" id="@Model.EndDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" />
                     <button type="button" class="query-button" style="border: 0; background: transparent;">
@@ -39,7 +43,7 @@
     <div style="height: 66%; min-height: 66%;">
         <div class="panel panel-info">
             <div class="panel-heading">
-                @($"{Model.TargetName} - 历史查询")
+                @($"{Model.TargetName} - 历史统计")
             </div>
             <div class="panel-body">
                 @{ var table = Html.BootstrapTable(null, TablePaginationOption.server, new

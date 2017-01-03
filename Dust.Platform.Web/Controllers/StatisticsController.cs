@@ -190,6 +190,11 @@ namespace Dust.Platform.Web.Controllers
             return View(model);
         }
 
+        public ActionResult HistoryStats(HistoryStatsViewModel model)
+        {
+            return View(model);
+        }
+
         public ActionResult HistoryChart(HistoryQueryChartPost post)
         {
             var ret = new List<HistoryLineChartViewModel>();
@@ -301,7 +306,33 @@ namespace Dust.Platform.Web.Controllers
                     AverageDateTime = q.AverageDateTime.ToString("yyyy-MM-dd HH:mm")
                 })
             }, JsonRequestBehavior.AllowGet);
+        }
 
+        public ActionResult HistoryStatsTable(HistoryStatsTablePost post)
+        {
+            var query =
+               _ctx.AverageMonitorDatas.Where(
+                   obj =>
+                       obj.Type == post.dataType &&
+                       obj.TargetId == post.id &&
+                       obj.Category == post.type && obj.AverageDateTime > post.start &&
+                       obj.AverageDateTime < post.end).OrderByDescending(o => o.AverageDateTime);
+
+            return Json(new
+            {
+                total = query.Count(),
+                rows = query.Skip(post.offset).Take(post.limit).ToList().Select(q => new
+                {
+                    q.ParticulateMatter,
+                    q.Pm25,
+                    q.Pm100,
+                    q.Noise,
+                    q.Temperature,
+                    q.Humidity,
+                    q.WindSpeed,
+                    AverageDateTime = q.AverageDateTime.ToString("yyyy-MM-dd HH:mm")
+                })
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }

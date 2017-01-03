@@ -16,6 +16,8 @@ namespace Dust.Platform.Web.Models.Home
 
         public string id { get; set; }
 
+        public string nodetype { get; set; }
+
         public AverageCategory viewType { get; set; }
 
         public List<Nodes> children { get; set; }

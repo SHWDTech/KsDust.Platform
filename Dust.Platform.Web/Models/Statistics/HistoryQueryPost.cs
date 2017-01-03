@@ -14,13 +14,13 @@ namespace Dust.Platform.Web.Models.Statistics
 
         public string FormId => $"historyQuery_{TargetId}";
 
-        public string StartDateId => $"start_{TargetId}";
+        public string StartDateId => $"hqstart_{TargetId}";
 
-        public string EndDateId => $"end_{TargetId}";
+        public string EndDateId => $"hqend_{TargetId}";
 
-        public string ChartId => $"chart_{TargetId}";
+        public string ChartId => $"hqchart_{TargetId}";
 
-        public string TableId => $"table_{TargetId}";
+        public string TableId => $"hqtable_{TargetId}";
     }
 
     public class HistoryQueryChartPost
@@ -28,6 +28,8 @@ namespace Dust.Platform.Web.Models.Statistics
         public Guid Id { get; set; }
 
         public AverageCategory Type { get; set; }
+
+        public AverageType DateType { get; set; }
 
         public MonitorDataValueType DataType { get; set; }
 

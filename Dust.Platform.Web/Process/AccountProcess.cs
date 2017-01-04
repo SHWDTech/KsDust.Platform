@@ -1,6 +1,8 @@
-﻿using System.Web.Security;
+﻿using System;
+using System.Web.Security;
 using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Account;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Dust.Platform.Web.Process
 {
@@ -22,6 +24,25 @@ namespace Dust.Platform.Web.Process
             result.Status = SignInStatus.Success;
 
             return result;
+        }
+
+        public static bool UserIsInRole(string userId, string roleName)
+        {
+            var auth = new AuthRepository();
+
+            return auth.UserInRole(userId, roleName);
+        }
+
+        public static IdentityUser FindUserByName(string name)
+        {
+            var auth = new AuthRepository();
+            return auth.FindByName(name);
+        }
+
+        public static Guid FindVendorId(IdentityUser usr)
+        {
+            var auth = new AuthRepository();
+            return auth.FindVendorId(usr);
         }
     }
 }

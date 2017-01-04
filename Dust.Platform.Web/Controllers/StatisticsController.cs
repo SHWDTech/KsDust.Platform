@@ -24,13 +24,39 @@ namespace Dust.Platform.Web.Controllers
         {
             var model = new ProjectsViewModel
             {
-                Districts =
-                    _ctx.Districts.Select(obj => new SelectListItem { Text = obj.Name, Value = obj.Id.ToString() })
-                        .ToList(),
-                Enterprises =
-                _ctx.Enterprises.Select(obj => new SelectListItem { Text = obj.Name, Value = obj.Id.ToString() })
-                        .ToList()
+                Districts = new List<SelectListItem>()
+                {
+                    new SelectListItem()
+                    {
+                        Text = "选择区县",
+                        Value = "",
+                        Selected = true
+                    }
+                },
+                Enterprises = new List<SelectListItem>()
+                {
+                    new SelectListItem()
+                    {
+                        Text = "选择施工企业",
+                        Value = "",
+                        Selected = true
+                    }
+                }
             };
+            model.Districts.AddRange(_ctx.Districts.Select(obj => new SelectListItem
+            {
+                Text = obj.Name,
+                Value = obj.Id.ToString(),
+                Selected = false
+            })
+                        .ToList());
+            model.Enterprises.AddRange(_ctx.Enterprises.Select(obj => new SelectListItem
+            {
+                Text = obj.Name,
+                Value = obj.Id.ToString(),
+                Selected = false
+            })
+                        .ToList());
             return View(model);
         }
 

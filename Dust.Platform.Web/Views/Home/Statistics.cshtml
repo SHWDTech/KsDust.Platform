@@ -104,7 +104,9 @@
         }
 
         var setupTable = function (par, callback) {
-            $('#' + par.table).bootstrapTable();
+            $('#' + par.table).bootstrapTable({
+                height: $('#' + par.table).parents('.present').height() - 50
+            });
             $('#' + par.table).bootstrapTable('refresh', {
                 url: par.url
             });

@@ -1,0 +1,46 @@
+﻿@model Dust.Platform.Storage.Model.KsDustDevice
+@{
+    Layout = null;
+}
+
+<div id="deviceRegisterForm">
+    @using (Ajax.BeginForm("DeviceRegister",
+                                 new
+                                 {
+                                     @class = "form"
+                                 },
+                                 new AjaxOptions
+                                 {
+                                     InsertionMode = InsertionMode.Replace,
+                                     UpdateTargetId = "deviceRegisterForm",
+                                     HttpMethod = "POST"
+                                 }))
+    {
+        <table class="table table-striped table-bordered table-hover">
+            <tbody>
+            <tr>
+                <td>@Html.LabelFor(m => m.Name)</td>
+                <td>
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", PlaceHolder = "请输入设备名称" })
+                    @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                </td>
+                <td>@Html.LabelFor(m => m.NodeId)</td>
+                <td>
+                    @Html.TextBoxFor(m => m.NodeId, new { @class = "form-control", PlaceHolder = "请输入设备MN码" })
+                    @Html.ValidationMessageFor(m => m.NodeId, null, new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    @Html.ValidationMessage("Vendor", null, new { @class = "text-danger" })
+                </td>
+            </tr>
+                <tr>
+                    <td colspan="4">
+                        <input type="submit" value="提交注册" class="btn btn-primary" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+</div>

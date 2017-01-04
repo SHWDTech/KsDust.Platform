@@ -1,0 +1,18 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div>
+    @(Html.BootstrapTable("deviceMantance", "/Setting/DeviceMantanceInfo", TablePaginationOption.server, new
+{
+    data_page_list = "[10, 25, 50, 100, ALL]"
+}).Column("设备名称", "Name")
+.Column("供应商", "VendorName")
+.Column("工程名称", "ProjectName")
+.Column("联系人", "SuperIntend")
+.Column("联系电话", "Mobile")
+.Column("维保时间", "LastMaintenance")
+.Column("维保状态", "MantanceStatus")
+    )
+</div>

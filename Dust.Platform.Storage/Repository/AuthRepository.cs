@@ -131,6 +131,22 @@ namespace Dust.Platform.Storage.Repository
             return result;
         }
 
+        public bool UserInRole(string userId, string roleName)
+        {
+            return _userManager.IsInRoleAsync(userId, roleName).Result;
+        }
+
+        public IdentityUser FindByName(string name)
+        {
+            return _userManager.FindByName(name);
+        }
+
+        public Guid FindVendorId(IdentityUser usr)
+        {
+            var claims = _userManager.GetClaimsAsync(usr.Id).Result;
+            return Guid.Parse(claims.First(c => c.Type == "VendorId").Value);
+        }
+
         public void Dispose()
         {
             _ctx.Dispose();

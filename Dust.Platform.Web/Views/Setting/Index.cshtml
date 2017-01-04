@@ -1,17 +1,90 @@
-﻿
+﻿@using Newtonsoft.Json
+@model Dust.Platform.Web.Models.Setting.SettingViewModel
 @{
     ViewBag.Title = "设置";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <div> 
+@section styles{
+    <link href="/Content/zTreeStyle.css" rel="stylesheet">
+    <link href="/Content/bootstrap-table.min.css" rel="stylesheet" />
+}
+<div style="position: relative; height: 100%;">
+    <div class="col-lg-2 accroding-menu" style="height: 100%;">
+        <div class="panel panel-info accroding-menu-item" style="margin-bottom: 0;">
+            <div class="panel-heading">设置管理<span class="glyphicon glyphicon-plus" style="float: right"></span></div>
+            <div class="panel-body" style="padding: 0">
+                <ul id="reporttree" class="ztree"></ul>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+    <div class="col-lg-10" style="height: 100%; overflow-y: hidden;">
+        <div class="tabBar" style="overflow-x: hidden;">
+            <ul class="nav nav-tabs" role="tablist"></ul>
+        </div>
+        <div class="tab-content">
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
+    <script src="/Scripts/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/Scripts/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript">
+        $('#reporttree').parents('.panel-body').height($('.accroding-menu').height() - 28);
+        var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.MenuNodes))');
+        var tabSwitch = function (a) {
+            $('.tabBar ul>li').removeClass('active');
+            $(a).parent('li').addClass('active');
+            $('.present').hide();
+            $('.present[data-id="' + $(a).attr('data-target') + '"]').show();
+        }
+        var tabPopUp = function (event, treeid, treenode) {
+            if ($('.tabBar a[data-target=' + treenode.id + '-' + treenode.nodetype + ']').length !== 0) {
+                var existLi = $('.tabBar a[data-target=' + treenode.id + '-' + treenode.nodetype + ']')[0];
+                tabSwitch($(existLi));
+                return;
+            }
+            var li = '<li role="presentation"><a data-target="' + treenode.id + '-' + treenode.nodetype + '" href="#">' + treenode.name + '</a></li>';
+            $('.tabBar ul').append(li);
+            $('.tabBar ul>li').removeClass('active');
+            var currentli = $($('.tabBar ul>li')[$('.tabBar ul>li').length - 1]);
+            currentli.addClass('active');
+            var content =
+                '<div class="present" data-id="' + treenode.id + '-' + treenode.nodetype + '" style="height: 100%; padding: 5px; border: 1px solid #bce8f1;"></div>';
+            $('.present').hide();
+            $('.tab-content').append(content);
+            $.get(treenode.ajaxurl, treenode.routeValue,
+                function (ret) {
+                    $($('.present')[$('.present').length - 1]).append(ret);
+                    if (treenode.callBack != null) {
+                        window[treenode.callBack](treenode.param, function () {
+                            currentli.find('a').click(function () {
+                                tabSwitch(currentli.find('a'));
+                            });
+                        }, treenode);
+                    }
+                });
+        }
+
+        var setting = {
+            view: {
+                selectedMulti: false
+            },
+            callback: {
+                onClick: tabPopUp
+            }
+        }
+        $.fn.zTree.init($('#reporttree'), setting, treeNodes);
+
+        var deviceMantanceTable = function () {
+            $('#deviceMantance').bootstrapTable({
+                height: $('#deviceMantance').parents('.tab-content').height() - 35
+            });
+            $('#deviceMantance')
+                .bootstrapTable('refresh',
+                {
+                    url: $('#deviceMantance').attr('url')
+                });
+        }
+    </script>
+}

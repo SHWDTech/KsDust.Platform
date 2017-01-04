@@ -190,3 +190,7 @@ textarea {
 .nopadding {
     height: 0;
 }
+
+.text-danger {
+    color: red;
+}

@@ -201,6 +201,7 @@ namespace Dust.Platform.Web.Controllers
             var query =
                 _ctx.AverageMonitorDatas.Where(
                     obj =>
+                        obj.Type == post.DateType &&
                         obj.Category == post.Type && obj.TargetId == post.Id && obj.AverageDateTime > post.Start &&
                         obj.AverageDateTime < post.End);
             switch (post.DataType)

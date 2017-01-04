@@ -1,0 +1,39 @@
+﻿
+@using Newtonsoft.Json
+@model Dust.Platform.Web.Models.Report.ReportViewModel
+@{
+    ViewBag.Title = "报表";
+}
+
+@section styles{
+    <link href="/Content/zTreeStyle.css" rel="stylesheet">
+}
+<div style="position: relative; height: 100%;">
+    <div class="col-lg-2 accroding-menu" style="height: 100%;">
+        <div class="panel panel-info accroding-menu-item" style="margin-bottom: 0;">
+            <div class="panel-heading">报表管理<span class="glyphicon glyphicon-plus" style="float: right"></span></div>
+            <div class="panel-body" style="padding: 0" style="height: 100%;">
+                <ul id="reporttree" class="ztree"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-10" style="height: 100%; overflow-y: hidden;">
+        <div class="tabBar" style="overflow-x: hidden;">
+            <ul class="nav nav-tabs" role="tablist"></ul>
+        </div>
+        <div class="tab-content">
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript">
+        var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.MenuNodes))');
+        $.fn.zTree.init($('#reporttree'), setting, treeNodes);
+        var setting = {
+            view: {
+                selectedMulti: false
+            }
+        }
+    </script>
+}

@@ -23,7 +23,7 @@ namespace Dust.Platform.Service.Controllers
         {
             var districts = _ctx.Districts.Where(dis => dis.Id != Guid.Empty).Select(d => new { d.Id, d.Name }).ToList();
 
-            var avgs = _ctx.AverageMonitorDatas.Where(tsp => tsp.Type == AverageType.FifteenAvg
+            var avgs = _ctx.AverageMonitorDatas.Where(tsp => tsp.Type == model.dataType
                                                                       && tsp.Category == AverageCategory.District);
             if (model.projectType != null)
             {
@@ -41,7 +41,7 @@ namespace Dust.Platform.Service.Controllers
                     {
                         id = district.Id,
                         name = district.Name,
-                        count = _ctx.KsDustDevices.Count(d => d.Project.DistrictId == district.Id && d.Project.ProjectType == model.projectType),
+                        count = devs.Count(),
                         tspAvg = avg?.ParticulateMatter ?? 0
                     }).ToList();
         }

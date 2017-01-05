@@ -14,6 +14,7 @@
         <div class="panel panel-info" style="min-height: 100%; margin-bottom: 3px; position: relative; display: flex; flex-direction: column;">
             <div class="panel-heading">实时监测</div>
             <div class="panel-body" style="bottom: 0; overflow-y: auto;">
+                <input class="form-control search-input" placeholder="输入关键字搜索">
                 <ul id="treeNodes" class="ztree"></ul>
             </div>
         </div>
@@ -26,10 +27,10 @@
         <div class="tab-content">
         </div>
     </div>
-
 </div>
 @section scripts{
     <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
+    <script src="~/Scripts/Utility/jquery.ztree.exhide.min.js"></script>
     <script src="~/Scripts/Utility/chartsOption.js"></script>
     <script src="~/Scripts/Page/monitor.js"></script>
     <script src="/Scripts/bootstrap-table/bootstrap-table.min.js"></script>
@@ -95,5 +96,48 @@
         $(function () {
             tabPopUp(null, null, { name: '所有数据', viewType: 4, id: '00000000-0000-0000-0000-000000000000' });
         });
+        $('.search-input').on('input propertychange', function () {
+            zTreeObj.expandAll(false);
+            hideAllNodes(zTreeObj.getNodes());
+            var reg = new RegExp($('.search-input').val());
+            var showNodes = regNodes(reg, zTreeObj.getNodes());
+            if ($('.search-input').val().trim().length === 0) {
+                zTreeObj.expandAll(false);
+            } else {
+                $.each(showNodes, function(index, node) {
+                    if (node.getParentNode() === null) {
+                        zTreeObj.expandNode(node, true, true);
+                    }
+                });
+            }
+            zTreeObj.showNodes(showNodes);
+        });
+
+        var hideAllNodes = function(nodes) {
+            $.each(nodes, function(index, node) {
+                if (node.isParent) {
+                    hideAllNodes(node.children);
+                }
+            });
+
+            zTreeObj.hideNodes(nodes);
+        }
+
+        var regNodes = function (reg, nodes) {
+            var matchedNodes = [];
+            for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].isParent) {
+                    var matchChild = regNodes(reg, nodes[i].children);
+                    if (matchChild.length > 0 || reg.test(nodes[i].name)) {
+                        matchedNodes.push(nodes[i]);
+                        matchedNodes = matchedNodes.concat(matchChild);
+                    }
+                }else if (reg.test(nodes[i].name)) {
+                    matchedNodes.push(nodes[i]);
+                }
+            }
+
+            return matchedNodes;
+        }
     </script>
 }

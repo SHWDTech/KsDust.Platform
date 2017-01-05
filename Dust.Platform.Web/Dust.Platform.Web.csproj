@@ -177,6 +177,7 @@
     <Compile Include="Models\Table\TablePost.cs" />
     <Compile Include="Models\Table\TotalDistrictsTable.cs" />
     <Compile Include="Process\AccountProcess.cs" />
+    <Compile Include="Process\QueryableExtensionClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -355,6 +356,7 @@
     <Content Include="Scripts\Utility\chartsOption.js" />
     <Content Include="Scripts\Utility\echarts.min.js" />
     <Content Include="Scripts\Utility\jquery.ztree.all.min.js" />
+    <Content Include="Scripts\Utility\jquery.ztree.exhide.min.js" />
     <Content Include="Scripts\Utility\sha.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />

@@ -6,6 +6,7 @@ using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Table;
+using Dust.Platform.Web.Process;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -96,7 +97,7 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult Monitor()
         {
-            var model = new MonitorViewModel {TreeNodes = GetMenuNodes()};
+            var model = new MonitorViewModel { TreeNodes = GetMenuNodes() };
             return View(model);
         }
 
@@ -314,7 +315,12 @@ namespace Dust.Platform.Web.Controllers
                        obj.Type == AverageType.HourAvg &&
                        obj.TargetId == post.id &&
                        obj.Category == post.type && obj.AverageDateTime > post.start &&
-                       obj.AverageDateTime < post.end).OrderByDescending(o => o.AverageDateTime);
+                       obj.AverageDateTime < post.end);
+
+            if (!string.IsNullOrWhiteSpace(post.sort))
+            {
+                query = query.OrderByField(post.sort, post.order == "asc");
+            }
 
             return Json(new
             {

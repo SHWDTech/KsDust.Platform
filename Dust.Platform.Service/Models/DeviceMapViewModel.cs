@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using Dust.Platform.Storage.Model;
 
 // ReSharper disable InconsistentNaming
@@ -32,5 +31,13 @@ namespace Dust.Platform.Service.Models
     public class MapPostParams
     {
         public ProjectType? projectType { get; set; }
+
+        public Guid? district { get; set; }
+
+        public Guid? enterprise { get; set; }
+
+        public Guid? project { get; set; }
+
+        public Guid? device { get; set; }
     }
 }

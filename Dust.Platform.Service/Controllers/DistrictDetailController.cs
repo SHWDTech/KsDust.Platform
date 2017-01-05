@@ -33,7 +33,7 @@ namespace Dust.Platform.Service.Controllers
                 let data = _ctx.AverageMonitorDatas.Where(dat => dat.Type == AverageType.HourAvg && dat.TargetId == dev.Id).OrderBy(da => da.AverageDateTime).FirstOrDefault()
                 select new DistrictDetailViewModel
                 {
-                    districtName = district.Name, name = dev.Name, tsp = data?.ParticulateMatter ?? 0, pm25 = data?.Pm25 ?? 0, pm100 = data?.Pm100 ?? 0, rate = Helper.GetRate(data?.ParticulateMatter ?? 0)
+                    id = dev.Id, districtName = district.Name, name = dev.Name, tsp = data?.ParticulateMatter ?? 0, pm25 = data?.Pm25 ?? 0, pm100 = data?.Pm100 ?? 0, rate = Helper.GetRate(data?.ParticulateMatter ?? 0)
                 }).ToList();
 
             return Request.CreateResponse(HttpStatusCode.OK, devList);

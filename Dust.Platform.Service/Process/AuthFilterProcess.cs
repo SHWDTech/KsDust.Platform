@@ -52,7 +52,7 @@ namespace Dust.Platform.Service.Process
         public List<KsDustProject> GetAuthedProjects(Expression<Func<KsDustProject, bool>> exp)
         {
             var user = _owinContext.Authentication.User;
-            IQueryable<KsDustProject> authedQuery = _dbContext.KsDustProjects;
+            IQueryable<KsDustProject> authedQuery = _dbContext.KsDustProjects.Where(obj => obj.Id != Guid.Empty);
 
             var userId = Guid.Parse(user.Identity.GetUserId());
             var userEntities =

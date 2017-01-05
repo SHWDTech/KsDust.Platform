@@ -6,6 +6,8 @@ namespace Dust.Platform.Service.Models
 {
     public class DistrictDetailViewModel
     {
+        public Guid id { get; set; }
+
         public string districtName { get; set; }
 
         public string name { get; set; }

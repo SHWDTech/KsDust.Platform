@@ -97,20 +97,15 @@
             tabPopUp(null, null, { name: '所有数据', viewType: 4, id: '00000000-0000-0000-0000-000000000000' });
         });
         $('.search-input').on('input propertychange', function () {
-            zTreeObj.expandAll(false);
             hideAllNodes(zTreeObj.getNodes());
             var reg = new RegExp($('.search-input').val());
             var showNodes = regNodes(reg, zTreeObj.getNodes());
+            zTreeObj.showNodes(showNodes);
             if ($('.search-input').val().trim().length === 0) {
                 zTreeObj.expandAll(false);
             } else {
-                $.each(showNodes, function(index, node) {
-                    if (node.getParentNode() === null) {
-                        zTreeObj.expandNode(node, true, true);
-                    }
-                });
+                zTreeObj.expandAll(true);
             }
-            zTreeObj.showNodes(showNodes);
         });
 
         var hideAllNodes = function(nodes) {

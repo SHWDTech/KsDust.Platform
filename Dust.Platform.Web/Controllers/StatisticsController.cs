@@ -43,14 +43,14 @@ namespace Dust.Platform.Web.Controllers
                     }
                 }
             };
-            model.Districts.AddRange(_ctx.Districts.Select(obj => new SelectListItem
+            model.Districts.AddRange(_ctx.Districts.Where(obj => obj.Id != Guid.Empty).Select(obj => new SelectListItem
             {
                 Text = obj.Name,
                 Value = obj.Id.ToString(),
                 Selected = false
             })
                         .ToList());
-            model.Enterprises.AddRange(_ctx.Enterprises.Select(obj => new SelectListItem
+            model.Enterprises.AddRange(_ctx.Enterprises.Where(obj => obj.Id != Guid.Empty).Select(obj => new SelectListItem
             {
                 Text = obj.Name,
                 Value = obj.Id.ToString(),
@@ -62,7 +62,7 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult GetProjects(TotalProjectsTablePost model)
         {
-            var query = _ctx.KsDustProjects.AsQueryable();
+            var query = _ctx.KsDustProjects.Where(obj => obj.Id != Guid.Empty);
             if (model.district != null)
             {
                 query = query.Where(obj => obj.DistrictId == model.district.Value);
@@ -71,7 +71,7 @@ namespace Dust.Platform.Web.Controllers
             {
                 query = query.Where(obj => obj.EnterpriseId == model.enterprise.Value);
             }
-            var total = _ctx.KsDustProjects.Count();
+            var total = query.Count();
             var projects = query.OrderBy(obj => obj.Id).Skip(model.offset).Take(model.limit).Select(prj => new
             {
                 prj.Name,
@@ -101,8 +101,8 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult GetDistricts(TablePost model)
         {
-            var total = _ctx.Districts.Count();
-            var districts = _ctx.Districts.Select(obj => new { obj.Id, obj.Name }).ToList();
+            var districts = _ctx.Districts.Where(obj => obj.Id != Guid.Empty).Select(obj => new { obj.Id, obj.Name }).ToList();
+            var total = districts.Count();
             var lastDay = DateTime.Now.AddDays(-1);
             var lastMonth = DateTime.Now.AddMonths(-1);
             var ret = (from district in districts

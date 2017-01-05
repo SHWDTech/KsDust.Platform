@@ -60,10 +60,19 @@ namespace Dust.Platform.Web.Controllers
             return View(model);
         }
 
-        public ActionResult GetProjects(TablePost model)
+        public ActionResult GetProjects(TotalProjectsTablePost model)
         {
+            var query = _ctx.KsDustProjects.AsQueryable();
+            if (model.district != null)
+            {
+                query = query.Where(obj => obj.DistrictId == model.district.Value);
+            }
+            if (model.enterprise != null)
+            {
+                query = query.Where(obj => obj.EnterpriseId == model.enterprise.Value);
+            }
             var total = _ctx.KsDustProjects.Count();
-            var projects = _ctx.KsDustProjects.OrderBy(obj => obj.Id).Skip(model.offset).Take(model.limit).Select(prj => new
+            var projects = query.OrderBy(obj => obj.Id).Skip(model.offset).Take(model.limit).Select(prj => new
             {
                 prj.Name,
                 prj.Address,

@@ -15,6 +15,13 @@ namespace Dust.Platform.Web.Models.Table
 
     }
 
+    public class TotalProjectsTablePost : TablePost
+    {
+        public Guid? district { get; set; }
+
+        public Guid? enterprise { get; set; }
+    }
+
     public class HistoryTablePost : TablePost
     {
         public AverageCategory type { get; set; }

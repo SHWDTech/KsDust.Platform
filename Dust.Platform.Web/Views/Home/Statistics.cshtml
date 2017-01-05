@@ -110,6 +110,12 @@
             $('#' + par.table).bootstrapTable('refresh', {
                 url: par.url
             });
+            var baseUrl = par.url;
+            $('#totalProjects .query-button').on('click', function() {
+                $('#' + par.table).bootstrapTable('refresh', {
+                    url: baseUrl + '?district=' + $('#districtSelecter').val() + '&enterprise=' + $('#projectSelecter').val()
+                });
+            });
 
             callback();
         }

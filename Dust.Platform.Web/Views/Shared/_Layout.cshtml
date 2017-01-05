@@ -28,6 +28,17 @@
                     <li><a href="/Report"><span class="glyphicon glyphicon-align-left" style="margin-right: 10px;"></span>报表</a></li>
                     <li><a href="/Setting"><span class="glyphicon glyphicon-cog" style="margin-right: 10px;"></span>设置</a></li>
                 </ul>
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right logout-form" }))
+            {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="javascript:document.getElementById('logoutForm').submit()">
+                                <span class="glyphicon glyphicon-log-out"></span>
+                                <span>退出</span>
+                            </a>
+                        </li>
+                    </ul>
+                }
             </div>
         </div>
     </div>

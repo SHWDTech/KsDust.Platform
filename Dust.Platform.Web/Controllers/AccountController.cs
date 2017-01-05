@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using System.Web.Security;
 using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Account;
 using Dust.Platform.Web.Process;
@@ -49,6 +50,13 @@ namespace Dust.Platform.Web.Controllers
             }
 
             return Redirect(returnUrl);
+        }
+
+        [HttpPost]
+        public ActionResult LogOff()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login", "Account");
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Dust.Platform.Service.Process
             }
             else if (user.IsInRole("ProjectManager"))
             {
-                authedQuery = authedQuery.Where(dev => userEntities.Contains(dev.ProjectId));
+                authedQuery = authedQuery.Where(dev => userEntities.Contains(dev.ProjectId.Value));
             }
 
             if (exp != null)

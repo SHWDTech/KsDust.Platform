@@ -30,7 +30,7 @@ namespace Dust.Platform.Web.Controllers
             wholeCity.InstallPercentage = $"{wholeCity.ProjectsInstalled * 100.00d / wholeCity.ProjectsCount:F2}%";
             model.DistrictInfos.Add(wholeCity);
             var now = DateTime.Now.AddHours(-1);
-            foreach (var district in _ctx.Districts.Select(obj => new { obj.Id, obj.Name }).ToList())
+            foreach (var district in _ctx.Districts.Where(obj => obj.Id != Guid.Empty).Select(obj => new { obj.Id, obj.Name }).ToList())
             {
                 var info = new DistrictInfo
                 {
@@ -52,7 +52,7 @@ namespace Dust.Platform.Web.Controllers
                 };
                 model.DistrictRanks.Add(avgValue);
             }
-            foreach (var enterprise in _ctx.Enterprises.Select(obj => new { obj.Id, obj.Name }).ToList())
+            foreach (var enterprise in _ctx.Enterprises.Where(obj => obj.Id != Guid.Empty).Select(obj => new { obj.Id, obj.Name }).ToList())
             {
                 var info = new Enterprises
                 {
@@ -66,7 +66,7 @@ namespace Dust.Platform.Web.Controllers
                     : $"{info.OnlineCount * 100.00d / info.DevicesCount:F1}%";
                 model.Enterpriseses.Add(info);
             }
-            foreach (var vendor in _ctx.Vendors.ToList())
+            foreach (var vendor in _ctx.Vendors.Where(obj => obj.Id != Guid.Empty).ToList())
             {
                 var info = new VendorInfo
                 {
@@ -116,7 +116,7 @@ namespace Dust.Platform.Web.Controllers
             {
                 case AverageCategory.WholeCity:
                     model.DistrictInfos = new List<DistrictInfo>();
-                    foreach (var district in _ctx.Districts.Select(obj => new { obj.Id, obj.Name }).ToList())
+                    foreach (var district in _ctx.Districts.Where(obj => obj.Id != Guid.Empty).Select(obj => new { obj.Id, obj.Name }).ToList())
                     {
                         var info = new DistrictInfo
                         {
@@ -248,7 +248,7 @@ namespace Dust.Platform.Web.Controllers
         private List<Nodes> GetMenuNodes()
         {
             var list = new List<Nodes>();
-            foreach (var district in _ctx.Districts.ToList())
+            foreach (var district in _ctx.Districts.Where(obj => obj.Id != Guid.Empty).ToList())
             {
                 var disNodes = new Nodes
                 {
@@ -259,7 +259,7 @@ namespace Dust.Platform.Web.Controllers
                 var devices = _ctx.KsDustDevices.Include("Project")
                     .Include("Project.District")
                     .Include("Project.Enterprise")
-                    .Where(dev => dev.Project.DistrictId == district.Id).ToList();
+                    .Where(dev => dev.Project.DistrictId == district.Id && dev.Project.Id != Guid.Empty).ToList();
                 var ents = devices.Select(dev => dev.Project.Enterprise).Distinct().ToList();
                 if (ents.Any())
                 {
@@ -321,13 +321,13 @@ namespace Dust.Platform.Web.Controllers
                 total = query.Count(),
                 rows = query.Skip(post.offset).Take(post.limit).ToList().Select(q => new
                 {
-                    q.ParticulateMatter,
-                    q.Pm25,
-                    q.Pm100,
-                    q.Noise,
-                    q.Temperature,
-                    q.Humidity,
-                    q.WindSpeed,
+                    ParticulateMatter = Math.Round(q.ParticulateMatter, 2),
+                    Pm25 = Math.Round(q.Pm25, 2),
+                    Pm100 = Math.Round(q.Pm100, 2),
+                    Noise = Math.Round(q.Noise, 1),
+                    Temperature = Math.Round(q.Temperature, 1),
+                    Humidity = Math.Round(q.Humidity, 1),
+                    WindSpeed = Math.Round(q.WindSpeed, 1),
                     AverageDateTime = q.AverageDateTime.ToString("yyyy-MM-dd HH:mm")
                 })
             }, JsonRequestBehavior.AllowGet);

@@ -26,19 +26,19 @@ namespace Dust.Platform.Service.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult(ModelState));
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult(ModelState));
             }
             model.Trim();
 
             var district = _ctx.Districts.FirstOrDefault(d => d.Name == model.District);
             if (district == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"不存在此区县：{model.District}"));
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"不存在此区县：{model.District}"));
             }
 
             if (_ctx.KsDustProjects.Any(prj => prj.ContractRecord == model.ContractRecord))
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"合同备案号已经存在：{model.ContractRecord.Trim()}"));
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"合同备案号已经存在：{model.ContractRecord.Trim()}"));
             }
 
             var enterprise = _ctx.Enterprises.FirstOrDefault(e => e.OuterId == model.EnterpriseId.Trim());
@@ -77,11 +77,11 @@ namespace Dust.Platform.Service.Controllers
                 var dev = _ctx.KsDustDevices.FirstOrDefault(de => de.NodeId == devId);
                 if (dev == null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"不存在的设备NODEID：{deviceNodeId}"));
+                    return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"不存在的设备NODEID：{deviceNodeId}"));
                 }
                 if (dev.ProjectId != Guid.Empty)
                 {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"设备已绑定其他工程，NODEID：{deviceNodeId}"));
+                    return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"设备已绑定其他工程，NODEID：{deviceNodeId}"));
                 }
                 project.VendorId = dev.VendorId;
                 dev.ProjectId = project.Id;
@@ -97,29 +97,29 @@ namespace Dust.Platform.Service.Controllers
             {
                 var errorCode = $"{DateTime.Now: yyyyMMddHHmmss}";
                 LogService.Instance.Error($"新增工程失败，错误号：{errorCode}", ex);
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"新增工程失败，错误号：{errorCode}"));
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"新增工程失败，错误号：{errorCode}"));
             }
-            return Request.CreateResponse(HttpStatusCode.Accepted, new OuterPlatformExecuteResult().Success());
+            return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult().Success());
         }
 
         public HttpResponseMessage Put([FromBody]OuterProjectViewModel model)
         {
             if (model == null || !ModelState.IsValid)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult(ModelState));
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult(ModelState));
             }
             model.Trim();
 
             var district = _ctx.Districts.FirstOrDefault(d => d.Name == model.District);
             if (district == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"不存在此区县：{model.District}"));
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"不存在此区县：{model.District}"));
             }
 
             var project = _ctx.KsDustProjects.FirstOrDefault(obj => obj.ContractRecord == model.ContractRecord);
             if (project == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"不存的合同备案号：{model.District}"));
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"不存的合同备案号：{model.District}"));
             }
 
             var enterprise = _ctx.Enterprises.FirstOrDefault(e => e.OuterId == model.EnterpriseId);
@@ -156,11 +156,11 @@ namespace Dust.Platform.Service.Controllers
                 var dev = _ctx.KsDustDevices.FirstOrDefault(de => de.NodeId == devId);
                 if (dev == null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"不存在的设备NODEID：{deviceNodeId}"));
+                    return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"不存在的设备NODEID：{deviceNodeId}"));
                 }
                 if (dev.ProjectId != Guid.Empty)
                 {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"设备已绑定其他工程，NODEID：{deviceNodeId}"));
+                    return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"设备已绑定其他工程，NODEID：{deviceNodeId}"));
                 }
                 project.VendorId = dev.VendorId;
                 dev.ProjectId = project.Id;
@@ -175,16 +175,16 @@ namespace Dust.Platform.Service.Controllers
             {
                 var errorCode = $"{DateTime.Now: yyyyMMddHHmmss}";
                 LogService.Instance.Error($"修改工程信息失败，错误号：{errorCode}", ex);
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult($"修改工程信息失败，错误号：{errorCode}"));
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"修改工程信息失败，错误号：{errorCode}"));
             }
-            return Request.CreateResponse(HttpStatusCode.Accepted, new OuterPlatformExecuteResult().Success());
+            return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult().Success());
         }
 
         public HttpResponseMessage Delete([FromBody]ProjectDeleteParams model)
         {
             if (model == null || !ModelState.IsValid)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new OuterPlatformExecuteResult(ModelState));
+                return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult(ModelState));
             }
             model.ContractRecord = model.ContractRecord.Trim();
 
@@ -206,7 +206,7 @@ namespace Dust.Platform.Service.Controllers
             {
                 var errorCode = $"{DateTime.Now: yyyyMMddHHmmss}";
                 LogService.Instance.Error($"停止工程失败，错误号：{errorCode}", ex);
-                return Request.CreateResponse(HttpStatusCode.BadRequest, $"系统内部错误，错误号：{errorCode}");
+                return Request.CreateResponse(HttpStatusCode.OK, $"系统内部错误，错误号：{errorCode}");
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult().Success());

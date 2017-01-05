@@ -28,7 +28,6 @@ namespace KsDust.Platform.Protocol
             {
                 ProjectType = ksDevice.Project.ProjectType,
                 DeviceId = Guid.Parse(package.ClientSource.ClientIdentity),
-                ProjectId = ksDevice.ProjectId,
                 EnterpriseId = ksDevice.Project.EnterpriseId,
                 DistrictId = ksDevice.Project.DistrictId,
                 ParticulateMatter = double.Parse(package.GetDataValueString(Properties.Resource.TSP)),
@@ -42,6 +41,10 @@ namespace KsDust.Platform.Protocol
                 MonitorType = ParseMonitorType(package["CmdByte"].ComponentValue),
                 UpdateTime = DateTime.Now
             };
+            if (ksDevice.ProjectId != null)
+            {
+                monitorData.ProjectId = ksDevice.ProjectId.Value;
+            }
             var ctx = new KsDustDbContext();
             ctx.KsDustMonitorDatas.Add(monitorData);
             ctx.SaveChanges();

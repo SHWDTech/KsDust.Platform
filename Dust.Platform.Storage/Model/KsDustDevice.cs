@@ -23,7 +23,7 @@ namespace Dust.Platform.Storage.Model
         /// </summary>
         [Required]
         [Display(Name = "所属工程ID")]
-        public Guid ProjectId { get; set; } = Guid.Empty;
+        public Guid? ProjectId { get; set; } = Guid.Empty;
 
         /// <summary>
         /// 设备所属工程

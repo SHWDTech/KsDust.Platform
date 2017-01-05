@@ -200,14 +200,16 @@
             {
                 id = $"dtable_{Model.TargetId}",
                 data_page_size = 50,
+                data_sort_name = "AverageDateTime",
+                data_sort_order = "desc",
                 url = $"/Home/MonitorLastDayData?id={Model.TargetId}&type={Model.ViewType}&start={DateTime.Now.AddDays(-1):yyyy-MM-dd HH:mm:ss}&end={DateTime.Now:yyyy-MM-dd HH:mm:ss}"
-            }).Column("粉尘", "ParticulateMatter")
+            }).Column("粉尘", "ParticulateMatter", true)
                                              .Column("PM2.5", "Pm25")
                                              .Column("PM10", "Pm100")
                                              .Column("噪音", "Noise")
                                              .Column("温度", "Temperature")
                                              .Column("湿度", "Humidity")
-                                             .Column("监测时间", "AverageDateTime")
+                                             .Column("监测时间", "AverageDateTime", true)
             )
         </div>
 

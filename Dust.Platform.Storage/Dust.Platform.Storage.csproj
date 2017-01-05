@@ -97,6 +97,10 @@
     <Compile Include="Migrations\201612300607535_AddAverageValues.Designer.cs">
       <DependentUpon>201612300607535_AddAverageValues.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701050321492_NullableProjectIdOnDevice.cs" />
+    <Compile Include="Migrations\201701050321492_NullableProjectIdOnDevice.Designer.cs">
+      <DependentUpon>201701050321492_NullableProjectIdOnDevice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -152,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612300607535_AddAverageValues.resx">
       <DependentUpon>201612300607535_AddAverageValues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701050321492_NullableProjectIdOnDevice.resx">
+      <DependentUpon>201701050321492_NullableProjectIdOnDevice.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

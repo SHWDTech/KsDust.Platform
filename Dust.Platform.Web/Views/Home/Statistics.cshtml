@@ -133,7 +133,9 @@
             $('#chart_' + par.Uuid).height($('#chart_' + par.Uuid).parents('.chartContainer').height() - 30);
             var chart = echarts.init(document.getElementById('chart_' + par.Uuid));
             $('#historyRank_' + par.Uuid + ' .query-button').on('click', function () {
-                $('#table_' + par.Uuid).bootstrapTable();
+                $('#table_' + par.Uuid).bootstrapTable({
+                    height: $('#table_' + par.Uuid).parents('.panel').parent('div').height() - 20
+                });
                 $('#table_' + par.Uuid)
                     .bootstrapTable('refresh',
                     {

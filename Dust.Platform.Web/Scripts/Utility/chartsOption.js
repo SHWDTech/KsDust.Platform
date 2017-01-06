@@ -63,10 +63,20 @@ chartsOption.timelineOptions = function(params) {
         },
         tooltip: {
             trigger: 'axis',
-            formatter: function (params) {
-                params = params[0];
-                var date = new Date(params.name);
-                return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
+            formatter: function (formatpar) {
+                formatpar = formatpar[0];
+                var date = new Date(formatpar.name);
+                return date.getFullYear() +
+                    '-' +
+                    date.getMonth() +
+                    '-' +
+                    date.getDate() +
+                    ' ' +
+                    date.getHours() +
+                    ':00 ' +
+                    params['title'] +
+                    ':' +
+                    formatpar.value[1];
             },
             axisPointer: {
                 animation: false

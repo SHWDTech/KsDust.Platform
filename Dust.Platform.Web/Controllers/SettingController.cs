@@ -40,12 +40,14 @@ namespace Dust.Platform.Web.Controllers
                     id = "deviceMantance",
                     name = "设备维保",
                     ajaxurl = "/Setting/DeviceMantance",
-                    callBack = "deviceMantanceTable"
+                    callBack = "deviceMantanceTable",
+                    nodetype = "setting"
                 },
                 new Nodes
                 {
                     id = "deviceRegister",
                     name = "设备注册",
+                    nodetype = "setting",
                     ajaxurl = "/Setting/DeviceRegister"
                 }
             };
@@ -60,7 +62,7 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult DeviceMantanceInfo(TablePost post)
         {
-            var devs = _ctx.KsDustDevices.Select(dev => new
+            var devs = _ctx.KsDustDevices.Where(obj => obj.ProjectId != Guid.Empty && !obj.Project.Stopped).Select(dev => new
             {
                 dev.Name,
                 VendorName = dev.Vendor.Name,

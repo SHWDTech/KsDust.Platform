@@ -22,11 +22,12 @@ namespace Dust.Platform.Web.Controllers
         public ActionResult Index()
         {
             var model = new IndexViewModel();
+            var projects = _ctx.KsDustProjects.Where(obj => obj.Id != Guid.Empty && !obj.Stopped);
             var wholeCity = new DistrictInfo
             {
                 DistrictName = "全市",
-                ProjectsCount = _ctx.KsDustProjects.Count(),
-                ProjectsInstalled = _ctx.KsDustProjects.Count(obj => obj.Installed)
+                ProjectsCount = projects.Count(),
+                ProjectsInstalled = projects.Count(obj => obj.Installed)
             };
             wholeCity.InstallPercentage = $"{wholeCity.ProjectsInstalled * 100.00d / wholeCity.ProjectsCount:F2}%";
             model.DistrictInfos.Add(wholeCity);
@@ -36,8 +37,8 @@ namespace Dust.Platform.Web.Controllers
                 var info = new DistrictInfo
                 {
                     DistrictName = district.Name,
-                    ProjectsCount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id),
-                    ProjectsInstalled = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id && obj.Installed)
+                    ProjectsCount = projects.Count(obj => obj.DistrictId == district.Id),
+                    ProjectsInstalled = projects.Count(obj => obj.DistrictId == district.Id && obj.Installed)
                 };
                 info.InstallPercentage = info.ProjectsCount == 0 ? "0.0%" : $"{info.ProjectsInstalled * 100.00d / info.ProjectsCount:F1}%";
                 model.DistrictInfos.Add(info);
@@ -122,8 +123,8 @@ namespace Dust.Platform.Web.Controllers
                         var info = new DistrictInfo
                         {
                             DistrictName = district.Name,
-                            ProjectsCount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id),
-                            ProjectsInstalled = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id && obj.Installed)
+                            ProjectsCount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id && !obj.Stopped),
+                            ProjectsInstalled = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id && obj.Installed && !obj.Stopped)
                         };
                         info.InstallPercentage = info.ProjectsCount == 0 ? "0.0%" : $"{info.ProjectsInstalled * 100.00d / info.ProjectsCount:F1}%";
                         model.DistrictInfos.Add(info);
@@ -131,11 +132,11 @@ namespace Dust.Platform.Web.Controllers
                     break;
                 case AverageCategory.District:
                     model.DistrictStatuses = new List<DistrictStatus>();
-                    var projects = _ctx.KsDustProjects.Where(prj => prj.DistrictId == model.TargetId).Select(obj => new { obj.Id, obj.Name, obj.OccupiedArea, obj.Floorage }).ToList();
+                    var projects = _ctx.KsDustProjects.Where(prj => prj.DistrictId == model.TargetId && !prj.Stopped).Select(obj => new { obj.Id, obj.Name, obj.OccupiedArea, obj.Floorage }).ToList();
                     var total = new DistrictStatus
                     {
                         ProjectName = "全区",
-                        DevicesCount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == model.TargetId),
+                        DevicesCount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == model.TargetId && !obj.Project.Stopped),
                         TotalOccupiedArea = projects.Sum(obj => obj.OccupiedArea),
                         TotalFloorage = projects.Sum(obj => obj.Floorage)
                     };
@@ -154,11 +155,11 @@ namespace Dust.Platform.Web.Controllers
                     break;
                 case AverageCategory.Enterprise:
                     model.DistrictStatuses = new List<DistrictStatus>();
-                    var entprojects = _ctx.KsDustProjects.Where(prj => prj.EnterpriseId == model.TargetId).Select(obj => new { obj.Id, obj.Name, obj.OccupiedArea, obj.Floorage }).ToList();
+                    var entprojects = _ctx.KsDustProjects.Where(prj => prj.EnterpriseId == model.TargetId && !prj.Stopped).Select(obj => new { obj.Id, obj.Name, obj.OccupiedArea, obj.Floorage }).ToList();
                     var enttotal = new DistrictStatus
                     {
                         ProjectName = "全区",
-                        DevicesCount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == model.TargetId),
+                        DevicesCount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == model.TargetId && !obj.Project.Stopped),
                         TotalOccupiedArea = entprojects.Sum(obj => obj.OccupiedArea),
                         TotalFloorage = entprojects.Sum(obj => obj.Floorage)
                     };
@@ -213,6 +214,7 @@ namespace Dust.Platform.Web.Controllers
                 menuNode.ajaxurl = "/Statistics/HistoryQuery";
                 menuNode.callBack = "setupHistoryQuery";
                 menuNode.nodetype = "historyQuery";
+                menuNode.tabTailfix = " - 历史查询";
                 menuNode.routeValue = new
                 {
                     ViewType = menuNode.viewType,
@@ -233,6 +235,7 @@ namespace Dust.Platform.Web.Controllers
                 menuNode.ajaxurl = "/Statistics/HistoryStats";
                 menuNode.callBack = "setupHistoryStats";
                 menuNode.nodetype = "historyStats";
+                menuNode.tabTailfix = " - 历史统计";
                 menuNode.routeValue = new
                 {
                     ViewType = menuNode.viewType,
@@ -260,7 +263,7 @@ namespace Dust.Platform.Web.Controllers
                 var devices = _ctx.KsDustDevices.Include("Project")
                     .Include("Project.District")
                     .Include("Project.Enterprise")
-                    .Where(dev => dev.Project.DistrictId == district.Id && dev.Project.Id != Guid.Empty).ToList();
+                    .Where(dev => dev.Project.DistrictId == district.Id && dev.Project.Id != Guid.Empty && !dev.Project.Stopped).ToList();
                 var ents = devices.Select(dev => dev.Project.Enterprise).Distinct().ToList();
                 if (ents.Any())
                 {

@@ -18,6 +18,8 @@ namespace Dust.Platform.Web.Models.Home
 
         public string nodetype { get; set; }
 
+        public string tabTailfix { get; set; } = string.Empty;
+
         public AverageCategory viewType { get; set; }
 
         public List<Nodes> children { get; set; }

@@ -57,11 +57,19 @@
                 function (ret) {
                     $($('.present')[$('.present').length - 1]).append(ret);
                     if (treenode.callBack != null) {
-                        window[treenode.callBack](treenode.param, function () {
-                            currentli.find('a').click(function () {
+                        window[treenode.callBack](treenode.param,
+                            function() {
+                                currentli.find('a')
+                                    .click(function() {
+                                        tabSwitch(currentli.find('a'));
+                                    });
+                            },
+                            treenode);
+                    } else {
+                        currentli.find('a')
+                            .click(function() {
                                 tabSwitch(currentli.find('a'));
                             });
-                        }, treenode);
                     }
                 });
         }
@@ -76,7 +84,7 @@
         }
         $.fn.zTree.init($('#reporttree'), setting, treeNodes);
 
-        var deviceMantanceTable = function () {
+        var deviceMantanceTable = function (param, callback) {
             $('#deviceMantance').bootstrapTable({
                 height: $('#deviceMantance').parents('.tab-content').height() - 35
             });
@@ -85,6 +93,7 @@
                 {
                     url: $('#deviceMantance').attr('url')
                 });
+            callback();
         }
     </script>
 }

@@ -22,12 +22,14 @@
         <div class="panel panel-info accroding-menu-item" style="margin-bottom: 0;">
             <div class="panel-heading">历史查询<span class="glyphicon glyphicon-plus" style="float: right"></span></div>
             <div class="panel-body" style="padding: 0;">
+                <input class="form-control search-input" id="querytreeSearch" placeholder="输入关键字搜索">
                 <ul id="querytree" class="ztree"></ul>
             </div>
         </div>
         <div class="panel panel-info accroding-menu-item" style="margin-bottom: 0;">
             <div class="panel-heading">历史统计<span class="glyphicon glyphicon-plus" style="float: right"></span></div>
             <div class="panel-body" style="padding: 0;">
+                <input class="form-control search-input" id="historytreeSearch" placeholder="输入关键字搜索">
                 <ul id="historytree" class="ztree"></ul>
             </div>
         </div>
@@ -43,6 +45,7 @@
 
 @section scripts{
     <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
+    <script src="~/Scripts/Utility/jquery.ztree.exhide.min.js"></script>
     <script src="/Scripts/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="/Scripts/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
     <script src="/Scripts/moment-with-locales.min.js"></script>
@@ -73,7 +76,7 @@
                 tabSwitch($(existLi));
                 return;
             }
-            var li = '<li role="presentation"><a data-target="' + treenode.id + '-' + treenode.nodetype + '" href="#">' + treenode.name + '</a></li>';
+            var li = '<li role="presentation"><a data-target="' + treenode.id + '-' + treenode.nodetype + '" href="#">' + treenode.name + treenode.tabTailfix + '</a></li>';
             $('.tabBar ul').append(li);
             $('.tabBar ul>li').removeClass('active');
             var currentli = $($('.tabBar ul>li')[$('.tabBar ul>li').length - 1]);
@@ -111,7 +114,7 @@
                 url: par.url
             });
             var baseUrl = par.url;
-            $('#totalProjects .query-button').on('click', function() {
+            $('#totalProjects .query-button').on('click', function () {
                 $('#' + par.table).bootstrapTable('refresh', {
                     url: baseUrl + '?district=' + $('#districtSelecter').val() + '&enterprise=' + $('#projectSelecter').val()
                 });
@@ -288,6 +291,7 @@
                 id: 0,
                 ajaxurl: '/Statistics/Projects',
                 callBack: 'setupTable',
+                tabTailfix: '',
                 param: { table: 'projectTable', url: '/Statistics/GetProjects' }
             },
             {
@@ -295,6 +299,7 @@
                 id: 1,
                 ajaxurl: '/Statistics/Districts',
                 callBack: 'setupTable',
+                tabTailfix: '',
                 param: { table: 'districtTable', url: '/Statistics/GetDistricts' }
             },
             {
@@ -302,6 +307,7 @@
                 id: 2,
                 ajaxurl: '/Statistics/HistoryRank',
                 callBack: 'setupRankChart',
+                tabTailfix: '',
                 routeValue: { Type: 0, Uuid: disGuid },
                 param: {
                     Uuid: disGuid,
@@ -314,6 +320,7 @@
                 id: 3,
                 ajaxurl: '/Statistics/HistoryRank',
                 callBack: 'setupRankChart',
+                tabTailfix: '',
                 routeValue: { Type: 1, Uuid: prjGuid },
                 param: {
                     Uuid: prjGuid,
@@ -323,8 +330,58 @@
             }
         ];
         $.fn.zTree.init($('#infotree'), setting, basicNodes);
-        $.fn.zTree.init($('#querytree'), setting, treeNodes);
-        $.fn.zTree.init($('#historytree'), setting, statsNodes);
+        var querytree = $.fn.zTree.init($('#querytree'), setting, treeNodes);
+        var historytree = $.fn.zTree.init($('#historytree'), setting, statsNodes);
         $('#infotree_1_a').click();
+        $('#querytreeSearch').on('input propertychange', function () {
+            hideAllNodes(querytree, querytree.getNodes());
+            var reg = new RegExp($('#querytreeSearch').val());
+            var showNodes = regNodes(reg, querytree.getNodes());
+            querytree.showNodes(showNodes);
+            if ($('.search-input').val().trim().length === 0) {
+                querytree.expandAll(false);
+            } else {
+                querytree.expandAll(true);
+            }
+        });
+
+        $('#historytreeSearch').on('input propertychange', function () {
+            hideAllNodes(historytree, historytree.getNodes());
+            var reg = new RegExp($('#historytreeSearch').val());
+            var showNodes = regNodes(reg, historytree.getNodes());
+            historytree.showNodes(showNodes);
+            if ($('.search-input').val().trim().length === 0) {
+                historytree.expandAll(false);
+            } else {
+                historytree.expandAll(true);
+            }
+        });
+
+        var hideAllNodes = function (ztreeobj, nodes) {
+            $.each(nodes, function (index, node) {
+                if (node.isParent) {
+                    hideAllNodes(ztreeobj, node.children);
+                }
+            });
+
+            ztreeobj.hideNodes(nodes);
+        }
+
+        var regNodes = function (reg, nodes) {
+            var matchedNodes = [];
+            for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].isParent) {
+                    var matchChild = regNodes(reg, nodes[i].children);
+                    if (matchChild.length > 0 || reg.test(nodes[i].name)) {
+                        matchedNodes.push(nodes[i]);
+                        matchedNodes = matchedNodes.concat(matchChild);
+                    }
+                } else if (reg.test(nodes[i].name)) {
+                    matchedNodes.push(nodes[i]);
+                }
+            }
+
+            return matchedNodes;
+        }
     </script>
 }

@@ -62,7 +62,7 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult GetProjects(TotalProjectsTablePost model)
         {
-            var query = _ctx.KsDustProjects.Where(obj => obj.Id != Guid.Empty);
+            var query = _ctx.KsDustProjects.Where(obj => obj.Id != Guid.Empty && !obj.Stopped);
             if (model.district != null)
             {
                 query = query.Where(obj => obj.DistrictId == model.district.Value);
@@ -109,8 +109,8 @@ namespace Dust.Platform.Web.Controllers
                        let query = _ctx.AverageMonitorDatas.Where(obj => obj.TargetId == district.Id)
                        let lastDayValue = query.FirstOrDefault(obj => obj.AverageDateTime > lastDay && obj.Type == AverageType.DayAvg)
                        let lastMonthValue = query.FirstOrDefault(obj => obj.AverageDateTime > lastMonth && obj.Type == AverageType.MonthAvg)
-                       let pcount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id)
-                       let dcount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == district.Id)
+                       let pcount = _ctx.KsDustProjects.Count(obj => obj.DistrictId == district.Id && !obj.Stopped)
+                       let dcount = _ctx.KsDustDevices.Count(obj => obj.Project.DistrictId == district.Id && !obj.Project.Stopped)
                        let toa = pcount == 0 ? 0 : _ctx.KsDustProjects.Where(item => item.DistrictId == district.Id).Sum(obj => obj.OccupiedArea)
                        let tfa = pcount == 0 ? 0 : _ctx.KsDustProjects.Where(item => item.DistrictId == district.Id).Sum(obj => obj.Floorage)
                        select new TotalDistrictsTable

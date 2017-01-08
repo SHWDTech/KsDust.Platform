@@ -198,6 +198,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\WdCameraViewer\WdCameraViewer\WdCameraViewer.csproj">
+      <Project>{16EB10AD-B459-43A2-8D25-F8C5C2FB3A35}</Project>
+      <Name>WdCameraViewer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\WDYunPlatform\Platform.Utility\Platform.Utility.csproj">
       <Project>{95b28f0d-c7d4-479c-aabf-e0f8b4b0e06c}</Project>
       <Name>Platform.Utility</Name>

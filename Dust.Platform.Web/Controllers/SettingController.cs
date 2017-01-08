@@ -62,7 +62,8 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult DeviceMantanceInfo(TablePost post)
         {
-            var devs = _ctx.KsDustDevices.Where(obj => obj.ProjectId != Guid.Empty && !obj.Project.Stopped).Select(dev => new
+            var devs = _ctx.KsDustDevices.Where(obj => obj.ProjectId != Guid.Empty && !obj.Project.Stopped)
+                .OrderBy(obj => obj.Id).Skip(post.offset).Take(post.limit).Select(dev => new
             {
                 dev.Name,
                 VendorName = dev.Vendor.Name,

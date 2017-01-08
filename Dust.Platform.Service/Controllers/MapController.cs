@@ -22,7 +22,7 @@ namespace Dust.Platform.Service.Controllers
         }
 
         [Authorize]
-        public HttpResponseMessage Post([FromUri]MapPostParams model)
+        public HttpResponseMessage Post([FromBody]MapPostParams model)
         {
             var mapList = new List<DeviceMapViewModel>();
             var authedDevices = model.projectType == null

@@ -282,7 +282,7 @@ namespace Dust.Platform.Web.Controllers
                     {
                         var prjNode = new Nodes
                         {
-                            name = prj.Name,
+                            name = $"{prj.Name}({prj.ContractRecord})",
                             id = prj.Id.ToString(),
                             viewType = AverageCategory.Project,
                             children = new List<Nodes>()

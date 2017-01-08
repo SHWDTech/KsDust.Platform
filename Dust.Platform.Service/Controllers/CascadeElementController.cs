@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -24,12 +25,21 @@ namespace Dust.Platform.Service.Controllers
         {
             switch (model.CascadeElementLevel)
             {
-                    case AverageCategory.District:
-                    var enterprises =
-                        this.CreateFilterProcess().GetAuthedProjects(null).Where(prj => prj.DistrictId == model.CascadeElementId)
-                            .Select(obj => obj.Enterprise)
-                            .Distinct()
-                            .Select(
+                case AverageCategory.WholeCity:
+                    var districts =
+                        _ctx.Districts.Where(obj => obj.Id != Guid.Empty).ToList().Select(item => new CascadeElementViewModel
+                        {
+                            CascadeElementId = item.Id,
+                            CascadeElementLevel = AverageCategory.District,
+                            CascadeElementName = item.Name
+                        });
+                    return Request.CreateResponse(HttpStatusCode.OK, districts);
+                case AverageCategory.District:
+                    var enterprises = this.CreateFilterProcess().GetAuthedProjects(null)
+                        .Where(prj => prj.DistrictId == model.CascadeElementId).ToList()
+                        .Select(obj => obj.EnterpriseId).Distinct();
+                    var ents = _ctx.Enterprises.Where(ent => enterprises.Contains(ent.Id))
+                        .ToList().Select(
                                 item =>
                                     new CascadeElementViewModel
                                     {
@@ -37,10 +47,11 @@ namespace Dust.Platform.Service.Controllers
                                         CascadeElementLevel = AverageCategory.Enterprise,
                                         CascadeElementName = item.Name
                                     });
-                    return Request.CreateResponse(HttpStatusCode.OK, enterprises);
-                    case AverageCategory.Enterprise:
+                    return Request.CreateResponse(HttpStatusCode.OK, ents);
+                case AverageCategory.Enterprise:
                     var projects =
                         this.CreateFilterProcess().GetAuthedProjects(null).Where(obj => obj.EnterpriseId == model.CascadeElementId)
+                        .ToList()
                             .Select(item => new CascadeElementViewModel
                             {
                                 CascadeElementId = item.Id,
@@ -48,9 +59,10 @@ namespace Dust.Platform.Service.Controllers
                                 CascadeElementName = item.Name
                             });
                     return Request.CreateResponse(HttpStatusCode.OK, projects);
-                    case AverageCategory.Project:
+                case AverageCategory.Project:
                     var devices =
                         this.CreateFilterProcess().GetAuthedDevices(null).Where(obj => obj.ProjectId == model.CascadeElementId)
+                        .ToList()
                         .Select(item => new CascadeElementViewModel
                         {
                             CascadeElementId = item.Id,
@@ -58,7 +70,7 @@ namespace Dust.Platform.Service.Controllers
                             CascadeElementName = item.Name
                         });
                     return Request.CreateResponse(HttpStatusCode.OK, devices);
-                    case AverageCategory.Device:
+                case AverageCategory.Device:
                     return Request.CreateResponse(HttpStatusCode.OK);
                 default:
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "未知层级或层级元素");

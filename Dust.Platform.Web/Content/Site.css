@@ -29,6 +29,9 @@ body {
     padding: 2px;
 }
 
+.datepicker {
+    padding:0 10px
+}
 /*.table > thead > tr > td {
     padding: 4px !important;
     font-size: 12px;

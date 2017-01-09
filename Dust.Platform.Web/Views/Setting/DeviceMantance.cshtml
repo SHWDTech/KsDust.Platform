@@ -3,11 +3,29 @@
     Layout = null;
 }
 
+<div id="toolbar" class="btn-group" style="margin-bottom: 5px;">
+    <button type="button" class="btn btn-default" id="mantance_all" title="全部">
+        <span>查看全部设备</span>
+    </button>
+    <button type="button" class="btn btn-default" id="mantance_over" title="已过期">
+        <span>
+            <img src="/Resources/Images/Site/32_32_red.png" style="height: 18px;" />
+            查看维保过期设备
+        </span>
+    </button>
+    <button type="button" class="btn btn-default" id="mantance_need" title="快到期">
+        <span>
+            <img src="/Resources/Images/Site/32_32_yellow.png" style="height: 18px;" />
+            查看维保快到期设备
+        </span>
+    </button>
+</div>
 <div>
     @(Html.BootstrapTable("deviceMantance", "/Setting/DeviceMantanceInfo", TablePaginationOption.server, new
-      {
-          data_page_list = "[25, 50, 100, ALL]"
-      }).Column("设备名称", "Name")
+{
+    data_page_list = "[25, 50, 100, ALL]"
+})
+          .Column("设备名称", "Name")
           .Column("供应商", "VendorName")
           .Column("工程名称", "ProjectName")
           .Column("联系人", "SuperIntend")
@@ -17,18 +35,39 @@
           .Apply(ColumnOption.formatter, "mantanceFormatter"))
 </div>
 <script type="text/javascript">
+    var baseUrl = "/Setting/DeviceMantanceInfo";
     var mantanceStatus = {
         'Mantanced': 0,
         'NeedMantance': 1,
         'Overdue': 255
     }
+
+    $('#mantance_all').on('click', function() {
+        refreshTable(baseUrl);
+    });
+
+    $('#mantance_over').on('click', function () {
+        refreshTable(baseUrl + '?MantanceStatus=255');
+    });
+
+    $('#mantance_need').on('click', function () {
+        refreshTable(baseUrl + '?MantanceStatus=1');
+    });
+
+    var refreshTable = function(url) {
+        $('#deviceMantance').bootstrapTable('refresh',
+        {
+            url : url
+        });
+    }
+
     var mantanceFormatter = function (value) {
         if (value === mantanceStatus.Mantanced) {
-            return '<img src="/Resources/Images/Site/32_32_green.png"></img>';
-        }else if (value === mantanceStatus.NeedMantance) {
-            return '<img src="/Resources/Images/Site/32_32_yellow.png"></img>';
+            return '<img src="/Resources/Images/Site/32_32_green.png" />';
+        } else if (value === mantanceStatus.NeedMantance) {
+            return '<img src="/Resources/Images/Site/32_32_yellow.png" />';
         } else {
-            return '<img src="/Resources/Images/Site/32_32_red.png"></img>';
+            return '<img src="/Resources/Images/Site/32_32_red.png" />';
         }
     }
 </script>

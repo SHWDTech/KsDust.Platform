@@ -3,6 +3,7 @@
 using System;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Web.Models.Ajax;
+using Dust.Platform.Web.Models.Setting;
 
 namespace Dust.Platform.Web.Models.Table
 {
@@ -60,5 +61,10 @@ namespace Dust.Platform.Web.Models.Table
         public DateTime start { get; set; }
 
         public DateTime end { get; set; }
+    }
+
+    public class DevMantanceTablePost : TablePost
+    {
+        public MantanceStatus? MantanceStatus { get; set; }
     }
 }

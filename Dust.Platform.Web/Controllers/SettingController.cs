@@ -60,10 +60,21 @@ namespace Dust.Platform.Web.Controllers
             return View();
         }
 
-        public ActionResult DeviceMantanceInfo(TablePost post)
+        public ActionResult DeviceMantanceInfo(DevMantanceTablePost post)
         {
-            var devs = _ctx.KsDustDevices.Where(obj => obj.ProjectId != Guid.Empty && !obj.Project.Stopped)
-                .OrderBy(obj => obj.Id).Skip(post.offset).Take(post.limit).Select(dev => new
+            var overed = DateTime.Now.AddMonths(-6);
+            var needMantance = DateTime.Now.AddMonths(-5);
+            var query = _ctx.KsDustDevices.Where(obj => obj.ProjectId != Guid.Empty && !obj.Project.Stopped);
+            switch (post.MantanceStatus)
+            {
+                case MantanceStatus.Overdue:
+                    query = query.Where(obj => obj.LastMaintenance < overed);
+                    break;
+                case MantanceStatus.NeedMantance:
+                    query = query.Where(obj => obj.LastMaintenance < needMantance && obj.LastMaintenance > overed);
+                    break;
+            }
+            var devs = query.OrderBy(obj => obj.Id).Skip(post.offset).Take(post.limit).Select(dev => new
             {
                 dev.Name,
                 VendorName = dev.Vendor.Name,

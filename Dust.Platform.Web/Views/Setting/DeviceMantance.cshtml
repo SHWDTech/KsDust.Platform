@@ -5,7 +5,10 @@
 
 <div id="toolbar" class="btn-group" style="margin-bottom: 5px;">
     <button type="button" class="btn btn-default" id="mantance_all" title="全部">
-        <span>查看全部设备</span>
+        <span>
+            <img src="/Resources/Images/Site/32_32_all.png" style="height: 18px;" />
+            查看全部设备
+        </span>
     </button>
     <button type="button" class="btn btn-default" id="mantance_over" title="已过期">
         <span>
@@ -42,7 +45,7 @@
         'Overdue': 255
     }
 
-    $('#mantance_all').on('click', function() {
+    $('#mantance_all').on('click', function () {
         refreshTable(baseUrl);
     });
 
@@ -54,10 +57,10 @@
         refreshTable(baseUrl + '?MantanceStatus=1');
     });
 
-    var refreshTable = function(url) {
+    var refreshTable = function (url) {
         $('#deviceMantance').bootstrapTable('refresh',
         {
-            url : url
+            url: url
         });
     }
 

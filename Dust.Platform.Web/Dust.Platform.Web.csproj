@@ -290,6 +290,7 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <None Include="Properties\PublishProfiles\ks_dust_web.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Resources\Images\Site\32_32_all.png" />
     <Content Include="Resources\Images\Site\32_32_green.png" />
     <Content Include="Resources\Images\Site\32_32_red.png" />
     <Content Include="Resources\Images\Site\32_32_yellow.png" />

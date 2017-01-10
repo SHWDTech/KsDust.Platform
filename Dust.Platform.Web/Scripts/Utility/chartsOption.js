@@ -4,13 +4,19 @@ chartsOption.barOption = function (params) {
     var option = {
         color: ['#3398DB'],
         title: {
-            text: params['title']
+            text: params['title'],
+            textAlign: 'center',
+            left: '50%'
         },
         tooltip: {
             trigger: 'axis',
             axisPointer: {            // 坐标轴指示器，坐标轴触发有效
                 type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
             }
+        },
+        grid: {
+            left: '60px',
+            right: '20px'
         },
         xAxis: {
             type: 'category',
@@ -29,13 +35,19 @@ chartsOption.lineOptions = function (params) {
     var option = {
         color: ['#3398DB'],
         title: {
-            text: params['title']
+            text: params['title'],
+            textAlign: 'center',
+            left: '50%'
         },
         tooltip: {
             trigger: 'axis',
             axisPointer: {
                 animation: false
             }
+        },
+        grid: {
+            left: '60px',
+            right: '20px'
         },
         xAxis: {
             type: 'category',
@@ -59,7 +71,9 @@ chartsOption.timelineOptions = function(params) {
     var option = {
         color: ['#3398DB'],
         title: {
-            text: params['title']
+            text: params['title'],
+            textAlign: 'center',
+            left: '50%'
         },
         tooltip: {
             trigger: 'axis',
@@ -81,6 +95,10 @@ chartsOption.timelineOptions = function(params) {
             axisPointer: {
                 animation: false
             }
+        },
+        grid: {
+            left: '60px',
+            right: '20px'
         },
         xAxis: {
             type: 'time'

@@ -206,7 +206,7 @@
                     Id: tarId,
                     Type: node.viewType,
                     DataType: $('#historyQuery_' + tarId + ' .dataSelect').val(),
-                    DateType: 1,
+                    DateType: $('#historyQuery_' + tarId + ' .dateSelect').val(),
                     Start: $('#' + 'hqstart_' + tarId).data('DateTimePicker').date()._d.toJSON(),
                     End: $('#' + 'hqend_' + tarId).data('DateTimePicker').date()._d.toJSON()
                 }, function (ret) {

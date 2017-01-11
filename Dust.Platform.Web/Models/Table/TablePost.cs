@@ -17,6 +17,10 @@ namespace Dust.Platform.Web.Models.Table
         public string sort { get; set; }
 
         public string order { get; set; }
+
+        public string act { get; set; }
+
+        public string title { get; set; }
     }
 
     public class TotalProjectsTablePost : TablePost

@@ -16,6 +16,7 @@ $(function () {
         title: "昆山市工程颗粒物小时均值",
         xAxis: window.prjTopTen.map(function (d) { return d.ProjectName }),
         yAxisName: '浓度mg/m³',
+        xAxisNameRotate: -45,
         series: [{ name: '颗粒物', type: 'bar', data: window.prjTopTen.map(function (d) { return d.CurrentTsp }) }]
     }));
 });

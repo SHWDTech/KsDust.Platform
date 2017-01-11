@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
@@ -7,6 +9,9 @@ using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Table;
 using Dust.Platform.Web.Process;
+using Dust.Platform.Web.Result;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -320,26 +325,88 @@ namespace Dust.Platform.Web.Controllers
                        obj.Category == post.type && obj.AverageDateTime > post.start &&
                        obj.AverageDateTime < post.end);
 
-            if (!string.IsNullOrWhiteSpace(post.sort))
+            query = !string.IsNullOrWhiteSpace(post.sort) ? query.OrderByField(post.sort, post.order == "asc") : query.OrderByDescending(obj => obj.AverageDateTime);
+
+            var rows = query.Skip(post.offset).Take(post.limit).ToList().Select(q => new
             {
-                query = query.OrderByField(post.sort, post.order == "asc");
+                ParticulateMatter = Math.Round(q.ParticulateMatter, 2),
+                Pm25 = Math.Round(q.Pm25, 2),
+                Pm100 = Math.Round(q.Pm100, 2),
+                Noise = Math.Round(q.Noise, 1),
+                Temperature = Math.Round(q.Temperature, 1),
+                Humidity = Math.Round(q.Humidity, 1),
+                WindSpeed = Math.Round(q.WindSpeed, 1),
+                AverageDateTime = q.AverageDateTime.ToString("yyyy-MM-dd HH:mm")
+            }).ToList();
+
+            if (post.act != "download")
+                return Json(new
+                {
+                    total = query.Count(),
+                    rows
+                }, JsonRequestBehavior.AllowGet);
+            var dt = new DataTable();
+            dt.Columns.Add("TSP", typeof(double));
+            dt.Columns.Add("PM2.5", typeof(double));
+            dt.Columns.Add("PM10", typeof(double));
+            dt.Columns.Add("噪音", typeof(double));
+            dt.Columns.Add("温度", typeof(double));
+            dt.Columns.Add("湿度", typeof(double));
+            dt.Columns.Add("风速", typeof(double));
+            dt.Columns.Add("时间", typeof(DateTime));
+            foreach (var dataRow in rows)
+            {
+                var row = dt.NewRow();
+                row["TSP"] = dataRow.ParticulateMatter;
+                row["PM2.5"] = dataRow.Pm25;
+                row["PM10"] = dataRow.Pm100;
+                row["噪音"] = dataRow.Noise;
+                row["温度"] = dataRow.Temperature;
+                row["湿度"] = dataRow.Humidity;
+                row["风速"] = dataRow.WindSpeed;
+                row["时间"] = dataRow.AverageDateTime;
+                dt.Rows.Add(row);
+            }
+            var package = new ExcelPackage();
+            var currentSheet = package.Workbook.Worksheets.Add(post.title);
+            for (var i = 1; i < 9; i++)
+            {
+                if (i < 8)
+                {
+                    currentSheet.Column(i).Width = 15;
+                    currentSheet.Column(i).Style.Font.Size = 14;
+                    currentSheet.Column(i).Style.Numberformat.Format = "0.00";
+                    currentSheet.Column(i).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                }
+                else
+                {
+                    currentSheet.Column(i).Width = 35;
+                    currentSheet.Column(i).Style.Font.Size = 14;
+                    currentSheet.Column(i).Style.Numberformat.Format = "yyyy-MM-dd hh:mm:ss";
+                    currentSheet.Column(i).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                }
             }
 
-            return Json(new
+            using (var range = currentSheet.Cells["A1:H1"])
             {
-                total = query.Count(),
-                rows = query.Skip(post.offset).Take(post.limit).ToList().Select(q => new
-                {
-                    ParticulateMatter = Math.Round(q.ParticulateMatter, 2),
-                    Pm25 = Math.Round(q.Pm25, 2),
-                    Pm100 = Math.Round(q.Pm100, 2),
-                    Noise = Math.Round(q.Noise, 1),
-                    Temperature = Math.Round(q.Temperature, 1),
-                    Humidity = Math.Round(q.Humidity, 1),
-                    WindSpeed = Math.Round(q.WindSpeed, 1),
-                    AverageDateTime = q.AverageDateTime.ToString("yyyy-MM-dd HH:mm")
-                })
-            }, JsonRequestBehavior.AllowGet);
+                range.Merge = true;
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                range.Value = post.title;
+                range.Style.Font.Size = 24;
+            }
+
+            using (var range = currentSheet.Cells["A2:H2"])
+            {
+                range.Style.Font.Bold = true;
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(26, 188, 156));
+                range.Style.Font.Color.SetColor(Color.White);
+            }
+
+            currentSheet.View.FreezePanes(3, 9);
+            currentSheet.Cells["A2"].LoadFromDataTable(dt, true);
+
+            return new ExcelResult(package, $"{post.title}-{DateTime.Now:yyyy-MM-dd}.xlsx");
         }
     }
 }

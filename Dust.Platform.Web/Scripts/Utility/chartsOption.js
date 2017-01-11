@@ -20,12 +20,19 @@ chartsOption.barOption = function (params) {
         },
         xAxis: {
             type: 'category',
-            data: params['xAxis']
+            data: params['xAxis'],
+            axisLabel: {
+                interval: 0
+            }
         },
         yAxis: {
             name: params['yAxisName']
         },
         series: params['series']
+    }
+
+    if (params['xAxisNameRotate'] !== null) {
+        option.xAxis.axisLabel.rotate = params['xAxisNameRotate'];
     }
 
     return option;

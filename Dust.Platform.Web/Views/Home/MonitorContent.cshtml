@@ -193,7 +193,7 @@
     </div>
     <div class="panel panel-info" style="height: 48%;">
         <div class="panel-heading">
-            <a class="glyphicon glyphicon-download-alt" download href="@($"/Home/MonitorLastDayData?id={Model.TargetId}&type={Model.ViewType}&offset=0&limit=24&start={DateTime.Now.AddDays(-1):yyyy-MM-dd HH:mm:ss}&end={DateTime.Now:yyyy-MM-dd HH:mm:ss}&act=download&title={Model.Title}-最近24小时监测数据")" style="float: right; margin-top: 3px; cursor: pointer;"></a>
+            <a class="glyphicon glyphicon-floppy-save" download href="@($"/Home/MonitorLastDayData?id={Model.TargetId}&type={Model.ViewType}&offset=0&limit=24&start={DateTime.Now.AddDays(-1):yyyy-MM-dd HH:mm:ss}&end={DateTime.Now:yyyy-MM-dd HH:mm:ss}&act=download&title={Model.Title}-最近24小时监测数据")" style="float: right; margin-top: 3px; cursor: pointer;"></a>
             <span>@Model.Title 最近24小时监测数据</span>
         </div>
         <div class="panel-body">

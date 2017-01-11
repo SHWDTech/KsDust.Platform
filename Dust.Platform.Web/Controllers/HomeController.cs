@@ -346,24 +346,24 @@ namespace Dust.Platform.Web.Controllers
                     rows
                 }, JsonRequestBehavior.AllowGet);
             var dt = new DataTable();
-            dt.Columns.Add("TSP", typeof(double));
-            dt.Columns.Add("PM2.5", typeof(double));
-            dt.Columns.Add("PM10", typeof(double));
-            dt.Columns.Add("噪音", typeof(double));
-            dt.Columns.Add("温度", typeof(double));
-            dt.Columns.Add("湿度", typeof(double));
-            dt.Columns.Add("风速", typeof(double));
+            dt.Columns.Add("TSP（mg/m³）", typeof(double));
+            dt.Columns.Add("PM2.5（mg/m³）", typeof(double));
+            dt.Columns.Add("PM10（mg/m³）", typeof(double));
+            dt.Columns.Add("噪音（dB/A）", typeof(double));
+            dt.Columns.Add("温度（℃）", typeof(double));
+            dt.Columns.Add("湿度（%）", typeof(double));
+            dt.Columns.Add("风速（m/s）", typeof(double));
             dt.Columns.Add("时间", typeof(DateTime));
             foreach (var dataRow in rows)
             {
                 var row = dt.NewRow();
-                row["TSP"] = dataRow.ParticulateMatter;
-                row["PM2.5"] = dataRow.Pm25;
-                row["PM10"] = dataRow.Pm100;
-                row["噪音"] = dataRow.Noise;
-                row["温度"] = dataRow.Temperature;
-                row["湿度"] = dataRow.Humidity;
-                row["风速"] = dataRow.WindSpeed;
+                row["TSP（mg/m³）"] = dataRow.ParticulateMatter;
+                row["PM2.5（mg/m³）"] = dataRow.Pm25;
+                row["PM10（mg/m³）"] = dataRow.Pm100;
+                row["噪音（dB/A）"] = dataRow.Noise;
+                row["温度（℃）"] = dataRow.Temperature;
+                row["湿度（%）"] = dataRow.Humidity;
+                row["风速（m/s）"] = dataRow.WindSpeed;
                 row["时间"] = dataRow.AverageDateTime;
                 dt.Rows.Add(row);
             }
@@ -373,7 +373,7 @@ namespace Dust.Platform.Web.Controllers
             {
                 if (i < 8)
                 {
-                    currentSheet.Column(i).Width = 15;
+                    currentSheet.Column(i).Width = 21;
                     currentSheet.Column(i).Style.Font.Size = 14;
                     currentSheet.Column(i).Style.Numberformat.Format = "0.00";
                     currentSheet.Column(i).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;

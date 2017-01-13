@@ -61,9 +61,9 @@ namespace Ks.Dust.Protocol.Tester
             foreach (var t in _devices)
             {
                 var client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                client.Bind(new IPEndPoint(IPAddress.Parse("192.168.1.103"), _port));
+                client.Bind(new IPEndPoint(IPAddress.Parse("192.168.1.100"), _port));
                 _port++;
-                client.Connect(new IPEndPoint(IPAddress.Parse("192.168.1.103"), 18254));
+                client.Connect(new IPEndPoint(IPAddress.Parse("192.168.1.100"), 18254));
                 client.Send(GetData(t, "2011"));
                 ClientSockets.Add(t, client);
                 Thread.Sleep(100);

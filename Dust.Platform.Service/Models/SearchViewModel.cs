@@ -9,4 +9,9 @@ namespace Dust.Platform.Service.Models
 
         public AverageCategory category { get; set; }
     }
+
+    public class SearchPost
+    {
+        public string objectId { get; set; }
+    }
 }

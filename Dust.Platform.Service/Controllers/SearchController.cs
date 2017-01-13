@@ -19,16 +19,16 @@ namespace Dust.Platform.Service.Controllers
             _ctx = new KsDustDbContext();
         }
 
-        public HttpResponseMessage Post([FromBody] string searchStr)
+        public HttpResponseMessage Post([FromBody]SearchPost post)
         {
             var resultList = new List<SearchViewModel>();
-            resultList.AddRange(_ctx.KsDustDevices.Where(dev => dev.Name.Contains(searchStr)).Select(item => item.Name).ToList()
+            resultList.AddRange(_ctx.KsDustDevices.Where(dev => dev.Name.Contains(post.objectId)).Select(item => item.Name).ToList()
                 .Select(obj => new SearchViewModel { name = obj, category = AverageCategory.Device }));
-            resultList.AddRange(_ctx.KsDustProjects.Where(prj => prj.Name.Contains(searchStr)).Select(item => item.Name).ToList()
+            resultList.AddRange(_ctx.KsDustProjects.Where(prj => prj.Name.Contains(post.objectId)).Select(item => item.Name).ToList()
                 .Select(obj => new SearchViewModel { name = obj, category = AverageCategory.Project }));
-            resultList.AddRange(_ctx.Enterprises.Where(ent => ent.Name.Contains(searchStr)).Select(item => item.Name).ToList()
+            resultList.AddRange(_ctx.Enterprises.Where(ent => ent.Name.Contains(post.objectId)).Select(item => item.Name).ToList()
                 .Select(obj => new SearchViewModel { name = obj, category = AverageCategory.Enterprise }));
-            resultList.AddRange(_ctx.Districts.Where(dis => dis.Name.Contains(searchStr)).Select(item => item.Name).ToList()
+            resultList.AddRange(_ctx.Districts.Where(dis => dis.Name.Contains(post.objectId)).Select(item => item.Name).ToList()
                 .Select(obj => new SearchViewModel { name = obj, category = AverageCategory.District }));
 
             return Request.CreateResponse(HttpStatusCode.OK, resultList);

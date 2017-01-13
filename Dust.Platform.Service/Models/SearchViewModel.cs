@@ -1,17 +1,20 @@
-﻿using Dust.Platform.Storage.Model;
+﻿using System;
+using Dust.Platform.Storage.Model;
 // ReSharper disable InconsistentNaming
 
 namespace Dust.Platform.Service.Models
 {
     public class SearchViewModel
     {
-        public string name { get; set; }
+        public Guid objectId { get; set; }
 
-        public AverageCategory category { get; set; }
+        public string objectName { get; set; }
+
+        public AverageCategory objectLevel { get; set; }
     }
 
     public class SearchPost
     {
-        public string objectId { get; set; }
+        public string searchName { get; set; }
     }
 }

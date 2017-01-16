@@ -8,11 +8,11 @@ namespace Dust.Platform.Service.Models
     {
         public Guid id { get; set; }
 
-        public string parentName { get; set; }
-
         public string name { get; set; }
 
-        public double tsp { get; set; }
+        public int count { get; set; }
+
+        public double tspAvg { get; set; }
 
         public double pm25 { get; set; }
 

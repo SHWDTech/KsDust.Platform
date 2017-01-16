@@ -6,7 +6,7 @@ namespace Dust.Platform.Service.Models
 {
     public class StatisticsDetailPost
     {
-        public ProjectType ProjectType { get; set; }
+        public AverageType dataType { get; set; } = AverageType.FifteenAvg;
 
         public AverageCategory elementType { get; set; }
 

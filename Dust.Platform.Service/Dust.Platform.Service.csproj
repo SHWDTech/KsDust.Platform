@@ -153,6 +153,7 @@
     <Compile Include="BasicConfig.cs" />
     <Compile Include="Controllers\AuditController.cs" />
     <Compile Include="Controllers\CameraLoginController.cs" />
+    <Compile Include="Controllers\CameraNodeController.cs" />
     <Compile Include="Controllers\CascadeElementController.cs" />
     <Compile Include="Controllers\DeviceCurrentController.cs" />
     <Compile Include="Controllers\DistrictAvgController.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Controllers\StatisticsDetailController.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Models\AuditInfo.cs" />
+    <Compile Include="Models\CameraNodes.cs" />
     <Compile Include="Models\CascadeElementViewModel.cs" />
     <Compile Include="Models\DeviceCurrentViewModel.cs" />
     <Compile Include="Models\DeviceMapViewModel.cs" />
@@ -185,7 +187,9 @@
     <Compile Include="StartUp.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

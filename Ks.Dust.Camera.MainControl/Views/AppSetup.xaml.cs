@@ -48,7 +48,8 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void Confirm(object sender, RoutedEventArgs args)
         {
-            
+            Apply(sender, args);
+            OnClose(sender, args);
         }
 
         private void Apply(object sender, RoutedEventArgs args)
@@ -57,6 +58,8 @@ namespace Ks.Dust.Camera.MainControl.Views
             {
                 typeof(Config).GetProperty(textBox.Tag.ToString()).SetValue(null, textBox.Text, BindingFlags.Default, null, null, null);
             }
+
+            LblInformation.Content = "设置已保存。";
         }
     }
 }

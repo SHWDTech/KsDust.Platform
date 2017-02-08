@@ -165,7 +165,7 @@
     <Compile Include="Controllers\StatisticsDetailController.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Models\AuditInfo.cs" />
-    <Compile Include="Models\CameraNodes.cs" />
+    <Compile Include="Models\CameraNode.cs" />
     <Compile Include="Models\CascadeElementViewModel.cs" />
     <Compile Include="Models\DeviceCurrentViewModel.cs" />
     <Compile Include="Models\DeviceMapViewModel.cs" />

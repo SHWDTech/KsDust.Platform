@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Dust.Platform.Service.Models;
+using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 
 namespace Dust.Platform.Service.Controllers

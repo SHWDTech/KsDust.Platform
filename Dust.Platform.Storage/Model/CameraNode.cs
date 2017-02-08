@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dust.Platform.Storage.Model;
 
-namespace Dust.Platform.Service.Models
+namespace Dust.Platform.Storage.Model
 {
     public class CameraNode
     {

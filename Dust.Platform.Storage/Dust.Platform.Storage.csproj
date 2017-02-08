@@ -106,6 +106,7 @@
     <Compile Include="Model\AverageMonitorData.cs" />
     <Compile Include="Model\AverageType.cs" />
     <Compile Include="Model\CameraLogin.cs" />
+    <Compile Include="Model\CameraNode.cs" />
     <Compile Include="Model\CityArea.cs" />
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\District.cs" />

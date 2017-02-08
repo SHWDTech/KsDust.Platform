@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Dust.Platform.Storage.Model;assembly=Dust.Platform.Storage"
         mc:Ignorable="d"
         Background="#c7c7c7"
         Title="昆山建设工程扬尘在线监控平台视频管理平台" WindowStartupLocation="CenterScreen" WindowState="Maximized">
@@ -14,13 +15,27 @@
         <Grid Row="0">
             <Menu Height="25" FontSize="14">
                 <MenuItem Header="操作" Height="25">
-                    <MenuItem Header="刷新"></MenuItem>
+                    <MenuItem Header="刷新" Click="UpdateCameraNodes"></MenuItem>
                     <MenuItem Header="设置" Click="OpenConfigWindow"></MenuItem>
                 </MenuItem>
             </Menu>
         </Grid>
         <Grid Row="1">
-            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Column="0">
+                <TreeView x:Name="TrCamera">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type local:CameraNode}" ItemsSource="{Binding Path=Children}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}"></TextBlock>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

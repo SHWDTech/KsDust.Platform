@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
+using Dust.Platform.Storage.Model;
 
 namespace Ks.Dust.Camera.MainControl.Views
 {
@@ -7,6 +9,8 @@ namespace Ks.Dust.Camera.MainControl.Views
     /// </summary>
     public partial class MainWindow
     {
+        public List<CameraNode> CameraNodes { get; private set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -19,6 +23,19 @@ namespace Ks.Dust.Camera.MainControl.Views
                 Owner = this
             };
             configWindow.ShowDialog();
+        }
+
+        private void UpdateCameraNodes(object sender, RoutedEventArgs args)
+        {
+            var updatePanel = new UpdatePanel() {Owner = this};
+            updatePanel.Show();
+        }
+
+        public void ResfreashCameraNodes(List<CameraNode> nodes)
+        {
+            if (nodes == null) return;
+            CameraNodes = nodes;
+            TrCamera.ItemsSource = CameraNodes;
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Dust.Platform.Storage.Model
 
         public string Name { get; set; }
 
+        public AverageCategory Category { get; set; }
+
         public List<CameraNode> Children { get; set; }
 
         public List<CameraLogin> GetCamreaLogins()

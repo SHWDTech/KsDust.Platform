@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace Ks.Dust.Camera.MainControl.Application
 {
@@ -42,5 +43,11 @@ namespace Ks.Dust.Camera.MainControl.Application
                 ConfigurationManager.RefreshSection("appSettings");
             }
         }
+
+        public static string CameraNodesJsonFile 
+            => $"{Environment.CurrentDirectory}\\Storage\\cameraNodes.json";
+
+        public static string CameraNodesTempJsonFile
+            => $"{Environment.CurrentDirectory}\\Storage\\_cameraNodes_temp.json";
     }
 }

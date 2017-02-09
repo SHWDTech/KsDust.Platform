@@ -31,13 +31,10 @@ namespace Ks.Dust.Camera.MainControl.Views
         public void ExecuteUpdate()
         {
             LblUpdateMessage.Text = "开始更新摄像头信息。。。";
+            LblUpdateMessage.Text = !RequestServerData() 
+                ? $"更新数据失败，请检查网络连接或系统设置，错误号：{_errorCode}" 
+                : "更新完成。";
 
-            if (!RequestServerData())
-            {
-                LblUpdateMessage.Text = $"更新数据失败，请检查网络连接或系统设置，错误号：{_errorCode}";
-            }
-
-            LblUpdateMessage.Text = "更新完成。";
             BtnConfirm.IsEnabled = true;
         }
 
@@ -52,12 +49,12 @@ namespace Ks.Dust.Camera.MainControl.Views
                 using (var reader = new StreamReader(stream))
                 {
                     var responseJson = reader.ReadToEnd();
-                    SaveJsonFile(responseJson);
+                    UpdateLocalData(responseJson);
                 }
             }
             catch (Exception ex)
             {
-                _errorCode = $"{DateTime.Now : yyyyMMddHHMMssfff}";
+                _errorCode = $"{DateTime.Now: yyyyMMddHHMMssfff}";
                 LogService.Instance.Error($"更新设备信息失败，错误号：{_errorCode}", ex);
                 return false;
             }
@@ -65,17 +62,16 @@ namespace Ks.Dust.Camera.MainControl.Views
             return true;
         }
 
-        private void SaveJsonFile(string jsonString)
+        private void UpdateLocalData(string jsonString)
         {
-            using (var writer = new StreamWriter(File.Create($"{Environment.CurrentDirectory}\\Storage\\_cameraNodes_temp.json")))
+            using (var writer = new StreamWriter(File.Create(Config.CameraNodesTempJsonFile)))
             {
                 var cameraNodes = JsonConvert.DeserializeObject<List<CameraNode>>(jsonString);
                 writer.Write(JsonConvert.SerializeObject(cameraNodes, Formatting.Indented));
                 ((MainWindow)Owner).ResfreashCameraNodes(cameraNodes);
             }
-
-            File.Delete($"{Environment.CurrentDirectory}\\Storage\\cameraNodes.json");
-            File.Move($"{Environment.CurrentDirectory}\\Storage\\_cameraNodes_temp.json", $"{Environment.CurrentDirectory}\\Storage\\cameraNodes.json");
+            File.Delete(Config.CameraNodesJsonFile);
+            File.Move(Config.CameraNodesTempJsonFile, Config.CameraNodesJsonFile);
         }
 
         private void OnClose(object sender, RoutedEventArgs args)

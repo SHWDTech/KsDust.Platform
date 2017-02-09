@@ -27,7 +27,8 @@ namespace Dust.Platform.Service.Controllers
                 var disNodes = new CameraNode
                 {
                     Id = district.Id,
-                    Name = district.Name
+                    Name = district.Name,
+                    Category = AverageCategory.District
                 };
                 var devices = _ctx.KsDustDevices.Include("Project")
                     .Include("Project.District")
@@ -44,6 +45,7 @@ namespace Dust.Platform.Service.Controllers
                     {
                         Id = ent.Id,
                         Name = ent.Name,
+                        Category = AverageCategory.Enterprise,
                         Children = new List<CameraNode>()
                     };
                     foreach (var prj in devices.Where(obj => obj.Project.EnterpriseId == ent.Id).Select(dev => dev.Project).Distinct().ToList())
@@ -52,6 +54,7 @@ namespace Dust.Platform.Service.Controllers
                         {
                             Id = prj.Id,
                             Name = $"{prj.Name}({prj.ContractRecord})",
+                            Category = AverageCategory.Project,
                             Children = new List<CameraNode>()
                         };
 
@@ -60,7 +63,8 @@ namespace Dust.Platform.Service.Controllers
                             prjNode.Children.Add(new CameraNode
                             {
                                 Id = dev.Id,
-                                Name = dev.Name
+                                Name = dev.Name,
+                                Category = AverageCategory.Device
                             });
                         }
 

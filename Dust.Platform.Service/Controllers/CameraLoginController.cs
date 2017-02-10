@@ -31,7 +31,7 @@ namespace Dust.Platform.Service.Controllers
             if (camera == null) return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "未找到此摄像头信息。");
             var cameraLogin = new CameraLogin
             {
-                DomainName = camera.ConnectName,
+                SerialNumber = camera.SerialNumber,
                 User = camera.UserName,
                 Password = camera.Password
             };

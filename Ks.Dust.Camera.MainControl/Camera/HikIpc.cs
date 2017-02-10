@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 using Dust.Platform.Storage.Model;
+using Ks.Dust.Camera.MainControl.Application;
 
 namespace Ks.Dust.Camera.MainControl.Camera
 {
@@ -37,8 +38,8 @@ namespace Ks.Dust.Camera.MainControl.Camera
         {
             var ipAddress = new byte[16];
             uint dwPort = 0;
-            if (!CHCNetSDK.NET_DVR_GetDVRIPByResolveSvr_EX("www.hik-online.com", 80, loginInfo.DomainBytes, (ushort)loginInfo.DomainBytes.Length,
-                    null, 0, ipAddress, ref dwPort))
+            if (!CHCNetSDK.NET_DVR_GetDVRIPByResolveSvr_EX(Config.IpServerAddress, Config.IpServerPort, null, 0,
+                    loginInfo.DomainBytes, (ushort)loginInfo.DomainBytes.Length, ipAddress, ref dwPort))
             {
                 LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
                 return false;

@@ -88,6 +88,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Camera\CHCNetSDK.cs" />
+    <Compile Include="Camera\HikIpc.cs" />
+    <Compile Include="Storage\CameraNode.cs" />
     <Compile Include="Views\UpdatePanel.xaml.cs">
       <DependentUpon>UpdatePanel.xaml</DependentUpon>
     </Compile>
@@ -135,7 +138,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -143,9 +148,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Storage\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\WDYunPlatform\Platform.Utility\Platform.Utility.csproj">
       <Project>{95b28f0d-c7d4-479c-aabf-e0f8b4b0e06c}</Project>

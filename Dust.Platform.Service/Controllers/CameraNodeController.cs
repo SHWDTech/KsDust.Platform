@@ -77,7 +77,15 @@ namespace Dust.Platform.Service.Controllers
                 cameraNodes.Add(disNodes);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, cameraNodes);
+            var logins = _ctx.KsDustCameras.Select(obj => new CameraLogin()
+            {
+                SerialNumber = obj.SerialNumber,
+                DeviceGuid = obj.DeviceId,
+                User = obj.UserName,
+                Password = obj.Password
+            }).ToList();
+
+            return Request.CreateResponse(HttpStatusCode.OK, new { Nodes = cameraNodes , Logins = logins});
         }
     }
 }

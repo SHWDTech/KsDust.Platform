@@ -35,9 +35,9 @@ namespace Dust.Platform.Storage.Model
         /// <summary>
         /// 摄像头域名
         /// </summary>
-        [Display(Name = "摄像头连接域名")]
+        [Display(Name = "摄像头序列号")]
         [MaxLength(100)]
-        public string ConnectName { get; set; }
+        public string SerialNumber { get; set; }
 
         /// <summary>
         /// 登陆用户名

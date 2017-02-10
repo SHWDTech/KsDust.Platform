@@ -101,6 +101,10 @@
     <Compile Include="Migrations\201701050321492_NullableProjectIdOnDevice.Designer.cs">
       <DependentUpon>201701050321492_NullableProjectIdOnDevice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702100701211_ModifyCameraPropertyName.cs" />
+    <Compile Include="Migrations\201702100701211_ModifyCameraPropertyName.Designer.cs">
+      <DependentUpon>201702100701211_ModifyCameraPropertyName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -160,6 +164,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701050321492_NullableProjectIdOnDevice.resx">
       <DependentUpon>201701050321492_NullableProjectIdOnDevice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702100701211_ModifyCameraPropertyName.resx">
+      <DependentUpon>201702100701211_ModifyCameraPropertyName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

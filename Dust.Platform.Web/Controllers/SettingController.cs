@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Setting;
@@ -118,7 +117,7 @@ namespace Dust.Platform.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeviceRegister(KsDustDevice model)
+        public ActionResult DeviceRegister(DeviceRegisterViewModel model)
         {
             var user = AccountProcess.FindUserByName(HttpContext.User.Identity.Name);
             if (!AccountProcess.UserIsInRole(user.Id, "VendorManager"))
@@ -126,11 +125,13 @@ namespace Dust.Platform.Web.Controllers
                 ModelState.AddModelError("Vendor", "只有设备提供商可以注册设备。");
                 return View(model);
             }
-            model.InstallDateTime = DateTime.Now;
-            model.StartDateTime = DateTime.Now;
-            model.LastMaintenance = DateTime.Now;
-            model.VendorId = AccountProcess.FindVendorId(user);
-            _ctx.KsDustDevices.Add(model);
+            model.Device.InstallDateTime = DateTime.Now;
+            model.Device.StartDateTime = DateTime.Now;
+            model.Device.LastMaintenance = DateTime.Now;
+            model.Device.VendorId = AccountProcess.FindVendorId(user);
+            _ctx.KsDustDevices.Add(model.Device);
+            model.Camera.Device = model.Device;
+            _ctx.KsDustCameras.Add(model.Camera);
             try
             {
                 _ctx.SaveChanges();

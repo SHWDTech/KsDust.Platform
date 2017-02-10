@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Windows;
-using Dust.Platform.Storage.Model;
 using Ks.Dust.Camera.MainControl.Application;
+using Ks.Dust.Camera.MainControl.Storage;
 using Newtonsoft.Json;
 using SHWDTech.Platform.Utility;
 
@@ -66,9 +65,9 @@ namespace Ks.Dust.Camera.MainControl.Views
         {
             using (var writer = new StreamWriter(File.Create(Config.CameraNodesTempJsonFile)))
             {
-                var cameraNodes = JsonConvert.DeserializeObject<List<CameraNode>>(jsonString);
+                var cameraNodes = JsonConvert.DeserializeObject<CameraNodeStorage>(jsonString);
                 writer.Write(JsonConvert.SerializeObject(cameraNodes, Formatting.Indented));
-                ((MainWindow)Owner).ResfreashCameraNodes(cameraNodes);
+                ((MainWindow)Owner).ResfreashCameraNodes(cameraNodes.Nodes);
             }
             File.Delete(Config.CameraNodesJsonFile);
             File.Move(Config.CameraNodesTempJsonFile, Config.CameraNodesJsonFile);

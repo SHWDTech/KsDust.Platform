@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using Dust.Platform.Storage.Model;
 using Ks.Dust.Camera.MainControl.Application;
+using Ks.Dust.Camera.MainControl.Storage;
 using Newtonsoft.Json;
 
 namespace Ks.Dust.Camera.MainControl.Views
@@ -61,8 +62,8 @@ namespace Ks.Dust.Camera.MainControl.Views
             if (!File.Exists(Config.CameraNodesJsonFile)) return;
             using (var reader = new StreamReader(File.OpenRead(Config.CameraNodesJsonFile)))
             {
-                var nodes = JsonConvert.DeserializeObject<List<CameraNode>>(reader.ReadToEnd());
-                ResfreashCameraNodes(nodes);
+                var nodes = JsonConvert.DeserializeObject<CameraNodeStorage>(reader.ReadToEnd());
+                ResfreashCameraNodes(nodes.Nodes);
             }
         }
     }

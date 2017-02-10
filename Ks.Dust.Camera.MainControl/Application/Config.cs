@@ -9,6 +9,10 @@ namespace Ks.Dust.Camera.MainControl.Application
 
         private static string _serverPort;
 
+        private static string _ipServerAddress;
+
+        private static ushort _ipServerPort;
+
         private static readonly Configuration AppSettings =
             ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
@@ -39,6 +43,38 @@ namespace Ks.Dust.Camera.MainControl.Application
             set
             {
                 AppSettings.AppSettings.Settings["ServerPort"].Value = value;
+                AppSettings.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+        }
+
+        public static string IpServerAddress
+        {
+            get
+            {
+                _ipServerAddress = AppSettings.AppSettings.Settings["IpServerAddress"].Value;
+
+                return _ipServerAddress;
+            }
+            set
+            {
+                AppSettings.AppSettings.Settings["IpServerAddress"].Value = value;
+                AppSettings.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+        }
+
+        public static ushort IpServerPort
+        {
+            get
+            {
+                _ipServerPort = ushort.Parse(AppSettings.AppSettings.Settings["IpServerPort"].Value);
+
+                return _ipServerPort;
+            }
+            set
+            {
+                AppSettings.AppSettings.Settings["IpServerPort"].Value = value.ToString();
                 AppSettings.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings");
             }

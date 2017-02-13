@@ -67,7 +67,7 @@ namespace Ks.Dust.Camera.MainControl.Views
             {
                 var cameraNodes = JsonConvert.DeserializeObject<CameraNodeStorage>(jsonString);
                 writer.Write(JsonConvert.SerializeObject(cameraNodes, Formatting.Indented));
-                ((MainWindow)Owner).ResfreashCameraNodes(cameraNodes.Nodes);
+                ((MainWindow)Owner).ResfreashCameraNodes(cameraNodes);
             }
             File.Delete(Config.CameraNodesJsonFile);
             File.Move(Config.CameraNodesTempJsonFile, Config.CameraNodesJsonFile);

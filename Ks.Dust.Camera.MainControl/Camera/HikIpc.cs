@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Dust.Platform.Storage.Model;
 using Ks.Dust.Camera.MainControl.Application;
@@ -11,6 +13,8 @@ namespace Ks.Dust.Camera.MainControl.Camera
     internal class HikIpc
     {
         public uint LastErrorCode { get; private set; }
+
+        public int DefaultChannel => _iChannelNum[0];
 
         private string _dvrAddress = string.Empty;
 
@@ -33,6 +37,11 @@ namespace Ks.Dust.Camera.MainControl.Camera
         private CHCNetSDK.NET_DVR_IPCHANINFO _struChanInfo;
 
         private CHCNetSDK.NET_DVR_IPCHANINFO_V40 _struChanInfoV40;
+
+        public static bool Initial()
+        {
+            return CHCNetSDK.NET_DVR_Init();
+        }
 
         public bool Login(CameraLogin loginInfo)
         {
@@ -57,6 +66,11 @@ namespace Ks.Dust.Camera.MainControl.Camera
             _dwAChanTotalNum = _deviceInfo.byChanNum;
             _dwDChanTotalNum = _deviceInfo.byIPChanNum + 256 * (uint)_deviceInfo.byHighDChanNum;
             return ReadIpcChannel();
+        }
+
+        public bool Logout()
+        {
+            return CHCNetSDK.NET_DVR_Logout(_loginUserId);
         }
 
         private bool ReadIpcChannel()
@@ -119,6 +133,64 @@ namespace Ks.Dust.Camera.MainControl.Camera
             }
             Marshal.FreeHGlobal(ptrIpParaCfgV40);
             return true;
+        }
+
+        public List<CameraHistoryRecord> SearchHistory(CHCNetSDK.NET_DVR_FILECOND_V40 struFileCondV40)
+        {
+            var records = new List<CameraHistoryRecord>();
+            var mLFindHandle = CHCNetSDK.NET_DVR_FindFile_V40(_loginUserId, ref struFileCondV40);
+
+            if (mLFindHandle < 0)
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return records;
+            }
+            var struFileData = new CHCNetSDK.NET_DVR_FINDDATA_V30();
+            while (true)
+            {
+                //逐个获取查找到的文件信息 Get file information one by one.
+                var result = CHCNetSDK.NET_DVR_FindNextFile_V30(mLFindHandle, ref struFileData);
+
+                if (result == CHCNetSDK.NET_DVR_ISFINDING)  //正在查找请等待 Searching, please wait
+                {
+                }
+                else if (result == CHCNetSDK.NET_DVR_FILE_SUCCESS) //获取文件信息成功 Get the file information successfully
+                {
+                    var record = new CameraHistoryRecord
+                    {
+                        FileName = struFileData.sFileName,
+                        StartDateTime = Convert.ToString(struFileData.struStartTime.dwYear) + "-" +
+                                        Convert.ToString(struFileData.struStartTime.dwMonth) + "-" +
+                                        Convert.ToString(struFileData.struStartTime.dwDay) + " " +
+                                        Convert.ToString(struFileData.struStartTime.dwHour) + ":" +
+                                        Convert.ToString(struFileData.struStartTime.dwMinute) + ":" +
+                                        Convert.ToString(struFileData.struStartTime.dwSecond),
+                        EndDateTime = Convert.ToString(struFileData.struStopTime.dwYear) + "-" +
+                                      Convert.ToString(struFileData.struStopTime.dwMonth) + "-" +
+                                      Convert.ToString(struFileData.struStopTime.dwDay) + " " +
+                                      Convert.ToString(struFileData.struStopTime.dwHour) + ":" +
+                                      Convert.ToString(struFileData.struStopTime.dwMinute) + ":" +
+                                      Convert.ToString(struFileData.struStopTime.dwSecond)
+                    };
+
+                    records.Add(record);
+                }
+                else if (result == CHCNetSDK.NET_DVR_FILE_NOFIND || result == CHCNetSDK.NET_DVR_NOMOREFILE)
+                {
+                    break; //未查找到文件或者查找结束，退出   No file found or no more file found, search is finished 
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return records;
+        }
+
+        public long PlayBack(string fileName, IntPtr hwnd)
+        {
+            return CHCNetSDK.NET_DVR_PlayBackByName(_loginUserId, fileName, hwnd);
         }
     }
 }

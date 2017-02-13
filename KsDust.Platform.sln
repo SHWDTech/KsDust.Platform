@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dust.Platform.Web", "Dust.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.Camera.MainControl", "Ks.Dust.Camera.MainControl\Ks.Dust.Camera.MainControl.csproj", "{47D01556-B5A4-490C-93A0-8348B95E4403}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.Camera.Client", "Ks.Dust.Camera.Client\Ks.Dust.Camera.Client.csproj", "{881B6CD8-215D-4D80-9112-0BF979469488}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{47D01556-B5A4-490C-93A0-8348B95E4403}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47D01556-B5A4-490C-93A0-8348B95E4403}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47D01556-B5A4-490C-93A0-8348B95E4403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{881B6CD8-215D-4D80-9112-0BF979469488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{881B6CD8-215D-4D80-9112-0BF979469488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{881B6CD8-215D-4D80-9112-0BF979469488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{881B6CD8-215D-4D80-9112-0BF979469488}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

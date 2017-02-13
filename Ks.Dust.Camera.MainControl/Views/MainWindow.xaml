@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dust.Platform.Storage.Model;assembly=Dust.Platform.Storage"
+        xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Background="#c7c7c7"
         MinHeight="600"
@@ -49,11 +51,57 @@
                             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                                 <Label x:Name="LblCameraName" Content="选中的摄像头：" FontSize="14"></Label>
                                 <TextBox x:Name="TxtSelectedCamera" IsReadOnly="True" FontSize="14" Width="200" VerticalContentAlignment="Center"></TextBox>
-                                <Button x:Name="BtnConnect" Content="连接摄像头" Width="100" Margin="15, 0, 0, 0" IsEnabled="False"></Button>
+                                <Button x:Name="BtnConnect" Content="连接摄像头" Width="100" Margin="15, 0, 0, 0" IsEnabled="False" Click="LoginCamera"></Button>
                             </StackPanel>
                             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                                <Label FontSize="14">已连接摄像头：</Label>
+                                <Label x:Name="LblConnectStatus"></Label>
                             </StackPanel>
-                            <StackPanel></StackPanel>
+                            <Grid>
+                                <Grid>
+                                    <TabControl>
+                                        <TabItem Header="视频回放">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="25"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                </Grid.RowDefinitions>
+                                                <Grid Row="0">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label Content="开始时间："></Label>
+                                                        <xctk:DateTimePicker x:Name="DpStart" Width="225"></xctk:DateTimePicker>
+                                                        <Label Content="结束时间："></Label>
+                                                        <xctk:DateTimePicker x:Name="DpEnd" Width="225"></xctk:DateTimePicker>
+                                                        <Button x:Name="BtnSearchHistory" Content="搜索视频记录" Click="SearchHistory" Margin="15, 0, 0, 0"></Button>
+                                                        <Button x:Name="BtnPlayHistory" Content="开始回放" Margin="15, 0, 0, 0" Click="StartPlayBack"></Button>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <Grid Row="1">
+                                                    <Border Padding="5">
+                                                        <DockPanel>
+                                                            <ListView x:Name="LvHistory" DockPanel.Dock="Left" VerticalAlignment="Stretch" Width="300">
+                                                                <ListView.View>
+                                                                    <GridView>
+                                                                        <GridViewColumn Width="100" Header="文件名" DisplayMemberBinding="{Binding FileName}"></GridViewColumn>
+                                                                        <GridViewColumn Width="100" Header="开始时间" DisplayMemberBinding="{Binding StartDateTime}"></GridViewColumn>
+                                                                        <GridViewColumn Width="100" Header="结束时间" DisplayMemberBinding="{Binding EndDateTime}"></GridViewColumn>
+                                                                    </GridView>
+                                                                </ListView.View>
+                                                            </ListView>
+                                                            <WindowsFormsHost DockPanel.Dock="Right" Margin="10, 0, 0, 0">
+                                                                <forms:PictureBox x:Name="PbPreview" BackColor="Black"></forms:PictureBox>
+                                                            </WindowsFormsHost>
+                                                        </DockPanel>
+                                                    </Border>
+                                                </Grid>
+                                            </Grid>
+                                        </TabItem>
+                                        <TabItem Header="已下载视频">
+                                            <Grid></Grid>
+                                        </TabItem>
+                                    </TabControl>
+                                </Grid>
+                            </Grid>
                         </DockPanel>
                     </Border>
                 </Grid>

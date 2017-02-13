@@ -17,7 +17,7 @@ namespace Ks.Dust.Camera.MainControl.Views
             InitializeComponent();
             Task.Factory.StartNew(() =>
             {
-                Dispatcher.Invoke(new Action(LoadConfigs));
+                Dispatcher.Invoke(LoadConfigs);
             });
         }
 

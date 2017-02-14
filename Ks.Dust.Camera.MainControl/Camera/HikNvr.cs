@@ -21,6 +21,8 @@ namespace Ks.Dust.Camera.MainControl.Camera
 
         private int _lPlayHandle;
 
+        private int _lDownloadHandle;
+
         private bool _paused;
 
         private uint _dwAChanTotalNum;
@@ -48,7 +50,7 @@ namespace Ks.Dust.Camera.MainControl.Camera
         {
             var ipAddress = new byte[16];
             uint dwPort = 0;
-            if (!CHCNetSDK.NET_DVR_GetDVRIPByResolveSvr_EX(Config.IpServerAddress, Config.IpServerPort, null, 0,
+            if (!CHCNetSDK.NET_DVR_GetDVRIPByResolveSvr_EX(Config.IpServerAddress, ushort.Parse(Config.IpServerPort), null, 0,
                     loginInfo.DomainBytes, (ushort)loginInfo.DomainBytes.Length, ipAddress, ref dwPort))
             {
                 LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
@@ -194,7 +196,7 @@ namespace Ks.Dust.Camera.MainControl.Camera
             return records;
         }
 
-        public bool StartPlayback(string fileName, IntPtr hwnd)
+        public bool StartPlaybackByName(string fileName, IntPtr hwnd)
         {
             _lPlayHandle = CHCNetSDK.NET_DVR_PlayBackByName(_loginUserId, fileName, hwnd);
             uint iOutValue = 0;
@@ -205,6 +207,25 @@ namespace Ks.Dust.Camera.MainControl.Camera
             }
 
             return _lPlayHandle >= 0;
+        }
+
+        public bool StartPlaybackByTime(CHCNetSDK.NET_DVR_VOD_PARA struVodPara)
+        {
+            _lPlayHandle = CHCNetSDK.NET_DVR_PlayBackByTime_V40(_loginUserId, ref struVodPara);
+            if (_lPlayHandle < 0)
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            uint iOutValue = 0;
+            if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYSTART, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            return true;
         }
 
         public bool StopPlayback()
@@ -218,26 +239,126 @@ namespace Ks.Dust.Camera.MainControl.Camera
             return true;
         }
 
-        public void PausePlayback()
+        public bool StopDownload()
         {
-            if (_paused) return;
+            if (!CHCNetSDK.NET_DVR_StopGetFile(_lDownloadHandle))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool PausePlayback()
+        {
+            if (_paused) return false;
             uint iOutValue = 0;
             if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYPAUSE, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
             {
                 LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
             }
             _paused = true;
+            return true;
         }
 
-        public void ContinuePlayback()
+        public bool ContinuePlayback()
         {
-            if (!_paused) return;
+            if (!_paused) return false;
             uint iOutValue = 0;
             if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYRESTART, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
             {
                 LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
             }
             _paused = false;
+            return true;
+        }
+
+        public void SlowPlayback()
+        {
+            uint iOutValue = 0;
+
+            if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYSLOW, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+        }
+
+        public void FastPlayback()
+        {
+            uint iOutValue = 0;
+
+            if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYFAST, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+        }
+
+        public void ResumePlayback()
+        {
+            uint iOutValue = 0;
+
+            if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYNORMAL, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+        }
+
+        public int GetPlaybackTpos()
+        {
+            uint iOutValue = 0;
+
+            var lpOutBuffer = Marshal.AllocHGlobal(4);
+            CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYGETPOS, IntPtr.Zero, 0, lpOutBuffer, ref iOutValue);
+            var pos = (int)Marshal.PtrToStructure(lpOutBuffer, typeof(int));
+            Marshal.FreeHGlobal(lpOutBuffer);
+            return pos;
+        }
+
+        public int GetDownloadTpos()
+        {
+            return CHCNetSDK.NET_DVR_GetDownloadPos(_lDownloadHandle);
+        }
+
+        public bool DownloadFileByName(string recordName, string fileName)
+        {
+            if (_lDownloadHandle > 0) return false;
+            _lDownloadHandle = CHCNetSDK.NET_DVR_GetFileByName(_loginUserId, recordName, fileName);
+            if (_lDownloadHandle < 0)
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            uint iOutValue = 0;
+            if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lDownloadHandle, CHCNetSDK.NET_DVR_PLAYSTART, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool DOwnloadFileByTime(CHCNetSDK.NET_DVR_PLAYCOND struDownPara, string fileName)
+        {
+            _lDownloadHandle = CHCNetSDK.NET_DVR_GetFileByTime_V40(_loginUserId, fileName, ref struDownPara);
+            if (_lDownloadHandle < 0)
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            uint iOutValue = 0;
+            if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lDownloadHandle, CHCNetSDK.NET_DVR_PLAYSTART, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            return true;
         }
     }
 }

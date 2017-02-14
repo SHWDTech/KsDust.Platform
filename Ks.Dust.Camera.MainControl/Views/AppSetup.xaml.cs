@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using Ks.Dust.Camera.MainControl.Application;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace Ks.Dust.Camera.MainControl.Views
 {
@@ -34,10 +36,13 @@ namespace Ks.Dust.Camera.MainControl.Views
             foreach (var textBox in WindowsExtensionMethod.FindVisualChildren<TextBox>(this))
             {
                 textBox.IsEnabled = true;
+                textBox.TextChanged += ParamsChanged;
             }
+        }
 
-            BtnConfirm.IsEnabled = BtnApply.IsEnabled = true;
-            LblInformation.Content = "更新完毕。";
+        private void ParamsChanged(object sender, TextChangedEventArgs e)
+        {
+            BtnApply.IsEnabled = BtnConfirm.IsEnabled = true;
         }
 
         private void OnClose(object sender, RoutedEventArgs args)
@@ -59,6 +64,16 @@ namespace Ks.Dust.Camera.MainControl.Views
             }
 
             LblInformation.Content = "设置已保存。";
+        }
+
+        private void SetVedioStorageDirectory(object sender, RoutedEventArgs args)
+        {
+            var dialog = new FolderBrowserDialog();
+            var result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                TxtVedioStorageDir.Text = dialog.SelectedPath;
+            }
         }
     }
 }

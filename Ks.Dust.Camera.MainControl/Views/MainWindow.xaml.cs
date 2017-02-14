@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Timers;
 using System.Windows;
 using Dust.Platform.Storage.Model;
 using Ks.Dust.Camera.Client.Camera;
@@ -25,9 +27,15 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private CameraNode _selectedCameraNode;
 
+        private CameraNode _loginCameraNode;
+
         private HikNvr _contorlSdk;
 
         private bool _cameraLoged;
+
+        private readonly Timer _playbackTimer = new Timer() {Enabled = false, Interval = 1000};
+
+        private readonly Timer _downloadTimer = new Timer() { Enabled = false, Interval = 1000 };
 
         public MainWindow()
         {
@@ -38,8 +46,64 @@ namespace Ks.Dust.Camera.MainControl.Views
         {
             LoadLocalStorage();
             InitSdk();
+            _playbackTimer.Elapsed += PlaybackTimerOnElapsed;
+            _downloadTimer.Elapsed += DownloadTimerOnElapsed;
             DpStart.Text = $"{DateTime.Now.AddDays(-7) : yyyy-MM-dd HH:mm:ss}";
             DpEnd.Text = $"{DateTime.Now: yyyy-MM-dd HH:mm:ss}";
+        }
+
+        private void DownloadTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            var pos = _contorlSdk.GetDownloadTpos();
+            Dispatcher.Invoke(() =>
+            {
+                if ((pos > DownloadProgressBar.Minimum) && (pos <= DownloadProgressBar.Maximum))
+                {
+                    DownloadProgressBar.Value = pos;
+                }
+
+                if (pos == 100)
+                {
+                    _contorlSdk.StopDownload();
+                    _downloadTimer.Stop();
+                    BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = true;
+                    
+                }
+
+                if (pos == 200) //网络异常，回放失败
+                {
+                    _downloadTimer.Stop();
+                    BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = true;
+                }
+            });
+        }
+
+        private void PlaybackTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            var pos = _contorlSdk.GetPlaybackTpos();
+            Dispatcher.Invoke(() =>
+            {
+                if ((pos > PlaybackProgressBar.Minimum) && (pos <= PlaybackProgressBar.Maximum))
+                {
+                    PlaybackProgressBar.Value = pos;
+                }
+
+                if (pos == 100)
+                {
+                    _contorlSdk.StopPlayback();
+                    _playbackTimer.Stop();
+                    BtnStartPlaybackByName.IsEnabled = BtnStartPlaybackByTime.IsEnabled = true;
+                    BtnStopPlayback.IsEnabled = false;
+                }
+
+                if (pos == 200)
+                {
+                    MessageBox.Show("网络异常，回放失败！", "警告", MessageBoxButton.OK, MessageBoxImage.Error);
+                    _playbackTimer.Stop();
+                    BtnStartPlaybackByName.IsEnabled = BtnStartPlaybackByTime.IsEnabled = true;
+                    BtnStopPlayback.IsEnabled = false;
+                }
+            });
         }
 
         private void InitSdk()
@@ -108,7 +172,8 @@ namespace Ks.Dust.Camera.MainControl.Views
             _cameraLoged = _contorlSdk.Login(_selectedCameraLogin);
             BtnConnect.IsEnabled = !_cameraLoged;
             LblConnectStatus.Content = _cameraLoged ? _selectedCameraNode.Name : string.Empty;
-            BtnSearchHistory.IsEnabled = true;
+            _loginCameraNode = _selectedCameraNode;
+            BtnSearchHistory.IsEnabled = BtnStartPlaybackByTime.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = _cameraLoged;
         }
 
         private void LoadLocalStorage()
@@ -159,22 +224,67 @@ namespace Ks.Dust.Camera.MainControl.Views
             var records = _contorlSdk.SearchHistory(struFileCondV40);
 
             LvHistory.ItemsSource = records;
-            BtnStartPlayback.IsEnabled = BtnDownloadPlayback.IsEnabled = true;
+            BtnStartPlaybackByName.IsEnabled = BtnDownloadPlaybackByName.IsEnabled = true;
+            BtnSearchHistory.IsEnabled = true;
         }
 
-        private void StartPlayback(object sender, RoutedEventArgs args)
+        private void StartPlaybackByName(object sender, RoutedEventArgs args)
         {
+            PlaybackProgressBar.Value = 0;
             if (!(LvHistory.SelectedItem is CameraHistoryRecord))
             {
                 MessageBox.Show("必须选择一个记录！", "提示！", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             var record = (CameraHistoryRecord) LvHistory.SelectedItem;
-            var ret = _contorlSdk.StartPlayback(record.FileName, PbPreview.Handle);
+            var ret = _contorlSdk.StartPlaybackByName(record.FileName, PbPreview.Handle);
             if (ret)
             {
-                BtnStartPlayback.IsEnabled = false;
+                BtnStartPlaybackByName.IsEnabled = BtnStartPlaybackByTime.IsEnabled = false;
                 BtnStopPlayback.IsEnabled = true;
+                _playbackTimer.Start();
+            }
+        }
+
+        private void StartPlaybackByTime(object sender, RoutedEventArgs args)
+        {
+            PlaybackProgressBar.Value = 0;
+            if (DpStart.Value == null || DpEnd.Value == null)
+            {
+                MessageBox.Show("请选择开始时间和结束时间", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var struVodPara = new CHCNetSDK.NET_DVR_VOD_PARA
+            {
+                hWnd = PbPreview.Handle,
+                struBeginTime =
+                {
+                    dwYear = (uint) DpStart.Value.Value.Year,
+                    dwMonth = (uint) DpStart.Value.Value.Month,
+                    dwDay = (uint) DpStart.Value.Value.Day,
+                    dwHour = (uint) DpStart.Value.Value.Hour,
+                    dwMinute = (uint) DpStart.Value.Value.Minute,
+                    dwSecond = (uint) DpStart.Value.Value.Second
+                },
+                struEndTime =
+                {
+                    dwYear = (uint) DpEnd.Value.Value.Year,
+                    dwMonth = (uint) DpEnd.Value.Value.Month,
+                    dwDay = (uint) DpEnd.Value.Value.Day,
+                    dwHour = (uint) DpEnd.Value.Value.Hour,
+                    dwMinute = (uint) DpEnd.Value.Value.Minute,
+                    dwSecond = (uint) DpEnd.Value.Value.Second
+                }
+            };
+            struVodPara.dwSize = (uint)Marshal.SizeOf(struVodPara);
+            struVodPara.struIDInfo.dwChannel = (uint)_contorlSdk.DefaultChannel;
+            var ret = _contorlSdk.StartPlaybackByTime(struVodPara);
+            if (ret)
+            {
+                BtnStartPlaybackByName.IsEnabled = BtnStartPlaybackByTime.IsEnabled = false;
+                BtnStopPlayback.IsEnabled = true;
+                _playbackTimer.Start();
             }
         }
 
@@ -183,17 +293,105 @@ namespace Ks.Dust.Camera.MainControl.Views
             var ret =_contorlSdk.StopPlayback();
             if (ret)
             {
-                BtnStartPlayback.IsEnabled = true;
+                BtnStartPlaybackByName.IsEnabled = BtnStartPlaybackByTime.IsEnabled = true;
                 BtnStopPlayback.IsEnabled = false;
+                _playbackTimer.Stop();
             }
         }
 
-        private void DownloadPlayback(object sender, RoutedEventArgs args)
+        private void DownloadPlaybackByName(object sender, RoutedEventArgs args)
         {
-            if (!(LvHistory.SelectedItem is CameraHistoryRecord))
+            DownloadProgressBar.Value = 0;
+            var record = LvHistory.SelectedItem as CameraHistoryRecord;
+            if (!Config.VedioStorageReady)
+            {
+                MessageBox.Show("视频存储目录未通过检查，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (record == null)
             {
                 MessageBox.Show("必须选择一个记录！", "提示！", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
+            }
+
+            var camera = _loginCameraNode.Id;
+            if (!Directory.Exists($"{Config.VedioStorageDirectory}\\{camera}"))
+            {
+                try
+                {
+                    Directory.CreateDirectory($"{Config.VedioStorageDirectory}\\{camera}");
+                }
+                catch(Exception)
+                {
+                    MessageBox.Show("创建存储目录失败，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
+
+            var ret = _contorlSdk.DownloadFileByName(record.FileName, $"{Config.VedioStorageDirectory}\\{camera}\\{record.FileName}.mp4");
+            if (ret)
+            {
+                _downloadTimer.Start();
+                BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = false;
+            }
+        }
+
+        private void DownloadPlaybackByTime(object sender, RoutedEventArgs args)
+        {
+            DownloadProgressBar.Value = 0;
+            if (!Config.VedioStorageReady)
+            {
+                MessageBox.Show("视频存储目录未通过检查，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (DpStart.Value == null || DpEnd.Value == null)
+            {
+                MessageBox.Show("请选择开始时间和结束时间", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var camera = _loginCameraNode.Id;
+            if (!Directory.Exists($"{Config.VedioStorageDirectory}\\{camera}"))
+            {
+                try
+                {
+                    Directory.CreateDirectory($"{Config.VedioStorageDirectory}\\{camera}");
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("创建存储目录失败，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
+
+            var struDownPara = new CHCNetSDK.NET_DVR_PLAYCOND
+            {
+                dwChannel = (uint) _contorlSdk.DefaultChannel,
+                struStartTime =
+                {
+                    dwYear = (uint) DpStart.Value.Value.Year,
+                    dwMonth = (uint) DpStart.Value.Value.Month,
+                    dwDay = (uint) DpStart.Value.Value.Day,
+                    dwHour = (uint) DpStart.Value.Value.Hour,
+                    dwMinute = (uint) DpStart.Value.Value.Minute,
+                    dwSecond = (uint) DpStart.Value.Value.Second
+                },
+                struStopTime =
+                {
+                    dwYear = (uint) DpEnd.Value.Value.Year,
+                    dwMonth = (uint) DpEnd.Value.Value.Month,
+                    dwDay = (uint) DpEnd.Value.Value.Day,
+                    dwHour = (uint) DpEnd.Value.Value.Hour,
+                    dwMinute = (uint) DpEnd.Value.Value.Minute,
+                    dwSecond = (uint) DpEnd.Value.Value.Second
+                }
+            };
+
+            var ret = _contorlSdk.DOwnloadFileByTime(struDownPara, $"{Config.VedioStorageDirectory}\\{camera}\\{DpStart.Value:yyyy-MM-dd(HH-mm-ss)}-{DpEnd.Value:yyyy-MM-dd(HH-mm-ss)}.mp4");
+            if (ret)
+            {
+                _downloadTimer.Start();
+                BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = false;
             }
         }
 
@@ -205,6 +403,21 @@ namespace Ks.Dust.Camera.MainControl.Views
         private void ContinuePlayback(object sender, RoutedEventArgs args)
         {
             _contorlSdk.ContinuePlayback();
+        }
+
+        private void SlowPlayback(object sender, RoutedEventArgs args)
+        {
+            _contorlSdk.SlowPlayback();
+        }
+
+        private void FastPlayback(object sender, RoutedEventArgs args)
+        {
+            _contorlSdk.FastPlayback();
+        }
+
+        private void NormalPlayback(object sender, RoutedEventArgs args)
+        {
+            _contorlSdk.ResumePlayback();
         }
     }
 }

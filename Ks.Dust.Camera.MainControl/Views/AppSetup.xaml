@@ -26,13 +26,18 @@
                         <Label Content="端口："></Label>
                         <TextBox x:Name="TxtIpServerPort" VerticalContentAlignment="Center" Width="50" IsEnabled="False" Tag="IpServerPort"></TextBox>
                     </DockPanel>
+                    <DockPanel VerticalAlignment="Center"  HorizontalAlignment="Left" Margin="0, 10, 0, 0">
+                        <Label Content="视频文件存储目录：" Width="150"></Label>
+                        <TextBox x:Name="TxtVedioStorageDir" Width="220" Tag="VedioStorageDirectory"></TextBox>
+                        <Button Content="..." Width="30" Click="SetVedioStorageDirectory"></Button>
+                    </DockPanel>
                 </StackPanel>
             </Border>
         </Grid>
         <Grid Row="1">
             <Border Padding="5">
                 <DockPanel>
-                    <Label x:Name="LblInformation" Content="读取设置中，请稍候。。。"></Label>
+                    <Label x:Name="LblInformation" Content=""></Label>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Width="75" Content="确定" Margin="0, 0, 10, 0" IsEnabled="False" x:Name="BtnConfirm" Click="Confirm"></Button>
                         <Button Width="75" Content="应用" Margin="0, 0, 10, 0" IsEnabled="False" x:Name="BtnApply" Click="Apply"></Button>

@@ -7,10 +7,7 @@ using Ks.Dust.Camera.MainControl.Application;
 
 namespace Ks.Dust.Camera.MainControl.Camera
 {
-    /// <summary>
-    /// 海康摄像机操作类
-    /// </summary>
-    internal class HikIpc
+    internal class HikNvr
     {
         public uint LastErrorCode { get; private set; }
 
@@ -21,6 +18,10 @@ namespace Ks.Dust.Camera.MainControl.Camera
         private ushort _dvrPortNumber = 8000;
 
         private int _loginUserId;
+
+        private int _lPlayHandle;
+
+        private bool _paused;
 
         private uint _dwAChanTotalNum;
 
@@ -70,7 +71,12 @@ namespace Ks.Dust.Camera.MainControl.Camera
 
         public bool Logout()
         {
-            return CHCNetSDK.NET_DVR_Logout(_loginUserId);
+            var ret = CHCNetSDK.NET_DVR_Logout(_loginUserId);
+            if (!ret)
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+            return ret;
         }
 
         private bool ReadIpcChannel()
@@ -188,9 +194,50 @@ namespace Ks.Dust.Camera.MainControl.Camera
             return records;
         }
 
-        public long PlayBack(string fileName, IntPtr hwnd)
+        public bool StartPlayback(string fileName, IntPtr hwnd)
         {
-            return CHCNetSDK.NET_DVR_PlayBackByName(_loginUserId, fileName, hwnd);
+            _lPlayHandle = CHCNetSDK.NET_DVR_PlayBackByName(_loginUserId, fileName, hwnd);
+            uint iOutValue = 0;
+            if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYSTART, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            return _lPlayHandle >= 0;
+        }
+
+        public bool StopPlayback()
+        {
+            if (!CHCNetSDK.NET_DVR_StopPlayBack(_lPlayHandle))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            return true;
+        }
+
+        public void PausePlayback()
+        {
+            if (_paused) return;
+            uint iOutValue = 0;
+            if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYPAUSE, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+            _paused = true;
+        }
+
+        public void ContinuePlayback()
+        {
+            if (!_paused) return;
+            uint iOutValue = 0;
+            if (!CHCNetSDK.NET_DVR_PlayBackControl_V40(_lPlayHandle, CHCNetSDK.NET_DVR_PLAYRESTART, IntPtr.Zero, 0, IntPtr.Zero, ref iOutValue))
+            {
+                LastErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+            _paused = false;
         }
     }
 }

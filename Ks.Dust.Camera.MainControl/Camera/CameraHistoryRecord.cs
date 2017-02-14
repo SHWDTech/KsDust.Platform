@@ -1,4 +1,4 @@
-﻿namespace Ks.Dust.Camera.MainControl.Application
+﻿namespace Ks.Dust.Camera.MainControl.Camera
 {
     internal class CameraHistoryRecord
     {

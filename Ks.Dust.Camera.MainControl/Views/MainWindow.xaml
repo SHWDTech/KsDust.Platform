@@ -10,11 +10,13 @@
         Background="#c7c7c7"
         MinHeight="600"
         MinWidth="800"
+        Loaded="OnLoaded"
         Title="昆山建设工程扬尘在线监控平台视频管理平台" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Row="0">
             <Menu Height="25" FontSize="14">
@@ -24,91 +26,114 @@
                 </MenuItem>
             </Menu>
         </Grid>
-        <Grid Row="1">
+        <Grid Row="1" Background="White">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="270"></ColumnDefinition>
+                <ColumnDefinition Width="210"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Column="0">
-                <TreeView x:Name="TrCamera" TreeViewItem.Selected="OnNodeSelected">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate DataType="{x:Type local:CameraNode}" ItemsSource="{Binding Path=Children}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}"></TextBlock>
-                            </StackPanel>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
+                <GroupBox Header="在建工程列表">
+                    <TreeView x:Name="TrCamera" TreeViewItem.Selected="OnNodeSelected">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type local:CameraNode}" ItemsSource="{Binding Path=Children}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}"></TextBlock>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </GroupBox>
             </Grid>
             <Grid Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="25"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid Row="0" Background="White">
-                    <Border Padding="10">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <Label x:Name="LblCameraName" Content="选中的摄像头：" FontSize="14"></Label>
-                                <TextBox x:Name="TxtSelectedCamera" IsReadOnly="True" FontSize="14" Width="200" VerticalContentAlignment="Center"></TextBox>
-                                <Button x:Name="BtnConnect" Content="连接摄像头" Width="100" Margin="15, 0, 0, 0" IsEnabled="False" Click="LoginCamera"></Button>
-                            </StackPanel>
-                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <Label FontSize="14">已连接摄像头：</Label>
-                                <Label x:Name="LblConnectStatus"></Label>
-                            </StackPanel>
-                            <Grid>
+                <GroupBox Header="视频回放操作">
+                    <Grid>
+                        <Border Padding="10">
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                                    <Label x:Name="LblCameraName" Content="选中的摄像头：" FontSize="14"></Label>
+                                    <TextBox x:Name="TxtSelectedCamera" IsReadOnly="True" FontSize="14" Width="200" VerticalContentAlignment="Center"></TextBox>
+                                    <Button x:Name="BtnConnect" Content="连接摄像头" Width="100" Margin="15, 0, 0, 0" IsEnabled="False" Click="LoginCamera"></Button>
+                                </StackPanel>
+                                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                                    <Label FontSize="14">已连接摄像头：</Label>
+                                    <Label x:Name="LblConnectStatus"></Label>
+                                </StackPanel>
                                 <Grid>
-                                    <TabControl>
-                                        <TabItem Header="视频回放">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="25"></RowDefinition>
-                                                    <RowDefinition Height="*"></RowDefinition>
-                                                </Grid.RowDefinitions>
-                                                <Grid Row="0">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Label Content="开始时间："></Label>
-                                                        <xctk:DateTimePicker x:Name="DpStart" Width="225"></xctk:DateTimePicker>
-                                                        <Label Content="结束时间："></Label>
-                                                        <xctk:DateTimePicker x:Name="DpEnd" Width="225"></xctk:DateTimePicker>
-                                                        <Button x:Name="BtnSearchHistory" Content="搜索视频记录" Click="SearchHistory" Margin="15, 0, 0, 0"></Button>
-                                                        <Button x:Name="BtnPlayHistory" Content="开始回放" Margin="15, 0, 0, 0" Click="StartPlayBack"></Button>
-                                                    </StackPanel>
+                                    <Grid>
+                                        <TabControl>
+                                            <TabItem Header="视频回放">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="25"></RowDefinition>
+                                                        <RowDefinition Height="*"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid Row="0">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label Content="开始时间："></Label>
+                                                            <xctk:DateTimePicker x:Name="DpStart" Width="225"></xctk:DateTimePicker>
+                                                            <Label Content="结束时间："></Label>
+                                                            <xctk:DateTimePicker x:Name="DpEnd" Width="225"></xctk:DateTimePicker>
+                                                            <Button x:Name="BtnSearchHistory" IsEnabled="False" Content="搜索视频记录" Click="SearchHistory" Margin="15, 0, 0, 0"></Button>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    <Grid Row="1">
+                                                        <Border Padding="5">
+                                                            <DockPanel>
+                                                                <DockPanel DockPanel.Dock="Left">
+                                                                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Height="30" HorizontalAlignment="Center">
+                                                                        <Button IsEnabled="False" x:Name="BtnStartPlayback" Content="开始回放" Width="75" Click="StartPlayback"></Button>
+                                                                        <Button IsEnabled="False" x:Name="BtnStopPlayback" Content="停止回放" Width="75" Click="StopPlayback" Margin="5, 0, 0, 0"></Button>
+                                                                        <Button IsEnabled="False" x:Name="BtnDownloadPlayback" Content="回放下载" Width="75" Click="DownloadPlayback" Margin="5, 0, 0, 0"></Button>
+                                                                    </StackPanel>
+                                                                    <Grid Height="5" DockPanel.Dock="Bottom"></Grid>
+                                                                    <ListView x:Name="LvHistory" DockPanel.Dock="Bottom" VerticalAlignment="Stretch" Width="240">
+                                                                        <ListView.View>
+                                                                            <GridView>
+                                                                                <GridViewColumn Width="80" Header="文件名" DisplayMemberBinding="{Binding FileName}"></GridViewColumn>
+                                                                                <GridViewColumn Width="80" Header="开始时间" DisplayMemberBinding="{Binding StartDateTime}"></GridViewColumn>
+                                                                                <GridViewColumn Width="80" Header="结束时间" DisplayMemberBinding="{Binding EndDateTime}"></GridViewColumn>
+                                                                            </GridView>
+                                                                        </ListView.View>
+                                                                    </ListView>
+                                                                </DockPanel>
+                                                                <DockPanel DockPanel.Dock="Left" Margin="10, 0, 0, 0">
+                                                                    <Grid DockPanel.Dock="Bottom">
+                                                                        <Border Padding="2">
+                                                                            <StackPanel Height="32" Orientation="Horizontal">
+                                                                                <Button x:Name="BtnPausePlayback" Content="暂停" Width="40" Click="PausePlayback"></Button>
+                                                                                <Button x:Name="BtnSpeedDown" Content="减速" Width="40" Margin="5, 0, 0, 0"></Button>
+                                                                                <Button x:Name="BtnSpeedUp" Content="加速" Width="40" Margin="5, 0, 0, 0"></Button>
+                                                                                <Button x:Name="BtnContinue" Content="播放" Width="40" Margin="5, 0, 0, 0" Click="ContinuePlayback"></Button>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                    </Grid>
+                                                                    <WindowsFormsHost DockPanel.Dock="Bottom">
+                                                                        <forms:PictureBox x:Name="PbPreview" BackColor="Black"></forms:PictureBox>
+                                                                    </WindowsFormsHost>
+                                                                </DockPanel>
+                                                            </DockPanel>
+                                                        </Border>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid Row="1">
-                                                    <Border Padding="5">
-                                                        <DockPanel>
-                                                            <ListView x:Name="LvHistory" DockPanel.Dock="Left" VerticalAlignment="Stretch" Width="300">
-                                                                <ListView.View>
-                                                                    <GridView>
-                                                                        <GridViewColumn Width="100" Header="文件名" DisplayMemberBinding="{Binding FileName}"></GridViewColumn>
-                                                                        <GridViewColumn Width="100" Header="开始时间" DisplayMemberBinding="{Binding StartDateTime}"></GridViewColumn>
-                                                                        <GridViewColumn Width="100" Header="结束时间" DisplayMemberBinding="{Binding EndDateTime}"></GridViewColumn>
-                                                                    </GridView>
-                                                                </ListView.View>
-                                                            </ListView>
-                                                            <WindowsFormsHost DockPanel.Dock="Right" Margin="10, 0, 0, 0">
-                                                                <forms:PictureBox x:Name="PbPreview" BackColor="Black"></forms:PictureBox>
-                                                            </WindowsFormsHost>
-                                                        </DockPanel>
-                                                    </Border>
-                                                </Grid>
-                                            </Grid>
-                                        </TabItem>
-                                        <TabItem Header="已下载视频">
-                                            <Grid></Grid>
-                                        </TabItem>
-                                    </TabControl>
+                                            </TabItem>
+                                            <TabItem Header="已下载视频">
+                                                <Grid></Grid>
+                                            </TabItem>
+                                        </TabControl>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </DockPanel>
-                    </Border>
-                </Grid>
-                <Grid Row="1">
-                    <TextBlock Height="25" Background="White"/>
-                </Grid>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                </GroupBox>
             </Grid>
+        </Grid>
+        <Grid Row="2">
+            <StatusBar>
+                <StatusBarItem>
+                    <TextBlock x:Name="TbAppInfo" FontSize="14"></TextBlock>
+                </StatusBarItem>
+            </StatusBar>
         </Grid>
     </Grid>
 </Window>

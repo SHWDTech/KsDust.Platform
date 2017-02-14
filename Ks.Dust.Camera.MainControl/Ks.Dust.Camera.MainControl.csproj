@@ -94,10 +94,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Application\CameraHistoryRecord.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Camera\CameraHistoryRecord.cs" />
     <Compile Include="Camera\CHCNetSDK.cs" />
-    <Compile Include="Camera\HikIpc.cs" />
-    <Compile Include="Storage\CameraNode.cs" />
+    <Compile Include="Camera\HikNvr.cs" />
+    <Compile Include="Storage\CameraNodeStorage.cs" />
     <Compile Include="Views\UpdatePanel.xaml.cs">
       <DependentUpon>UpdatePanel.xaml</DependentUpon>
     </Compile>
@@ -109,10 +112,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Application\Config.cs" />
     <Compile Include="Application\WindowsExtensionMethod.cs" />
     <Compile Include="Views\AppSetup.xaml.cs">

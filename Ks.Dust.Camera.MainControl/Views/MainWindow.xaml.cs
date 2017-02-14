@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using Dust.Platform.Storage.Model;
+using Ks.Dust.Camera.Client.Camera;
 using Ks.Dust.Camera.MainControl.Application;
 using Ks.Dust.Camera.MainControl.Camera;
-using Ks.Dust.Camera.MainControl.Storage;
 using Newtonsoft.Json;
 using MessageBox = System.Windows.MessageBox;
 
@@ -24,20 +25,26 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private CameraNode _selectedCameraNode;
 
-        private HikIpc _contorlSdk;
+        private HikNvr _contorlSdk;
 
         private bool _cameraLoged;
 
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs args)
+        {
             LoadLocalStorage();
             InitSdk();
+            DpStart.Text = $"{DateTime.Now.AddDays(-7) : yyyy-MM-dd HH:mm:ss}";
+            DpEnd.Text = $"{DateTime.Now: yyyy-MM-dd HH:mm:ss}";
         }
 
         private void InitSdk()
         {
-            if (!HikIpc.Initial())
+            if (!HikNvr.Initial())
             {
                 MessageBox.Show("初始化摄像头模块失败，请尝试重新启动！","警告！",MessageBoxButton.OK, MessageBoxImage.Warning);
                 Close();
@@ -97,10 +104,11 @@ namespace Ks.Dust.Camera.MainControl.Views
                     return;
                 }
             }
-            _contorlSdk = new HikIpc();
+            _contorlSdk = new HikNvr();
             _cameraLoged = _contorlSdk.Login(_selectedCameraLogin);
             BtnConnect.IsEnabled = !_cameraLoged;
             LblConnectStatus.Content = _cameraLoged ? _selectedCameraNode.Name : string.Empty;
+            BtnSearchHistory.IsEnabled = true;
         }
 
         private void LoadLocalStorage()
@@ -151,24 +159,52 @@ namespace Ks.Dust.Camera.MainControl.Views
             var records = _contorlSdk.SearchHistory(struFileCondV40);
 
             LvHistory.ItemsSource = records;
-            BtnSearchHistory.IsEnabled = true;
+            BtnStartPlayback.IsEnabled = BtnDownloadPlayback.IsEnabled = true;
         }
 
-        private void StartPlayBack(object sender, RoutedEventArgs args)
+        private void StartPlayback(object sender, RoutedEventArgs args)
         {
             if (!(LvHistory.SelectedItem is CameraHistoryRecord))
             {
                 MessageBox.Show("必须选择一个记录！", "提示！", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
             }
             var record = (CameraHistoryRecord) LvHistory.SelectedItem;
-            Dispatcher.Invoke(() =>
+            var ret = _contorlSdk.StartPlayback(record.FileName, PbPreview.Handle);
+            if (ret)
             {
-                var playret = _contorlSdk.PlayBack(record.FileName, PbPreview.Handle);
-                if (playret > 0)
-                {
-                    BtnPlayHistory.IsEnabled = false;
-                }
-            });
+                BtnStartPlayback.IsEnabled = false;
+                BtnStopPlayback.IsEnabled = true;
+            }
+        }
+
+        private void StopPlayback(object sender, RoutedEventArgs args)
+        {
+            var ret =_contorlSdk.StopPlayback();
+            if (ret)
+            {
+                BtnStartPlayback.IsEnabled = true;
+                BtnStopPlayback.IsEnabled = false;
+            }
+        }
+
+        private void DownloadPlayback(object sender, RoutedEventArgs args)
+        {
+            if (!(LvHistory.SelectedItem is CameraHistoryRecord))
+            {
+                MessageBox.Show("必须选择一个记录！", "提示！", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+        }
+
+        private void PausePlayback(object sender, RoutedEventArgs args)
+        {
+            _contorlSdk.PausePlayback();
+        }
+
+        private void ContinuePlayback(object sender, RoutedEventArgs args)
+        {
+            _contorlSdk.ContinuePlayback();
         }
     }
 }

@@ -52,6 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\AppConfig.cs" />
+    <Compile Include="App\AppMessage.cs" />
+    <Compile Include="Camera\CameraHistoryRecord.cs" />
+    <Compile Include="Camera\CameraNodeStorage.cs" />
+    <Compile Include="Camera\CHCNetSDK.cs" />
+    <Compile Include="Camera\HikNvr.cs" />
     <Compile Include="Views\Setup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,10 +108,6 @@
     <ProjectReference Include="..\Dust.Platform.Storage\Dust.Platform.Storage.csproj">
       <Project>{e9ac4c39-d38e-4570-9faa-c62dc1c82f83}</Project>
       <Name>Dust.Platform.Storage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ks.Dust.Camera.MainControl\Ks.Dust.Camera.MainControl.csproj">
-      <Project>{47D01556-B5A4-490C-93A0-8348B95E4403}</Project>
-      <Name>Ks.Dust.Camera.MainControl</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

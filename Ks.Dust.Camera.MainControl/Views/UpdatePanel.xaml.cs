@@ -2,8 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Windows;
+using Ks.Dust.Camera.Client.Camera;
 using Ks.Dust.Camera.MainControl.Application;
-using Ks.Dust.Camera.MainControl.Storage;
 using Newtonsoft.Json;
 using SHWDTech.Platform.Utility;
 

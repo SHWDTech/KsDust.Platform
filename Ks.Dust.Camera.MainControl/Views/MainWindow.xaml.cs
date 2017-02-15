@@ -492,6 +492,11 @@ namespace Ks.Dust.Camera.MainControl.Views
         private void StartPlayLocalVedio(object sender, RoutedEventArgs args)
         {
             if (!CheckLocalPlayPrepare()) return;
+            if (LvLocalVedio.SelectedItem == null)
+            {
+                MessageBox.Show("请先选择一个视频文件！", "提示！", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
             var fileName = ((CameraVedioStorage) LvLocalVedio.SelectedItem).FileFullPathWithName;
             var ret = HikNvr.OpenFile(fileName);
             if (!ret)
@@ -517,6 +522,7 @@ namespace Ks.Dust.Camera.MainControl.Views
             {
                 UpdateInfo($"停止播放视频文件失败，错误码：{HikNvr.LastPlayErrorCode}");
             }
+            LocalPlayProgressBar.Value = 0;
             _localPlayTimer.Stop();
         }
 

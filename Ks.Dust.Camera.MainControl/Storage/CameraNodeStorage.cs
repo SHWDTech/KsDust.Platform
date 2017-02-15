@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Dust.Platform.Storage.Model;
 
-namespace Ks.Dust.Camera.Client.Camera
+namespace Ks.Dust.Camera.MainControl.Storage
 {
     public class CameraNodeStorage
     {

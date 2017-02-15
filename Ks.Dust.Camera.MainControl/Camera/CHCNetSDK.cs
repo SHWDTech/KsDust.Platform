@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 // ReSharper disable InconsistentNaming
 namespace Ks.Dust.Camera.MainControl.Camera
 {
@@ -15704,5 +15705,37 @@ namespace Ks.Dust.Camera.MainControl.Camera
 
 		[DllImportAttribute(@"..\lib\HCNetSDK.dll")]
 		public static extern int NET_DVR_FindDVRLog_Matrix(int iUserID, int lSelectMode, uint dwMajorType, uint dwMinorType, ref tagVEDIOPLATLOG lpVedioPlatLog, ref NET_DVR_TIME lpStartTime, ref NET_DVR_TIME lpStopTime);
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern bool PlayM4_GetPort(ref int nPort);
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern bool PlayM4_OpenFile(int nPort, string sFileName);
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern bool PlayM4_CloseFile(int nPort);
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern bool PlayM4_Play(int nPort, IntPtr hWnd);
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern bool PlayM4_Stop(int nPort);
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern bool PlayM4_Pause(int nPort, uint nPause); //1-暂停 0-恢复
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern ulong PlayM4_GetLastError(int nPort);
+
+		public delegate void FILEENDCALLBACK(int nPort, IntPtr pUser);
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern bool PlayM4_SetFileEndCallback(int nPort, FILEENDCALLBACK FileEndCallback, IntPtr pUser);
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern uint PlayM4_GetFileTime(int nPort);
+
+		[DllImport(@"\PlayCtrl.dll")]
+		public static extern uint PlayM4_GetPlayedTime(int nPort);
 	}
 }

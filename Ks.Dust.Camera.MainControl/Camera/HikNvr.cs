@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Dust.Platform.Storage.Model;
@@ -10,6 +11,8 @@ namespace Ks.Dust.Camera.MainControl.Camera
     internal class HikNvr
     {
         public uint LastErrorCode { get; private set; }
+
+        public static ulong LastPlayErrorCode { get; private set; }
 
         public int DefaultChannel => _iChannelNum[0];
 
@@ -32,6 +35,10 @@ namespace Ks.Dust.Camera.MainControl.Camera
         private readonly int[] _iIpDevId = new int[96];
 
         private readonly int[] _iChannelNum = new int[96];
+
+        private static int _nPort;
+
+        private static readonly CHCNetSDK.FILEENDCALLBACK Fileendcallback = FilePlayEndCallback;
 
         private CHCNetSDK.NET_DVR_DEVICEINFO_V30 _deviceInfo;
 
@@ -342,7 +349,7 @@ namespace Ks.Dust.Camera.MainControl.Camera
             return true;
         }
 
-        public bool DOwnloadFileByTime(CHCNetSDK.NET_DVR_PLAYCOND struDownPara, string fileName)
+        public bool DownloadFileByTime(CHCNetSDK.NET_DVR_PLAYCOND struDownPara, string fileName)
         {
             _lDownloadHandle = CHCNetSDK.NET_DVR_GetFileByTime_V40(_loginUserId, fileName, ref struDownPara);
             if (_lDownloadHandle < 0)
@@ -359,6 +366,84 @@ namespace Ks.Dust.Camera.MainControl.Camera
             }
 
             return true;
+        }
+
+        public static bool GetPlayPort()
+        {
+            var ret = CHCNetSDK.PlayM4_GetPort(ref _nPort);
+            if (!ret)
+            {
+                LastPlayErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+
+            return ret;
+        }
+
+        public static bool OpenFile(string sFileName)
+        {
+            var ret = CHCNetSDK.PlayM4_OpenFile(_nPort, sFileName);
+
+            if (!ret)
+            {
+                LastPlayErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+
+            return ret;
+        }
+
+        public static void FilePlayEndCallback(int nPort, IntPtr pUser)
+        {
+            
+        }
+
+        public static bool StartPlayLocal(IntPtr hWnd, out uint fileTime)
+        {
+            var intPtr = Marshal.GetHINSTANCE(Assembly.GetExecutingAssembly().GetModules()[0]);
+            CHCNetSDK.PlayM4_SetFileEndCallback(_nPort, Fileendcallback, intPtr);
+            var ret = CHCNetSDK.PlayM4_Play(_nPort, hWnd);
+            if (!ret)
+            {
+                LastPlayErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+
+            fileTime = CHCNetSDK.PlayM4_GetFileTime(_nPort);
+
+            return ret;
+        }
+
+        public static bool StopPlayLocal()
+        {
+            var ret = CHCNetSDK.PlayM4_Stop(_nPort);
+            if (!ret)
+            {
+                LastPlayErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+                return false;
+            }
+
+            ret = CHCNetSDK.PlayM4_CloseFile(_nPort);
+
+            if (!ret)
+            {
+                LastPlayErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+
+            return ret;
+        }
+
+        public static uint GetPlayedTime()
+        {
+            return CHCNetSDK.PlayM4_GetPlayedTime(_nPort);
+        }
+
+        public static bool PausePlayLocal(uint nPause)
+        {
+            var ret = CHCNetSDK.PlayM4_Pause(_nPort, nPause);
+            if (!ret)
+            {
+                LastPlayErrorCode = CHCNetSDK.NET_DVR_GetLastError();
+            }
+
+            return ret;
         }
     }
 }

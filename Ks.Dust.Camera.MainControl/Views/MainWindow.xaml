@@ -10,6 +10,8 @@
         Background="#c7c7c7"
         MinHeight="600"
         MinWidth="800"
+        Height="600"
+        Width="800"
         Loaded="OnLoaded"
         Title="昆山建设工程扬尘在线监控平台视频管理平台" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
@@ -52,7 +54,8 @@
                                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                                     <Label x:Name="LblCameraName" Content="选中的摄像头：" FontSize="14"></Label>
                                     <TextBox x:Name="TxtSelectedCamera" IsReadOnly="True" FontSize="14" Width="200" VerticalContentAlignment="Center"></TextBox>
-                                    <Button x:Name="BtnConnect" Content="连接摄像头" Width="100" Margin="15, 0, 0, 0" IsEnabled="False" Click="LoginCamera"></Button>
+                                    <Button x:Name="BtnConnect" Content="登录摄像头" Width="100" Margin="15, 0, 0, 0" IsEnabled="False" Click="LoginCamera"></Button>
+                                    <Button x:Name="BtnDisConnect" Content="断开连接" Width="100" Margin="15, 0, 0, 0" IsEnabled="False" Click="LogOffCamera"></Button>
                                 </StackPanel>
                                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                                     <Label FontSize="14">已连接摄像头：</Label>
@@ -103,11 +106,11 @@
                                                                     <Grid DockPanel.Dock="Bottom">
                                                                         <Border Padding="2">
                                                                             <StackPanel Height="32" Orientation="Horizontal">
-                                                                                <Button x:Name="BtnPausePlayback" Content="暂停" Width="40" Click="PausePlayback"></Button>
-                                                                                <Button x:Name="BtnSpeedDown" Content="慢放" Width="40" Margin="5, 0, 0, 0" Click="SlowPlayback"></Button>
-                                                                                <Button x:Name="BtnSpeedUp" Content="快放" Width="40" Margin="5, 0, 0, 0" Click="FastPlayback"></Button>
-                                                                                <Button x:Name="BtnNormalPlayback" Content="正常速度" Width="60" Margin="5, 0, 0, 0" Click="NormalPlayback"></Button>
-                                                                                <Button x:Name="BtnContinue" Content="播放" Width="40" Margin="5, 0, 0, 0" Click="ContinuePlayback"></Button>
+                                                                                <Button x:Name="BtnPausePlayback" IsEnabled="False" Content="暂停" Width="40" Click="PausePlayback"></Button>
+                                                                                <Button x:Name="BtnSpeedDown" IsEnabled="False" Content="慢放" Width="40" Margin="5, 0, 0, 0" Click="SlowPlayback"></Button>
+                                                                                <Button x:Name="BtnSpeedUp" IsEnabled="False" Content="快放" Width="40" Margin="5, 0, 0, 0" Click="FastPlayback"></Button>
+                                                                                <Button x:Name="BtnNormalPlayback" IsEnabled="False" Content="正常速度" Width="60" Margin="5, 0, 0, 0" Click="NormalPlayback"></Button>
+                                                                                <Button x:Name="BtnContinue" IsEnabled="False" Content="播放" Width="40" Margin="5, 0, 0, 0" Click="ContinuePlayback"></Button>
                                                                             </StackPanel>
                                                                         </Border>
                                                                     </Grid>
@@ -122,7 +125,41 @@
                                                 </Grid>
                                             </TabItem>
                                             <TabItem Header="已下载视频">
-                                                <Grid></Grid>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="270"></ColumnDefinition>
+                                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid Column="0">
+                                                        <ListView x:Name="LvLocalVedio"  DockPanel.Dock="Left" Width="270">
+                                                            <ListView.View>
+                                                                <GridView>
+                                                                    <GridViewColumn Header="文件名" Width="270" DisplayMemberBinding="{Binding FileName}"></GridViewColumn>
+                                                                </GridView>
+                                                            </ListView.View>
+                                                        </ListView>
+                                                    </Grid>
+                                                    <Grid Column="1">
+                                                        <Border Padding="10, 0, 0, 0">
+                                                            <DockPanel>
+                                                                <Border DockPanel.Dock="Bottom" Padding="5">
+                                                                    <StackPanel  Height="35" Orientation="Horizontal">
+                                                                        <Button Content="播放" x:Name="BtnStartPlayLocalVedio" Width="40" Click="StartPlayLocalVedio"></Button>
+                                                                        <Button Content="停止" x:Name="BtnStopPlayLocalVedio" Width="40" Margin="5, 0, 0, 0" Click="StopPlayLocalVedio"></Button>
+                                                                        <Button Content="暂停" x:Name="BtnPausePlayLocalVedio" Width="40" Margin="5, 0, 0, 0" Click="PausePlayLocalVedio"></Button>
+                                                                        <Button Content="恢复" x:Name="BtnResumePlayLocalVedio" Width="40" Margin="5, 0, 0, 0" Click="ResumePlayLocalVedio"></Button>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                                <Border DockPanel.Dock="Bottom" Padding="2">
+                                                                    <ProgressBar x:Name="LocalPlayProgressBar" Minimum="0" Height="10"></ProgressBar>
+                                                                </Border>
+                                                                <WindowsFormsHost DockPanel.Dock="Bottom">
+                                                                    <forms:PictureBox x:Name="PbLocalPreview" BackColor="Black"></forms:PictureBox>
+                                                                </WindowsFormsHost>
+                                                            </DockPanel>
+                                                        </Border>
+                                                    </Grid>
+                                                </Grid>
                                             </TabItem>
                                         </TabControl>
                                     </Grid>

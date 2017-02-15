@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Ks.Dust.Camera.MainControl.Application;
+using Ks.Dust.Camera.MainControl.Storage;
 
 namespace Ks.Dust.Camera.MainControl
 {
@@ -8,6 +9,7 @@ namespace Ks.Dust.Camera.MainControl
         protected override void OnStartup(StartupEventArgs e)
         {
             Config.ConfigCheck();
+            ApplicationStorage.LoadDownloadFile();
             base.OnStartup(e);
         }
     }

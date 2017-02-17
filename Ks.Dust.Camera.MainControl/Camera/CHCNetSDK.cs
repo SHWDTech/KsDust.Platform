@@ -15725,7 +15725,7 @@ namespace Ks.Dust.Camera.MainControl.Camera
 		public static extern bool PlayM4_Pause(int nPort, uint nPause); //1-暂停 0-恢复
 
 		[DllImport(@"\PlayCtrl.dll")]
-		public static extern ulong PlayM4_GetLastError(int nPort);
+		public static extern uint PlayM4_GetLastError(int nPort);
 
 		public delegate void FILEENDCALLBACK(int nPort, IntPtr pUser);
 

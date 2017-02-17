@@ -95,7 +95,7 @@ namespace Dust.Platform.Web.Controllers
 
             return Json(new
             {
-                total = devs.Count,
+                total = query.Count(),
                 rows = devs
             }, JsonRequestBehavior.AllowGet);
         }

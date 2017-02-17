@@ -119,6 +119,8 @@
     <Compile Include="Camera\CameraHistoryRecord.cs" />
     <Compile Include="Camera\CHCNetSDK.cs" />
     <Compile Include="Camera\HikNvr.cs" />
+    <Compile Include="Camera\HikPlayCtrl.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Storage\ApplicationStorage.cs" />
     <Compile Include="Storage\CameraNodeStorage.cs" />
     <Compile Include="Storage\CameraVedioStorage.cs" />

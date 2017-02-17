@@ -23,16 +23,6 @@ namespace Dust.Platform.Web.Controllers
             {
                 new Nodes
                 {
-                    id = "dayReport",
-                    name = "日报表"
-                },
-                new Nodes
-                {
-                    id = "weekReport",
-                    name = "周报表"
-                },
-                new Nodes
-                {
                     id = "monthReport",
                     name = "月报表"
                 },

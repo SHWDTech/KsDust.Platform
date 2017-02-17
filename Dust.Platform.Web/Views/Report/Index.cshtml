@@ -27,13 +27,42 @@
 </div>
 @section scripts{
     <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
+    <script src="/Scripts/Utility/accrodingmenu.js"></script>
     <script type="text/javascript">
+        var tabPopUp = function (event, treeid, treenode) {
+            if ($('.tabBar a[data-target=' + treenode.id + ']').length !== 0) {
+                var existLi = $('.tabBar a[data-target=' + treenode.id + ']')[0];
+                tabSwitch($(existLi));
+                return;
+            }
+            var li = '<li role="presentation"><a data-target="' + treenode.id + '" href="#">' + treenode.name + '</a></li>';
+            $('.tabBar ul').append(li);
+            $('.tabBar ul>li').removeClass('active');
+            var currentli = $($('.tabBar ul>li')[$('.tabBar ul>li').length - 1]);
+            currentli.addClass('active');
+            var content =
+                '<div class="present" data-id="' + treenode.id + '" style="height: 100%; padding: 5px; border: 1px solid #bce8f1;"></div>';
+            $('.present').hide();
+            $('.tab-content').append(content);
+            currentli.find('a').click(function () {
+                tabSwitch(currentli.find('a'));
+            });
+        }
+        var tabSwitch = function (a) {
+            $('.tabBar ul>li').removeClass('active');
+            $(a).parent('li').addClass('active');
+            $('.present').hide();
+            $('.present[data-id="' + $(a).attr('data-target') + '"]').show();
+        }
         var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.MenuNodes))');
-        $.fn.zTree.init($('#reporttree'), setting, treeNodes);
         var setting = {
             view: {
-                selectedMulti: false
+                selectedMulti: false,
+                callback: {
+                    onClick: tabPopUp
+                }
             }
         }
+        $.fn.zTree.init($('#reporttree'), setting, treeNodes);
     </script>
 }

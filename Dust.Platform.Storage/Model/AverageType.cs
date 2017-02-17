@@ -23,6 +23,21 @@
         /// <summary>
         /// 月均值
         /// </summary>
-        MonthAvg = 0x03
+        MonthAvg = 0x03,
+
+        /// <summary>
+        /// 季节均值
+        /// </summary>
+        Season = 0x04,
+
+        /// <summary>
+        /// 半年均值
+        /// </summary>
+        HalfYear = 0x05,
+
+        /// <summary>
+        /// 年均值
+        /// </summary>
+        Year = 0x06
     }
 }

@@ -115,8 +115,6 @@ namespace Ks.Dust.Camera.MainControl.Application
 
         public static bool VedioStorageReady { get; set; }
 
-        public static bool LocalVedioPortReady { get; set; }
-
         public static string CameraNodesJsonFile 
             => $"{Environment.CurrentDirectory}\\Storage\\cameraNodes.json";
 
@@ -141,8 +139,6 @@ namespace Ks.Dust.Camera.MainControl.Application
             {
                 VedioStorageReady = true;
             }
-
-            LocalVedioPortReady = HikNvr.GetPlayPort();
         }
     }
 }

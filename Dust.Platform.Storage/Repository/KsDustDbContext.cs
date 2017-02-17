@@ -75,5 +75,15 @@ namespace Dust.Platform.Storage.Repository
         /// 用户关联的实体（区域、施工单位、工程、设备）
         /// </summary>
         public virtual DbSet<UserRelatedEntity> UserRelatedEntities { get; set; }
+
+        /// <summary>
+        /// 设备在线率统计
+        /// </summary>
+        public virtual DbSet<DeviceOnlineStatus> DeviceOnlineStatuses { get; set; }
+
+        /// <summary>
+        /// 在线率统计（区县、工程）
+        /// </summary>
+        public virtual DbSet<OnlineStatistics> OnlineStatisticses { get; set; }
     }
 }

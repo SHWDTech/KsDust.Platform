@@ -105,6 +105,18 @@
     <Compile Include="Migrations\201702100701211_ModifyCameraPropertyName.Designer.cs">
       <DependentUpon>201702100701211_ModifyCameraPropertyName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702170235206_AddOnlineStatus.cs" />
+    <Compile Include="Migrations\201702170235206_AddOnlineStatus.Designer.cs">
+      <DependentUpon>201702170235206_AddOnlineStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702170530269_AddColumn_StatisticsToTableOnlineStatistics.cs" />
+    <Compile Include="Migrations\201702170530269_AddColumn_StatisticsToTableOnlineStatistics.Designer.cs">
+      <DependentUpon>201702170530269_AddColumn_StatisticsToTableOnlineStatistics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702170909555_AlterColumn.cs" />
+    <Compile Include="Migrations\201702170909555_AlterColumn.Designer.cs">
+      <DependentUpon>201702170909555_AlterColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -122,6 +134,8 @@
     <Compile Include="Model\KsDustMonitorData.cs" />
     <Compile Include="Model\KsDustProject.cs" />
     <Compile Include="Model\MonitorType.cs" />
+    <Compile Include="Model\DeviceOnlineStatus.cs" />
+    <Compile Include="Model\OnlineStatistics.cs" />
     <Compile Include="Model\ProjectType.cs" />
     <Compile Include="Model\RefreshToken.cs" />
     <Compile Include="Model\SystemConfiguration.cs" />
@@ -133,12 +147,14 @@
     <Compile Include="Repository\AuthContext.cs" />
     <Compile Include="Repository\AuthRepository.cs" />
     <Compile Include="Repository\CameraRepository.cs" />
+    <Compile Include="Repository\DeviceOnlineStatusRepository.cs" />
     <Compile Include="Repository\DeviceRepository.cs" />
     <Compile Include="Repository\DistrictRepository.cs" />
     <Compile Include="Repository\EnterpriseRepository.cs" />
     <Compile Include="Repository\KsDustDbContext.cs" />
     <Compile Include="Repository\KsDustRepository.cs" />
     <Compile Include="Repository\MonitorDataRepository.cs" />
+    <Compile Include="Repository\OnlineStatisticsRepository.cs" />
     <Compile Include="Repository\ProjectRepository.cs" />
     <Compile Include="Repository\VendorRepository.cs" />
   </ItemGroup>
@@ -167,6 +183,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702100701211_ModifyCameraPropertyName.resx">
       <DependentUpon>201702100701211_ModifyCameraPropertyName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702170235206_AddOnlineStatus.resx">
+      <DependentUpon>201702170235206_AddOnlineStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702170530269_AddColumn_StatisticsToTableOnlineStatistics.resx">
+      <DependentUpon>201702170530269_AddColumn_StatisticsToTableOnlineStatistics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702170909555_AlterColumn.resx">
+      <DependentUpon>201702170909555_AlterColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

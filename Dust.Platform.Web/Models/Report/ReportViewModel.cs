@@ -7,4 +7,18 @@ namespace Dust.Platform.Web.Models.Report
     {
         public List<Nodes> MenuNodes { get; set; }
     }
+
+    public class DayReportViewModel
+    {
+        
+    }
+
+    public class DeviceInstalled
+    {
+        public int Total { get; set; }
+
+        public int Using { get; set; }
+
+        public int Stoped { get; set; }
+    }
 }

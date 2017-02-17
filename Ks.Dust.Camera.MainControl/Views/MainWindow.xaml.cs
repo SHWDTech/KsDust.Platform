@@ -19,9 +19,9 @@ namespace Ks.Dust.Camera.MainControl.Views
     /// </summary>
     public partial class MainWindow
     {
-        private List<CameraNode> CameraNodes { get; set; }
+        public List<CameraNode> CameraNodes { get; set; }
 
-        private List<CameraLogin> CameraLogins { get; set; }
+        public List<CameraLogin> CameraLogins { get; set; }
 
         private CameraLogin _selectedCameraLogin;
 
@@ -30,6 +30,8 @@ namespace Ks.Dust.Camera.MainControl.Views
         private CameraNode _loginCameraNode;
 
         private HikNvr _contorlSdk;
+
+        public HikPlayCtrl LocalPlayCtrl { get; } = new HikPlayCtrl();
 
         private bool IsCameraLoged { get; set; }
 
@@ -59,7 +61,7 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void LocalPlayTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            var playedTime = HikNvr.GetPlayedTime();
+            var playedTime = LocalPlayCtrl.GetPlayedTime();
             Dispatcher.Invoke(() =>
             {
                 LocalPlayProgressBar.Value = playedTime;
@@ -351,6 +353,7 @@ namespace Ks.Dust.Camera.MainControl.Views
                 BtnStopPlayback.IsEnabled = false;
                 _playbackTimer.Stop();
                 UpdateInfo("回放结束！");
+                PbPreview.Refresh();
             }
             else
             {
@@ -491,24 +494,23 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void StartPlayLocalVedio(object sender, RoutedEventArgs args)
         {
-            if (!CheckLocalPlayPrepare()) return;
             if (LvLocalVedio.SelectedItem == null)
             {
                 MessageBox.Show("请先选择一个视频文件！", "提示！", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             var fileName = ((CameraVedioStorage) LvLocalVedio.SelectedItem).FileFullPathWithName;
-            var ret = HikNvr.OpenFile(fileName);
+            var ret = LocalPlayCtrl.OpenFile(fileName);
             if (!ret)
             {
-                UpdateInfo($"打开视频文件失败，错误码：{HikNvr.LastPlayErrorCode}");
+                UpdateInfo($"打开视频文件失败，错误码：{LocalPlayCtrl.LastErrorCode}");
                 return;
             }
             uint fileTime;
-            ret = HikNvr.StartPlayLocal(PbLocalPreview.Handle, out fileTime);
+            ret = LocalPlayCtrl.StartPlayLocal(PbLocalPreview.Handle, out fileTime);
             if (!ret)
             {
-                UpdateInfo($"播放视频文件失败，错误码：{HikNvr.LastPlayErrorCode}");
+                UpdateInfo($"播放视频文件失败，错误码：{LocalPlayCtrl.LastErrorCode}");
             }
 
             LocalPlayProgressBar.Maximum = _fileTime = fileTime;
@@ -517,42 +519,32 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void StopPlayLocalVedio(object sender, RoutedEventArgs args)
         {
-            var ret = HikNvr.StopPlayLocal();
+            var ret = LocalPlayCtrl.StopPlayLocal();
             if (!ret)
             {
-                UpdateInfo($"停止播放视频文件失败，错误码：{HikNvr.LastPlayErrorCode}");
+                UpdateInfo($"停止播放视频文件失败，错误码：{LocalPlayCtrl.LastErrorCode}");
             }
             LocalPlayProgressBar.Value = 0;
             _localPlayTimer.Stop();
+            PbLocalPreview.Refresh();
         }
 
         private void PausePlayLocalVedio(object sender, RoutedEventArgs args)
         {
-            var ret = HikNvr.PausePlayLocal(1);
+            var ret = LocalPlayCtrl.PausePlayLocal(1);
             if (!ret)
             {
-                UpdateInfo($"暂停播放视频文件失败，错误码：{HikNvr.LastPlayErrorCode}");
+                UpdateInfo($"暂停播放视频文件失败，错误码：{LocalPlayCtrl.LastErrorCode}");
             }
         }
 
         private void ResumePlayLocalVedio(object sender, RoutedEventArgs args)
         {
-            var ret = HikNvr.PausePlayLocal(0);
+            var ret = LocalPlayCtrl.PausePlayLocal(0);
             if (!ret)
             {
-                UpdateInfo($"恢复播放视频文件失败，错误码：{HikNvr.LastPlayErrorCode}");
+                UpdateInfo($"恢复播放视频文件失败，错误码：{LocalPlayCtrl.LastErrorCode}");
             }
-        }
-
-        private bool CheckLocalPlayPrepare()
-        {
-            if (!Config.LocalVedioPortReady)
-            {
-                MessageBox.Show("本地视频播放端口未就绪，请尝试重新启动！","错误！",MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-
-            return true;
         }
 
         private void UpdateInfo(string message)

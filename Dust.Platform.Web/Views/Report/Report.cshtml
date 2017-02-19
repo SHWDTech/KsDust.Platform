@@ -1,8 +1,166 @@
-﻿
+﻿@using Dust.Platform.Web.Models.Report
+@model GeneralReportViewModel
 @{
     Layout = null;
 }
 
 <div class="col-lg-12" style="height: 100%; padding: 2px;">
-    <h1>日报表</h1>
+    <h1>@Model.ReportTitle</h1>
+    <div>
+        <h1>@Model.ReportTitle - 监测点总体情况</h1>
+        <Table class="table table-bordered table-hover table-striped">
+            <thead>
+            <tr class="info">
+                <td>类型</td>
+                <td>安装量</td>
+                <td>在用量</td>
+                <td>停用量</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>全市</td>
+                <td>@Model.TotalInstalled.Total</td>
+                <td>@Model.TotalInstalled.Using</td>
+                <td>@Model.TotalInstalled.Stoped</td>
+            </tr>
+            <tr>
+                <td>建筑工地</td>
+                <td>@Model.ConstructionSiteInstalled.Total</td>
+                <td>@Model.ConstructionSiteInstalled.Using</td>
+                <td>@Model.ConstructionSiteInstalled.Stoped</td>
+            </tr>
+            <tr>
+                <td>市政工地</td>
+                <td>@Model.MunicipalWorksInstalled.Total</td>
+                <td>@Model.MunicipalWorksInstalled.Using</td>
+                <td>@Model.MunicipalWorksInstalled.Stoped</td>
+            </tr>
+            <tr>
+                <td>拌合站</td>
+                <td>@Model.MixingPlantInstalled.Total</td>
+                <td>@Model.MixingPlantInstalled.Using</td>
+                <td>@Model.MixingPlantInstalled.Stoped</td>
+            </tr>
+            </tbody>
+        </Table>
+    </div>
+    <div>
+        <h1>@Model.ReportTitle - 各区县试点工地颗粒物浓度评价</h1>
+        <Table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr class="info">
+                    <td>区县名称</td>
+                    <td>已安装</td>
+                    <td>在用</td>
+                    <td>停用</td>
+                    <td>建筑工地在用</td>
+                    <td>市政工地在用</td>
+                    <td>拌合站在用</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var districtDeviceInstalled in Model.DistrictInstalleds)
+                    {
+                        <tr>
+                            <td>@districtDeviceInstalled.DistrictName</td>
+                            <td>@districtDeviceInstalled.Total</td>
+                            <td>@districtDeviceInstalled.Using</td>
+                            <td>@districtDeviceInstalled.Stoped</td>
+                            <td>@districtDeviceInstalled.ConstructionSiteInstalled</td>
+                            <td>@districtDeviceInstalled.MunicipalWorksInstalled</td>
+                            <td>@districtDeviceInstalled.MixingPlantInstalled</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </Table>
+    </div>
+    <div>
+        <h1>@Model.ReportTitle - 各区县试点工地颗粒物浓度评价</h1>
+        <div id="districtChart"></div>
+    </div>
+    <div>
+        <h1>@Model.ReportTitle - 各区县试点工地颗粒物平均浓度</h1>
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr class="info">
+                    <td>区县名称</td>
+                    <td>整体颗粒物平均浓度mg/m³</td>
+                    <td>PM2.5平均浓度mg/m³</td>
+                    <td>PM10平均浓度mg/m³</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var districtAvg in Model.DistrictAvgs)
+                    {
+                        <tr>
+                            <td>@districtAvg.DistrictName</td>
+                            <td>@districtAvg.AveragePm</td>
+                            <td>@districtAvg.AveragePm25</td>
+                            <td>@districtAvg.AveragePm100</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h1>@Model.ReportTitle - 评级为优的前十名工地</h1>
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+            <tr class="success">
+                <td>颗粒物浓度ms/m³</td>
+                <td>工地名称</td>
+                <td>评级</td>
+                <td>建设单位名称</td>
+                <td>所属区县</td>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                foreach (var projectRank in Model.ProjectTopRanks)
+                {
+                    <tr>
+                        <td>@projectRank.Average</td>
+                        <td>@projectRank.ProjectName</td>
+                        <td>@projectRank.Rank</td>
+                        <td>@projectRank.EnterpriseName</td>
+                        <td>@projectRank.DistrictName</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h1>@Model.ReportTitle - 评级为差的前十名工地</h1>
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr class="danger">
+                    <td>颗粒物浓度ms/m³</td>
+                    <td>工地名称</td>
+                    <td>评级</td>
+                    <td>建设单位名称</td>
+                    <td>所属区县</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var projectRank in Model.ProjectTailRanks)
+                    {
+                        <tr>
+                            <td>@projectRank.Average</td>
+                            <td>@projectRank.ProjectName</td>
+                            <td>@projectRank.Rank</td>
+                            <td>@projectRank.EnterpriseName</td>
+                            <td>@projectRank.DistrictName</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

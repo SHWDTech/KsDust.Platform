@@ -85,5 +85,10 @@ namespace Dust.Platform.Storage.Repository
         /// 在线率统计（区县、工程）
         /// </summary>
         public virtual DbSet<OnlineStatistics> OnlineStatisticses { get; set; }
+
+        /// <summary>
+        /// 报表数据
+        /// </summary>
+        public virtual DbSet<Report> Reports { get; set; }
     }
 }

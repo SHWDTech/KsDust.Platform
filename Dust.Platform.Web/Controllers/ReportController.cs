@@ -1,12 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using Dust.Platform.Storage.Model;
+using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Report;
+using Newtonsoft.Json;
 
 namespace Dust.Platform.Web.Controllers
 {
     public class ReportController : Controller
     {
+        private readonly KsDustDbContext _ctx;
+
+        public ReportController()
+        {
+            _ctx = new KsDustDbContext();
+        }
+
         // GET: Report
         public ActionResult Index()
         {
@@ -24,16 +36,30 @@ namespace Dust.Platform.Web.Controllers
                 new Nodes
                 {
                     id = "monthReport",
-                    name = "月报表"
+                    name = "月报表",
+                    routeValue = ReportType.Month
                 },
                 new Nodes
                 {
                     id = "yearReport",
-                    name = "年报表"
+                    name = "年报表",
+                    routeValue = ReportType.Year
                 }
             };
 
             return nodes;
+        }
+
+        public ActionResult ReportSelecter(ReportType type)
+        {
+            var reports = _ctx.Reports.Where(obj => obj.ReportType == type).ToList();
+            return View(reports);
+        }
+
+        public ActionResult Report(Guid id)
+        {
+            var report = _ctx.Reports.First(obj => obj.Id == id);
+            return View(JsonConvert.DeserializeObject<GeneralReportViewModel>(report.ReportDataJson));
         }
     }
 }

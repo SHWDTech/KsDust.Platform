@@ -8,9 +8,25 @@ namespace Dust.Platform.Web.Models.Report
         public List<Nodes> MenuNodes { get; set; }
     }
 
-    public class DayReportViewModel
+    public class GeneralReportViewModel
     {
-        
+        public string ReportTitle { get; set; }
+
+        public DeviceInstalled TotalInstalled { get; set; }
+
+        public DeviceInstalled ConstructionSiteInstalled { get; set; }
+
+        public DeviceInstalled MunicipalWorksInstalled { get; set; }
+
+        public DeviceInstalled MixingPlantInstalled { get; set; }
+
+        public List<DistrictDeviceInstalled> DistrictInstalleds { get; set; }
+
+        public List<DistrictAvg> DistrictAvgs { get; set; }
+
+        public List<ProjectRank> ProjectTopRanks { get; set; }
+
+        public List<ProjectRank> ProjectTailRanks { get; set; }
     }
 
     public class DeviceInstalled
@@ -20,5 +36,40 @@ namespace Dust.Platform.Web.Models.Report
         public int Using { get; set; }
 
         public int Stoped { get; set; }
+    }
+
+    public class DistrictDeviceInstalled : DeviceInstalled
+    {
+        public string DistrictName { get; set; }
+
+        public int ConstructionSiteInstalled { get; set; }
+
+        public int MunicipalWorksInstalled { get; set; }
+
+        public int MixingPlantInstalled { get; set; }
+    }
+
+    public class DistrictAvg
+    {
+        public string DistrictName { get; set; }
+
+        public double AveragePm { get; set; }
+
+        public double AveragePm25 { get; set; }
+
+        public double AveragePm100 { get; set; }
+    }
+
+    public class ProjectRank
+    {
+        public string ProjectName { get; set; }
+
+        public string EnterpriseName { get; set; }
+
+        public string DistrictName { get; set; }
+
+        public string Rank { get; set; }
+
+        public double Average { get; set; }
     }
 }

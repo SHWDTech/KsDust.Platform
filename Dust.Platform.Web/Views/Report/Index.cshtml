@@ -41,9 +41,15 @@
             var currentli = $($('.tabBar ul>li')[$('.tabBar ul>li').length - 1]);
             currentli.addClass('active');
             var content =
-                '<div class="present" data-id="' + treenode.id + '" style="height: 100%; padding: 5px; border: 1px solid #bce8f1;"></div>';
+                '<div class="present" data-id="' + treenode.id + '" style="height: 100%; padding: 5px; border: 1px solid #bce8f1; overflow: auto;"></div>';
             $('.present').hide();
             $('.tab-content').append(content);
+            $.get('/Report/ReportSelecter?type=' + treenode.routeValue, null, function (ret) {
+                $($('.present')[$('.present').length - 1]).append(ret);
+                $('.reportloader').on('click', function() {
+                    loadReport();
+                });
+            });
             currentli.find('a').click(function () {
                 tabSwitch(currentli.find('a'));
             });
@@ -57,12 +63,20 @@
         var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.MenuNodes))');
         var setting = {
             view: {
-                selectedMulti: false,
-                callback: {
-                    onClick: tabPopUp
-                }
+                selectedMulti: false
+            },
+            callback: {
+                onClick: tabPopUp
             }
         }
+
         $.fn.zTree.init($('#reporttree'), setting, treeNodes);
+
+        var loadReport = function() {
+            $.get('/Report/Report?id=' + $('#monthReportSelecter').val(), null, function (ret) {
+                $('#monthReportContent').empty();
+                $('#monthReportContent').append(ret);
+            });
+        }
     </script>
 }

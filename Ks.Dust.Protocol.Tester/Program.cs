@@ -1,115 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using SHWDTech.Platform.Utility;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Dust.Platform.Storage.Repository;
+using Dust.Platform.Web.Models.Report;
+using Newtonsoft.Json;
 
 namespace Ks.Dust.Protocol.Tester
 {
     class Program
     {
-        private static string baseStr =
-            "QN={0};ST=22;CN={1};PW=123456;MN={2};CP=&&DataTime={3};a34001-Avg={4};a34004-Avg={5};a34005-Avg={6};a50001-Avg={7};a01001-Avg={8};a01002-Avg={9};a01007-Avg={10};a01008-Avg={11}&&";
-
-        private static readonly Dictionary<string, Socket> ClientSockets = new Dictionary<string, Socket>();
-
-        private static int _port = 1000;
-
-        private static string[] _devices;
-
-        private static int _count;
-
         static void Main(string[] args)
         {
-            _devices = new[]
+            var report = new GeneralReportViewModel()
             {
-                "V87AS7F0000001",
-                "V87AS7F0000002",
-                "V87AS7F0000003",
-                "V87AS7F0000004",
-                "V87AS7F0000005",
-                "V87AS7F0000006",
-                "V87AS7F0000007",
-                "V87AS7F0000008",
-                "V87AS7F0000009",
-                "V87AS7F0000010",
-                "V87AS7F0000011"
+                ReportTitle = "2017年1月",
+                TotalInstalled = new DeviceInstalled { Total = 50, Using = 44, Stoped = 6},
+                ConstructionSiteInstalled = new DeviceInstalled { Total = 35, Using = 33, Stoped = 2},
+                MunicipalWorksInstalled = new DeviceInstalled { Total = 10, Using = 8, Stoped = 2},
+                MixingPlantInstalled = new DeviceInstalled { Total = 5, Using = 3, Stoped = 2}
             };
 
-            Console.ReadKey();
-            Connect();
-            while (true)
+            var db = new KsDustDbContext();
+            var districts = db.Districts.ToList();
+            var disInstalled = new List<DistrictDeviceInstalled>();
+            var avgs = new List<DistrictAvg>();
+            foreach (var district in districts)
             {
-                Send();
-                Thread.Sleep(60000);
-                _count++;
-                if (_count % 15 == 0)
+                var disIns = new DistrictDeviceInstalled
                 {
-                    SendFifteen();
-                }
-                if (_count%60 == 0)
+                    DistrictName = district.Name,
+                    ConstructionSiteInstalled = 4,
+                    MunicipalWorksInstalled = 1,
+                    MixingPlantInstalled = 0
+                };
+                disInstalled.Add(disIns);
+                var avg = new DistrictAvg
                 {
-                    SendHour();
-                }
+                    DistrictName = district.Name,
+                    AveragePm = 0.567,
+                    AveragePm25 = 0.433,
+                    AveragePm100 = 0.486
+                };
+                avgs.Add(avg);
             }
-        }
 
-        static void Connect()
-        {
-            foreach (var t in _devices)
+            report.DistrictInstalleds = disInstalled;
+            report.DistrictAvgs = avgs;
+            var projects = db.KsDustProjects.Include("District").Include("Enterprise").Take(10).ToList();
+            var top = new List<ProjectRank>();
+            var tail = new List<ProjectRank>();
+            foreach (var ksDustProject in projects)
             {
-                var client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                client.Bind(new IPEndPoint(IPAddress.Parse("192.168.1.100"), _port));
-                _port++;
-                client.Connect(new IPEndPoint(IPAddress.Parse("192.168.1.100"), 18254));
-                client.Send(GetData(t, "2011"));
-                ClientSockets.Add(t, client);
-                Thread.Sleep(100);
+                var t = new ProjectRank
+                {
+                    DistrictName = ksDustProject.District.Name,
+                    EnterpriseName = ksDustProject.Enterprise.Name,
+                    Average = 0.543,
+                    ProjectName = ksDustProject.Name,
+                    Rank = "优"
+                };
+                var ta = new ProjectRank
+                {
+                    DistrictName = ksDustProject.District.Name,
+                    EnterpriseName = ksDustProject.Enterprise.Name,
+                    Average = 0.543,
+                    ProjectName = ksDustProject.Name,
+                    Rank = "优"
+                };
+                top.Add(t);
+                tail.Add(ta);
             }
-        }
+            report.ProjectTopRanks = top;
+            report.ProjectTailRanks = tail;
 
-        static void Send()
-        {
-            foreach (var clientSocket in ClientSockets)
+            var json = JsonConvert.SerializeObject(report);
+            using (var stream = new StreamWriter(File.OpenWrite(@"d:\mysql.json")))
             {
-                clientSocket.Value.Send(GetData(clientSocket.Key, "2011"));
+                stream.Write(json);
             }
-        }
-
-        static void SendFifteen()
-        {
-            foreach (var clientSocket in ClientSockets)
-            {
-                clientSocket.Value.Send(GetData(clientSocket.Key, "2051"));
-            }
-        }
-
-        static void SendHour()
-        {
-            foreach (var clientSocket in ClientSockets)
-            {
-                clientSocket.Value.Send(GetData(clientSocket.Key, "2061"));
-            }
-        }
-
-        static byte[] GetData(string nodeId, string cmd)
-        {
-            var qnStr = DateTime.Now.ToString("yyyyMMddHHmmssfff");
-            var dateStr = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var dataStr = string.Format(baseStr, qnStr, cmd, nodeId, dateStr, RandomDouble(0, 1), RandomDouble(0, 1), RandomDouble(0, 1), RandomDouble(50, 80), RandomDouble(20,30), RandomDouble(25,70), RandomDouble(0, 15), RandomDouble(0, 360));
-            var crc = Globals.GetCrcModBus(Encoding.ASCII.GetBytes(dataStr));
-            dataStr = $"##{dataStr.Length:D4}{dataStr}";
-            dataStr += crc;
-            dataStr += "\r\n";
-            return Encoding.ASCII.GetBytes(dataStr);
-        }
-
-        static string RandomDouble(int start, int end)
-        {
-            var rd = new Random();
-            return (rd.Next(start*100, end*100)/100.0).ToString("F1");
         }
     }
 }

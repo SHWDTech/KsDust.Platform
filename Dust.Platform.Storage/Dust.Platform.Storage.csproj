@@ -117,6 +117,14 @@
     <Compile Include="Migrations\201702170909555_AlterColumn.Designer.cs">
       <DependentUpon>201702170909555_AlterColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702191123073_Add-Table-Report.cs" />
+    <Compile Include="Migrations\201702191123073_Add-Table-Report.Designer.cs">
+      <DependentUpon>201702191123073_Add-Table-Report.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702191130112_Add-Column-ReportDateToTableReport.cs" />
+    <Compile Include="Migrations\201702191130112_Add-Column-ReportDateToTableReport.Designer.cs">
+      <DependentUpon>201702191130112_Add-Column-ReportDateToTableReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -138,6 +146,8 @@
     <Compile Include="Model\OnlineStatistics.cs" />
     <Compile Include="Model\ProjectType.cs" />
     <Compile Include="Model\RefreshToken.cs" />
+    <Compile Include="Model\Report.cs" />
+    <Compile Include="Model\ReportType.cs" />
     <Compile Include="Model\SystemConfiguration.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Model\UserRelatedEntity.cs" />
@@ -192,6 +202,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702170909555_AlterColumn.resx">
       <DependentUpon>201702170909555_AlterColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702191123073_Add-Table-Report.resx">
+      <DependentUpon>201702191123073_Add-Table-Report.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702191130112_Add-Column-ReportDateToTableReport.resx">
+      <DependentUpon>201702191130112_Add-Column-ReportDateToTableReport.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

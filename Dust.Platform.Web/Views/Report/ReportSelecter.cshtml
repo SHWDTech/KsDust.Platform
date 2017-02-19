@@ -1,0 +1,25 @@
+﻿@model List<Dust.Platform.Storage.Model.Report>
+@{
+    Layout = null;
+    ViewBag.Title = null;
+}
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div style="display: flex;">
+            <select class="form-control" style="width: 180px;" id="monthReportSelecter">
+                @{
+                    foreach (var report in Model)
+                    {
+                        <option value="@report.Id">@report.ReportDate</option>
+                    }
+                }
+            </select>
+            <input type="button" class="form-control reportloader" style="margin-left: 25px; width: 75px;" value="确认"/>
+        </div>
+    </div>
+    <div class="panel-body" id="monthReportContent" style="overflow-y: auto;">
+        
+    </div>
+</div>
+

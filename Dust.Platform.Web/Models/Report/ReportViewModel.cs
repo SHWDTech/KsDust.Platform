@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Dust.Platform.Web.Models.Home;
+// ReSharper disable InconsistentNaming
 
 namespace Dust.Platform.Web.Models.Report
 {
@@ -27,6 +28,8 @@ namespace Dust.Platform.Web.Models.Report
         public List<ProjectRank> ProjectTopRanks { get; set; }
 
         public List<ProjectRank> ProjectTailRanks { get; set; }
+
+        public ReportBarChartOption BarChartOption { get; set; }
     }
 
     public class DeviceInstalled
@@ -71,5 +74,25 @@ namespace Dust.Platform.Web.Models.Report
         public string Rank { get; set; }
 
         public double Average { get; set; }
+    }
+
+    public class ReportBarChartOption
+    {
+        public string title { get; set; }
+
+        public List<string> xAxis { get; set; } = new List<string>();
+
+        public string yAxisName { get; set; }
+
+        public List<BarOptionSeries> series { get; set; } = new List<BarOptionSeries>();
+    }
+
+    public class BarOptionSeries
+    {
+        public string name { get; set; }
+
+        public string type { get; set; }
+
+        public List<double> data { get; set; } = new List<double>();
     }
 }

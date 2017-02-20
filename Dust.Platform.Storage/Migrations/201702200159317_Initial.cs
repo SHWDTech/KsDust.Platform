@@ -19,7 +19,23 @@ namespace Dust.Platform.Storage.Migrations
                         ParticulateMatter = c.Double(nullable: false),
                         Pm25 = c.Double(nullable: false),
                         Pm100 = c.Double(nullable: false),
+                        Noise = c.Double(nullable: false),
+                        Temperature = c.Double(nullable: false),
+                        Humidity = c.Double(nullable: false),
+                        WindSpeed = c.Double(nullable: false),
                         AverageDateTime = c.DateTime(nullable: false, precision: 0),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.DeviceOnlineStatus",
+                c => new
+                    {
+                        Id = c.Long(nullable: false, identity: true),
+                        DeviceGuid = c.Guid(nullable: false),
+                        IsOnline = c.Boolean(nullable: false),
+                        UpdateTime = c.DateTime(nullable: false, precision: 0),
+                        StatusType = c.Byte(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -127,7 +143,7 @@ namespace Dust.Platform.Storage.Migrations
                         Id = c.Guid(nullable: false),
                         DeviceId = c.Guid(nullable: false),
                         Name = c.String(maxLength: 100, storeType: "nvarchar"),
-                        ConnectName = c.String(maxLength: 100, storeType: "nvarchar"),
+                        SerialNumber = c.String(maxLength: 100, storeType: "nvarchar"),
                         UserName = c.String(maxLength: 100, storeType: "nvarchar"),
                         Password = c.String(maxLength: 100, storeType: "nvarchar"),
                     })
@@ -164,6 +180,25 @@ namespace Dust.Platform.Storage.Migrations
                 .Index(t => new { t.MonitorType, t.DistrictId, t.EnterpriseId, t.ProjectId, t.DeviceId, t.UpdateTime }, name: "Ix_MonitorType_DistrictId_EnterpriseId_ProjectId_DeviceId_UpdateTime");
             
             CreateTable(
+                "dbo.OnlineStatistics",
+                c => new
+                    {
+                        Id = c.Long(nullable: false, identity: true),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Reports",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        ReportDataJson = c.String(unicode: false, storeType: "text"),
+                        ReportType = c.Byte(nullable: false),
+                        ReportDate = c.String(unicode: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.SystemConfigurations",
                 c => new
                     {
@@ -173,6 +208,15 @@ namespace Dust.Platform.Storage.Migrations
                         ConfigValue = c.String(nullable: false, maxLength: 8000, storeType: "nvarchar"),
                     })
                 .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.UserRelatedEntities",
+                c => new
+                    {
+                        User = c.Guid(nullable: false),
+                        Entity = c.Guid(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.User, t.Entity });
             
         }
         
@@ -197,7 +241,10 @@ namespace Dust.Platform.Storage.Migrations
             DropIndex("dbo.KsDustDevices", new[] { "VendorId" });
             DropIndex("dbo.KsDustDevices", new[] { "ProjectId" });
             DropIndex("dbo.KsDustAlarms", new[] { "DeviceId" });
+            DropTable("dbo.UserRelatedEntities");
             DropTable("dbo.SystemConfigurations");
+            DropTable("dbo.Reports");
+            DropTable("dbo.OnlineStatistics");
             DropTable("dbo.KsDustMonitorDatas");
             DropTable("dbo.KsDustCameras");
             DropTable("dbo.Vendors");
@@ -206,6 +253,7 @@ namespace Dust.Platform.Storage.Migrations
             DropTable("dbo.KsDustAlarms");
             DropTable("dbo.Enterprises");
             DropTable("dbo.Districts");
+            DropTable("dbo.DeviceOnlineStatus");
             DropTable("dbo.AverageMonitorDatas");
         }
     }

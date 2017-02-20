@@ -7,13 +7,13 @@ namespace Dust.Platform.Storage.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class ModifyCameraPropertyName : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ModifyCameraPropertyName));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201702100701211_ModifyCameraPropertyName"; }
+            get { return "201702200159317_Initial"; }
         }
         
         string IMigrationMetadata.Source

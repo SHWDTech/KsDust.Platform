@@ -1,4 +1,5 @@
 ﻿@using Dust.Platform.Web.Models.Report
+@using Newtonsoft.Json
 @model GeneralReportViewModel
 @{
     Layout = null;
@@ -79,7 +80,11 @@
     </div>
     <div>
         <h1>@Model.ReportTitle - 各区县试点工地颗粒物浓度评价</h1>
-        <div id="districtChart"></div>
+        @{
+            var barOptions = JsonConvert.SerializeObject(Model.BarChartOption);
+        }
+        <input type="hidden" value="@barOptions" class="barOptions"/>
+        <div class="districtChart" style="width: 100%; height: 400px;"></div>
     </div>
     <div>
         <h1>@Model.ReportTitle - 各区县试点工地颗粒物平均浓度</h1>

@@ -27,6 +27,7 @@
 </div>
 @section scripts{
     <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
+    <script src="~/Scripts/Utility/chartsOption.js"></script>
     <script src="/Scripts/Utility/accrodingmenu.js"></script>
     <script type="text/javascript">
         var tabPopUp = function (event, treeid, treenode) {
@@ -46,8 +47,8 @@
             $('.tab-content').append(content);
             $.get('/Report/ReportSelecter?type=' + treenode.routeValue, null, function (ret) {
                 $($('.present')[$('.present').length - 1]).append(ret);
-                $('.reportloader').on('click', function() {
-                    loadReport();
+                $('.reportloader').on('click', function (e) {
+                    loadReport(e);
                 });
             });
             currentli.find('a').click(function () {
@@ -72,10 +73,20 @@
 
         $.fn.zTree.init($('#reporttree'), setting, treeNodes);
 
-        var loadReport = function() {
-            $.get('/Report/Report?id=' + $('#monthReportSelecter').val(), null, function (ret) {
-                $('#monthReportContent').empty();
-                $('#monthReportContent').append(ret);
+        var loadReport = function (event) {
+            var panel = $(event.target).parents('.panel-info')[0];
+            $.get('/Report/Report?id=' + $(panel).find('.reportSelecter').val(), null, function (ret) {
+                $(panel).find('.reportContent').empty();
+                $(panel).find('.reportContent').append(ret);
+                var optionData = JSON.parse($(panel).find('.barOptions').val());
+                var option = chartsOption.barOption(optionData);
+                option['legend'] = {
+                    data: ['PM', 'PM2.5', 'PM10']
+                };
+                option['color'] = ['#3398DB', '#449d44', '#286090'];
+                option.title = {};
+                var chart = echarts.init($(panel).find('.districtChart')[0]);
+                chart.setOption(option);
             });
         }
     </script>

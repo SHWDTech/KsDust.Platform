@@ -39,6 +39,14 @@ namespace Dust.Platform.Service.Models
         public string updatetime { get; set; }
 
         public string camera { get; set; }
+
+        public string ipServerAddr { get; set; }
+
+        public string serialNumber { get; set; }
+
+        public string userName { get; set; }
+
+        public string password { get; set; }
     }
 
     public class DeviceCurrentPostParams

@@ -59,6 +59,15 @@ namespace Dust.Platform.Service.Controllers
                 current.updatetime = lastData.UpdateTime.ToString("yyyy-MM-dd HH:mm:ss");
             }
 
+            current.ipServerAddr =
+                _ctx.SystemConfigurations.First(obj => obj.ConfigName == "CameraIpServer").ConfigValue;
+
+            var camera = _ctx.KsDustCameras.FirstOrDefault(car => car.DeviceId == device.Id);
+            if (camera == null) return Request.CreateResponse(HttpStatusCode.OK, current);
+            current.serialNumber = camera.SerialNumber;
+            current.userName = camera.UserName;
+            current.password = camera.Password;
+
             return Request.CreateResponse(HttpStatusCode.OK, current);
         }
     }

@@ -150,26 +150,43 @@ namespace Dust.Platform.Web.Controllers
                         obj.Type == post.DateType &&
                         obj.Category == post.Type && obj.AverageDateTime > post.Start &&
                         obj.AverageDateTime < post.End);
+
             if (post.Type == AverageCategory.District)
             {
-                var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
+                var group = query.GroupBy(obj => obj.TargetId).Select(item => new
                 {
                     _ctx.Districts.FirstOrDefault(obj => obj.Id == item.Key).Name,
-                    Avg = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0
-                }).ToList();
-
-                return Json(avgs, JsonRequestBehavior.AllowGet);
+                    Data = item
+                });
             }
             else
             {
-                var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
+                var group = query.GroupBy(obj => obj.TargetId).Select(item => new
                 {
                     _ctx.KsDustProjects.FirstOrDefault(obj => obj.Id == item.Key).Name,
-                    Avg = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0
-                }).OrderByDescending(avg => avg.Avg).Take(10).ToList();
-
-                return Json(avgs, JsonRequestBehavior.AllowGet);
+                    Data = item
+                });
             }
+            //if (post.Type == AverageCategory.District)
+            //{
+            //    var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
+            //    {
+            //        _ctx.Districts.FirstOrDefault(obj => obj.Id == item.Key).Name,
+            //        Avg = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0
+            //    }).ToList();
+
+            //    return Json(avgs, JsonRequestBehavior.AllowGet);
+            //}
+            //else
+            //{
+            //    var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
+            //    {
+            //        _ctx.KsDustProjects.FirstOrDefault(obj => obj.Id == item.Key).Name,
+            //        Avg = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0
+            //    }).OrderByDescending(avg => avg.Avg).Take(10).ToList();
+
+            //    return Json(avgs, JsonRequestBehavior.AllowGet);
+            //}
         }
 
         public ActionResult HistoryRankTable(HistoryTablePost post)

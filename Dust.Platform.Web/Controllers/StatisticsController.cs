@@ -102,7 +102,7 @@ namespace Dust.Platform.Web.Controllers
         public ActionResult GetDistricts(TablePost model)
         {
             var districts = _ctx.Districts.Where(obj => obj.Id != Guid.Empty).Select(obj => new { obj.Id, obj.Name }).ToList();
-            var total = districts.Count();
+            var total = districts.Count;
             var lastDay = DateTime.Now.AddDays(-1);
             var lastMonth = DateTime.Now.AddMonths(-1);
             var ret = (from district in districts
@@ -146,47 +146,71 @@ namespace Dust.Platform.Web.Controllers
         {
             var query =
                 _ctx.AverageMonitorDatas.Where(
-                    obj =>
-                        obj.Type == post.DateType &&
-                        obj.Category == post.Type && obj.AverageDateTime > post.Start &&
-                        obj.AverageDateTime < post.End);
+                        obj =>
+                            obj.Type == post.DateType &&
+                            obj.Category == post.Type && obj.AverageDateTime > post.Start &&
+                            obj.AverageDateTime < post.End)
+                    .GroupBy(obj => obj.TargetId).ToList();
 
-            if (post.Type == AverageCategory.District)
+            var targetNames = post.Type == AverageCategory.District 
+                ? _ctx.Districts.Select(dis => new { dis.Id, dis.Name}) 
+                : _ctx.KsDustProjects.Select(dis => new { dis.Id, dis.Name });
+
+            object avgs = null;
+            switch (post.DataType)
             {
-                var group = query.GroupBy(obj => obj.TargetId).Select(item => new
-                {
-                    _ctx.Districts.FirstOrDefault(obj => obj.Id == item.Key).Name,
-                    Data = item
-                });
+                case MonitorDataValueType.Pm:
+                    avgs = query.Select(g => new
+                    {
+                        targetNames.First(tar => tar.Id == g.Key).Name,
+                        Avg = g.Any() ? Math.Round(g.Average(val => val.ParticulateMatter), 2) : 0
+                    }).ToList();
+                    break;
+                    case MonitorDataValueType.Pm25:
+                    avgs = query.Select(g => new
+                    {
+                        targetNames.First(tar => tar.Id == g.Key).Name,
+                        Avg = g.Any() ? Math.Round(g.Average(val => val.Pm25), 2) : 0
+                    }).ToList();
+                    break;
+                    case MonitorDataValueType.Pm100:
+                    avgs = query.Select(g => new
+                    {
+                        targetNames.First(tar => tar.Id == g.Key).Name,
+                        Avg = g.Any() ? Math.Round(g.Average(val => val.Pm100), 2) : 0
+                    }).ToList();
+                    break;
+                    case MonitorDataValueType.Noise:
+                    avgs = query.Select(g => new
+                    {
+                        targetNames.First(tar => tar.Id == g.Key).Name,
+                        Avg = g.Any() ? Math.Round(g.Average(val => val.Noise), 2) : 0
+                    }).ToList();
+                    break;
+                    case MonitorDataValueType.Humidity:
+                    avgs = query.Select(g => new
+                    {
+                        targetNames.First(tar => tar.Id == g.Key).Name,
+                        Avg = g.Any() ? Math.Round(g.Average(val => val.Humidity), 2) : 0
+                    }).ToList();
+                    break;
+                    case MonitorDataValueType.Temperature:
+                    avgs = query.Select(g => new
+                    {
+                        targetNames.First(tar => tar.Id == g.Key).Name,
+                        Avg = g.Any() ? Math.Round(g.Average(val => val.Temperature), 2) : 0
+                    }).ToList();
+                    break;
+                    case MonitorDataValueType.WindSPeed:
+                    avgs = query.Select(g => new
+                    {
+                        targetNames.First(tar => tar.Id == g.Key).Name,
+                        Avg = g.Any() ? Math.Round(g.Average(val => val.WindSpeed), 2) : 0
+                    }).ToList();
+                    break;
             }
-            else
-            {
-                var group = query.GroupBy(obj => obj.TargetId).Select(item => new
-                {
-                    _ctx.KsDustProjects.FirstOrDefault(obj => obj.Id == item.Key).Name,
-                    Data = item
-                });
-            }
-            //if (post.Type == AverageCategory.District)
-            //{
-            //    var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
-            //    {
-            //        _ctx.Districts.FirstOrDefault(obj => obj.Id == item.Key).Name,
-            //        Avg = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0
-            //    }).ToList();
 
-            //    return Json(avgs, JsonRequestBehavior.AllowGet);
-            //}
-            //else
-            //{
-            //    var avgs = query.GroupBy(obj => obj.TargetId).Select(item => new
-            //    {
-            //        _ctx.KsDustProjects.FirstOrDefault(obj => obj.Id == item.Key).Name,
-            //        Avg = item.Any() ? Math.Round(item.Average(val => val.ParticulateMatter), 2) : 0
-            //    }).OrderByDescending(avg => avg.Avg).Take(10).ToList();
-
-            //    return Json(avgs, JsonRequestBehavior.AllowGet);
-            //}
+            return Json(avgs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult HistoryRankTable(HistoryTablePost post)

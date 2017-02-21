@@ -28,6 +28,18 @@ namespace Dust.Platform.Storage.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.DeviceMantanceRecords",
+                c => new
+                    {
+                        Id = c.Long(nullable: false, identity: true),
+                        Device = c.Guid(nullable: false),
+                        MantancePerson = c.String(maxLength: 50, storeType: "nvarchar"),
+                        MantanceReport = c.String(unicode: false),
+                        MantanceDateTime = c.DateTime(nullable: false, precision: 0),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.DeviceOnlineStatus",
                 c => new
                     {
@@ -191,7 +203,7 @@ namespace Dust.Platform.Storage.Migrations
                 "dbo.Reports",
                 c => new
                     {
-                        Id = c.Guid(nullable: false),
+                        Id = c.Long(nullable: false, identity: true),
                         ReportDataJson = c.String(unicode: false, storeType: "text"),
                         ReportType = c.Byte(nullable: false),
                         ReportDate = c.String(unicode: false),
@@ -254,6 +266,7 @@ namespace Dust.Platform.Storage.Migrations
             DropTable("dbo.Enterprises");
             DropTable("dbo.Districts");
             DropTable("dbo.DeviceOnlineStatus");
+            DropTable("dbo.DeviceMantanceRecords");
             DropTable("dbo.AverageMonitorDatas");
         }
     }

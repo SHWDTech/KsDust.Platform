@@ -396,6 +396,8 @@
     <Content Include="Views\Setting\DeviceRegister.cshtml" />
     <Content Include="Views\Report\Report.cshtml" />
     <Content Include="Views\Report\ReportSelecter.cshtml" />
+    <Content Include="Views\Setting\DeviceMantanceRecord.cshtml" />
+    <Content Include="Views\Setting\DeviceMantanceRecordList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

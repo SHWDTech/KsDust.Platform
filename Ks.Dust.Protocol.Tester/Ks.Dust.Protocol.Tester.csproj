@@ -72,57 +72,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WdCameraViewer\WdCameraViewer\WdCameraViewer.csproj">
-      <Project>{16eb10ad-b459-43a2-8d25-f8c5c2fb3a35}</Project>
-      <Name>WdCameraViewer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\WDYunPlatform\Platform.Utility\Platform.Utility.csproj">
       <Project>{95b28f0d-c7d4-479c-aabf-e0f8b4b0e06c}</Project>
       <Name>Platform.Utility</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\WDYunPlatform\ProtocolService\ProtocolService.csproj">
-      <Project>{cffd96ff-629e-4e23-903d-80b0082b591a}</Project>
-      <Name>ProtocolService</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\WDYunPlatform\SHWDTech.Platform.StorageConstrains\SHWDTech.Platform.StorageConstrains.csproj">
       <Project>{6b3823b8-0540-43af-9f41-498287d2dd4e}</Project>
       <Name>SHWDTech.Platform.StorageConstrains</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dust.Platform.Service\Dust.Platform.Service.csproj">
-      <Project>{60a30693-ee66-44ca-851a-a176a73f3250}</Project>
-      <Name>Dust.Platform.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\Dust.Platform.Storage\Dust.Platform.Storage.csproj">
       <Project>{e9ac4c39-d38e-4570-9faa-c62dc1c82f83}</Project>
       <Name>Dust.Platform.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\Dust.Platform.Web\Dust.Platform.Web.csproj">
-      <Project>{97106cc7-3a03-49de-81b8-4ac284bd5642}</Project>
+      <Project>{97106CC7-3A03-49DE-81B8-4AC284BD5642}</Project>
       <Name>Dust.Platform.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ks.Dust.Camera.Client\Ks.Dust.Camera.Client.csproj">
-      <Project>{881b6cd8-215d-4d80-9112-0bf979469488}</Project>
-      <Name>Ks.Dust.Camera.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ks.Dust.Camera.MainControl\Ks.Dust.Camera.MainControl.csproj">
-      <Project>{47d01556-b5a4-490c-93a0-8348b95e4403}</Project>
-      <Name>Ks.Dust.Camera.MainControl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ks.Dust.Platform.TestConsole\Ks.Dust.Platform.TestConsole.csproj">
-      <Project>{fc3594f8-f53e-4e15-8f8e-43e82f45cbec}</Project>
-      <Name>Ks.Dust.Platform.TestConsole</Name>
     </ProjectReference>
     <ProjectReference Include="..\KsDust.Platform.Protocol\KsDust.Platform.Protocol.csproj">
       <Project>{206d7430-93e4-421a-95f4-f01981235c55}</Project>
       <Name>KsDust.Platform.Protocol</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ks_Dust_Protocl_AdminTool\Ks_Dust_Protocl_AdminTool.csproj">
-      <Project>{f2089fb9-1b91-4014-8834-cb31d4ec0e03}</Project>
-      <Name>Ks_Dust_Protocl_AdminTool</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NatioanalEnvirmentEncoder\NatioanalEnvirmentEncoder.csproj">
-      <Project>{69245f64-be93-4760-af56-14aaa89cacf1}</Project>
-      <Name>NatioanalEnvirmentEncoder</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

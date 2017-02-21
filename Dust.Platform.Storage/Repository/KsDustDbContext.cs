@@ -90,5 +90,10 @@ namespace Dust.Platform.Storage.Repository
         /// 报表数据
         /// </summary>
         public virtual DbSet<Report> Reports { get; set; }
+
+        /// <summary>
+        /// 设备维保记录
+        /// </summary>
+        public virtual DbSet<DeviceMantanceRecord> DeviceMantanceRecords { get; set; }
     }
 }

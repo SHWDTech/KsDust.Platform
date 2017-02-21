@@ -35,7 +35,10 @@
           .Column("联系电话", "Mobile")
           .Column("维保时间", "LastMaintenance")
           .Column("维保状态", "MantanceStatus")
-          .Apply(ColumnOption.formatter, "mantanceFormatter"))
+          .Apply(ColumnOption.formatter, "mantanceFormatter")
+          .Column("维保记录")
+          .Apply(ColumnOption.formatter, "operater")
+          .Apply(ColumnOption.events, "operateEvents"))
 </div>
 <script type="text/javascript">
     var baseUrl = "/Setting/DeviceMantanceInfo";
@@ -45,23 +48,30 @@
         'Overdue': 255
     }
 
-    $('#mantance_all').on('click', function () {
-        refreshTable(baseUrl);
-    });
+    $('#mantance_all')
+        .on('click',
+            function () {
+                refreshTable(baseUrl);
+            });
 
-    $('#mantance_over').on('click', function () {
-        refreshTable(baseUrl + '?MantanceStatus=255');
-    });
+    $('#mantance_over')
+        .on('click',
+            function () {
+                refreshTable(baseUrl + '?MantanceStatus=255');
+            });
 
-    $('#mantance_need').on('click', function () {
-        refreshTable(baseUrl + '?MantanceStatus=1');
-    });
+    $('#mantance_need')
+        .on('click',
+            function () {
+                refreshTable(baseUrl + '?MantanceStatus=1');
+            });
 
     var refreshTable = function (url) {
-        $('#deviceMantance').bootstrapTable('refresh',
-        {
-            url: url
-        });
+        $('#deviceMantance')
+            .bootstrapTable('refresh',
+            {
+                url: url
+            });
     }
 
     var mantanceFormatter = function (value) {
@@ -73,4 +83,21 @@
             return '<img src="/Resources/Images/Site/32_32_red.png" />';
         }
     }
+
+    var operater = function (value, row, index) {
+        return [
+            '<a class="view" href="javascript:void(0)" title="查看维保记录">查看</a>',
+            '<a class="add" href="javascript:void(0)" title="添加维保记录" style="margin-left: 10px;">添加</a>'
+        ].join('');
+    }
+
+    window.operateEvents = {
+        'click .view': function (e, value, row, index) {
+            alert(row.Id);
+        },
+        'click .add':function(e, value, row, index) {
+            alert(row.Id);
+        }
+    };
+
 </script>

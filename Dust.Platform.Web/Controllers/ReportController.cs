@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
@@ -56,7 +55,7 @@ namespace Dust.Platform.Web.Controllers
             return View(reports);
         }
 
-        public ActionResult Report(Guid id)
+        public ActionResult Report(long id)
         {
             var report = _ctx.Reports.First(obj => obj.Id == id);
             return View(JsonConvert.DeserializeObject<GeneralReportViewModel>(report.ReportDataJson));

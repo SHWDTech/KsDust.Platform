@@ -3,7 +3,7 @@ using SHWDTech.Platform.StorageConstrains.Model;
 
 namespace Dust.Platform.Storage.Model
 {
-    public class Report : GuidModel
+    public class Report : LongModel
     {
         [Column(TypeName = "text")]
         public string ReportDataJson { get; set; }

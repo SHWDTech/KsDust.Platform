@@ -85,9 +85,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201702200159317_Initial.cs" />
-    <Compile Include="Migrations\201702200159317_Initial.Designer.cs">
-      <DependentUpon>201702200159317_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201702210254579_Initial.cs" />
+    <Compile Include="Migrations\201702210254579_Initial.Designer.cs">
+      <DependentUpon>201702210254579_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
@@ -97,6 +97,7 @@
     <Compile Include="Model\CameraNode.cs" />
     <Compile Include="Model\CityArea.cs" />
     <Compile Include="Model\Client.cs" />
+    <Compile Include="Model\DeviceMantanceRecord.cs" />
     <Compile Include="Model\District.cs" />
     <Compile Include="Model\Enterprise.cs" />
     <Compile Include="Model\Enum.cs" />
@@ -143,8 +144,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201702200159317_Initial.resx">
-      <DependentUpon>201702200159317_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201702210254579_Initial.resx">
+      <DependentUpon>201702210254579_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

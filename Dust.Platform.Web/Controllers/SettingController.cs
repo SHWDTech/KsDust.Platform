@@ -75,6 +75,7 @@ namespace Dust.Platform.Web.Controllers
             }
             var devs = query.OrderBy(obj => obj.Id).Skip(post.offset).Take(post.limit).Select(dev => new
             {
+                dev.Id,
                 dev.Name,
                 VendorName = dev.Vendor.Name,
                 ProjectName = dev.Project.Name,
@@ -84,6 +85,7 @@ namespace Dust.Platform.Web.Controllers
             }).ToList()
             .Select(obj => new
             {
+                obj.Id,
                 obj.Name,
                 obj.VendorName,
                 obj.ProjectName,

@@ -13,7 +13,7 @@ namespace Dust.Platform.Storage.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201702200159317_Initial"; }
+            get { return "201702210254579_Initial"; }
         }
         
         string IMigrationMetadata.Source

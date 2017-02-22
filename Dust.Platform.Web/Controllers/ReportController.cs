@@ -5,7 +5,9 @@ using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Report;
+using Dust.Platform.Web.Result;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -59,6 +61,12 @@ namespace Dust.Platform.Web.Controllers
         {
             var report = _ctx.Reports.First(obj => obj.Id == id);
             return View(JsonConvert.DeserializeObject<GeneralReportViewModel>(report.ReportDataJson));
+        }
+
+        public ActionResult ExportPeriodicReport(long id)
+        {
+            var pkg = new ExcelPackage();
+            return new ExcelResult(pkg, "");
         }
     }
 }

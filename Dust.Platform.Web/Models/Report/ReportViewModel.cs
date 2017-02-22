@@ -43,12 +43,24 @@ namespace Dust.Platform.Web.Models.Report
 
     public class DistrictDeviceInstalled : DeviceInstalled
     {
+        /// <summary>
+        /// 区县名称
+        /// </summary>
         public string DistrictName { get; set; }
 
+        /// <summary>
+        /// 建筑工地在用
+        /// </summary>
         public int ConstructionSiteInstalled { get; set; }
 
+        /// <summary>
+        /// 拌合站在用
+        /// </summary>
         public int MunicipalWorksInstalled { get; set; }
 
+        /// <summary>
+        /// 市政工地在用
+        /// </summary>
         public int MixingPlantInstalled { get; set; }
     }
 

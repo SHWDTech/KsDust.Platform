@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Dust.Platform.Service;
-using Dust.Platform.Storage.Model;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 using Dust.Platform.Storage.Repository;
-using SHWDTech.Platform.Utility;
+using Dust.Platform.Web.Models.Report;
+using Newtonsoft.Json;
+using OfficeOpenXml;
+using OfficeOpenXml.Drawing.Chart;
+using OfficeOpenXml.Style;
 
 namespace Ks.Dust.Platform.TestConsole
 {
@@ -12,274 +16,238 @@ namespace Ks.Dust.Platform.TestConsole
     {
         static void Main(string[] args)
         {
-            if (args == null) return;
-            //TestData();
-            //GenCrcModBus();
-            //GenerateSecret();
-            ParseDateString();
+            //GenerateReport();
+            ExportExcelWithChart();
         }
 
-        static void ParseDateString()
+        /// <summary>
+        /// 生成昆山扬尘报表数据
+        /// </summary>
+        public static void GenerateReport()
         {
-            var str = "2016-12-29T04:22:00.000Z";
-            var date = DateTime.Parse(str);
-            Console.WriteLine(date.ToString("yyyy-MM-dd HH:mm:ss"));
-            Console.ReadKey();
+            var report = new GeneralReportViewModel()
+            {
+                ReportTitle = "2017年2月",
+                TotalInstalled = new DeviceInstalled { Total = 50, Using = 44, Stoped = 6 },
+                ConstructionSiteInstalled = new DeviceInstalled { Total = 35, Using = 33, Stoped = 2 },
+                MunicipalWorksInstalled = new DeviceInstalled { Total = 10, Using = 8, Stoped = 2 },
+                MixingPlantInstalled = new DeviceInstalled { Total = 5, Using = 3, Stoped = 2 }
+            };
+
+            var db = new KsDustDbContext();
+            var districts = db.Districts.Where(obj => obj.Id != Guid.Empty).ToList();
+            var disInstalled = new List<DistrictDeviceInstalled>();
+            var avgs = new List<DistrictAvg>();
+            var option = new ReportBarChartOption
+            {
+                title = "各区县试点工地颗粒物浓度图表",
+                yAxisName = "颗粒物mg/m³"
+            };
+            option.series.Add(new BarOptionSeries
+            {
+                name = "PM",
+                type = "bar"
+            });
+            option.series.Add(new BarOptionSeries
+            {
+                name = "PM2.5",
+                type = "bar"
+            });
+            option.series.Add(new BarOptionSeries
+            {
+                name = "PM10",
+                type = "bar"
+            });
+            foreach (var district in districts)
+            {
+                var disIns = new DistrictDeviceInstalled
+                {
+                    DistrictName = district.Name,
+                    ConstructionSiteInstalled = 4,
+                    MunicipalWorksInstalled = 1,
+                    MixingPlantInstalled = 0
+                };
+                disInstalled.Add(disIns);
+                var avg = new DistrictAvg
+                {
+                    DistrictName = district.Name,
+                    AveragePm = 0.567,
+                    AveragePm25 = 0.433,
+                    AveragePm100 = 0.486
+                };
+                avgs.Add(avg);
+                option.xAxis.Add(district.Name);
+                option.series[0].data.Add(0.567);
+                option.series[1].data.Add(0.443);
+                option.series[2].data.Add(0.512);
+            }
+
+            report.DistrictInstalleds = disInstalled;
+            report.DistrictAvgs = avgs;
+            var projects = db.KsDustProjects.Include("District")
+                .Include("Enterprise")
+                .Where(obj => obj.Id != Guid.Empty)
+                .Take(10)
+                .ToList();
+            var top = new List<ProjectRank>();
+            var tail = new List<ProjectRank>();
+            foreach (var ksDustProject in projects)
+            {
+                var t = new ProjectRank
+                {
+                    DistrictName = ksDustProject.District.Name,
+                    EnterpriseName = ksDustProject.Enterprise.Name,
+                    Average = 0.543,
+                    ProjectName = ksDustProject.Name,
+                    Rank = "优"
+                };
+                var ta = new ProjectRank
+                {
+                    DistrictName = ksDustProject.District.Name,
+                    EnterpriseName = ksDustProject.Enterprise.Name,
+                    Average = 0.543,
+                    ProjectName = ksDustProject.Name,
+                    Rank = "差"
+                };
+                top.Add(t);
+                tail.Add(ta);
+            }
+            report.ProjectTopRanks = top;
+            report.ProjectTailRanks = tail;
+            report.BarChartOption = option;
+
+            var json = JsonConvert.SerializeObject(report);
+            using (var stream = new StreamWriter(File.OpenWrite(@"d:\mysql.json")))
+            {
+                stream.Write(json);
+            }
         }
 
-        static void GenerateSecret()
-        {
-            var code = Globals.NewIdentityCode();
-            Console.WriteLine(code);
-            Console.WriteLine(Helper.GetHash(code));
-            Console.ReadKey();
-        }
-
-        static void TestData()
+        public static void ExportExcelWithChart()
         {
             var ctx = new KsDustDbContext();
-            var disa = new District
+            var report = JsonConvert.DeserializeObject<GeneralReportViewModel>(ctx.Reports.First().ReportDataJson);
+            Console.WriteLine(report.ReportTitle);
+            using (var excelPackage = new ExcelPackage())
             {
-                Id = Guid.Empty,
-                Name = "未审核"
-            };
-            var disb = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "淀山湖镇"
-            };
-            var disc = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "玉山镇"
-            };
-            var disd = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "巴城镇"
-            };
-            var dise = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "花桥镇"
-            };
-            var disf = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "锦溪镇"
-            };
-            var disg = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "周市镇"
-            };
-            var dish = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "千灯镇"
-            };
-            var disi = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "周庄镇"
-            };
-            var disj = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "陆家镇"
-            };
-            var disk = new District
-            {
-                Id = Guid.NewGuid(),
-                Name = "张浦镇"
-            };
-            ctx.Districts.AddRange(new List<District>
-            {
-                disa,disb,disc,disd,dise,disf,disg,dish,disi,disj,disk
-            });
+                var barSheet = excelPackage.Workbook.Worksheets.Add("barChart");
+                var barChart = barSheet.Drawings.AddChart("barChart", eChartType.ColumnClustered);
+                for (var i = 1; i < 8; i++)
+                {
+                    barSheet.Column(i).Width = 20;
+                }
+                using (var range = barSheet.Cells["A1:G1"])
+                {
+                    range.Merge = true;
+                    range.Style.Font.Size = 22;
+                    range.Value = report.ReportTitle;
+                }
 
-            var enta = new Enterprise
-            {
-                Id = Guid.NewGuid(),
-                Mobile = "13500000000",
-                Name = "昆山市第一施工单位"
-            };
-            var entb = new Enterprise
-            {
-                Id = Guid.NewGuid(),
-                Mobile = "13600000000",
-                Name = "昆山市第二施工单位"
-            };
-            var entc = new Enterprise
-            {
-                Id = Guid.NewGuid(),
-                Mobile = "13700000000",
-                Name = "昆山市第三施工单位"
-            };
-            var entd = new Enterprise
-            {
-                Id = Guid.NewGuid(),
-                Mobile = "13800000000",
-                Name = "昆山市第四施工单位"
-            };
-            ctx.Enterprises.AddRange(new List<Enterprise>
-            {
-                enta,entb,entc,entd
-            });
+                //监测点总体情况
+                using (var range = barSheet.Cells["A2:G2"])
+                {
+                    range.Merge = true;
+                    range.Style.Font.Size = 22;
+                    range.Value = $"{report.ReportTitle} - 监测点总体情况";
+                }
+                barSheet.Cells["A3"].Value = "类型";
+                barSheet.Cells["B3"].Value = "安装量";
+                barSheet.Cells["C3"].Value = "在用量";
+                barSheet.Cells["D3"].Value = "停用量";
+                using (var range = barSheet.Cells["A3:G3"])
+                {
+                    range.Style.Font.Size = 14;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#d9edf7"));
+                }
+                barSheet.Cells["A4"].Value = "全市";
+                barSheet.Cells["B4"].Value = report.TotalInstalled.Total;
+                barSheet.Cells["C4"].Value = report.TotalInstalled.Using;
+                barSheet.Cells["D4"].Value = report.TotalInstalled.Stoped;
+                barSheet.Cells["A5"].Value = "建筑工地";
+                barSheet.Cells["B5"].Value = report.ConstructionSiteInstalled.Total;
+                barSheet.Cells["C5"].Value = report.ConstructionSiteInstalled.Using;
+                barSheet.Cells["D5"].Value = report.ConstructionSiteInstalled.Stoped;
+                barSheet.Cells["A6"].Value = "市政工地";
+                barSheet.Cells["B6"].Value = report.MunicipalWorksInstalled.Total;
+                barSheet.Cells["C6"].Value = report.MunicipalWorksInstalled.Using;
+                barSheet.Cells["D6"].Value = report.MunicipalWorksInstalled.Stoped;
+                barSheet.Cells["A7"].Value = "拌合站";
+                barSheet.Cells["B7"].Value = report.MixingPlantInstalled.Total;
+                barSheet.Cells["C7"].Value = report.MixingPlantInstalled.Using;
+                barSheet.Cells["D7"].Value = report.MixingPlantInstalled.Stoped;
 
-            var vena = new Vendor
-            {
-                Id = Guid.NewGuid(),
-                Mobile = "13510000000",
-                Name = "昆山市A供应商",
-                Susperintend = "赵经理"
-            };
-            var venb = new Vendor
-            {
-                Id = Guid.NewGuid(),
-                Mobile = "13520000000",
-                Name = "昆山市A供应商",
-                Susperintend = "钱经理"
-            };
-            var venc = new Vendor
-            {
-                Id = Guid.NewGuid(),
-                Mobile = "13530000000",
-                Name = "昆山市A供应商",
-                Susperintend = "孙经理"
-            };
-            var vend = new Vendor
-            {
-                Id = Guid.NewGuid(),
-                Mobile = "13540000000",
-                Name = "昆山市A供应商",
-                Susperintend = "李经理"
-            };
-            ctx.Vendors.AddRange(new List<Vendor>
-            {
-                vena,venb,venc,vend
-            });
+                //区县设备总体情况
+                using (var range = barSheet.Cells["A8:G8"])
+                {
+                    range.Merge = true;
+                    range.Style.Font.Size = 22;
+                    range.Value = $"{report.ReportTitle} - 各区县监测点总体情况";
+                }
+                using (var range = barSheet.Cells["A9:G9"])
+                {
+                    range.Style.Font.Size = 14;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#d9edf7"));
+                }
+                barSheet.Cells["A9"].Value = "区县名称";
+                barSheet.Cells["B9"].Value = "安装量";
+                barSheet.Cells["C9"].Value = "在用量";
+                barSheet.Cells["D9"].Value = "停用量";
+                barSheet.Cells["E9"].Value = "建筑工地在用";
+                barSheet.Cells["F9"].Value = "市政工地在用";
+                barSheet.Cells["G9"].Value = "拌合站在用";
+                for (var i = 10; i < report.DistrictInstalleds.Count + 10; i++)
+                {
+                    var installed = report.DistrictInstalleds[i - 10];
+                    barSheet.Cells[$"A{i}"].Value = installed.DistrictName;
+                    barSheet.Cells[$"B{i}"].Value = installed.Total;
+                    barSheet.Cells[$"C{i}"].Value = installed.Using;
+                    barSheet.Cells[$"D{i}"].Value = installed.Stoped;
+                    barSheet.Cells[$"E{i}"].Value = installed.ConstructionSiteInstalled;
+                    barSheet.Cells[$"F{i}"].Value = installed.MunicipalWorksInstalled;
+                    barSheet.Cells[$"G{i}"].Value = installed.MixingPlantInstalled;
+                }
 
-            var prja = new KsDustProject
-            {
-                Id = Guid.NewGuid(),
-                Address = "昆山市第一街道",
-                ConstructionUnit = "昆山市第一建设集团",
-                District = disb,
-                Enterprise = enta,
-                Vendor = vena,
-                Floorage = 40000.00,
-                OccupiedArea = 40000.00
-            };
-            var prjb = new KsDustProject
-            {
-                Id = Guid.NewGuid(),
-                Address = "昆山市第二街道",
-                ConstructionUnit = "昆山市第二建设集团",
-                District = disc,
-                Enterprise = entb,
-                Vendor = venb,
-                Floorage = 40000.00,
-                OccupiedArea = 40000.00
-            };
-            var prjc = new KsDustProject
-            {
-                Id = Guid.NewGuid(),
-                Address = "昆山市第三街道",
-                ConstructionUnit = "昆山市第三建设集团",
-                District = disd,
-                Enterprise = entc,
-                Vendor = venc,
-                Floorage = 40000.00,
-                OccupiedArea = 40000.00
-            };
-            var prjd = new KsDustProject
-            {
-                Id = Guid.NewGuid(),
-                Address = "昆山市第四街道",
-                ConstructionUnit = "昆山市第四建设集团",
-                District = dise,
-                Enterprise = entd,
-                Vendor = vend,
-                Floorage = 40000.00,
-                OccupiedArea = 40000.00
-            };
-            ctx.KsDustProjects.AddRange(new List<KsDustProject>
-            {
-                prja,prjb,prjc,prjd
-            });
+                var lastRow = report.DistrictInstalleds.Count + 11;
 
-            var deva = new KsDustDevice
-            {
-                Id = Guid.NewGuid(),
-                NodeId = "KSHBZBWCOM0001",
-                Project = prja,
-                Name = "昆山第一套设备",
-                Longitude = "121.3262547",
-                Latitude = "49.2651245",
-                IsOnline = true,
-                InstallDateTime = DateTime.Parse("2016-12-15"),
-                StartDateTime = DateTime.Parse("2016-12-15"),
-                LastMaintenance = DateTime.Parse("2016-12-15")
-            };
-            var devb = new KsDustDevice
-            {
-                Id = Guid.NewGuid(),
-                NodeId = "KSHBZBWCOM0001",
-                Project = prjb,
-                Name = "昆山第二套设备",
-                Longitude = "121.6521436254172651245",
-                IsOnline = true,
-                InstallDateTime = DateTime.Parse("2016-12-15"),
-                StartDateTime = DateTime.Parse("2016-12-15"),
-                LastMaintenance = DateTime.Parse("2016-12-15")
-            };
-            var devc = new KsDustDevice
-            {
-                Id = Guid.NewGuid(),
-                NodeId = "KSHBZBWCOM0003",
-                Project = prjc,
-                Name = "昆山第三套设备",
-                Longitude = "121.7662547",
-                Latitude = "49.8651245",
-                IsOnline = true,
-                InstallDateTime = DateTime.Parse("2016-12-15"),
-                StartDateTime = DateTime.Parse("2016-12-15"),
-                LastMaintenance = DateTime.Parse("2016-12-15")
-            };
-            var devd = new KsDustDevice
-            {
-                Id = Guid.NewGuid(),
-                NodeId = "KSHBZBWCOM0004",
-                Project = prja,
-                Name = "昆山第四套设备",
-                Longitude = "121.6251458",
-                Latitude = "49.2514856",
-                IsOnline = true,
-                InstallDateTime = DateTime.Parse("2016-12-15"),
-                StartDateTime = DateTime.Parse("2016-12-15"),
-                LastMaintenance = DateTime.Parse("2016-12-15")
-            };
-
-            ctx.KsDustDevices.AddRange(new List<KsDustDevice>
-            {
-                deva,
-                devb,
-                devc,
-                devd
-            });
-            ctx.SaveChanges();
-            Console.WriteLine("Done");
-            Console.ReadKey();
-        }
-
-        static void GenCrcModBus()
-        {
-            var str =
-                "QN=20161001094000000;ST=22;CN=2011;PW=123456;MN=V87AS7F0000001;CP=&&DataTime=20161001094000;a34001-Avg=0.346,a34001-Max=0.346,a34001-Min=0.346,a34001-Flag=N;a34004-Avg=0.086,a34004-Max=0.086,a34004-Min=0.086,a34004-Flag=N;a34005-Avg=0.126,a34005-Max=0.126,a34005-Min=0.126,a34005-Flag=N;a50001-Avg=62.2,a50001-Max=64.8,a50001-Min=57.3,a50001-Flag=N;a01001-Avg=24.6,a01001-Max=24.8,a01001-Min=24.3,a01001-Flag=N;a01002-Avg=72.8,a01002-Max=74.0,a01002-Min=71.3,a01002-Flag=N;a01007-Avg=0.0,a01007-Max=0.0,a01007-Min=0.0,a01007-Flag=N;a01008-Avg=128.0,a01008-Max=128.0,a01008-Min=128.0,a01008-Flag=N&&";
-            var crc = Globals.GetCrcModBus(Encoding.ASCII.GetBytes(str));
-            Console.WriteLine(crc);
-            Console.ReadKey();
+                //各区县试点工地颗粒物浓度柱状图
+                using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
+                {
+                    range.Merge = true;
+                    range.Style.Font.Size = 22;
+                    range.Value = $"{report.ReportTitle} - 各区县试点工地颗粒物浓度评价";
+                }
+                barChart.SetSize(960, 400);
+                barChart.SetPosition(lastRow, 5, 0, 5);
+                barChart.Title.Text = "各区县试点工地颗粒物浓度评价";
+                lastRow += 2;
+                var start = lastRow;
+                barSheet.Cells[$"C{lastRow}"].Value = "颗粒物";
+                barSheet.Cells[$"D{lastRow}"].Value = "PM2.5";
+                barSheet.Cells[$"E{lastRow}"].Value = "PM10";
+                lastRow += 1;
+                foreach (var avg in report.DistrictAvgs)
+                {
+                    barSheet.Cells[$"B{lastRow}"].Value = avg.DistrictName;
+                    barSheet.Cells[$"C{lastRow}"].Value = avg.AveragePm;
+                    barSheet.Cells[$"D{lastRow}"].Value = avg.AveragePm25;
+                    barSheet.Cells[$"E{lastRow}"].Value = avg.AveragePm100;
+                    lastRow++;
+                }
+                var end = lastRow;
+                var seal = barChart.Series.Add(barSheet.Cells[$"C{start + 1}:C{end - 1}"], barSheet.Cells[$"B{start + 1}:B{end - 1}"]);
+                seal.Header = "颗粒物";
+                seal.Fill.Color = ColorTranslator.FromHtml("#3398DB");
+                seal = barChart.Series.Add(barSheet.Cells[$"D{start + 1}:D{end - 1}"], barSheet.Cells[$"B{start + 1}:B{end - 1}"]);
+                seal.Header = "PM2.5";
+                seal.Fill.Color = ColorTranslator.FromHtml("#449d44");
+                seal = barChart.Series.Add(barSheet.Cells[$"E{start + 1}:E{end - 1}"], barSheet.Cells[$"B{start + 1}:B{end - 1}"]);
+                seal.Header = "PM10";
+                seal.Fill.Color = ColorTranslator.FromHtml("#286090");
+                excelPackage.File = new FileInfo(@"d:\\testBarExcel.xlsx");
+                excelPackage.Save();
+            }
         }
     }
 }

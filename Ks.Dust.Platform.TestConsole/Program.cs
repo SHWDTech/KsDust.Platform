@@ -127,7 +127,6 @@ namespace Ks.Dust.Platform.TestConsole
         {
             var ctx = new KsDustDbContext();
             var report = JsonConvert.DeserializeObject<GeneralReportViewModel>(ctx.Reports.First().ReportDataJson);
-            Console.WriteLine(report.ReportTitle);
             using (var excelPackage = new ExcelPackage())
             {
                 var barSheet = excelPackage.Workbook.Worksheets.Add("barChart");
@@ -136,6 +135,9 @@ namespace Ks.Dust.Platform.TestConsole
                 {
                     barSheet.Column(i).Width = 20;
                 }
+
+                barSheet.Column(2).Style.WrapText = true;
+                barSheet.Column(4).Style.WrapText = true;
                 using (var range = barSheet.Cells["A1:G1"])
                 {
                     range.Merge = true;
@@ -216,35 +218,112 @@ namespace Ks.Dust.Platform.TestConsole
                 {
                     range.Merge = true;
                     range.Style.Font.Size = 22;
-                    range.Value = $"{report.ReportTitle} - 各区县试点工地颗粒物浓度评价";
+                    range.Value = $"{report.ReportTitle} - 各区县试点工地颗粒物浓度柱状图";
                 }
                 barChart.SetSize(960, 400);
                 barChart.SetPosition(lastRow, 5, 0, 5);
                 barChart.Title.Text = "各区县试点工地颗粒物浓度评价";
-                lastRow += 2;
+                lastRow += 22;
+                using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
+                {
+                    range.Merge = true;
+                    range.Style.Font.Size = 22;
+                    range.Value = $"{report.ReportTitle} - 各区县试点工地颗粒物平均浓度";
+                }
+                lastRow += 1;
                 var start = lastRow;
-                barSheet.Cells[$"C{lastRow}"].Value = "颗粒物";
-                barSheet.Cells[$"D{lastRow}"].Value = "PM2.5";
-                barSheet.Cells[$"E{lastRow}"].Value = "PM10";
+                barSheet.Cells[$"A{lastRow}"].Value = "区县名称";
+                barSheet.Cells[$"B{lastRow}"].Value = "颗粒物";
+                barSheet.Cells[$"C{lastRow}"].Value = "PM2.5";
+                barSheet.Cells[$"D{lastRow}"].Value = "PM10";
+                using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
+                {
+                    range.Style.Font.Size = 14;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#d9edf7"));
+                }
                 lastRow += 1;
                 foreach (var avg in report.DistrictAvgs)
                 {
-                    barSheet.Cells[$"B{lastRow}"].Value = avg.DistrictName;
-                    barSheet.Cells[$"C{lastRow}"].Value = avg.AveragePm;
-                    barSheet.Cells[$"D{lastRow}"].Value = avg.AveragePm25;
-                    barSheet.Cells[$"E{lastRow}"].Value = avg.AveragePm100;
+                    barSheet.Cells[$"A{lastRow}"].Value = avg.DistrictName;
+                    barSheet.Cells[$"B{lastRow}"].Value = avg.AveragePm;
+                    barSheet.Cells[$"C{lastRow}"].Value = avg.AveragePm25;
+                    barSheet.Cells[$"D{lastRow}"].Value = avg.AveragePm100;
                     lastRow++;
                 }
                 var end = lastRow;
-                var seal = barChart.Series.Add(barSheet.Cells[$"C{start + 1}:C{end - 1}"], barSheet.Cells[$"B{start + 1}:B{end - 1}"]);
+                var seal = barChart.Series.Add(barSheet.Cells[$"B{start + 1}:B{end - 1}"], barSheet.Cells[$"A{start + 1}:A{end - 1}"]);
                 seal.Header = "颗粒物";
                 seal.Fill.Color = ColorTranslator.FromHtml("#3398DB");
-                seal = barChart.Series.Add(barSheet.Cells[$"D{start + 1}:D{end - 1}"], barSheet.Cells[$"B{start + 1}:B{end - 1}"]);
+                seal = barChart.Series.Add(barSheet.Cells[$"C{start + 1}:C{end - 1}"], barSheet.Cells[$"A{start + 1}:A{end - 1}"]);
                 seal.Header = "PM2.5";
                 seal.Fill.Color = ColorTranslator.FromHtml("#449d44");
-                seal = barChart.Series.Add(barSheet.Cells[$"E{start + 1}:E{end - 1}"], barSheet.Cells[$"B{start + 1}:B{end - 1}"]);
+                seal = barChart.Series.Add(barSheet.Cells[$"D{start + 1}:D{end - 1}"], barSheet.Cells[$"A{start + 1}:A{end - 1}"]);
                 seal.Header = "PM10";
                 seal.Fill.Color = ColorTranslator.FromHtml("#286090");
+
+                //工地前十名、后十名
+                lastRow += 1;
+                using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
+                {
+                    range.Merge = true;
+                    range.Style.Font.Size = 22;
+                    range.Value = $"{report.ReportTitle} - 评级为优的前十名工地";
+                }
+                lastRow += 1;
+                using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
+                {
+                    range.Style.Font.Size = 14;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#dff0d8"));
+                }
+                barSheet.Cells[$"A{lastRow}"].Value = "颗粒物浓度（mg/m³）";
+                barSheet.Cells[$"B{lastRow}"].Value = "工地名称";
+                barSheet.Cells[$"C{lastRow}"].Value = "评级";
+                barSheet.Cells[$"D{lastRow}"].Value = "建设单位";
+                barSheet.Cells[$"E{lastRow}"].Value = "所属区县";
+                lastRow += 1;
+                foreach (var topRank in report.ProjectTopRanks)
+                {
+                    barSheet.Cells[$"A{lastRow}"].Value = topRank.Average;
+                    barSheet.Cells[$"B{lastRow}"].Value = topRank.ProjectName;
+                    barSheet.Cells[$"C{lastRow}"].Value = topRank.Rank;
+                    barSheet.Cells[$"D{lastRow}"].Value = topRank.EnterpriseName;
+                    barSheet.Cells[$"E{lastRow}"].Value = topRank.DistrictName;
+                    lastRow += 1;
+                }
+
+                lastRow += 1;
+                using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
+                {
+                    range.Merge = true;
+                    range.Style.Font.Size = 22;
+                    range.Value = $"{report.ReportTitle} - 评级为优的后十名工地";
+                }
+                lastRow += 1;
+                using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
+                {
+                    range.Style.Font.Size = 14;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#f2dede"));
+                }
+                barSheet.Cells[$"A{lastRow}"].Value = "颗粒物浓度（mg/m³）";
+                barSheet.Cells[$"B{lastRow}"].Value = "工地名称";
+                barSheet.Cells[$"C{lastRow}"].Value = "评级";
+                barSheet.Cells[$"D{lastRow}"].Value = "建设单位";
+                barSheet.Cells[$"E{lastRow}"].Value = "所属区县";
+                lastRow += 1;
+                foreach (var topRank in report.ProjectTailRanks)
+                {
+                    barSheet.Cells[$"A{lastRow}"].Value = topRank.Average;
+                    barSheet.Cells[$"B{lastRow}"].Value = topRank.ProjectName;
+                    barSheet.Cells[$"C{lastRow}"].Value = topRank.Rank;
+                    barSheet.Cells[$"D{lastRow}"].Value = topRank.EnterpriseName;
+                    barSheet.Cells[$"E{lastRow}"].Value = topRank.DistrictName;
+                    lastRow += 1;
+                }
+
+
                 excelPackage.File = new FileInfo(@"d:\\testBarExcel.xlsx");
                 excelPackage.Save();
             }

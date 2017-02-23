@@ -87,6 +87,7 @@
                 option.title = {};
                 var chart = echarts.init($(panel).find('.districtChart')[0]);
                 chart.setOption(option);
+                $(panel).find('a').prop('href', '/Report/ExportPeriodicReport?id=' + $(panel).find('.reportSelecter').val());
             });
         }
     </script>

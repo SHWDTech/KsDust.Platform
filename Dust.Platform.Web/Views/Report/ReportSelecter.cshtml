@@ -6,8 +6,9 @@
 
 <div class="panel panel-info">
     <div class="panel-heading">
-        <div style="display: flex;">
-            <select class="form-control reportSelecter" style="width: 180px;">
+        <div style="">
+            <a class="glyphicon glyphicon-floppy-save" download href="" style="float: right; margin-top: 12px; cursor: pointer;" title="导出为Excel"></a>
+            <select class="reportSelecter" style="width: 180px; height: 36px;">
                 @{
                     foreach (var report in Model)
                     {

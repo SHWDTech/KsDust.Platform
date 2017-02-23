@@ -132,6 +132,7 @@
     <Compile Include="Repository\OnlineStatisticsRepository.cs" />
     <Compile Include="Repository\ProjectRepository.cs" />
     <Compile Include="Repository\VendorRepository.cs" />
+    <Compile Include="ViewModel\PeroidReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

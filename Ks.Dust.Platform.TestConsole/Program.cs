@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using Dust.Platform.Storage.Repository;
-using Dust.Platform.Web.Models.Report;
+using Dust.Platform.Storage.ViewModel;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;

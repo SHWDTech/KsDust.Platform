@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
+using Dust.Platform.Storage.ViewModel;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Report;
 using Dust.Platform.Web.Result;

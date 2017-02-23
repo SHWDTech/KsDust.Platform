@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.Camera.Client", "Ks
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.Camera.MainControl", "Ks.Dust.Camera.MainControl\Ks.Dust.Camera.MainControl.csproj", "{47D01556-B5A4-490C-93A0-8348B95E4403}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.PeroidReportGenerator", "Ks.Dust.PeroidReportGenerator\Ks.Dust.PeroidReportGenerator.csproj", "{78F570EC-7B57-42C9-B9FE-BAAB6C0C95A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{47D01556-B5A4-490C-93A0-8348B95E4403}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47D01556-B5A4-490C-93A0-8348B95E4403}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47D01556-B5A4-490C-93A0-8348B95E4403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78F570EC-7B57-42C9-B9FE-BAAB6C0C95A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78F570EC-7B57-42C9-B9FE-BAAB6C0C95A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78F570EC-7B57-42C9-B9FE-BAAB6C0C95A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78F570EC-7B57-42C9-B9FE-BAAB6C0C95A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

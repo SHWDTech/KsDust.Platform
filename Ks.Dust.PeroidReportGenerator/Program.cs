@@ -51,7 +51,7 @@ namespace Ks.Dust.PeroidReportGenerator
 
         private static bool CheckExisted()
         {
-            var nowDate = $"{DateTime.Now:yyyy-MM-dd}";
+            var nowDate = $"{DateTime.Now:yyyy-MM}-01";
             switch (_reportType)
             {
                 case CommandReportType.Month:
@@ -216,7 +216,7 @@ namespace Ks.Dust.PeroidReportGenerator
             {
                 ReportDataJson = JsonConvert.SerializeObject(model),
                 ReportType = _reportType == CommandReportType.Month ? ReportType.Month : ReportType.Year,
-                ReportDate = $"{DateTime.Now :yyyy-MM-dd}"
+                ReportDate = $"{DateTime.Now :yyyy-MM}-01"
             };
             Ctx.Reports.Add(report);
             return Ctx.SaveChanges();

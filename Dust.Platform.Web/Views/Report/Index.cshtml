@@ -7,6 +7,7 @@
 
 @section styles{
     <link href="/Content/zTreeStyle.css" rel="stylesheet">
+    <link href="/Content/bootstrap-table.min.css" rel="stylesheet" />
     <link href="/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 }
 <div style="position: relative; height: 100%;">
@@ -30,6 +31,8 @@
     <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
     <script src="~/Scripts/Utility/chartsOption.js"></script>
     <script src="/Scripts/Utility/accrodingmenu.js"></script>
+    <script src="/Scripts/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/Scripts/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
     <script src="/Scripts/moment-with-locales.min.js"></script>
     <script src="/Scripts/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
@@ -74,6 +77,16 @@
                 viewMode: 'years',
                 format: 'YYYY-MM'
             });
+            debugger;
+            $('#avg-report-table').bootstrapTable({
+                height: $('#avg-report-table').parents('.present').height() - 60
+            });
+            $('#avg-query-button').on('click', function() {
+                $('#avg-report-table').bootstrapTable('refresh', {
+                    url: '/Report/AvgReportTable?start=' + $('#avgrpStart').val() + '&end=' + $('#avgrpEnd').val() + '&percent=' + $('#avgPercent').val()
+                });
+            });
+            
             callback();
         }
 

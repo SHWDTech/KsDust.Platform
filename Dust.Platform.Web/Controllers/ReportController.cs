@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web.Mvc;
@@ -300,8 +301,29 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult AvgReportTable(AvgReportTablePost post)
         {
+            var avgs = _ctx.AverageMonitorDatas.Where(d => d.Type == AverageType.MonthAvg
+                                                           && d.Category == AverageCategory.Project
+                                                           && d.AverageDateTime > post.start
+                                                           && d.AverageDateTime < post.end)
+                .GroupBy(g => g.TargetId)
+                .Select(t => new {Project = t.Key, Avg = t.Sum(p => p.ParticulateMatter) / t.Count()})
+                .OrderBy(t => t.Avg).ToList();
+            var table = avgs.Take((int)(avgs.Count * 1.0 / 100 * post.percent)).ToList();
+            var datas = (from td in table
+                        let project = _ctx.KsDustProjects.Include("Enterprise").FirstOrDefault(p => p.Id == td.Project)
+                        select new
+                        {
+                            Rank = table.IndexOf(td) + 1,
+                            ProjectName = project?.Name,
+                            EnterpriseName = project?.Enterprise.Name,
+                            AvgPm = Math.Round(td.Avg, 3)
+                        }).ToList();
 
-            return null;
+            return Json(new
+            {
+                total = datas.Count,
+                rows = datas
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }

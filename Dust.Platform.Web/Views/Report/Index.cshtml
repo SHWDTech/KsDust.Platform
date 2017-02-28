@@ -45,7 +45,7 @@
                 '<div class="present" data-id="' + treenode.id + '" style="height: 100%; padding: 5px; border: 1px solid #bce8f1; overflow: auto;"></div>';
             $('.present').hide();
             $('.tab-content').append(content);
-            $.get('/Report/ReportSelecter?type=' + treenode.routeValue, null, function (ret) {
+            $.get(treenode.ajaxurl + treenode.routeValue, null, function (ret) {
                 $($('.present')[$('.present').length - 1]).append(ret);
                 $('.reportloader').on('click', function (e) {
                     loadReport(e);

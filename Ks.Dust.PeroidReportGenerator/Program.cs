@@ -29,7 +29,7 @@ namespace Ks.Dust.PeroidReportGenerator
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                return (int) ExecuteResult.StopWithException;
+                return (int)ExecuteResult.StopWithException;
             }
             return ret;
         }
@@ -37,7 +37,7 @@ namespace Ks.Dust.PeroidReportGenerator
         private static int GenerateReport()
         {
             if (CheckExisted()) return (int)ExecuteResult.Done;
-            var report = new GeneralReportViewModel {ReportTitle = MakeTitle()};
+            var report = new GeneralReportViewModel { ReportTitle = MakeTitle() };
             CalcInstalled(report);
             GetDistrictReportData(report);
             ProcessProjectsRank(report);
@@ -157,7 +157,7 @@ namespace Ks.Dust.PeroidReportGenerator
                             .OrderByDescending(a => a.AverageDateTime)
                             .FirstOrDefault();
                 }
-                else if(_reportType == CommandReportType.Year)
+                else if (_reportType == CommandReportType.Year)
                 {
                     avg =
                         Ctx.AverageMonitorDatas.Where(a => a.TargetId == district.Id && a.Type == AverageType.Year)
@@ -167,6 +167,13 @@ namespace Ks.Dust.PeroidReportGenerator
                 option.series[0].data.Add(avg?.ParticulateMatter ?? 0);
                 option.series[1].data.Add(avg?.Pm25 ?? 0);
                 option.series[2].data.Add(avg?.Pm100 ?? 0);
+                model.DistrictAvgs.Add(new DistrictAvg
+                {
+                    DistrictName = district.Name,
+                    AveragePm = avg?.ParticulateMatter ?? 0,
+                    AveragePm25 = avg?.Pm25 ?? 0,
+                    AveragePm100 = avg?.Pm100 ?? 0
+                });
             }
             model.BarChartOption = option;
         }
@@ -178,7 +185,8 @@ namespace Ks.Dust.PeroidReportGenerator
             if (_reportType == CommandReportType.Month)
             {
                 avgDatas = Ctx.AverageMonitorDatas.Where(a => a.Category == AverageCategory.Project && a.Type == AverageType.MonthAvg && a.AverageDateTime > compareDate).ToList();
-            }else if (_reportType == CommandReportType.Year)
+            }
+            else if (_reportType == CommandReportType.Year)
             {
                 avgDatas = Ctx.AverageMonitorDatas.Where(a => a.Category == AverageCategory.Project && a.Type == AverageType.Year && a.AverageDateTime > compareDate).ToList();
             }
@@ -216,7 +224,7 @@ namespace Ks.Dust.PeroidReportGenerator
             {
                 ReportDataJson = JsonConvert.SerializeObject(model),
                 ReportType = _reportType == CommandReportType.Month ? ReportType.Month : ReportType.Year,
-                ReportDate = $"{DateTime.Now :yyyy-MM}-01"
+                ReportDate = $"{DateTime.Now:yyyy-MM}-01"
             };
             Ctx.Reports.Add(report);
             return Ctx.SaveChanges();

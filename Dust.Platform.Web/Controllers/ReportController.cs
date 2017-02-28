@@ -42,13 +42,20 @@ namespace Dust.Platform.Web.Controllers
                 {
                     id = "monthReport",
                     name = "月报表",
-                    routeValue = ReportType.Month
+                    routeValue = ReportType.Month,
+                    ajaxurl = "/Report/ReportSelecter?type="
                 },
                 new Nodes
                 {
                     id = "yearReport",
                     name = "年报表",
-                    routeValue = ReportType.Year
+                    routeValue = ReportType.Year,
+                    ajaxurl = "/Report/ReportSelecter?type="
+                },
+                new Nodes
+                {
+                    id = "avgReport",
+                    name = "均值排名报表"
                 }
             };
 
@@ -194,18 +201,21 @@ namespace Dust.Platform.Web.Controllers
                 lastRow++;
             }
             var end = lastRow;
-            var seal = barChart.Series.Add(barSheet.Cells[$"B{start + 1}:B{end - 1}"],
+            if ((end - start) > 1)
+            {
+                var seal = barChart.Series.Add(barSheet.Cells[$"B{start + 1}:B{end - 1}"],
                 barSheet.Cells[$"A{start + 1}:A{end - 1}"]);
-            seal.Header = "颗粒物";
-            seal.Fill.Color = ColorTranslator.FromHtml("#3398DB");
-            seal = barChart.Series.Add(barSheet.Cells[$"C{start + 1}:C{end - 1}"],
-                barSheet.Cells[$"A{start + 1}:A{end - 1}"]);
-            seal.Header = "PM2.5";
-            seal.Fill.Color = ColorTranslator.FromHtml("#449d44");
-            seal = barChart.Series.Add(barSheet.Cells[$"D{start + 1}:D{end - 1}"],
-                barSheet.Cells[$"A{start + 1}:A{end - 1}"]);
-            seal.Header = "PM10";
-            seal.Fill.Color = ColorTranslator.FromHtml("#286090");
+                seal.Header = "颗粒物";
+                seal.Fill.Color = ColorTranslator.FromHtml("#3398DB");
+                seal = barChart.Series.Add(barSheet.Cells[$"C{start + 1}:C{end - 1}"],
+                    barSheet.Cells[$"A{start + 1}:A{end - 1}"]);
+                seal.Header = "PM2.5";
+                seal.Fill.Color = ColorTranslator.FromHtml("#449d44");
+                seal = barChart.Series.Add(barSheet.Cells[$"D{start + 1}:D{end - 1}"],
+                    barSheet.Cells[$"A{start + 1}:A{end - 1}"]);
+                seal.Header = "PM10";
+                seal.Fill.Color = ColorTranslator.FromHtml("#286090");
+            }
 
             //工地前十名、后十名
             lastRow += 1;

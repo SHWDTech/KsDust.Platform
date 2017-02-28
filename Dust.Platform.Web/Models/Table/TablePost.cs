@@ -71,4 +71,13 @@ namespace Dust.Platform.Web.Models.Table
     {
         public MantanceStatus? MantanceStatus { get; set; }
     }
+
+    public class AvgReportTablePost : TablePost
+    {
+        public DateTime start { get; set; }
+
+        public DateTime end { get; set; }
+
+        public int percent { get; set; }
+    }
 }

@@ -29,5 +29,7 @@ namespace Dust.Platform.Web.Models.Home
         public object routeValue { get; set; }
 
         public string callBack { get; set; }
+
+        public object param { get; set; }
     }
 }

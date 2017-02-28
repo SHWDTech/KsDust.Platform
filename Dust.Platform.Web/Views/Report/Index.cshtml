@@ -7,6 +7,7 @@
 
 @section styles{
     <link href="/Content/zTreeStyle.css" rel="stylesheet">
+    <link href="/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 }
 <div style="position: relative; height: 100%;">
     <div class="col-lg-2 accroding-menu" style="height: 100%;">
@@ -29,6 +30,8 @@
     <script src="~/Scripts/Utility/jquery.ztree.all.min.js"></script>
     <script src="~/Scripts/Utility/chartsOption.js"></script>
     <script src="/Scripts/Utility/accrodingmenu.js"></script>
+    <script src="/Scripts/moment-with-locales.min.js"></script>
+    <script src="/Scripts/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
         var tabPopUp = function (event, treeid, treenode) {
             if ($('.tabBar a[data-target=' + treenode.id + ']').length !== 0) {
@@ -45,16 +48,35 @@
                 '<div class="present" data-id="' + treenode.id + '" style="height: 100%; padding: 5px; border: 1px solid #bce8f1; overflow: auto;"></div>';
             $('.present').hide();
             $('.tab-content').append(content);
-            $.get(treenode.ajaxurl + treenode.routeValue, null, function (ret) {
-                $($('.present')[$('.present').length - 1]).append(ret);
-                $('.reportloader').on('click', function (e) {
-                    loadReport(e);
+            $.get(treenode.ajaxurl, treenode.routeValue,
+                function (ret) {
+                    $($('.present')[$('.present').length - 1]).append(ret);
+                    if (treenode.callBack != null) {
+                        window[treenode.callBack](treenode.param, function () {
+                            currentli.find('a').click(function () {
+                                tabSwitch(currentli.find('a'));
+                            });
+                        }, treenode);
+                    }
                 });
-            });
-            currentli.find('a').click(function () {
-                tabSwitch(currentli.find('a'));
-            });
         }
+
+        var onLoadButtonClick = function (param, callback, treenode) {
+            $('.reportloader').on('click', function (e) {
+                loadReport(e);
+            });
+            callback();
+        };
+
+        var setupAvgReport = function (param, callback, treenode) {
+            $('.datepicker').datetimepicker({
+                locale: 'zh-cn',
+                viewMode: 'years',
+                format: 'YYYY-MM'
+            });
+            callback();
+        }
+
         var tabSwitch = function (a) {
             $('.tabBar ul>li').removeClass('active');
             $(a).parent('li').addClass('active');

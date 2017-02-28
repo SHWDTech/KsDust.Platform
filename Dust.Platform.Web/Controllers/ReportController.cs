@@ -7,6 +7,7 @@ using Dust.Platform.Storage.Repository;
 using Dust.Platform.Storage.ViewModel;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Report;
+using Dust.Platform.Web.Models.Table;
 using Dust.Platform.Web.Result;
 using Newtonsoft.Json;
 using OfficeOpenXml;
@@ -42,20 +43,34 @@ namespace Dust.Platform.Web.Controllers
                 {
                     id = "monthReport",
                     name = "月报表",
-                    routeValue = ReportType.Month,
-                    ajaxurl = "/Report/ReportSelecter?type="
+                    routeValue = new
+                    {
+                        type = ReportType.Month
+                    },
+                    ajaxurl = "/Report/ReportSelecter",
+                    callBack = "onLoadButtonClick"
                 },
                 new Nodes
                 {
                     id = "yearReport",
                     name = "年报表",
-                    routeValue = ReportType.Year,
-                    ajaxurl = "/Report/ReportSelecter?type="
+                    routeValue = new
+                    {
+                        type = ReportType.Year
+                    },
+                    ajaxurl = "/Report/ReportSelecter",
+                    callBack = "onLoadButtonClick"
                 },
                 new Nodes
                 {
                     id = "avgReport",
-                    name = "均值排名报表"
+                    name = "均值排名报表",
+                    ajaxurl = "/Report/AvgReport",
+                    callBack = "setupAvgReport",
+                    param = new
+                    {
+                        tableUrl = "/Report/AvgReportTable"
+                    }
                 }
             };
 
@@ -279,6 +294,14 @@ namespace Dust.Platform.Web.Controllers
             }
 
             return new ExcelResult(excelPackage, $"{report.ReportTitle}.xlsx");
+        }
+
+        public ActionResult AvgReport() => View();
+
+        public ActionResult AvgReportTable(AvgReportTablePost post)
+        {
+
+            return null;
         }
     }
 }

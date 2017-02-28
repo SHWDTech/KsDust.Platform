@@ -398,6 +398,7 @@
     <Content Include="Views\Report\ReportSelecter.cshtml" />
     <Content Include="Views\Setting\DeviceMantanceRecord.cshtml" />
     <Content Include="Views\Setting\DeviceMantanceRecordList.cshtml" />
+    <Content Include="Views\Report\AvgReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -436,7 +437,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>4528</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

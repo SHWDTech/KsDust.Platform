@@ -1,0 +1,34 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div style="">
+            <a class="glyphicon glyphicon-floppy-save" download href="" style="float: right; margin-top: 6px; cursor: pointer;" title="导出为Excel"></a>
+            <label>开始时间：</label>
+            <input type="text" class="form-control datepicker" id="avgrpStart" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.AddYears(-1).ToString("yyyy-MM")" />
+            <label>结束时间：</label>
+            <input type="text" class="form-control datepicker" id="avgrpEnd" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.ToString("yyyy-MM")" />
+            <label>显示比例：</label>
+            <input type="text" class="form-control" style="width: 50px; display: inline-block; height: 24px;" value="70"/>
+            <label>%</label>
+            <button type="button" id="avg-query-button" style="border: 0; background: transparent;">
+                <span class="glyphicon glyphicon-search" style="display: inline-block; cursor: pointer; width: 20px;"></span>
+            </button>
+        </div>
+    </div>
+    <div class="panel-body" style="overflow-y: auto;">
+        @{ var table = Html.BootstrapTable(null, TablePaginationOption.server, new
+            {
+                id = "avg-report-table",
+                data_page_size = 50
+            });
+            var builder = table.Column("排名", "Rank")
+                                       .Column("工程名称", "ProjectName")
+                                       .Column("建设单位", "EnterpriseName")
+                                       .Column("颗粒物均值(mg/m³)", "AvgPm");
+        }
+        @(builder)
+    </div>
+</div>

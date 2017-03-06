@@ -41,7 +41,7 @@ namespace Dust.Platform.Service.Controllers
                     {
                         id = district.Id,
                         name = district.Name,
-                        count = devs.Count(),
+                        count = dev.Count(),
                         tspAvg = avg?.ParticulateMatter ?? 0
                     }).ToList();
         }

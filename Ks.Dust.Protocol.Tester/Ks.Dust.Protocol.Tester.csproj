@@ -76,22 +76,6 @@
       <Project>{95b28f0d-c7d4-479c-aabf-e0f8b4b0e06c}</Project>
       <Name>Platform.Utility</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\WDYunPlatform\SHWDTech.Platform.StorageConstrains\SHWDTech.Platform.StorageConstrains.csproj">
-      <Project>{6b3823b8-0540-43af-9f41-498287d2dd4e}</Project>
-      <Name>SHWDTech.Platform.StorageConstrains</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dust.Platform.Storage\Dust.Platform.Storage.csproj">
-      <Project>{e9ac4c39-d38e-4570-9faa-c62dc1c82f83}</Project>
-      <Name>Dust.Platform.Storage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dust.Platform.Web\Dust.Platform.Web.csproj">
-      <Project>{97106CC7-3A03-49DE-81B8-4AC284BD5642}</Project>
-      <Name>Dust.Platform.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KsDust.Platform.Protocol\KsDust.Platform.Protocol.csproj">
-      <Project>{206d7430-93e4-421a-95f4-f01981235c55}</Project>
-      <Name>KsDust.Platform.Protocol</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -16,6 +16,7 @@ namespace Dust.Platform.Storage.Model
         /// </summary>
         [Required]
         [Display(Name = "相关设备ID")]
+        [Index("IX_DeviceGuid_AlarmDateTime", IsClustered = true, Order = 0)]
         public Guid DeviceId { get; set; }
 
         /// <summary>
@@ -35,6 +36,7 @@ namespace Dust.Platform.Storage.Model
         /// 报警时间
         /// </summary>
         [Display(Name = "报警时间")]
+        [Index("IX_DeviceGuid_AlarmDateTime", IsClustered = true, Order = 1)]
         public DateTime AlarmDateTime { get; set; }
 
         /// <summary>

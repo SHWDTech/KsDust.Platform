@@ -8,6 +8,7 @@ namespace Dust.Platform.Storage.Model
         [Column(TypeName = "text")]
         public string ReportDataJson { get; set; }
 
+        [Index("IX_ReportType", IsClustered = true, Order = 0)]
         public ReportType ReportType { get; set; }
 
         public string ReportDate { get; set; }

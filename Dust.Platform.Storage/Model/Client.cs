@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Dust.Platform.Service.Models;
 
-namespace Dust.Platform.Service.Entities
+namespace Dust.Platform.Storage.Model
 {
     public class Client
     {

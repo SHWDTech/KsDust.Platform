@@ -16,6 +16,7 @@ namespace Dust.Platform.Storage.Model
         /// </summary>
         [Required]
         [Display(Name = "工程类型")]
+        [Index("IX_ProjectType_DistrictId_EnterpriseId", IsClustered = true, Order = 0)]
         public ProjectType ProjectType { get; set; }
 
         /// <summary>
@@ -23,6 +24,7 @@ namespace Dust.Platform.Storage.Model
         /// </summary>
         [Required]
         [Display(Name = "所属区县ID")]
+        [Index("IX_ProjectType_DistrictId_EnterpriseId", IsClustered = true, Order = 1)]
         public Guid DistrictId { get; set; } = Guid.Empty;
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace Dust.Platform.Storage.Model
         /// </summary>
         [Required]
         [Display(Name = "所属施工单位ID")]
+        [Index("IX_ProjectType_DistrictId_EnterpriseId", IsClustered = true, Order = 2)]
         public Guid EnterpriseId { get; set; } = Guid.Empty;
 
         /// <summary>

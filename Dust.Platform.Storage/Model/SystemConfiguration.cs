@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using SHWDTech.Platform.StorageConstrains.Model;
 
 namespace Dust.Platform.Storage.Model
@@ -16,6 +17,7 @@ namespace Dust.Platform.Storage.Model
         [Required]
         [MaxLength(500)]
         [Display(Name = "配置类型")]
+        [Index("IX_ConfigType_ConfigName", IsClustered = true, Order = 0)]
         public string ConfigType { get; set; }
 
         /// <summary>
@@ -24,6 +26,7 @@ namespace Dust.Platform.Storage.Model
         [Required]
         [MaxLength(500)]
         [Display(Name = "配置名称")]
+        [Index("IX_ConfigType_ConfigName", IsClustered = true, Order = 1)]
         public string ConfigName { get; set; }
 
         /// <summary>

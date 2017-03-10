@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using SHWDTech.Platform.StorageConstrains.Model;
 
 namespace Dust.Platform.Storage.Model
@@ -10,24 +11,28 @@ namespace Dust.Platform.Storage.Model
         /// <summary>
         /// 工程类型
         /// </summary>
+        [Index("IX_ProjectType_AverageCategory_AverageType_TargetId_UpdateTime", IsClustered = true, Order = 0)]
         public ProjectType ProjectType { get; set; }
 
         /// <summary>
         /// 对象ID
         /// </summary>
         [Required]
+        [Index("IX_ProjectType_AverageCategory_AverageType_TargetId_UpdateTime", IsClustered = true, Order = 3)]
         public Guid TargetId { get; set; }
 
         /// <summary>
         /// 对象类型
         /// </summary>
         [Required]
+        [Index("IX_ProjectType_AverageCategory_AverageType_TargetId_UpdateTime", IsClustered = true, Order = 1)]
         public AverageCategory Category { get; set; }
 
         /// <summary>
         /// 均值类型
         /// </summary>
         [Required]
+        [Index("IX_ProjectType_AverageCategory_AverageType_TargetId_UpdateTime", IsClustered = true, Order = 2)]
         public AverageType Type { get; set; }
 
         /// <summary>
@@ -68,6 +73,7 @@ namespace Dust.Platform.Storage.Model
         /// <summary>
         /// 均值时间
         /// </summary>
+        [Index("IX_ProjectType_AverageCategory_AverageType_TargetId_UpdateTime", IsClustered = true, Order = 4)]
         public DateTime AverageDateTime { get; set; }
     }
 }

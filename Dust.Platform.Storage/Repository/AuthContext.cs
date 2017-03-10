@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using Dust.Platform.Service.Entities;
+using Dust.Platform.Storage.Model;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Dust.Platform.Storage.Repository

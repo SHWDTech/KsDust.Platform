@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Dust.Platform.Service.Entities;
+using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;

@@ -89,6 +89,10 @@
     <Compile Include="Migrations\201702210254579_Initial.Designer.cs">
       <DependentUpon>201702210254579_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703101425405_Add_Index.cs" />
+    <Compile Include="Migrations\201703101425405_Add_Index.Designer.cs">
+      <DependentUpon>201703101425405_Add_Index.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -147,6 +151,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201702210254579_Initial.resx">
       <DependentUpon>201702210254579_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703101425405_Add_Index.resx">
+      <DependentUpon>201703101425405_Add_Index.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

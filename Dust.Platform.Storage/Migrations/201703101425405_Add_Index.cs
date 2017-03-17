@@ -7,9 +7,10 @@ namespace Dust.Platform.Storage.Migrations
     {
         public override void Up()
         {
-            DropIndex("dbo.KsDustAlarms", new[] { "DeviceId" });
-            DropIndex("dbo.KsDustProjects", new[] { "DistrictId" });
-            DropIndex("dbo.KsDustProjects", new[] { "EnterpriseId" });
+            //MYSQL 外键默认创建索引，非聚合索引可以保留。
+            //DropIndex("dbo.KsDustAlarms", new[] { "DeviceId" });
+            //DropIndex("dbo.KsDustProjects", new[] { "DistrictId" });
+            //DropIndex("dbo.KsDustProjects", new[] { "EnterpriseId" });
             CreateIndex("dbo.AverageMonitorDatas", new[] { "ProjectType", "Category", "Type", "TargetId", "AverageDateTime" }, clustered: true, name: "IX_ProjectType_AverageCategory_AverageType_TargetId_UpdateTime");
             CreateIndex("dbo.DeviceMantanceRecords", new[] { "Device", "MantanceDateTime" }, clustered: true);
             CreateIndex("dbo.DeviceOnlineStatus", new[] { "DeviceGuid", "StatusType", "UpdateTime" }, clustered: true);
@@ -28,9 +29,9 @@ namespace Dust.Platform.Storage.Migrations
             DropIndex("dbo.DeviceOnlineStatus", new[] { "DeviceGuid", "StatusType", "UpdateTime" });
             DropIndex("dbo.DeviceMantanceRecords", new[] { "Device", "MantanceDateTime" });
             DropIndex("dbo.AverageMonitorDatas", "IX_ProjectType_AverageCategory_AverageType_TargetId_UpdateTime");
-            CreateIndex("dbo.KsDustProjects", "EnterpriseId");
-            CreateIndex("dbo.KsDustProjects", "DistrictId");
-            CreateIndex("dbo.KsDustAlarms", "DeviceId");
+            //CreateIndex("dbo.KsDustProjects", "EnterpriseId");
+            //CreateIndex("dbo.KsDustProjects", "DistrictId");
+            //CreateIndex("dbo.KsDustAlarms", "DeviceId");
         }
     }
 }

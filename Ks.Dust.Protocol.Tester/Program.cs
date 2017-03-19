@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -21,8 +22,11 @@ namespace Ks.Dust.Protocol.Tester
 
         private static int _count;
 
+        private static IPAddress _localIp;
+
         static void Main(string[] args)
         {
+            _localIp = IPAddress.Parse(ConfigurationManager.AppSettings["localIp"]);
             _devices = new[]
             {
                 "V87AS7F0000001",
@@ -54,6 +58,7 @@ namespace Ks.Dust.Protocol.Tester
                     SendHour();
                 }
             }
+            // ReSharper disable once FunctionNeverReturns
         }
 
         static void Connect()
@@ -61,9 +66,9 @@ namespace Ks.Dust.Protocol.Tester
             foreach (var t in _devices)
             {
                 var client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                client.Bind(new IPEndPoint(IPAddress.Parse("192.168.1.105"), _port));
+                client.Bind(new IPEndPoint(_localIp, _port));
                 _port++;
-                client.Connect(new IPEndPoint(IPAddress.Parse("192.168.1.105"), 18254));
+                client.Connect(new IPEndPoint(_localIp, 18254));
                 client.Send(GetData(t, "2011"));
                 ClientSockets.Add(t, client);
                 Thread.Sleep(100);

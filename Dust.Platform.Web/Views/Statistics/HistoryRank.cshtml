@@ -28,8 +28,8 @@
                         <option value="2">天</option>
                         <option value="3">月</option>
                     </select>
-                    <input type="text" class="form-control datepicker" id="@Model.StartDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss")" />
-                    <input type="text" class="form-control datepicker" id="@Model.EndDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" />
+                    <input type="text" class="form-control datepicker" id="@Model.StartDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm")" />
+                    <input type="text" class="form-control datepicker" id="@Model.EndDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" />
                     <button type="button" class="query-button" style="border: 0; background: transparent;">
                         <span class="glyphicon glyphicon-search" style="display: inline-block; cursor: pointer; width: 20px;"></span>
                     </button>

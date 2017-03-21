@@ -133,10 +133,12 @@
 
         var setupRankChart = function (par, callback) {
             $('#' + 'start_' + par.Uuid).datetimepicker({
-                locale: 'zh-cn'
+                locale: 'zh-cn',
+                format: 'YYYY年MM月DD日 HH点mm分'
             });
             $('#' + 'end_' + par.Uuid).datetimepicker({
-                locale: 'zh-cn'
+                locale: 'zh-cn',
+                format: 'YYYY年MM月DD日 HH点mm分'
             });
             $('#chart_' + par.Uuid).height($('#chart_' + par.Uuid).parents('.chartContainer').height() - 30);
             var chart = echarts.init(document.getElementById('chart_' + par.Uuid));
@@ -184,10 +186,12 @@
         var setupHistoryQuery = function (par, callback, node) {
             var tarId = node.routeValue.TargetId;
             $('#' + 'hqstart_' + tarId).datetimepicker({
-                locale: 'zh-cn'
+                locale: 'zh-cn',
+                format: 'YYYY年MM月DD日 HH点mm分'
             });
             $('#' + 'hqend_' + tarId).datetimepicker({
-                locale: 'zh-cn'
+                locale: 'zh-cn',
+                format: 'YYYY年MM月DD日 HH点mm分'
             });
             $('#hqchart_' + tarId).height($('#hqchart_' + tarId).parents('.chartContainer').height() - 30);
             var chart = echarts.init(document.getElementById('hqchart_' + tarId));
@@ -234,10 +238,12 @@
         var setupHistoryStats = function (par, callback, node) {
             var tarId = node.routeValue.TargetId;
             $('#' + 'hsstart_' + tarId).datetimepicker({
-                locale: 'zh-cn'
+                locale: 'zh-cn',
+                format: 'YYYY年MM月DD日 HH点mm分'
             });
             $('#' + 'hsend_' + tarId).datetimepicker({
-                locale: 'zh-cn'
+                locale: 'zh-cn',
+                format: 'YYYY年MM月DD日 HH点mm分'
             });
             $('#hschart_' + tarId).height($('#hschart_' + tarId).parents('.chartContainer').height() - 30);
             var chart = echarts.init(document.getElementById('hschart_' + tarId));

@@ -398,9 +398,10 @@
     <Content Include="Views\Setting\DeviceRegister.cshtml" />
     <Content Include="Views\Report\Report.cshtml" />
     <Content Include="Views\Report\ReportSelecter.cshtml" />
+    <Content Include="Views\Setting\EditDeviceMantanceRecord.cshtml" />
     <Content Include="Views\Setting\DeviceMantanceRecord.cshtml" />
-    <Content Include="Views\Setting\DeviceMantanceRecordList.cshtml" />
     <Content Include="Views\Report\AvgReport.cshtml" />
+    <Content Include="Views\Shared\AddSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

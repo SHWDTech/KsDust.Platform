@@ -40,6 +40,20 @@
           .Apply(ColumnOption.formatter, "operater")
           .Apply(ColumnOption.events, "operateEvents"))
 </div>
+
+<div class="modal fade" id="dmrModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dmrModallabel"></h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     var baseUrl = "/Setting/DeviceMantanceInfo";
     var mantanceStatus = {
@@ -84,7 +98,7 @@
         }
     }
 
-    var operater = function (value, row, index) {
+    var operater = function () {
         return [
             '<a class="view" href="javascript:void(0)" title="查看维保记录">查看</a>',
             '<a class="add" href="javascript:void(0)" title="添加维保记录" style="margin-left: 10px;">添加</a>'
@@ -92,11 +106,25 @@
     }
 
     window.operateEvents = {
-        'click .view': function (e, value, row, index) {
-            alert(row.Id);
+        'click .view': function (e, value, row) {
+            $.get('/Setting/DeviceMantanceRecord', { deviceGuid: row.Id }, function (ret) {
+                $('#dmrModal .modal-body').html(ret);
+                $('#deviceMantanceRecord').bootstrapTable({
+                    width: '600px'
+                });
+                $('#deviceMantanceRecord').bootstrapTable('refresh',
+                    {
+                        url: "/Setting/DeviceMantanceTable" + "?deviceGuid=" + row.Id
+                    });
+                $('#dmrModal').modal();
+            });
         },
-        'click .add':function(e, value, row, index) {
-            alert(row.Id);
+        'click .add': function (e, value, row) {
+            $.get('/Setting/EditDeviceMantanceRecord', { deviceGuid: row.Id }, function (ret) {
+                $('#dmrModal .modal-body').html(ret);
+                $('#dmrModallabel').html('添加维保记录');
+                $('#dmrModal').modal();
+            });
         }
     };
 

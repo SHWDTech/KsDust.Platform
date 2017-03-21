@@ -87,6 +87,7 @@ chartsOption.timelineOptions = function(params) {
             formatter: function (formatpar) {
                 formatpar = formatpar[0];
                 var date = new Date(formatpar.name);
+                if (formatpar.value == null) return '';
                 return date.getFullYear() +
                     '-' +
                     date.getMonth() +

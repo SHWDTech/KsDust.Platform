@@ -1,0 +1,48 @@
+﻿@using Dust.Platform.Web.Models.Setting
+@model EditDeviceMantanceViewModel
+
+@{
+    Layout = null;
+}
+
+<div id="editDmr">
+    @using (Ajax.BeginForm("EditDeviceMantanceRecord", null, new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "editDmr"
+    }, new { id = "editDmrform" }))
+    {
+        @Html.HiddenFor(m => m.Device)
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <td>维保设备</td>
+                    <td colspan="3">@Html.DisplayTextFor(m => m.DeviceName)</td>
+                </tr>
+                <tr>
+                    <td>维保人</td>
+                    <td colspan="3">@Html.TextBoxFor(m => m.MantancePerson)</td>
+                </tr>
+                <tr>
+                    <td>
+                        备注
+                    </td>
+                    <td colspan="3">
+                        @Html.TextAreaFor(m => m.MantanceReport, new { style = "height: 400px; width: 100%;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        @Html.ValidationMessage("Save", null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <button type="submit" class="btn btn-primary" style="float: right;">确认提交</button>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+    }
+</div>

@@ -72,6 +72,11 @@ namespace Dust.Platform.Web.Models.Table
         public MantanceStatus? MantanceStatus { get; set; }
     }
 
+    public class DeviceMantanceRecordTablePost : TablePost
+    {
+        public Guid DeviceGuid { get; set; }
+    }
+
     public class AvgReportTablePost : TablePost
     {
         public DateTime start { get; set; }

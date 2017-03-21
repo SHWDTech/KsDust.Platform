@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Setting;
@@ -147,6 +148,83 @@ namespace Dust.Platform.Web.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult EditDeviceMantanceRecord(Guid deviceGuid)
+        {
+            var dev = _ctx.KsDustDevices.FirstOrDefault(d => d.Id == deviceGuid);
+            if (dev == null)
+            {
+                ViewBag.CustomerErrorMessage = "未找到指定设备信息。";
+                return PartialView("Error");
+            }
+            var model = new EditDeviceMantanceViewModel
+            {
+                DeviceName = dev.Name,
+                MantancePerson = User.Identity.Name,
+                Device = dev.Id
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EditDeviceMantanceRecord(EditDeviceMantanceViewModel model)
+        {
+            try
+            {
+                var record = new DeviceMantanceRecord
+                {
+                    Device = model.Device,
+                    MantancePerson = model.MantancePerson,
+                    MantanceReport = model.MantanceReport,
+                    MantanceDateTime = DateTime.Now
+                };
+                _ctx.DeviceMantanceRecords.Add(record);
+                _ctx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                var errorCode = Globals.NewIdentityCode();
+                LogService.Instance.Error($"新增维保记录失败，错误码：{errorCode}", ex);
+                ModelState.AddModelError("Save", $"新增维保记录失败，请联系管理员， 错误码：{errorCode}。");
+                return View(model);
+            }
+
+            return Json("添加成功！");
+        }
+
+        [HttpGet]
+        public ActionResult DeviceMantanceRecord(Guid deviceGuid)
+        {
+            var dev = _ctx.KsDustDevices.FirstOrDefault(d => d.Id == deviceGuid);
+            if (dev == null)
+            {
+                ViewBag.CustomerErrorMessage = "未找到指定设备信息。";
+                return PartialView("Error");
+            }
+
+            ViewBag.TableTitle = $"{dev.Name} - 维保记录查询";
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult DeviceMantanceTable(DeviceMantanceRecordTablePost post)
+        {
+            var query = _ctx.DeviceMantanceRecords.Where(r => r.Device == post.DeviceGuid);
+            var records = query.OrderBy(item => item.MantanceDateTime).Skip(post.offset).Take(post.limit)
+                .ToList()
+                .Select(obj => new
+                {
+                    obj.MantancePerson,
+                    obj.MantanceReport,
+                    MantanceDateTime = obj.MantanceDateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                });
+            return Json(new
+            {
+                total = query.Count(),
+                rows = records
+            },JsonRequestBehavior.AllowGet);
         }
     }
 }

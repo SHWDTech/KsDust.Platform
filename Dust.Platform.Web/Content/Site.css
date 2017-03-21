@@ -1,4 +1,5 @@
 ﻿* {
+    -ms-border-radius: 0 !important;
     border-radius: 0 !important;
 }
 
@@ -30,7 +31,7 @@ body {
 }
 
 .datepicker {
-    padding:0 10px
+    padding: 0 10px;
 }
 /*.table > thead > tr > td {
     padding: 4px !important;
@@ -67,20 +68,20 @@ footer {
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
+/*input,
 select,
 textarea {
     max-width: 280px;
-}
+}*/
 
 .tabBar {
     width: 100%;
     max-height: 30px;
 }
 
-.tabBar > .nav > li > a {
-    padding: 4px 10px;
-}
+    .tabBar > .nav > li > a {
+        padding: 4px 10px;
+    }
 
 .map {
     height: 56%;
@@ -196,4 +197,16 @@ textarea {
 
 .text-danger {
     color: red;
+}
+
+.server-error {
+    background-color: #fff;
+}
+
+td textarea {
+    max-width: 1920px;
+    width: 100%;
+    -webkit-box-sizing: border-box; /* <=iOS4, <= Android  2.3 */
+    -moz-box-sizing: border-box; /* FF1+ */
+    box-sizing: border-box; /* Chrome, IE8, Opera, Safari 5.1*/
 }

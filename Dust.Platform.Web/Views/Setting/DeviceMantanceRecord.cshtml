@@ -2,3 +2,13 @@
     Layout = null;
 }
 
+<div>
+    <h4 class="text-center">@ViewBag.TableTitle</h4>
+    @(Html.BootstrapTable("deviceMantanceRecord", "", TablePaginationOption.server, new
+      {
+          data_page_size = 25
+      })
+          .Column("维保人", "MantancePerson")
+          .Column("维保时间", "MantanceDateTime")
+          .Column("维保报告", "MantanceReport"))
+</div>

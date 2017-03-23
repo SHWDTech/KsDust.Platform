@@ -25,6 +25,7 @@ namespace Dust.Platform.Service.Controllers
             _rsaCryptoServiceProvider.FromXmlString(BasicConfig.RsaPrivateKey);
         }
 
+        [AllowAnonymous]
         public HttpResponseMessage Get([FromUri]Guid cameraId)
         {
             var camera = _ctx.KsDustCameras.FirstOrDefault(obj => obj.Id == cameraId);
@@ -33,6 +34,7 @@ namespace Dust.Platform.Service.Controllers
             {
                 SerialNumber = camera.SerialNumber,
                 User = camera.UserName,
+                IpServerAddr = _ctx.SystemConfigurations.First(obj => obj.ConfigName == "CameraIpServer").ConfigValue,
                 Password = camera.Password
             };
 

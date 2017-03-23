@@ -157,6 +157,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
+    <Compile Include="Controllers\CameraController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SettingController.cs" />
@@ -365,10 +366,13 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\Utility\accrodingmenu.js" />
+    <Content Include="Scripts\Utility\base.js" />
+    <Content Include="Scripts\Utility\camera.js" />
     <Content Include="Scripts\Utility\chartsOption.js" />
     <Content Include="Scripts\Utility\echarts.min.js" />
     <Content Include="Scripts\Utility\jquery.ztree.all.min.js" />
     <Content Include="Scripts\Utility\jquery.ztree.exhide.min.js" />
+    <Content Include="Scripts\Utility\popUp.js" />
     <Content Include="Scripts\Utility\sha.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -402,6 +406,7 @@
     <Content Include="Views\Setting\DeviceMantanceRecord.cshtml" />
     <Content Include="Views\Report\AvgReport.cshtml" />
     <Content Include="Views\Shared\AddSuccess.cshtml" />
+    <Content Include="Views\Camera\Preview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

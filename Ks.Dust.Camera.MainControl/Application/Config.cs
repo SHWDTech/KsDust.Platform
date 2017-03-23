@@ -2,11 +2,10 @@
 using System.Configuration;
 using System.IO;
 using System.Windows;
-using Ks.Dust.Camera.MainControl.Camera;
 
 namespace Ks.Dust.Camera.MainControl.Application
 {
-    internal class Config
+    internal static class Config
     {
         private static string _serverAddress;
 
@@ -115,8 +114,7 @@ namespace Ks.Dust.Camera.MainControl.Application
 
         public static bool VedioStorageReady { get; set; }
 
-        public static string CameraNodesJsonFile 
-            => $"{Environment.CurrentDirectory}\\Storage\\cameraNodes.json";
+        public static string CameraNodesJsonFile { get; } = $"{Environment.CurrentDirectory}\\Storage\\cameraNodes.json";
 
         public static string CameraNodesTempJsonFile
             => $"{Environment.CurrentDirectory}\\Storage\\_cameraNodes_temp.json";

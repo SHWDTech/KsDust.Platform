@@ -5,7 +5,7 @@ using Ks.Dust.Camera.MainControl.Application;
 
 namespace Ks.Dust.Camera.MainControl.Storage
 {
-    public class ApplicationStorage
+    public static class ApplicationStorage
     {
         public static void LoadDownloadFile()
         {

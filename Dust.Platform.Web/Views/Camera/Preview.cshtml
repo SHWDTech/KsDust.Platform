@@ -1,0 +1,18 @@
+﻿<div style="margin: auto; width: 800px;">
+    <input type="hidden" value="@ViewBag.CameraId" id="cameraId" />
+    <div id="ieAlarm" style="display: none;">
+        <p>
+            <span style="color: red;">
+                请使用IE浏览器查看工地视频，暂不支持非IE浏览器。
+            </span>
+        </p>
+    </div>
+    <div id="ocxAlarm" style="display: none;">
+        <p>请先安装视频插件，<span><a href="/Resources/WdCameraViewer.msi">点击此处下载安装</a></span>。<span style="color: red;">并以管理员权限运行安装。</span></p>
+    </div>
+    <object classid="clsid:16EB10AD-B459-43A2-8D25-F8C5C2FB3A35" width="800" height="600" id="WdCameraViewer" style="z-index: -1;"></object>
+</div>
+<div style="margin: auto; width: 800px;">
+    <button class="btn btn-default" onmousedown="camViewer.Preview()">开始预览</button>
+    <button class="btn btn-default" onmousedown="camViewer.left()" onmouseup="camViewer.leftStop()" onmouseleave="camViewer.leftStop()">左转</button>
+</div>

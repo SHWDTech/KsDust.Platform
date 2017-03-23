@@ -12,9 +12,9 @@ using OfficeOpenXml.Style;
 
 namespace Ks.Dust.Platform.TestConsole
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             //GenerateReport();
             ExportExcelWithChart();
@@ -230,7 +230,7 @@ namespace Ks.Dust.Platform.TestConsole
                     range.Style.Font.Size = 22;
                     range.Value = $"{report.ReportTitle} - 各区县试点工地颗粒物平均浓度";
                 }
-                lastRow += 1;
+                lastRow++;
                 var start = lastRow;
                 barSheet.Cells[$"A{lastRow}"].Value = "区县名称";
                 barSheet.Cells[$"B{lastRow}"].Value = "颗粒物";
@@ -242,7 +242,7 @@ namespace Ks.Dust.Platform.TestConsole
                     range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                     range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#d9edf7"));
                 }
-                lastRow += 1;
+                lastRow++;
                 foreach (var avg in report.DistrictAvgs)
                 {
                     barSheet.Cells[$"A{lastRow}"].Value = avg.DistrictName;
@@ -263,14 +263,14 @@ namespace Ks.Dust.Platform.TestConsole
                 seal.Fill.Color = ColorTranslator.FromHtml("#286090");
 
                 //工地前十名、后十名
-                lastRow += 1;
+                lastRow++;
                 using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
                 {
                     range.Merge = true;
                     range.Style.Font.Size = 22;
                     range.Value = $"{report.ReportTitle} - 评级为优的前十名工地";
                 }
-                lastRow += 1;
+                lastRow++;
                 using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
                 {
                     range.Style.Font.Size = 14;
@@ -282,7 +282,7 @@ namespace Ks.Dust.Platform.TestConsole
                 barSheet.Cells[$"C{lastRow}"].Value = "评级";
                 barSheet.Cells[$"D{lastRow}"].Value = "建设单位";
                 barSheet.Cells[$"E{lastRow}"].Value = "所属区县";
-                lastRow += 1;
+                lastRow++;
                 foreach (var topRank in report.ProjectTopRanks)
                 {
                     barSheet.Cells[$"A{lastRow}"].Value = topRank.Average;
@@ -290,17 +290,17 @@ namespace Ks.Dust.Platform.TestConsole
                     barSheet.Cells[$"C{lastRow}"].Value = topRank.Rank;
                     barSheet.Cells[$"D{lastRow}"].Value = topRank.EnterpriseName;
                     barSheet.Cells[$"E{lastRow}"].Value = topRank.DistrictName;
-                    lastRow += 1;
+                    lastRow++;
                 }
 
-                lastRow += 1;
+                lastRow++;
                 using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
                 {
                     range.Merge = true;
                     range.Style.Font.Size = 22;
                     range.Value = $"{report.ReportTitle} - 评级为优的后十名工地";
                 }
-                lastRow += 1;
+                lastRow++;
                 using (var range = barSheet.Cells[$"A{lastRow}:G{lastRow}"])
                 {
                     range.Style.Font.Size = 14;
@@ -312,7 +312,7 @@ namespace Ks.Dust.Platform.TestConsole
                 barSheet.Cells[$"C{lastRow}"].Value = "评级";
                 barSheet.Cells[$"D{lastRow}"].Value = "建设单位";
                 barSheet.Cells[$"E{lastRow}"].Value = "所属区县";
-                lastRow += 1;
+                lastRow++;
                 foreach (var topRank in report.ProjectTailRanks)
                 {
                     barSheet.Cells[$"A{lastRow}"].Value = topRank.Average;
@@ -320,9 +320,8 @@ namespace Ks.Dust.Platform.TestConsole
                     barSheet.Cells[$"C{lastRow}"].Value = topRank.Rank;
                     barSheet.Cells[$"D{lastRow}"].Value = topRank.EnterpriseName;
                     barSheet.Cells[$"E{lastRow}"].Value = topRank.DistrictName;
-                    lastRow += 1;
+                    lastRow++;
                 }
-
 
                 excelPackage.File = new FileInfo(@"d:\\testBarExcel.xlsx");
                 excelPackage.Save();

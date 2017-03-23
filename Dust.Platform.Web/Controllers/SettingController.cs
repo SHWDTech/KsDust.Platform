@@ -55,10 +55,7 @@ namespace Dust.Platform.Web.Controllers
             return nodes;
         }
 
-        public ActionResult DeviceMantance()
-        {
-            return View();
-        }
+        public ActionResult DeviceMantance() => View();
 
         public ActionResult DeviceMantanceInfo(DevMantanceTablePost post)
         {
@@ -114,10 +111,7 @@ namespace Dust.Platform.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult DeviceRegister()
-        {
-            return View();
-        }
+        public ActionResult DeviceRegister() => View();
 
         [HttpPost]
         public ActionResult DeviceRegister(DeviceRegisterViewModel model)

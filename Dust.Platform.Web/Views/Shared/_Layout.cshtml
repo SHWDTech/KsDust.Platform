@@ -48,7 +48,23 @@
     <footer>
         <p style="text-align: center; border-top: 1px solid #e7e7e7; padding-top: 5px;">&copy; @DateTime.Now.Year - 昆山住建委</p>
     </footer>
+    <!-- Modal -->
+    <div class="modal fade" id="modalPopUp" tabindex="-1" role="dialog" aria-labelledby="modalPopUpLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalPopUpLabel"></h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/base")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

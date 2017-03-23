@@ -14,6 +14,8 @@ namespace Dust.Platform.Storage.Model
 
         public Guid DeviceGuid { get; set; }
 
+        public string IpServerAddr { get; set; }
+
         [JsonIgnore]
         public byte[] DomainBytes => Encoding.UTF8.GetBytes(SerialNumber);
     }

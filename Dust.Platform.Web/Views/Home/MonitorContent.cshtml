@@ -164,6 +164,9 @@
                                                         @{ var devStatus = Model.Device.IsOnline ? "在线" : "离线";}
                                                         <td>@devStatus</td>
                                                     </tr>
+                                                    <tr>
+                                                        <td colspan="4"><button class="btn btn-link" onclick="viewCamera('@Model.TargetId','@Model.Device.Name')"><span class="glyphicon glyphicon-facetime-video">查看现场视频</span></button></td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                                                 break;

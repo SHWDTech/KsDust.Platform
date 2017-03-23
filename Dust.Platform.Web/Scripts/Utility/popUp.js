@@ -12,7 +12,6 @@
                 modal.find('.modal-dialog').addClass('modal-sm');
             default:
         }
-        debugger;
         if (options.call != null) {
             options.call();
         }

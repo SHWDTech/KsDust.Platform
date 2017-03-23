@@ -10,9 +10,14 @@
     <div id="ocxAlarm" style="display: none;">
         <p>请先安装视频插件，<span><a href="/Resources/WdCameraViewer.msi">点击此处下载安装</a></span>。<span style="color: red;">并以管理员权限运行安装。</span></p>
     </div>
-    <object classid="clsid:16EB10AD-B459-43A2-8D25-F8C5C2FB3A35" width="800" height="600" id="WdCameraViewer" style="z-index: -1;"></object>
+    <object classid="clsid:D3262329-D458-4EF4-AA98-6CC75AAA4E31" width="800" height="600" id="WdCameraViewer" style="z-index: -1;"></object>
 </div>
 <div style="margin: auto; width: 800px;">
-    <button class="btn btn-default" onmousedown="camViewer.Preview()">开始预览</button>
-    <button class="btn btn-default" onmousedown="camViewer.left()" onmouseup="camViewer.leftStop()" onmouseleave="camViewer.leftStop()">左转</button>
+    <button class="btn btn-default" onmousedown="camViewer.preview(event)">启动预览</button>
+    <button class="btn btn-default" onmousedown="camViewer.left()" onmouseup="camViewer.leftStop()" onmouseleave="camViewer.leftStop()">云台左转</button>
+    <button class="btn btn-default" onmousedown="camViewer.right()" onmouseup="camViewer.rightStop()" onmouseleave="camViewer.rightStop()">云台右转</button>
+    <button class="btn btn-default" onmousedown="camViewer.up()" onmouseup="camViewer.upStop()" onmouseleave="camViewer.upStop()">云台上升</button>
+    <button class="btn btn-default" onmousedown="camViewer.down()" onmouseup="camViewer.downStop()" onmouseleave="camViewer.downStop()">云台下降</button>
+    <button class="btn btn-default" onmousedown="camViewer.far()" onmouseup="camViewer.farStop()" onmouseleave="camViewer.farStop()">焦点调远</button>
+    <button class="btn btn-default" onmousedown="camViewer.near()" onmouseup="camViewer.nearStop()" onmouseleave="camViewer.nearStop()">焦点调近</button>
 </div>

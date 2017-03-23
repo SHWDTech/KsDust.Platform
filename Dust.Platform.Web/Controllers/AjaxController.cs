@@ -3,8 +3,13 @@ using System.Web.Mvc;
 using Dust.Platform.Web.Models.Ajax;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
+using SHWDTech.Platform.Utility.ExtensionMethod;
+using SHWDTech.Platform.Utility.Serialize;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -121,6 +126,36 @@ namespace Dust.Platform.Web.Controllers
             if (pm < 0.4) return Models.Ajax.DeviceStatus.Good;
             if(pm < 1) return Models.Ajax.DeviceStatus.Alarm;
             return Models.Ajax.DeviceStatus.Bad;
+        }
+
+        [HttpGet]
+        public ActionResult CameraLogin(Guid devId)
+        {
+            var rsaCryptoServiceProvider = new RSACryptoServiceProvider();
+            var key = _ctx.SystemConfigurations.First(
+                    cfg => cfg.ConfigType == "RsaKeys" && cfg.ConfigName == "RsaPrivate").ConfigValue;
+            rsaCryptoServiceProvider.FromXmlString(key);
+
+            var camera = _ctx.KsDustCameras.FirstOrDefault(obj => obj.DeviceId == devId);
+            if (camera == null) return Json(new
+            {
+                success = false
+            }, JsonRequestBehavior.AllowGet);
+            var cameraLogin = new CameraLogin
+            {
+                SerialNumber = camera.SerialNumber,
+                User = camera.UserName,
+                IpServerAddr = _ctx.SystemConfigurations.First(obj => obj.ConfigName == "CameraIpServer").ConfigValue,
+                Password = camera.Password
+            };
+
+            var encryptString = rsaCryptoServiceProvider.EncryptString(XmlSerializerHelper.Serialize(cameraLogin));
+
+            return Json(new
+            {
+                success = true,
+                par = Convert.ToBase64String(Encoding.UTF8.GetBytes(encryptString))
+            },JsonRequestBehavior.AllowGet);
         }
     }
 }

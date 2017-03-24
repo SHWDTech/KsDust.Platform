@@ -1,4 +1,4 @@
-﻿namespace Dust.Platform.Service.Models
+﻿namespace Dust.Platform.Storage.Model
 {
     public enum ApplicationTypes
     {

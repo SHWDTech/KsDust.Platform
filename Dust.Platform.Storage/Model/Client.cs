@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Dust.Platform.Service.Models;
 
 namespace Dust.Platform.Storage.Model
 {

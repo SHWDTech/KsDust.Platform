@@ -95,5 +95,15 @@ namespace Dust.Platform.Storage.Repository
         /// 设备维保记录
         /// </summary>
         public virtual DbSet<DeviceMantanceRecord> DeviceMantanceRecords { get; set; }
+
+        /// <summary>
+        /// 系统通知
+        /// </summary>
+        public virtual DbSet<Notice> Notices { get; set; }
+
+        /// <summary>
+        /// 用户通知列表
+        /// </summary>
+        public virtual DbSet<UserClientNotice> UserClientNotices { get; set; }
     }
 }

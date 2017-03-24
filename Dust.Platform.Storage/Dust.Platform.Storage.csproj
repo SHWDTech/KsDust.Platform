@@ -93,6 +93,10 @@
     <Compile Include="Migrations\201703101425405_Add_Index.Designer.cs">
       <DependentUpon>201703101425405_Add_Index.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703240727054_Add_Notice.cs" />
+    <Compile Include="Migrations\201703240727054_Add_Notice.Designer.cs">
+      <DependentUpon>201703240727054_Add_Notice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -110,6 +114,10 @@
     <Compile Include="Model\KsDustDevice.cs" />
     <Compile Include="Model\KsDustMonitorData.cs" />
     <Compile Include="Model\KsDustProject.cs" />
+    <Compile Include="Model\Message.cs" />
+    <Compile Include="Model\MessageType.cs" />
+    <Compile Include="Model\NoticeClientType.cs" />
+    <Compile Include="Model\NoticeType.cs" />
     <Compile Include="Model\MonitorType.cs" />
     <Compile Include="Model\DeviceOnlineStatus.cs" />
     <Compile Include="Model\OnlineStatistics.cs" />
@@ -118,6 +126,8 @@
     <Compile Include="Model\Report.cs" />
     <Compile Include="Model\ReportType.cs" />
     <Compile Include="Model\SystemConfiguration.cs" />
+    <Compile Include="Model\Notice.cs" />
+    <Compile Include="Model\UserClientNotice.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Model\UserRelatedEntity.cs" />
     <Compile Include="Model\Vendor.cs" />
@@ -154,6 +164,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703101425405_Add_Index.resx">
       <DependentUpon>201703101425405_Add_Index.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703240727054_Add_Notice.resx">
+      <DependentUpon>201703240727054_Add_Notice.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

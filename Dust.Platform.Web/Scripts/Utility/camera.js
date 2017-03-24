@@ -6,13 +6,12 @@
         },
         preview: function (e) {
             if (camViewer.started) {
-                e.target.innerHTML = "开始预览";
                 camViewer.target.StopPreview();
             } else {
-                e.target.innerHTML = "停止预览";
                 camViewer.target.StartPreview();
             }
-            camViewer.started = !camViewer.started;
+            camViewer.started = !camViewer.target.PreviewStarted;
+            e.target.innerHTML = camViewer.started ? "停止预览" : "开始预览";
         },
         tryLogin: function (parString) {
             camViewer.target.TryLogin(parString);

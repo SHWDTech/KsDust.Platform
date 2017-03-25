@@ -140,17 +140,21 @@
             return matchedNodes;
         }
 
-        var viewCamera = function (id,name) {
-            $.get('/Camera/Preview', null, function (ret) {
-                popUp({
-                    title: "工地实时视频查看 - " + name,
-                    body: ret,
-                    size: 'large',
-                    call: function () {
-                        initCamera(id);
-                        
-                    }
-                });
+        var viewCamera = function (id, name) {
+            $.get({
+                url: '/Camera/Preview',
+                cache: false,
+                success: function(ret) {
+                    popUp({
+                        title: "工地实时视频查看 - " + name,
+                        body: ret,
+                        size: 'large',
+                        call: function() {
+                            initCamera(id);
+
+                        }
+                    });
+                }
             });
         }
 
@@ -168,14 +172,20 @@
             }
             $('#viewerLayer').show();
             var wdCameraViewer = document.getElementById('WdCameraViewer');
-            $.get('/Ajax/CameraLogin', { devId: devid }, function (ret) {
-                if (ret.success) {
-                    wdCameraViewer.TryLogin(ret.par);
-                    camViewer.setup(wdCameraViewer);
-                } else {
-                    wdCameraViewer.Message("获取摄像头登录信息失败，请联系管理员。");
+            $.get({
+                url: '/Ajax/CameraLogin',
+                data: { devId: devid },
+                cache: false,
+                success: function (ret) {
+                    if (ret.success) {
+                        wdCameraViewer.TryLogin(ret.par);
+                        camViewer.setup(wdCameraViewer);
+                    } else {
+                        wdCameraViewer.Message("获取摄像头登录信息失败，请联系管理员。");
+                    }
                 }
             });
+            return null;
         }
     </script>
 }

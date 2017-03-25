@@ -166,7 +166,7 @@
                 $('#ocxAlarm').show();
                 return null;
             }
-            $('#WdCameraViewer').show();
+            $('#viewerLayer').show();
             var wdCameraViewer = document.getElementById('WdCameraViewer');
             $.get('/Ajax/CameraLogin', { devId: devid }, function (ret) {
                 if (ret.success) {

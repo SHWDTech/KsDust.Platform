@@ -97,6 +97,10 @@
     <Compile Include="Migrations\201703240727054_Add_Notice.Designer.cs">
       <DependentUpon>201703240727054_Add_Notice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703250917334_AddOnlineStatistics.cs" />
+    <Compile Include="Migrations\201703250917334_AddOnlineStatistics.Designer.cs">
+      <DependentUpon>201703250917334_AddOnlineStatistics.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -167,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703240727054_Add_Notice.resx">
       <DependentUpon>201703240727054_Add_Notice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703250917334_AddOnlineStatistics.resx">
+      <DependentUpon>201703250917334_AddOnlineStatistics.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

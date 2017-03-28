@@ -101,6 +101,14 @@
     <Compile Include="Migrations\201703250917334_AddOnlineStatistics.Designer.cs">
       <DependentUpon>201703250917334_AddOnlineStatistics.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703280703213_DropColumnIsReaded.cs" />
+    <Compile Include="Migrations\201703280703213_DropColumnIsReaded.Designer.cs">
+      <DependentUpon>201703280703213_DropColumnIsReaded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703281020514_AddColumnRelatedValueToTableNotice.cs" />
+    <Compile Include="Migrations\201703281020514_AddColumnRelatedValueToTableNotice.Designer.cs">
+      <DependentUpon>201703281020514_AddColumnRelatedValueToTableNotice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -174,6 +182,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703250917334_AddOnlineStatistics.resx">
       <DependentUpon>201703250917334_AddOnlineStatistics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703280703213_DropColumnIsReaded.resx">
+      <DependentUpon>201703280703213_DropColumnIsReaded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703281020514_AddColumnRelatedValueToTableNotice.resx">
+      <DependentUpon>201703281020514_AddColumnRelatedValueToTableNotice.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

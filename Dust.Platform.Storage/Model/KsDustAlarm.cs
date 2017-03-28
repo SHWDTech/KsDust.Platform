@@ -38,11 +38,5 @@ namespace Dust.Platform.Storage.Model
         [Display(Name = "报警时间")]
         [Index("IX_DeviceGuid_AlarmDateTime", IsClustered = true, Order = 1)]
         public DateTime AlarmDateTime { get; set; }
-
-        /// <summary>
-        /// 是否已经阅读
-        /// </summary>
-        [Display(Name = "是否已经阅读")]
-        public bool IsReaded { get; set; }
     }
 }

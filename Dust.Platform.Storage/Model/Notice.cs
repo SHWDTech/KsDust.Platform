@@ -10,6 +10,9 @@ namespace Dust.Platform.Storage.Model
 
         public virtual DateTime NoticeDateTime { get; set; }
 
+        [MaxLength(36)]
+        public virtual string RelatedValue { get; set; }
+
         [MaxLength(200)]
         public virtual string Title { get; set; }
 

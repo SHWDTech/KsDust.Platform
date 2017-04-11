@@ -109,6 +109,10 @@
     <Compile Include="Migrations\201703281020514_AddColumnRelatedValueToTableNotice.Designer.cs">
       <DependentUpon>201703281020514_AddColumnRelatedValueToTableNotice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704111000367_AlterTableVendor.cs" />
+    <Compile Include="Migrations\201704111000367_AlterTableVendor.Designer.cs">
+      <DependentUpon>201704111000367_AlterTableVendor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -188,6 +192,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703281020514_AddColumnRelatedValueToTableNotice.resx">
       <DependentUpon>201703281020514_AddColumnRelatedValueToTableNotice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704111000367_AlterTableVendor.resx">
+      <DependentUpon>201704111000367_AlterTableVendor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

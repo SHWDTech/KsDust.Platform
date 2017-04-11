@@ -15,6 +15,7 @@ namespace Dust.Platform.Storage.Model
         /// </summary>
         [Display(Name = "供应商名称")]
         [MaxLength(100)]
+        [Required(ErrorMessage = "必须填写供应商名称！")]
         public string Name { get; set; }
 
         /// <summary>
@@ -22,6 +23,7 @@ namespace Dust.Platform.Storage.Model
         /// </summary>
         [Display(Name = "负责人名称")]
         [MaxLength(100)]
+        [Required(ErrorMessage = "必须填写负责人名称！")]
         public string Susperintend { get; set; }
 
         /// <summary>
@@ -29,6 +31,7 @@ namespace Dust.Platform.Storage.Model
         /// </summary>
         [Display(Name = "联系电话")]
         [MaxLength(100)]
+        [Required(ErrorMessage = "必须填写负责人联系电话！")]
         public string Mobile { get; set; }
     }
 }

@@ -1,0 +1,58 @@
+﻿@model Dust.Platform.Storage.Model.Vendor
+@{
+    Layout = null;
+}
+
+<div id="vendorContent">
+    @using (Ajax.BeginForm("Vendor", "Setting", Model.Id, new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "vendorContent"
+    }, new { @class = "form-group" }))
+    {
+        <div>
+            @Html.HiddenFor(m => m.Id)
+            <table class="table table-bordered table-hover table-striped">
+                <tbody>
+                <tr>
+                    <td>
+                        @Html.LabelFor(m => m.Name)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(m => m.Susperintend)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Susperintend, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Susperintend)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(m => m.Mobile)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Mobile, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Mobile)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        @Html.ValidationSummary()
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="direction: rtl;">
+                        <input type="submit" value="确认" class="btn btn-success"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

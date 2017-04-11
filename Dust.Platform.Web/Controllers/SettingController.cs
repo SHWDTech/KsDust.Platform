@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
@@ -49,6 +51,13 @@ namespace Dust.Platform.Web.Controllers
                     name = "设备注册",
                     nodetype = "setting",
                     ajaxurl = "/Setting/DeviceRegister"
+                },
+                new Nodes
+                {
+                    id = "vendorsInfo",
+                    name = "供应商信息",
+                    nodetype = "setting",
+                    ajaxurl = "/Setting/VendorsInfo"
                 }
             };
 
@@ -117,7 +126,7 @@ namespace Dust.Platform.Web.Controllers
         public ActionResult DeviceRegister(DeviceRegisterViewModel model)
         {
             var user = AccountProcess.FindUserByName(HttpContext.User.Identity.Name);
-            if (!AccountProcess.UserIsInRole(user.Id, "VendorManager"))
+            if (user == null || !AccountProcess.UserIsInRole(user.Id, "VendorManager"))
             {
                 ModelState.AddModelError("Vendor", "只有设备提供商可以注册设备。");
                 return View(model);
@@ -218,7 +227,60 @@ namespace Dust.Platform.Web.Controllers
             {
                 total = query.Count(),
                 rows = records
-            },JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult VendorsInfo() => View();
+
+        public ActionResult VendorsTable(TablePost post)
+        {
+            var total = _ctx.Vendors.Count(v => v.Id != Guid.Empty);
+            var rows = _ctx.Vendors.Where(ven => ven.Id != Guid.Empty).OrderBy(v => v.Id).Skip(post.offset).Take(post.limit);
+
+            return Json(new
+            {
+                total,
+                rows
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult Vendor(Guid id)
+        {
+            var model = id == Guid.Empty ? new Vendor() : _ctx.Vendors.FirstOrDefault(v => v.Id == id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Vendor(Vendor model)
+        {
+            try
+            {
+                if (model.Id == Guid.Empty)
+                {
+                    model.Id = Globals.NewCombId();
+                    _ctx.Vendors.Add(model);
+                    _ctx.SaveChanges();
+                    ModelState.AddModelError("AddSuccess", "添加成功！");
+                }
+                else
+                {
+                    _ctx.Vendors.Attach(model);
+                    _ctx.Entry(model).State = EntityState.Modified;
+                    _ctx.SaveChanges();
+                    ModelState.AddModelError("UpdateSuccess", "更新成功！");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is DbEntityValidationException))
+                {
+                    ModelState.AddModelError("发生未知异常，请联系管理人员", ex.Message);
+                }
+                return View(model);
+            }
+
+            return View(model);
         }
     }
 }

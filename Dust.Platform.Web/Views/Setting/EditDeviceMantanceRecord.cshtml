@@ -22,14 +22,14 @@
                 </tr>
                 <tr>
                     <td>维保人</td>
-                    <td colspan="3">@Html.TextBoxFor(m => m.MantancePerson)</td>
+                    <td colspan="3">@Html.TextBoxFor(m => m.MantancePerson, new { @class = "form-control" })</td>
                 </tr>
                 <tr>
                     <td>
                         备注
                     </td>
                     <td colspan="3">
-                        @Html.TextAreaFor(m => m.MantanceReport, new { style = "height: 400px; width: 100%;" })
+                        @Html.TextAreaFor(m => m.MantanceReport, new { @class = "form-control", style = "height: 400px; width: 100%;" })
                     </td>
                 </tr>
                 <tr>

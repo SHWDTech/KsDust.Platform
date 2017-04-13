@@ -97,6 +97,10 @@
     <Compile Include="AuthMigrations\201704120904189_AddIdNullable.Designer.cs">
       <DependentUpon>201704120904189_AddIdNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="AuthMigrations\201704130841472_ReModelRole.cs" />
+    <Compile Include="AuthMigrations\201704130841472_ReModelRole.Designer.cs">
+      <DependentUpon>201704130841472_ReModelRole.cs</DependentUpon>
+    </Compile>
     <Compile Include="AuthMigrations\Configuration.cs" />
     <Compile Include="Migrations\201702210254579_Initial.cs" />
     <Compile Include="Migrations\201702210254579_Initial.Designer.cs">
@@ -200,6 +204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AuthMigrations\201704120904189_AddIdNullable.resx">
       <DependentUpon>201704120904189_AddIdNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AuthMigrations\201704130841472_ReModelRole.resx">
+      <DependentUpon>201704130841472_ReModelRole.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702210254579_Initial.resx">
       <DependentUpon>201702210254579_Initial.cs</DependentUpon>

@@ -2,7 +2,7 @@
 
 namespace Dust.Platform.Storage.Model
 {
-    public class DustRole : LongModel
+    public class DustRole : GuidModel
     {
         public string DisplayName { get; set; }
 

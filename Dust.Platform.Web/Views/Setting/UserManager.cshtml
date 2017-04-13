@@ -1,4 +1,7 @@
-﻿<div class="modal fade" id="dmrModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
+﻿@{
+    Layout = null;
+}
+<div class="modal fade" id="dmrModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -15,31 +18,32 @@
     <div style="margin-bottom: 5px;">
         <input type="button" class="btn btn-primary" value="新增登陆用户" onclick="addVendor()" />
     </div>
-    @(Html.BootstrapTable("vendors", "/Setting/VendorsTable", TablePaginationOption.server, new
+    @(Html.BootstrapTable("users", "/Setting/UserTable", TablePaginationOption.server, new
 {
     data_page_size = 25
 })
-          .Column("用户名", "Name")
-          .Column("用户所属角色", "Susperintend")
-          .Column("联系电话", "Mobile")
+          .Column("用户名", "UserName")
+          .Column("用户所属角色", "UserRole")
+          .Column("联系电话", "PhoneNumber")
           .Column("操作")
-          .Apply(ColumnOption.formatter, "vendorOperaterFormatter")
+          .Apply(ColumnOption.formatter, "userOperaterFormatter")
           .Apply(ColumnOption.events, "operateEvents"))
 </div>
 
 <script type="text/javascript">
-    $('#vendors').bootstrapTable({
-        height: $('#vendors').parents('.tab-content').height() - 75
+    $('#users').bootstrapTable({
+        height: $('#users').parents('.tab-content').height() - 75
     });
-    window.vendorOperaterFormatter = function () {
+    window.userOperaterFormatter = function () {
         return [
-            '<a class="update" href="javascript:void(0)" title="更新厂商信息">更新</a>'
+            '<a class="update" href="javascript:void(0)" title="更新用户信息">更新</a>',
+            '<a class="delete" href="javascript:void(0)" title="删除用户" style="margin-left: 10px;">删除</a>',
+            '<a class="password" href="javascript:void(0)" title="修改密码" style="margin-left: 10px;">修改密码</a>'
         ].join('');
     }
 
     var addVendor = function () {
-        debugger;
-        $.get('/Setting/Vendor', { id: '00000000-0000-0000-0000-000000000000' }, function (ret) {
+        $.get('/Setting/UserEdit', { id: '00000000-0000-0000-0000-000000000000' }, function (ret) {
             $('#dmrModal .modal-body').html(ret);
             $('#dmrModal').modal();
         });
@@ -47,7 +51,19 @@
 
     window.operateEvents = {
         'click .update': function (e, value, row) {
-            $.get('/Setting/Vendor', { id: row.Id }, function (ret) {
+            $.get('/Setting/UserEdit', { id: row.Id }, function (ret) {
+                $('#dmrModal .modal-body').html(ret);
+                $('#dmrModal').modal();
+            });
+        },
+        'click .delete': function (e, value, row) {
+            $.get('/Setting/DeleteUser', { id: row.Id }, function (ret) {
+                $('#dmrModal .modal-body').html(ret);
+                $('#dmrModal').modal();
+            });
+        },
+        'click .password': function (e, value, row) {
+            $.get('/Setting/UserPassword', { id: row.Id }, function (ret) {
                 $('#dmrModal .modal-body').html(ret);
                 $('#dmrModal').modal();
             });
@@ -55,9 +71,9 @@
     };
 
     $('#dmrModal').on('hidden.bs.modal', function () {
-        $('#vendors').bootstrapTable('refresh',
+        $('#users').bootstrapTable('refresh',
             {
-                url: '/Setting/VendorsTable'
+                url: '/Setting/UserTable'
             });
     });
 </script>

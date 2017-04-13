@@ -11,6 +11,7 @@ using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Setting;
 using Dust.Platform.Web.Models.Table;
 using Dust.Platform.Web.Process;
+using Microsoft.AspNet.Identity.EntityFramework;
 using SHWDTech.Platform.Utility;
 
 namespace Dust.Platform.Web.Controllers
@@ -287,5 +288,61 @@ namespace Dust.Platform.Web.Controllers
         }
 
         public ActionResult UserManager() => View();
+
+        public ActionResult UserTable(TablePost post)
+        {
+            var repo = new AuthRepository();
+            var total = repo.GetUserCount(null);
+            var users = repo.GetUserTable(post.offset, post.limit);
+            var rows = users.Select(u => new
+            {
+                u.Id,
+                u.UserName,
+                UserRole = repo.GetDustRole(u).DisplayName,
+                u.PhoneNumber
+            });
+
+            return Json(new
+            {
+                total,
+                rows
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult UserEdit(string id)
+        {
+            var model = new UserEditModel();
+            var repo = new AuthRepository();
+            ViewBag.Roles = repo.GetDustRoles(null)
+                .Select(r => new SelectListItem
+                {
+                    Text = r.DisplayName,
+                    Value = r.Id.ToString()
+                })
+                .ToList();
+            var user = repo.FindById(id).Result;
+            if (user == null)
+            {
+                return View(model);
+            }
+            model.Id = user.Id;
+            model.UserName = user.UserName;
+            model.PhoneNumber = user.PhoneNumber;
+            model.UserRole = repo.GetDustRole(user).Id.ToString();
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult UserEdit(UserEditModel model)
+        {
+            var repo = new AuthRepository();
+            var user = repo.FindById(model.Id).Result;
+            user.UserName = model.UserName;
+            user.PhoneNumber = model.PhoneNumber;
+
+            return null;
+        }
     }
 }

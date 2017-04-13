@@ -41,7 +41,6 @@
     }
 
     var addVendor = function () {
-        debugger;
         $.get('/Setting/Vendor', { id: '00000000-0000-0000-0000-000000000000' }, function (ret) {
             $('#dmrModal .modal-body').html(ret);
             $('#dmrModal').modal();

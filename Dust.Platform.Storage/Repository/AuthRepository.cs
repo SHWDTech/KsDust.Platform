@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Dust.Platform.Service.Entities;
@@ -45,11 +46,41 @@ namespace Dust.Platform.Storage.Repository
             return user;
         }
 
+        public async Task<IdentityUser> FindById(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            return user;
+        }
+
         public async Task<IList<string>> GetUserRoles(IdentityUser user)
         {
             var roles = await _userManager.GetRolesAsync(user.Id);
 
             return roles;
+        }
+
+        public List<DustRole> GetDustRoles(Expression<Func<DustRole, bool>> exp)
+        {
+            var query = _ctx.DustRoles.AsQueryable();
+            if (exp != null)
+            {
+                query = query.Where(exp);
+            }
+
+            return query.ToList();
+        }
+
+        public DustRole GetDustRole(IdentityUser user)
+        {
+            if (user.Roles == null || user.Roles.Count <= 0)
+            {
+                return new DustRole();
+            }
+            
+            var roleId = Guid.Parse(user.Roles.First().RoleId);
+            var dustRole = _ctx.DustRoles.First(r => r.Id == roleId);
+            return dustRole;
         }
 
         public async Task<IList<Claim>> GetUserClaims(IdentityUser user)
@@ -189,6 +220,22 @@ namespace Dust.Platform.Storage.Repository
         {
             var roleId = Guid.Parse(_roleManager.FindByName(role).Id);
             return _ctx.RolePermissions.Where(rp => rp.RoleId == roleId).Select(o => o.PermissionId).ToList();
+        }
+
+        public int GetUserCount(Expression<Func<IdentityUser, bool>> exp)
+        {
+
+            return exp == null ? _userManager.Users.Count() : _userManager.Users.Count(exp);
+        }
+
+        public List<IdentityUser> GetUserTable(int offset, int limit)
+        {
+            return _userManager.Users.OrderBy(u => u.Id).Skip(offset).Take(limit).ToList();
+        }
+
+        public async Task<IdentityResult> UpdateAsync(IdentityUser user)
+        {
+            return await _userManager.UpdateAsync(user);
         }
 
         public void Dispose()

@@ -170,6 +170,7 @@
     <Compile Include="Models\Account\LoginViewModel.cs" />
     <Compile Include="Models\Account\SignInResult.cs" />
     <Compile Include="Models\Account\SignInStatus.cs" />
+    <Compile Include="Models\Account\UserEditModel.cs" />
     <Compile Include="Models\Ajax\AjaxViewModel.cs" />
     <Compile Include="Models\Home\IndexViewModel.cs" />
     <Compile Include="Models\Home\MonitorContentViewModel.cs" />
@@ -414,6 +415,7 @@
     <Content Include="Views\Setting\VendorsInfo.cshtml" />
     <Content Include="Views\Setting\Vendor.cshtml" />
     <Content Include="Views\Setting\UserManager.cshtml" />
+    <Content Include="Views\Setting\UserEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

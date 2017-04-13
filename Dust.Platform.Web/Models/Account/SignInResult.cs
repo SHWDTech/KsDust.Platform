@@ -1,4 +1,6 @@
-﻿namespace Dust.Platform.Web.Models.Account
+﻿using System.Web;
+
+namespace Dust.Platform.Web.Models.Account
 {
     /// <summary>
     /// 登陆结果
@@ -19,5 +21,7 @@
         /// 错误元素
         /// </summary>
         public string ErrorElement { get; set; }
+
+        public HttpCookie SignInCookie { get; set; }
     }
 }

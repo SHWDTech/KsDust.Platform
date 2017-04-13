@@ -85,6 +85,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthMigrations\201704120800384_InitialCreate.cs" />
+    <Compile Include="AuthMigrations\201704120800384_InitialCreate.Designer.cs">
+      <DependentUpon>201704120800384_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AuthMigrations\201704120832368_AddParentModuleId.cs" />
+    <Compile Include="AuthMigrations\201704120832368_AddParentModuleId.Designer.cs">
+      <DependentUpon>201704120832368_AddParentModuleId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AuthMigrations\201704120904189_AddIdNullable.cs" />
+    <Compile Include="AuthMigrations\201704120904189_AddIdNullable.Designer.cs">
+      <DependentUpon>201704120904189_AddIdNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AuthMigrations\Configuration.cs" />
     <Compile Include="Migrations\201702210254579_Initial.cs" />
     <Compile Include="Migrations\201702210254579_Initial.Designer.cs">
       <DependentUpon>201702210254579_Initial.cs</DependentUpon>
@@ -123,6 +136,8 @@
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\DeviceMantanceRecord.cs" />
     <Compile Include="Model\District.cs" />
+    <Compile Include="Model\DustPermission.cs" />
+    <Compile Include="Model\DustRole.cs" />
     <Compile Include="Model\Enterprise.cs" />
     <Compile Include="Model\Enum.cs" />
     <Compile Include="Model\KsDustAlarm.cs" />
@@ -132,6 +147,7 @@
     <Compile Include="Model\KsDustProject.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\MessageType.cs" />
+    <Compile Include="Model\Module.cs" />
     <Compile Include="Model\NoticeClientType.cs" />
     <Compile Include="Model\NoticeType.cs" />
     <Compile Include="Model\MonitorType.cs" />
@@ -141,6 +157,7 @@
     <Compile Include="Model\RefreshToken.cs" />
     <Compile Include="Model\Report.cs" />
     <Compile Include="Model\ReportType.cs" />
+    <Compile Include="Model\RolePermission.cs" />
     <Compile Include="Model\SystemConfiguration.cs" />
     <Compile Include="Model\Notice.cs" />
     <Compile Include="Model\UserClientNotice.cs" />
@@ -175,6 +192,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AuthMigrations\201704120800384_InitialCreate.resx">
+      <DependentUpon>201704120800384_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AuthMigrations\201704120832368_AddParentModuleId.resx">
+      <DependentUpon>201704120832368_AddParentModuleId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AuthMigrations\201704120904189_AddIdNullable.resx">
+      <DependentUpon>201704120904189_AddIdNullable.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702210254579_Initial.resx">
       <DependentUpon>201702210254579_Initial.cs</DependentUpon>
     </EmbeddedResource>

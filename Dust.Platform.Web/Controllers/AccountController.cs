@@ -48,6 +48,7 @@ namespace Dust.Platform.Web.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            Response.Cookies.Add(result.SignInCookie);
 
             return Redirect(returnUrl);
         }

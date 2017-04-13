@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
+using Dust.Platform.Web.Models.Account;
 using Dust.Platform.Web.Models.Home;
 using Dust.Platform.Web.Models.Setting;
 using Dust.Platform.Web.Models.Table;
@@ -51,15 +52,17 @@ namespace Dust.Platform.Web.Controllers
                     name = "设备注册",
                     nodetype = "setting",
                     ajaxurl = "/Setting/DeviceRegister"
-                },
-                new Nodes
-                {
-                    id = "vendorsInfo",
-                    name = "供应商信息",
-                    nodetype = "setting",
-                    ajaxurl = "/Setting/VendorsInfo"
                 }
             };
+            
+            var menus = new AuthRepository().FindModuleByParentName(((DustPrincipal)User).Id, "设置", false);
+            nodes.AddRange(menus.Select(module => new Nodes
+            {
+                id = module.Id.ToString(),
+                name = module.ModuleName,
+                nodetype = "setting",
+                ajaxurl = $"/{module.Controller}/{module.Action}"
+            }));
 
             return nodes;
         }
@@ -125,7 +128,7 @@ namespace Dust.Platform.Web.Controllers
         [HttpPost]
         public ActionResult DeviceRegister(DeviceRegisterViewModel model)
         {
-            var user = AccountProcess.FindUserByName(HttpContext.User.Identity.Name);
+            var user = AccountProcess.FindUserByName(User.Identity.Name);
             if (user == null || !AccountProcess.UserIsInRole(user.Id, "VendorManager"))
             {
                 ModelState.AddModelError("Vendor", "只有设备提供商可以注册设备。");
@@ -282,5 +285,7 @@ namespace Dust.Platform.Web.Controllers
 
             return View(model);
         }
+
+        public ActionResult UserManager() => View();
     }
 }

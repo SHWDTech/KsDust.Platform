@@ -165,6 +165,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\DustPrincipalModel.cs" />
+    <Compile Include="Models\Account\DustPrincipal.cs" />
     <Compile Include="Models\Account\LoginViewModel.cs" />
     <Compile Include="Models\Account\SignInResult.cs" />
     <Compile Include="Models\Account\SignInStatus.cs" />
@@ -411,6 +413,7 @@
     <Content Include="Views\Camera\Preview.cshtml" />
     <Content Include="Views\Setting\VendorsInfo.cshtml" />
     <Content Include="Views\Setting\Vendor.cshtml" />
+    <Content Include="Views\Setting\UserManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

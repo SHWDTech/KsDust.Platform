@@ -1,0 +1,63 @@
+﻿<div class="modal fade" id="dmrModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dmrModallabel">更新用户信息</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div style="margin-bottom: 5px;">
+        <input type="button" class="btn btn-primary" value="新增登陆用户" onclick="addVendor()" />
+    </div>
+    @(Html.BootstrapTable("vendors", "/Setting/VendorsTable", TablePaginationOption.server, new
+{
+    data_page_size = 25
+})
+          .Column("用户名", "Name")
+          .Column("用户所属角色", "Susperintend")
+          .Column("联系电话", "Mobile")
+          .Column("操作")
+          .Apply(ColumnOption.formatter, "vendorOperaterFormatter")
+          .Apply(ColumnOption.events, "operateEvents"))
+</div>
+
+<script type="text/javascript">
+    $('#vendors').bootstrapTable({
+        height: $('#vendors').parents('.tab-content').height() - 75
+    });
+    window.vendorOperaterFormatter = function () {
+        return [
+            '<a class="update" href="javascript:void(0)" title="更新厂商信息">更新</a>'
+        ].join('');
+    }
+
+    var addVendor = function () {
+        debugger;
+        $.get('/Setting/Vendor', { id: '00000000-0000-0000-0000-000000000000' }, function (ret) {
+            $('#dmrModal .modal-body').html(ret);
+            $('#dmrModal').modal();
+        });
+    };
+
+    window.operateEvents = {
+        'click .update': function (e, value, row) {
+            $.get('/Setting/Vendor', { id: row.Id }, function (ret) {
+                $('#dmrModal .modal-body').html(ret);
+                $('#dmrModal').modal();
+            });
+        }
+    };
+
+    $('#dmrModal').on('hidden.bs.modal', function () {
+        $('#vendors').bootstrapTable('refresh',
+            {
+                url: '/Setting/VendorsTable'
+            });
+    });
+</script>

@@ -54,6 +54,18 @@ namespace Dust.Platform.Storage.Repository
             return user;
         }
 
+        public DustRole FindDustRoleById(string id)
+        {
+            var roleId = Guid.Parse(id);
+            return _ctx.DustRoles.First(r => r.Id == roleId);
+        }
+
+        public List<DustPermission> FindRolePermissions(DustRole role)
+        {
+            var rolePermissoins = _ctx.RolePermissions.Where(rp => rp.RoleId == role.Id).Select(obj => obj.PermissionId).ToList();
+            return _ctx.DustPermissions.Where(p => rolePermissoins.Contains(p.Id)).ToList();
+        }
+
         public async Task<IList<string>> GetUserRoles(IdentityUser user)
         {
             var roles = await _userManager.GetRolesAsync(user.Id);
@@ -97,11 +109,34 @@ namespace Dust.Platform.Storage.Repository
             return claims;
         }
 
+        public void UpdateRolePermissions(string roleId, List<Guid> permissions)
+        {
+            var roleGuid = Guid.Parse(roleId);
+            _ctx.RolePermissions.RemoveRange(_ctx.RolePermissions.Where(rp => rp.RoleId == roleGuid));
+            if (permissions != null)
+            {
+                foreach (var dustPermission in permissions)
+                {
+                    _ctx.RolePermissions.Add(new RolePermission
+                    {
+                        RoleId = roleGuid,
+                        PermissionId = dustPermission
+                    });
+                }
+            }
+
+            _ctx.SaveChanges();
+        }
+
         public IdentityResult ChangePassword(string userId, string currentPassword, string newPassword)
         {
             return _userManager.ChangePassword(userId, currentPassword, newPassword);
         }
 
+        public List<DustPermission> GetDustPermissions(Expression<Func<DustPermission, bool>> exp)
+        {
+            return exp == null ? _ctx.DustPermissions.ToList() : _ctx.DustPermissions.Where(exp).ToList();
+        }
 
         public Client FindClient(string clientId)
         {

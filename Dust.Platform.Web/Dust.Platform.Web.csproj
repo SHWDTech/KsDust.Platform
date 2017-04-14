@@ -168,6 +168,7 @@
     <Compile Include="Models\Account\DustPrincipalModel.cs" />
     <Compile Include="Models\Account\DustPrincipal.cs" />
     <Compile Include="Models\Account\LoginViewModel.cs" />
+    <Compile Include="Models\Account\RolePermissionsModel.cs" />
     <Compile Include="Models\Account\SignInResult.cs" />
     <Compile Include="Models\Account\SignInStatus.cs" />
     <Compile Include="Models\Account\UserEditModel.cs" />
@@ -419,6 +420,7 @@
     <Content Include="Views\Setting\UserEdit.cshtml" />
     <Content Include="Views\Setting\RoleManager.cshtml" />
     <Content Include="Views\Setting\UserPassword.cshtml" />
+    <Content Include="Views\Setting\RolePermissions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

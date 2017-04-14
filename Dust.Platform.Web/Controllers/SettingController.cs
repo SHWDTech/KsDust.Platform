@@ -477,5 +477,47 @@ namespace Dust.Platform.Web.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        public ActionResult RolePermissions(string id)
+        {
+            var repo = new AuthRepository();
+            var role = repo.FindDustRoleById(id);
+            var permissions = repo.FindRolePermissions(role);
+
+            return View(new RolePermissionsModel
+            {
+                RoleId = role.Id.ToString(),
+                RoleName = role.DisplayName,
+                Permissions = repo.GetDustPermissions(null),
+                RolePermissions = permissions
+            });
+        }
+
+        [HttpPost]
+        public ActionResult RolePermissions(RolePermissionsModel model)
+        {
+            var repo = new AuthRepository();
+            var role = repo.FindDustRoleById(model.RoleId);
+            model.RoleName = role.DisplayName;
+            model.Permissions = repo.GetDustPermissions(null);
+
+            var rolePermissions = Request["RolePermissions"]?.Split(',').Select(Guid.Parse).ToList();
+            try
+            {
+                repo.UpdateRolePermissions(model.RoleId, rolePermissions);
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("Failed", "更新角色权限失败！");
+                model.RolePermissions = repo.FindRolePermissions(role);
+                return View(model);
+            }
+
+            ModelState.AddModelError("Success", "更新角色权限成功！");
+            model.RolePermissions = repo.FindRolePermissions(role);
+
+            return View(model);
+        }
     }
 }

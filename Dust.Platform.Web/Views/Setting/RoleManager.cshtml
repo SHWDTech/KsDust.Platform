@@ -1,0 +1,46 @@
+﻿@{
+    Layout = null;
+}
+<div class="modal fade" id="dmrModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dmrModallabel">角色权限管理</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    @(Html.BootstrapTable("roles", "/Setting/RoleTable", TablePaginationOption.server, new
+      {
+          data_page_size = 25
+      })
+          .Column("角色名称", "RoleName")
+          .Column("操作")
+          .Apply(ColumnOption.formatter, "userOperaterFormatter")
+          .Apply(ColumnOption.events, "operateEvents"))
+</div>
+
+<script type="text/javascript">
+    $('#roles').bootstrapTable({
+        height: $('#roles').parents('.tab-content').height() - 75
+    });
+    window.userOperaterFormatter = function () {
+        return [
+            '<a class="permission" href="javascript:void(0)" title="更新角色权限">权限管理</a>'
+        ].join('');
+    }
+
+    window.operateEvents = {
+        'click .permission': function (e, value, row) {
+            $.get('/Setting/RolePermissions', { id: row.Id }, function (ret) {
+                $('#dmrModal .modal-body').html(ret);
+                $('#dmrModal').modal();
+            });
+        }
+    };
+</script>

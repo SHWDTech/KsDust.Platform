@@ -1,12 +1,12 @@
 ﻿@{
     Layout = null;
 }
-<div class="modal fade" id="dmrModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
+<div class="modal fade" id="usrModal" tabindex="-1" role="dialog" aria-labelledby="usrModallabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="dmrModallabel">更新用户信息</h4>
+                <h4 class="modal-title" id="usrModallabel">更新用户信息</h4>
             </div>
             <div class="modal-body">
 
@@ -44,33 +44,36 @@
 
     var addVendor = function () {
         $.get('/Setting/UserEdit', { id: '00000000-0000-0000-0000-000000000000' }, function (ret) {
-            $('#dmrModal .modal-body').html(ret);
-            $('#dmrModal').modal();
+            $('#usrModal .modal-body').html(ret);
+            $('#usrModal').modal();
         });
     };
 
     window.operateEvents = {
         'click .update': function (e, value, row) {
             $.get('/Setting/UserEdit', { id: row.Id }, function (ret) {
-                $('#dmrModal .modal-body').html(ret);
-                $('#dmrModal').modal();
+                $('#usrModal .modal-body').html(ret);
+                $('#usrModal').modal();
             });
         },
         'click .delete': function (e, value, row) {
-            $.get('/Setting/DeleteUser', { id: row.Id }, function (ret) {
-                $('#dmrModal .modal-body').html(ret);
-                $('#dmrModal').modal();
-            });
+            if (confirm("确定要删除用户：" + row.UserName + "吗？")) {
+                $.get('/Setting/DeleteUser', { id: row.Id }, function (ret) {
+                    debugger;
+                    $('#usrModal .modal-body').html(ret.message);
+                    $('#usrModal').modal();
+                });
+            }
         },
         'click .password': function (e, value, row) {
-            $.get('/Setting/UserPassword', { id: row.Id }, function (ret) {
-                $('#dmrModal .modal-body').html(ret);
-                $('#dmrModal').modal();
+            $.get('/Setting/UserPassword', { id: row.Id, name: row.UserName }, function (ret) {
+                $('#usrModal .modal-body').html(ret);
+                $('#usrModal').modal();
             });
         }
     };
 
-    $('#dmrModal').on('hidden.bs.modal', function () {
+    $('#usrModal').on('hidden.bs.modal', function () {
         $('#users').bootstrapTable('refresh',
             {
                 url: '/Setting/UserTable'

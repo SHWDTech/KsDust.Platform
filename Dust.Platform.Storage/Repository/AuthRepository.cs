@@ -31,7 +31,8 @@ namespace Dust.Platform.Storage.Repository
         {
             var user = new IdentityUser
             {
-                UserName = userModel.UserName
+                UserName = userModel.UserName,
+                PhoneNumber = userModel.PhoneNumber
             };
 
             var result = await _userManager.CreateAsync(user, userModel.Password);
@@ -71,6 +72,12 @@ namespace Dust.Platform.Storage.Repository
             return query.ToList();
         }
 
+        public IdentityResult DeleteUser(string userId)
+        {
+            var user = _userManager.FindById(userId);
+            return _userManager.Delete(user);
+        }
+
         public DustRole GetDustRole(IdentityUser user)
         {
             if (user.Roles == null || user.Roles.Count <= 0)
@@ -88,6 +95,11 @@ namespace Dust.Platform.Storage.Repository
             var claims = await _userManager.GetClaimsAsync(user.Id);
 
             return claims;
+        }
+
+        public IdentityResult ChangePassword(string userId, string currentPassword, string newPassword)
+        {
+            return _userManager.ChangePassword(userId, currentPassword, newPassword);
         }
 
 
@@ -224,8 +236,12 @@ namespace Dust.Platform.Storage.Repository
 
         public int GetUserCount(Expression<Func<IdentityUser, bool>> exp)
         {
-
             return exp == null ? _userManager.Users.Count() : _userManager.Users.Count(exp);
+        }
+
+        public int GetRoleCount(Expression<Func<IdentityRole, bool>> exp)
+        {
+            return exp == null ? _roleManager.Roles.Count() : _roleManager.Roles.Count(exp);
         }
 
         public List<IdentityUser> GetUserTable(int offset, int limit)
@@ -233,9 +249,31 @@ namespace Dust.Platform.Storage.Repository
             return _userManager.Users.OrderBy(u => u.Id).Skip(offset).Take(limit).ToList();
         }
 
+        public List<DustRole> GetDustRoleTable(int offset, int limit)
+        {
+            return _ctx.DustRoles.OrderBy(r => r.Id).Skip(offset).Take(limit).ToList();
+        }
+
         public async Task<IdentityResult> UpdateAsync(IdentityUser user)
         {
             return await _userManager.UpdateAsync(user);
+        }
+
+        public IdentityResult Update(IdentityUser user)
+        {
+            return _userManager.Update(user);
+        }
+
+        public void UserAddRole(IdentityUser user, string roleId)
+        {
+            var role = _roleManager.FindById(roleId);
+            _userManager.AddToRole(user.Id, role.Name);
+        }
+
+        public void UserRemoveFromRoles(IdentityUser user, string[] roleIds)
+        {
+            var roles = roleIds.Select(r => _roleManager.FindById(r).Name).ToArray();
+            _userManager.RemoveFromRoles(user.Id, roles);
         }
 
         public void Dispose()

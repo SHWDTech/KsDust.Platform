@@ -55,7 +55,7 @@ namespace Dust.Platform.Web.Controllers
                     ajaxurl = "/Setting/DeviceRegister"
                 }
             };
-            
+
             var menus = new AuthRepository().FindModuleByParentName(((DustPrincipal)User).Id, "设置", false);
             nodes.AddRange(menus.Select(module => new Nodes
             {
@@ -312,7 +312,10 @@ namespace Dust.Platform.Web.Controllers
         [HttpGet]
         public ActionResult UserEdit(string id)
         {
-            var model = new UserEditModel();
+            var model = new UserEditModel
+            {
+                Id = id
+            };
             var repo = new AuthRepository();
             ViewBag.Roles = repo.GetDustRoles(null)
                 .Select(r => new SelectListItem
@@ -330,7 +333,7 @@ namespace Dust.Platform.Web.Controllers
             model.UserName = user.UserName;
             model.PhoneNumber = user.PhoneNumber;
             model.UserRole = repo.GetDustRole(user).Id.ToString();
-            
+
             return View(model);
         }
 
@@ -338,11 +341,141 @@ namespace Dust.Platform.Web.Controllers
         public ActionResult UserEdit(UserEditModel model)
         {
             var repo = new AuthRepository();
+            ViewBag.Roles = repo.GetDustRoles(null)
+                .Select(r => new SelectListItem
+                {
+                    Text = r.DisplayName,
+                    Value = r.Id.ToString()
+                })
+                .ToList();
             var user = repo.FindById(model.Id).Result;
+            return user != null ? UpdateUser(repo, user, model) : AddNewUser(repo, model);
+        }
+
+        private ActionResult UpdateUser(AuthRepository repo, IdentityUser user, UserEditModel model)
+        {
             user.UserName = model.UserName;
             user.PhoneNumber = model.PhoneNumber;
+            if (user.Roles.Count > 0)
+            {
+                repo.UserRemoveFromRoles(user, user.Roles.Select(r => r.RoleId).ToArray());
+            }
+            repo.UserAddRole(user, model.UserRole);
+            var ret = repo.Update(user);
+            if (ret.Succeeded)
+            {
+                ModelState.AddModelError("Success", "更新成功！");
+            }
+            else
+            {
+                ModelState.AddModelError("Failed", "更新失败！");
+            }
 
-            return null;
+            return View(model);
+        }
+
+        private ActionResult AddNewUser(AuthRepository repo, UserEditModel model)
+        {
+            if (model.Password != model.ConfirmPassword)
+            {
+                ModelState.AddModelError("Failed", "两次输入的密码不一致！");
+                return View(model);
+            }
+            var ret = repo.RegisterUser(new UserModel
+            {
+                UserName = model.UserName,
+                Password = model.Password,
+                ConfirmPassword = model.ConfirmPassword,
+                PhoneNumber = model.PhoneNumber
+            });
+            if (!ret.Result.Succeeded)
+            {
+                ModelState.AddModelError("Failed", "新增用户失败！");
+                return View(model);
+            }
+
+            var usr = repo.FindByName(model.UserName);
+            repo.UserAddRole(usr, model.UserRole);
+
+            ModelState.AddModelError("Success", "新增用户成功！");
+
+            return View(model);
+        }
+
+        public ActionResult DeleteUser(string id)
+        {
+            var repo = new AuthRepository();
+            if (repo.DeleteUser(id).Succeeded)
+            {
+                return Json(new
+                {
+                    message = "删除成功！"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new
+            {
+                message = "删除失败！"
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RoleManager() => View();
+
+        public ActionResult RoleTable(TablePost post)
+        {
+            var repo = new AuthRepository();
+            var total = repo.GetRoleCount(null);
+            var roles = repo.GetDustRoleTable(post.offset, post.limit);
+            var rows = roles.Select(u => new
+            {
+                u.Id,
+                RoleName = u.DisplayName
+            });
+
+            return Json(new
+            {
+                total,
+                rows
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult UserPassword(string id, string name) => View(new UserPasswordModel
+        {
+            UserId = id,
+            UserName = name
+        });
+
+        [HttpPost]
+        public ActionResult UserPassword(UserPasswordModel model)
+        {
+            var repo = new AuthRepository();
+            if (string.IsNullOrWhiteSpace(model.CurrentPassword))
+            {
+                ModelState.AddModelError("Failed", "请输入当前密码！");
+                return View(model);
+            }
+            if (string.IsNullOrWhiteSpace(model.Password))
+            {
+                ModelState.AddModelError("Failed", "请输入新密码！");
+                return View(model);
+            }
+            if (model.Password != model.ConfirmPassword)
+            {
+                ModelState.AddModelError("Failed", "两次输入的密码不一致！");
+                return View(model);
+            }
+            var ret = repo.ChangePassword(model.UserId, model.CurrentPassword, model.Password);
+            if (ret.Succeeded)
+            {
+                ModelState.AddModelError("Success", "修改密码成功！");
+            }
+            else
+            {
+                ModelState.AddModelError("Failed", "修改密码失败！");
+            }
+
+            return View(model);
         }
     }
 }

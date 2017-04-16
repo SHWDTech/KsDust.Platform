@@ -1,7 +1,7 @@
 ﻿@{
     Layout = null;
 }
-<div class="modal fade" id="dmrModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
+<div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -34,8 +34,8 @@
     window.operateEvents = {
         'click .permission': function (e, value, row) {
             $.get('/Setting/RolePermissions', { id: row.Id }, function (ret) {
-                $('#dmrModal .modal-body').html(ret);
-                $('#dmrModal').modal();
+                $('#roleModal .modal-body').html(ret);
+                $('#roleModal').modal();
             });
         }
     };

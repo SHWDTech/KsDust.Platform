@@ -123,8 +123,7 @@ namespace Dust.Platform.Web.Controllers
         {
             if ((DateTime.Now - time).TotalMinutes > 15) return Models.Ajax.DeviceStatus.OffLine;
             if (pm < 0.4) return Models.Ajax.DeviceStatus.Good;
-            if(pm < 1) return Models.Ajax.DeviceStatus.Alarm;
-            return Models.Ajax.DeviceStatus.Bad;
+            return pm < 1 ? Models.Ajax.DeviceStatus.Alarm : Models.Ajax.DeviceStatus.Bad;
         }
 
         [HttpGet]

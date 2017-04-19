@@ -29,7 +29,7 @@
                                         var chked = enabled ? "checked" : "";
                                     }
                                     <input type="checkbox" name="RolePermissions" class="parent-permission" id="@permission.Id" value="@permission.Id" @chked />
-                                    <label for="@permission.Id" class="lbl160 text-main-reverse font-20">@permission.PermissionDisplayName</label>
+                                    <label for="@permission.Id" class="lbl120 text-main-reverse font-20">@permission.PermissionDisplayName</label>
                                 </h4>
                                 @{
                                     foreach (var subPermission in Model.Permissions.Where(item => item.ParentPermissionId != null && item.ParentPermissionId.Value == permission.Id))
@@ -37,7 +37,7 @@
                                         var subchked = Model.RolePermissions.Any(obj => obj.Id == subPermission.Id) ? "checked" : "";
                                         var subEnabled = enabled ? "" : "disabled";
                                         <input type="checkbox" name="RolePermissions" class="child-permission" id="@subPermission.Id" value="@subPermission.Id" data-parent="@permission.Id" @subchked @subEnabled />
-                                        <label for="@subPermission.Id" class="lbl160">@subPermission.PermissionDisplayName</label>
+                                        <label for="@subPermission.Id" class="lbl120">@subPermission.PermissionDisplayName</label>
                                     }
                                 }
                             </div>

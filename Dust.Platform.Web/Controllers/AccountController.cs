@@ -21,7 +21,6 @@ namespace Dust.Platform.Web.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            ViewBag.LoginTitle = "昆山扬尘在线监控平台";
             return View();
         }
 
@@ -31,7 +30,6 @@ namespace Dust.Platform.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.LoginTitle = "昆山扬尘在线监控平台";
                 return View(model);
             }
 
@@ -39,7 +37,6 @@ namespace Dust.Platform.Web.Controllers
 
             if (result.Status == SignInStatus.Failure)
             {
-                ViewBag.LoginTitle = "餐饮油烟在线监控平台";
                 ModelState.AddModelError(result.ErrorElement, result.ErrorMessage);
                 return View(model);
             }

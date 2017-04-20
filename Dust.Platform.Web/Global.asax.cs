@@ -33,6 +33,7 @@ namespace Dust.Platform.Web
 
             var serializeModel = JsonConvert.DeserializeObject<DustPrincipalModel>(authTicket.UserData);
 
+            if (serializeModel == null) return;
             var newUser = new DustPrincipal(serializeModel);
 
             HttpContext.Current.User = newUser;

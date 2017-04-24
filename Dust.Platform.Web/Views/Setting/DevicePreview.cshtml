@@ -2,22 +2,28 @@
     Layout = null;
 }
 
-<div>
-    @(Html.BootstrapTable("devicePreview", "/Setting/DevicePreviewTable", TablePaginationOption.server, new
-{
-    data_page_size = 50
-})
-          .Column("设备名称", "Name")
-          .Column("供应商", "VendorName")
-          .Column("工程名称", "ProjectName")
-          .Column("联系人", "SuperIntend")
-          .Column("联系电话", "Mobile")
-          .Column("最后数据时间", "LastDataTime")
-          .Apply(ColumnOption.formatter, "mantanceFormatter")
-          .Column("操作")
-          .Apply(ColumnOption.width, "100")
-          .Apply(ColumnOption.formatter, "devicePreviewOperater")
-          .Apply(ColumnOption.events, "devicePreviewEvents"))
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @Html.DropDownList("vendorsSelect", (List<SelectListItem>)ViewBag.Vendors, new { style = "height: 34px; width: 180px;"})
+        <input type="button" class="btn btn-primary" value="查询" id="devPreviewQuery"/>
+    </div>
+    <div class="panel-body">
+        @(Html.BootstrapTable("devicePreview", "/Setting/DevicePreviewTable", TablePaginationOption.server, new
+          {
+              data_page_size = 50
+          })
+              .Column("设备名称", "Name")
+              .Column("供应商", "VendorName")
+              .Column("工程名称", "ProjectName")
+              .Column("联系人", "SuperIntend")
+              .Column("联系电话", "Mobile")
+              .Column("最后数据时间", "LastDataTime")
+              .Apply(ColumnOption.formatter, "mantanceFormatter")
+              .Column("操作")
+              .Apply(ColumnOption.width, "100")
+              .Apply(ColumnOption.formatter, "devicePreviewOperater")
+              .Apply(ColumnOption.events, "devicePreviewEvents"))
+    </div>
 </div>
 
 <div class="modal fade" id="dprModal" tabindex="-1" role="dialog" aria-labelledby="dprModallabel">
@@ -51,9 +57,22 @@
         }
     };
 
+    var vendor = null;
+
+    $('#devPreviewQuery').on('click', function () {
+        vendor = $('#vendorsSelect').val();
+        $('#devicePreview').bootstrapTable('refresh', {
+            url: '/Setting/DevicePreviewTable'
+        });
+    });
+
     $(function() {
         $('#devicePreview').bootstrapTable({
-            height: $('#devicePreview').parents('.tab-content').height() - 75
+            height: $('#devicePreview').parents('.tab-content').height() - 100,
+            queryParams: function (params) {
+                params.VendorGuid = vendor;
+                return params;
+            }
         });
     });
 </script>

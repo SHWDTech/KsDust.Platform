@@ -46,8 +46,7 @@ namespace Dust.Platform.Web.Process
                 HttpOnly = true,
                 Expires = authTicket.Expiration
             };
-            
-            //FormsAuthentication.SetAuthCookie(model.LoginName, false);
+
             result.Status = SignInStatus.Success;
             result.SignInCookie = cookie;
 

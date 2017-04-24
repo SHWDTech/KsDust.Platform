@@ -514,7 +514,16 @@ namespace Dust.Platform.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult DevicePreview() => View();
+        public ActionResult DevicePreview()
+        {
+            ViewBag.Vendors = _ctx.Vendors.Where(ve => ve.Id != Guid.Empty).Select(v => new SelectListItem
+            {
+                Text = v.Name,
+                Value = v.Id.ToString()
+            }).ToList();
+
+            return View();
+        }
 
         public ActionResult DevicePreviewTable(DevicePreviewTablePost post)
         {

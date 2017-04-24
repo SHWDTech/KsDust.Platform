@@ -77,6 +77,11 @@ namespace Dust.Platform.Web.Models.Table
         public Guid DeviceGuid { get; set; }
     }
 
+    public class DevicePreviewTablePost : TablePost
+    {
+        public Guid? VendorGuid { get; set; }
+    }
+
     public class AvgReportTablePost : TablePost
     {
         public DateTime start { get; set; }
@@ -84,5 +89,10 @@ namespace Dust.Platform.Web.Models.Table
         public DateTime end { get; set; }
 
         public int percent { get; set; }
+    }
+
+    public class DeviceHistoryDataTablePost : TablePost
+    {
+        public Guid devideGuid { get; set; }
     }
 }

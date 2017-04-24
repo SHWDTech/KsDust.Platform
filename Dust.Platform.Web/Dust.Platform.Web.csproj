@@ -185,6 +185,7 @@
     <Compile Include="Models\Statistics\HistoryLineChartViewModel.cs" />
     <Compile Include="Models\Statistics\HistoryQueryPost.cs" />
     <Compile Include="Models\Statistics\ProjectsViewModel.cs" />
+    <Compile Include="Models\Table\DevicePreviewTable.cs" />
     <Compile Include="Models\Table\TablePost.cs" />
     <Compile Include="Models\Table\TotalDistrictsTable.cs" />
     <Compile Include="Process\AccountProcess.cs" />
@@ -421,6 +422,8 @@
     <Content Include="Views\Setting\RoleManager.cshtml" />
     <Content Include="Views\Setting\UserPassword.cshtml" />
     <Content Include="Views\Setting\RolePermissions.cshtml" />
+    <Content Include="Views\Setting\DevicePreview.cshtml" />
+    <Content Include="Views\Setting\DeviceHistoryData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

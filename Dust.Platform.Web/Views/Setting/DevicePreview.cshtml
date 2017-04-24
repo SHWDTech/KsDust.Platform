@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+}
+
+<div>
+    @(Html.BootstrapTable("devicePreview", "/Setting/DevicePreviewTable", TablePaginationOption.server, new
+{
+    data_page_size = 50
+})
+          .Column("设备名称", "Name")
+          .Column("供应商", "VendorName")
+          .Column("工程名称", "ProjectName")
+          .Column("联系人", "SuperIntend")
+          .Column("联系电话", "Mobile")
+          .Column("最后数据时间", "LastDataTime")
+          .Apply(ColumnOption.formatter, "mantanceFormatter")
+          .Column("操作")
+          .Apply(ColumnOption.width, "100")
+          .Apply(ColumnOption.formatter, "devicePreviewOperater")
+          .Apply(ColumnOption.events, "devicePreviewEvents"))
+</div>
+
+<div class="modal fade" id="dprModal" tabindex="-1" role="dialog" aria-labelledby="dprModallabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dprModallabel"></h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var devicePreviewOperater = function () {
+        return [
+            '<a class="preview" href="javascript:void(0)" title="查看历史数据">历史数据</a>'
+        ].join('');
+    }
+
+    window.devicePreviewEvents = {
+        'click .preview': function (e, value, row) {
+            $.get('/Setting/DeviceHistoryData', { deviceGuid: row.Id }, function (ret) {
+                $('#dprModal .modal-body').html(ret);
+                $('#dprModallabel').html(row.Name + ' - 历史数据查询');
+                $('#dprModal').modal();
+            });
+        }
+    };
+
+    $(function() {
+        $('#devicePreview').bootstrapTable({
+            height: $('#devicePreview').parents('.tab-content').height() - 75
+        });
+    });
+</script>

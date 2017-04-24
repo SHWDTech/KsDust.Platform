@@ -28,7 +28,7 @@ namespace Dust.Platform.Web.Controllers
                 {
                     new SelectListItem()
                     {
-                        Text = "选择区县",
+                        Text = @"选择区县",
                         Value = "",
                         Selected = true
                     }
@@ -37,7 +37,7 @@ namespace Dust.Platform.Web.Controllers
                 {
                     new SelectListItem()
                     {
-                        Text = "选择施工企业",
+                        Text = @"选择施工企业",
                         Value = "",
                         Selected = true
                     }
@@ -152,8 +152,8 @@ namespace Dust.Platform.Web.Controllers
                             obj.AverageDateTime < post.End)
                     .GroupBy(obj => obj.TargetId).ToList();
 
-            var targetNames = post.Type == AverageCategory.District 
-                ? _ctx.Districts.Select(dis => new { dis.Id, dis.Name}) 
+            var targetNames = post.Type == AverageCategory.District
+                ? _ctx.Districts.Select(dis => new { dis.Id, dis.Name})
                 : _ctx.KsDustProjects.Select(dis => new { dis.Id, dis.Name });
 
             object avgs = null;

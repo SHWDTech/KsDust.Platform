@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+
+<div>
+    @{ var table = Html.BootstrapTable(null, TablePaginationOption.server, new
+       {
+           id = $"{ViewBag.DevId}",
+           data_page_size = 50,
+           data_height = 550
+       });
+        var builder = table.Column("粉尘(mg/m³)", "ParticulateMatter")
+            .Column("PM2.5(mg/m³)", "Pm25")
+            .Column("PM10(mg/m³)", "Pm100")
+            .Column("噪音(dB)", "Noise")
+            .Column("温度(℃)", "Temperature")
+            .Column("湿度(%)", "Humidity")
+            .Column("监测时间", "UpdateTime");
+    }
+    @(builder)
+</div>
+
+<script type="text/javascript">
+    var tableId = '@(ViewBag.DevId)';
+
+    $('#' + tableId).bootstrapTable();
+    $('#' + tableId).bootstrapTable('refresh', {
+        url: '/Setting/DeviceHistoryDataTable?devideGuid=' + tableId
+    });
+
+</script>

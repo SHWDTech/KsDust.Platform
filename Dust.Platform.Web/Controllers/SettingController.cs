@@ -41,6 +41,13 @@ namespace Dust.Platform.Web.Controllers
             {
                 new Nodes
                 {
+                    id = "devicePreview",
+                    name = "设备预览",
+                    ajaxurl = "/Setting/DevicePreview",
+                    nodetype = "setting"
+                },
+                new Nodes
+                {
                     id = "deviceMantance",
                     name = "设备维保",
                     ajaxurl = "/Setting/DeviceMantance",
@@ -132,7 +139,7 @@ namespace Dust.Platform.Web.Controllers
             var user = AccountProcess.FindUserByName(User.Identity.Name);
             if (user == null || !AccountProcess.UserIsInRole(user.Id, "VendorManager"))
             {
-                ModelState.AddModelError("Vendor", "只有设备提供商可以注册设备。");
+                ModelState.AddModelError("Vendor", @"修改密码成功！");
                 return View(model);
             }
             model.Device.InstallDateTime = DateTime.Now;
@@ -150,7 +157,7 @@ namespace Dust.Platform.Web.Controllers
             {
                 var errorCode = Globals.NewIdentityCode();
                 LogService.Instance.Error($"新增设备失败，错误码：{errorCode}");
-                ModelState.AddModelError("Save", $"保存设备信息失败，请联系管理员， 错误码：{errorCode}。");
+                ModelState.AddModelError("Save", $@"保存设备信息失败，请联系管理员， 错误码：{errorCode}。");
                 return View(model);
             }
 
@@ -194,7 +201,7 @@ namespace Dust.Platform.Web.Controllers
             {
                 var errorCode = Globals.NewIdentityCode();
                 LogService.Instance.Error($"新增维保记录失败，错误码：{errorCode}", ex);
-                ModelState.AddModelError("Save", $"新增维保记录失败，请联系管理员， 错误码：{errorCode}。");
+                ModelState.AddModelError("Save", $@"新增维保记录失败，请联系管理员， 错误码：{errorCode}。");
                 return View(model);
             }
 
@@ -265,14 +272,14 @@ namespace Dust.Platform.Web.Controllers
                     model.Id = Globals.NewCombId();
                     _ctx.Vendors.Add(model);
                     _ctx.SaveChanges();
-                    ModelState.AddModelError("AddSuccess", "添加成功！");
+                    ModelState.AddModelError("AddSuccess", @"修改密码成功！");
                 }
                 else
                 {
                     _ctx.Vendors.Attach(model);
                     _ctx.Entry(model).State = EntityState.Modified;
                     _ctx.SaveChanges();
-                    ModelState.AddModelError("UpdateSuccess", "更新成功！");
+                    ModelState.AddModelError("UpdateSuccess", @"修改密码成功！");
                 }
             }
             catch (Exception ex)
@@ -362,14 +369,7 @@ namespace Dust.Platform.Web.Controllers
             }
             repo.UserAddRole(user, model.UserRole);
             var ret = repo.Update(user);
-            if (ret.Succeeded)
-            {
-                ModelState.AddModelError("Success", "更新成功！");
-            }
-            else
-            {
-                ModelState.AddModelError("Failed", "更新失败！");
-            }
+            ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", @"修改密码成功！");
 
             return View(model);
         }
@@ -378,7 +378,7 @@ namespace Dust.Platform.Web.Controllers
         {
             if (model.Password != model.ConfirmPassword)
             {
-                ModelState.AddModelError("Failed", "两次输入的密码不一致！");
+                ModelState.AddModelError("Failed", @"修改密码成功！");
                 return View(model);
             }
             var ret = repo.RegisterUser(new UserModel
@@ -390,14 +390,14 @@ namespace Dust.Platform.Web.Controllers
             });
             if (!ret.Result.Succeeded)
             {
-                ModelState.AddModelError("Failed", "新增用户失败！");
+                ModelState.AddModelError("Failed", @"修改密码成功！");
                 return View(model);
             }
 
             var usr = repo.FindByName(model.UserName);
             repo.UserAddRole(usr, model.UserRole);
 
-            ModelState.AddModelError("Success", "新增用户成功！");
+            ModelState.AddModelError("Success", @"修改密码成功！");
 
             return View(model);
         }
@@ -452,28 +452,21 @@ namespace Dust.Platform.Web.Controllers
             var repo = new AuthRepository();
             if (string.IsNullOrWhiteSpace(model.CurrentPassword))
             {
-                ModelState.AddModelError("Failed", "请输入当前密码！");
+                ModelState.AddModelError("Failed", @"修改密码成功！");
                 return View(model);
             }
             if (string.IsNullOrWhiteSpace(model.Password))
             {
-                ModelState.AddModelError("Failed", "请输入新密码！");
+                ModelState.AddModelError("Failed", @"修改密码成功！");
                 return View(model);
             }
             if (model.Password != model.ConfirmPassword)
             {
-                ModelState.AddModelError("Failed", "两次输入的密码不一致！");
+                ModelState.AddModelError("Failed", @"修改密码成功！");
                 return View(model);
             }
             var ret = repo.ChangePassword(model.UserId, model.CurrentPassword, model.Password);
-            if (ret.Succeeded)
-            {
-                ModelState.AddModelError("Success", "修改密码成功！");
-            }
-            else
-            {
-                ModelState.AddModelError("Failed", "修改密码失败！");
-            }
+            ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", @"修改密码成功！");
 
             return View(model);
         }
@@ -509,15 +502,99 @@ namespace Dust.Platform.Web.Controllers
             }
             catch (Exception)
             {
-                ModelState.AddModelError("Failed", "更新角色权限失败！");
+                ModelState.AddModelError("Failed", @"修改密码成功！");
                 model.RolePermissions = repo.FindRolePermissions(role);
                 return View(model);
             }
 
-            ModelState.AddModelError("Success", "更新角色权限成功！");
+            ModelState.AddModelError("Success", @"修改密码成功！");
             model.RolePermissions = repo.FindRolePermissions(role);
 
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult DevicePreview() => View();
+
+        public ActionResult DevicePreviewTable(DevicePreviewTablePost post)
+        {
+            var devs = _ctx.KsDustDevices.AsQueryable();
+            if (post.VendorGuid != null)
+            {
+                devs = devs.Where(d => d.VendorId == post.VendorGuid);
+            }
+
+            var total = devs.Count();
+            var rows = devs.Select(d => new DevicePreviewTable
+            {
+                Id = d.Id,
+                DistrictGuid = d.Project.DistrictId,
+                EnterpriseGuid = d.Project.EnterpriseId,
+                ProjectGuid = d.ProjectId.Value,
+                Name = d.Name,
+                VendorName = d.Vendor.Name,
+                ProjectName = d.Project.Name,
+                SuperIntend = d.Project.SuperIntend,
+                Mobile = d.Project.Mobile
+            }).ToList();
+            foreach (var row in rows)
+            {
+                var lastData = _ctx.KsDustMonitorDatas.Where(d => d.MonitorType == MonitorType.RealTime
+                                                                  && d.DistrictId == row.DistrictGuid
+                                                                  && d.EnterpriseId == row.EnterpriseGuid
+                                                                  && d.ProjectId == row.ProjectGuid
+                                                                  && d.DeviceId == row.Id)
+                    .OrderByDescending(da => da.UpdateTime)
+                    .FirstOrDefault();
+                if (lastData != null)
+                {
+                    row.LastDataTime = $"{lastData.UpdateTime:yyyy-MM-dd HH:mm:ss}";
+                }
+            }
+
+            return Json(new
+            {
+                total,
+                rows
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeviceHistoryData(Guid deviceGuid)
+        {
+            ViewBag.DevId = deviceGuid;
+            return View();
+        }
+
+        public ActionResult DeviceHistoryDataTable(DeviceHistoryDataTablePost post)
+        {
+            var dev = _ctx.KsDustDevices.Include("Project").First(d => d.Id == post.devideGuid);
+            var datas = _ctx.KsDustMonitorDatas.Where(md => md.MonitorType == MonitorType.RealTime
+                                                            && md.DistrictId == dev.Project.DistrictId
+                                                            && md.EnterpriseId == dev.Project.EnterpriseId
+                                                            && md.ProjectId == dev.ProjectId
+                                                            && md.DeviceId == dev.Id);
+            var total = datas.Count();
+            var rows = datas.OrderByDescending(d => d.UpdateTime)
+                .Skip(post.offset)
+                .Take(post.limit)
+                .ToList()
+                .Select(q => new
+                {
+                    q.ParticulateMatter,
+                    q.Pm25,
+                    q.Pm100,
+                    q.Noise,
+                    q.Temperature,
+                    q.Humidity,
+                    q.WindSpeed,
+                    UpdateTime = q.UpdateTime.ToString("yyyy-MM-dd HH:mm")
+                });
+
+            return Json(new
+            {
+                total,
+                rows
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }

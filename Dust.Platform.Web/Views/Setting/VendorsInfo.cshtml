@@ -1,12 +1,12 @@
 ﻿@{
     Layout = null;
 }
-<div class="modal fade" id="dmrModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
+<div class="modal fade" id="vendorModal" tabindex="-1" role="dialog" aria-labelledby="vendorModallabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="dmrModallabel">更新注册供应商信息</h4>
+                <h4 class="modal-title" id="vendorModallabel">更新注册供应商信息</h4>
             </div>
             <div class="modal-body">
 
@@ -42,21 +42,21 @@
 
     var addVendor = function () {
         $.get('/Setting/Vendor', { id: '00000000-0000-0000-0000-000000000000' }, function (ret) {
-            $('#dmrModal .modal-body').html(ret);
-            $('#dmrModal').modal();
+            $('#vendorModal .modal-body').html(ret);
+            $('#vendorModal').modal();
         });
     };
 
     window.operateEvents = {
         'click .update': function (e, value, row) {
             $.get('/Setting/Vendor', { id: row.Id }, function (ret) {
-                $('#dmrModal .modal-body').html(ret);
-                $('#dmrModal').modal();
+                $('#vendorModal .modal-body').html(ret);
+                $('#vendorModal').modal();
             });
         }
     };
 
-    $('#dmrModal').on('hidden.bs.modal', function () {
+    $('#vendorModal').on('hidden.bs.modal', function () {
         $('#vendors').bootstrapTable('refresh',
             {
                 url: '/Setting/VendorsTable'

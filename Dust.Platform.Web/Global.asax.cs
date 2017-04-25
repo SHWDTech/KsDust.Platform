@@ -28,14 +28,18 @@ namespace Dust.Platform.Web
             var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
             if (authTicket == null)
             {
-                throw new InvalidDataException("Ticket Decrype Failed");
+                FormsAuthentication.SignOut();
+                Response.Redirect("Account/Login");
+                return;
             }
 
             var serializeModel = JsonConvert.DeserializeObject<DustPrincipalModel>(authTicket.UserData);
 
             if (serializeModel == null)
             {
-                throw new InvalidDataException("Custmer AuthTicket Losted");
+                FormsAuthentication.SignOut();
+                Response.Redirect("Account/Login");
+                return;
             }
             var newUser = new DustPrincipal(serializeModel);
 

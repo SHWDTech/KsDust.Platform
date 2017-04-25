@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SHWDTech.Platform.StorageConstrains", "..\WDYunPlatform\SHWDTech.Platform.StorageConstrains\SHWDTech.Platform.StorageConstrains.csproj", "{6B3823B8-0540-43AF-9F41-498287D2DD4E}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.Camera.MainControl", "Ks.Dust.Camera.MainControl\Ks.Dust.Camera.MainControl.csproj", "{47D01556-B5A4-490C-93A0-8348B95E4403}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ks.Dust.PeroidReportGenerator", "Ks.Dust.PeroidReportGenerator\Ks.Dust.PeroidReportGenerator.csproj", "{78F570EC-7B57-42C9-B9FE-BAAB6C0C95A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackgroundServices", "BackgroundServices", "{7D3E0620-C9F7-496D-B739-DBD427F2C95F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

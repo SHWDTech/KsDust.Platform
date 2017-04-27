@@ -13,6 +13,7 @@ using Dust.Platform.Web.Models.Table;
 using Dust.Platform.Web.Process;
 using Microsoft.AspNet.Identity.EntityFramework;
 using SHWDTech.Platform.Utility;
+using System.Transactions;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -139,7 +140,7 @@ namespace Dust.Platform.Web.Controllers
             var user = AccountProcess.FindUserByName(User.Identity.Name);
             if (user == null || !AccountProcess.UserIsInRole(user.Id, "VendorManager"))
             {
-                ModelState.AddModelError("Vendor", @"修改密码成功！");
+                ModelState.AddModelError("Vendor", @"设备注册成功！");
                 return View(model);
             }
             model.Device.InstallDateTime = DateTime.Now;
@@ -272,14 +273,14 @@ namespace Dust.Platform.Web.Controllers
                     model.Id = Globals.NewCombId();
                     _ctx.Vendors.Add(model);
                     _ctx.SaveChanges();
-                    ModelState.AddModelError("AddSuccess", @"修改密码成功！");
+                    ModelState.AddModelError("AddSuccess", @"添加供应商成功！");
                 }
                 else
                 {
                     _ctx.Vendors.Attach(model);
                     _ctx.Entry(model).State = EntityState.Modified;
                     _ctx.SaveChanges();
-                    ModelState.AddModelError("UpdateSuccess", @"修改密码成功！");
+                    ModelState.AddModelError("UpdateSuccess", @"更新供应商信息成功！");
                 }
             }
             catch (Exception ex)
@@ -340,6 +341,8 @@ namespace Dust.Platform.Web.Controllers
             model.UserName = user.UserName;
             model.PhoneNumber = user.PhoneNumber;
             model.UserRole = repo.GetDustRole(user).Id.ToString();
+            var relateEntity = user.Claims.FirstOrDefault(c => c.ClaimType == "UserRelatedEntity");
+            model.UserRelateEntity = relateEntity != null ? relateEntity.ClaimValue : "";
 
             return View(model);
         }
@@ -361,15 +364,21 @@ namespace Dust.Platform.Web.Controllers
 
         private ActionResult UpdateUser(AuthRepository repo, IdentityUser user, UserEditModel model)
         {
-            user.UserName = model.UserName;
-            user.PhoneNumber = model.PhoneNumber;
-            if (user.Roles.Count > 0)
+            using (var scope = new TransactionScope())
             {
-                repo.UserRemoveFromRoles(user, user.Roles.Select(r => r.RoleId).ToArray());
+                user.UserName = model.UserName;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Roles.Clear();
+                user.Roles.Add(new IdentityUserRole
+                {
+                    UserId = user.Id,
+                    RoleId = model.UserRole
+                });
+                RefreshUserRelatedEntity(user, model);
+                var ret = repo.Update(user);
+                scope.Complete();
+                ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"更新用户信息成功！" : @"更新用户信息失败！");
             }
-            repo.UserAddRole(user, model.UserRole);
-            var ret = repo.Update(user);
-            ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", @"修改密码成功！");
 
             return View(model);
         }
@@ -378,28 +387,54 @@ namespace Dust.Platform.Web.Controllers
         {
             if (model.Password != model.ConfirmPassword)
             {
-                ModelState.AddModelError("Failed", @"修改密码成功！");
+                ModelState.AddModelError("Failed", @"两次输入的密码不一致！");
                 return View(model);
             }
-            var ret = repo.RegisterUser(new UserModel
+            using (var scope = new TransactionScope())
             {
-                UserName = model.UserName,
-                Password = model.Password,
-                ConfirmPassword = model.ConfirmPassword,
-                PhoneNumber = model.PhoneNumber
-            });
-            if (!ret.Result.Succeeded)
-            {
-                ModelState.AddModelError("Failed", @"修改密码成功！");
-                return View(model);
+                var ret = repo.RegisterUser(new UserModel
+                {
+                    UserName = model.UserName,
+                    Password = model.Password,
+                    ConfirmPassword = model.ConfirmPassword,
+                    PhoneNumber = model.PhoneNumber
+                });
+                if (!ret.Result.Succeeded)
+                {
+                    ModelState.AddModelError("Failed", @"新增用户失败！");
+                    return View(model);
+                }
+
+                var user = repo.FindByName(model.UserName);
+                user.Roles.Add(new IdentityUserRole
+                {
+                    UserId = user.Id,
+                    RoleId = model.UserRole
+                });
+                RefreshUserRelatedEntity(user, model);
+                var updateRet = repo.Update(user);
+                ModelState.AddModelError(updateRet.Succeeded ? "Success" : "Failed", updateRet.Succeeded ? @"新增用户信息成功！" : @"新增用户信息失败！");
+                scope.Complete();
             }
-
-            var usr = repo.FindByName(model.UserName);
-            repo.UserAddRole(usr, model.UserRole);
-
-            ModelState.AddModelError("Success", @"修改密码成功！");
 
             return View(model);
+        }
+
+        private void RefreshUserRelatedEntity(IdentityUser user, UserEditModel model)
+        {
+            var relatedEntity = user.Claims.FirstOrDefault(c => c.ClaimType == "UserRelatedEntity");
+            if (relatedEntity != null)
+            {
+                relatedEntity.ClaimValue = model.UserRelateEntity;
+            }
+            else
+            {
+                user.Claims.Add(new IdentityUserClaim
+                {
+                    ClaimType = "UserRelatedEntity",
+                    ClaimValue = model.UserRelateEntity
+                });
+            }
         }
 
         public ActionResult DeleteUser(string id)
@@ -452,21 +487,21 @@ namespace Dust.Platform.Web.Controllers
             var repo = new AuthRepository();
             if (string.IsNullOrWhiteSpace(model.CurrentPassword))
             {
-                ModelState.AddModelError("Failed", @"修改密码成功！");
+                ModelState.AddModelError("Failed", @"密码不能为空！");
                 return View(model);
             }
             if (string.IsNullOrWhiteSpace(model.Password))
             {
-                ModelState.AddModelError("Failed", @"修改密码成功！");
+                ModelState.AddModelError("Failed", @"密码不能为空！");
                 return View(model);
             }
             if (model.Password != model.ConfirmPassword)
             {
-                ModelState.AddModelError("Failed", @"修改密码成功！");
+                ModelState.AddModelError("Failed", @"两次输入的密码不一致！");
                 return View(model);
             }
             var ret = repo.ChangePassword(model.UserId, model.CurrentPassword, model.Password);
-            ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", @"修改密码成功！");
+            ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"修改密码成功！" : @"修改密码失败");
 
             return View(model);
         }
@@ -502,12 +537,12 @@ namespace Dust.Platform.Web.Controllers
             }
             catch (Exception)
             {
-                ModelState.AddModelError("Failed", @"修改密码成功！");
+                ModelState.AddModelError("Failed", @"更新角色权限失败！");
                 model.RolePermissions = repo.FindRolePermissions(role);
                 return View(model);
             }
 
-            ModelState.AddModelError("Success", @"修改密码成功！");
+            ModelState.AddModelError("Success", @"更新角色权限成功！");
             model.RolePermissions = repo.FindRolePermissions(role);
 
             return View(model);

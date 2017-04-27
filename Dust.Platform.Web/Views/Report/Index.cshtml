@@ -1,5 +1,4 @@
-﻿
-@using Newtonsoft.Json
+﻿@using Newtonsoft.Json
 @model Dust.Platform.Web.Models.Report.ReportViewModel
 @{
     ViewBag.Title = "报表";
@@ -86,7 +85,7 @@
                     url: '/Report/AvgReportTable?start=' + $('#avgrpStart').val() + '&end=' + $('#avgrpEnd').val() + '&percent=' + $('#avgPercent').val()
                 });
             });
-            
+
             callback();
         }
 

@@ -9,7 +9,6 @@ namespace Dust.Platform.Storage.Repository
     {
         public AuthContext() : base("AuthContext")
         {
-            
         }
 
         public DbSet<Client> Clients { get; set; }

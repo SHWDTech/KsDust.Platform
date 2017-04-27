@@ -96,10 +96,15 @@ namespace Dust.Platform.Storage.Repository
             {
                 return new DustRole();
             }
-            
+
             var roleId = Guid.Parse(user.Roles.First().RoleId);
             var dustRole = _ctx.DustRoles.First(r => r.Id == roleId);
             return dustRole;
+        }
+
+        public DustRole GetDustRole(Guid roleId)
+        {
+            return _ctx.DustRoles.FirstOrDefault(r => r.Id == roleId);
         }
 
         public async Task<IList<Claim>> GetUserClaims(IdentityUser user)
@@ -107,6 +112,11 @@ namespace Dust.Platform.Storage.Repository
             var claims = await _userManager.GetClaimsAsync(user.Id);
 
             return claims;
+        }
+
+        public IdentityResult RemoveClaim(string userId, Claim claim)
+        {
+            return _userManager.RemoveClaim(userId, claim);
         }
 
         public void UpdateRolePermissions(string roleId, List<Guid> permissions)
@@ -303,6 +313,11 @@ namespace Dust.Platform.Storage.Repository
         {
             var role = _roleManager.FindById(roleId);
             _userManager.AddToRole(user.Id, role.Name);
+        }
+
+        public IdentityRole FindRoleById(string roleId)
+        {
+            return _roleManager.FindById(roleId);
         }
 
         public void UserRemoveFromRoles(IdentityUser user, string[] roleIds)

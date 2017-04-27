@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
+using Dust.Platform.Web.Models.Account;
 using SHWDTech.Platform.Utility.ExtensionMethod;
 using SHWDTech.Platform.Utility.Serialize;
 
@@ -35,7 +36,7 @@ namespace Dust.Platform.Web.Controllers
             switch (model.dType)
             {
                 case MonitorDataValueType.Pm:
-                    ret.AddRange(query.Select(obj => new MonitorChartData {value = obj.ParticulateMatter, date = obj.AverageDateTime}).ToList());
+                    ret.AddRange(query.Select(obj => new MonitorChartData { value = obj.ParticulateMatter, date = obj.AverageDateTime }).ToList());
                     break;
                 case MonitorDataValueType.Pm25:
                     ret.AddRange(query.Select(obj => new MonitorChartData { value = obj.Pm25, date = obj.AverageDateTime }).ToList());
@@ -62,7 +63,7 @@ namespace Dust.Platform.Web.Controllers
             return Json(new
             {
                 success = true,
-                data = ret.Select(obj => new {obj.value, date = obj.date.ToString("yyyy-MM-dd HH:mm")}).ToList()
+                data = ret.Select(obj => new { obj.value, date = obj.date.ToString("yyyy-MM-dd HH:mm") }).ToList()
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -71,19 +72,19 @@ namespace Dust.Platform.Web.Controllers
             var devices = new List<Guid>();
             switch (model.viewType)
             {
-                    case AverageCategory.WholeCity:
+                case AverageCategory.WholeCity:
                     devices.AddRange(_ctx.KsDustDevices.Select(obj => obj.Id).ToList());
                     break;
-                    case AverageCategory.District:
+                case AverageCategory.District:
                     devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.Project.DistrictId == model.targetId).Select(dev => dev.Id).ToList());
                     break;
-                    case AverageCategory.Enterprise:
+                case AverageCategory.Enterprise:
                     devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.Project.EnterpriseId == model.targetId).Select(dev => dev.Id).ToList());
                     break;
-                    case AverageCategory.Project:
+                case AverageCategory.Project:
                     devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.ProjectId == model.targetId).Select(dev => dev.Id).ToList());
                     break;
-                    case AverageCategory.Device:
+                case AverageCategory.Device:
                     devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.Id == model.targetId).Select(dev => dev.Id).ToList());
                     break;
             }
@@ -97,7 +98,7 @@ namespace Dust.Platform.Web.Controllers
             var ret = new List<DeviceCurrentStatus>();
             var devLocal =
                 _ctx.KsDustDevices.Where(obj => deviceList.Contains(obj.Id))
-                    .Select(dev => new {dev.Id, dev.Name, dev.Longitude, dev.Latitude}).ToList();
+                    .Select(dev => new { dev.Id, dev.Name, dev.Longitude, dev.Latitude }).ToList();
             foreach (var dev in devLocal)
             {
                 var last =
@@ -153,7 +154,57 @@ namespace Dust.Platform.Web.Controllers
             {
                 success = true,
                 par = Convert.ToBase64String(Encoding.UTF8.GetBytes(encryptString))
-            },JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ClientNotices()
+        {
+            var userId = Guid.Parse(((DustPrincipal)User).Id);
+            var unReadCount = _ctx.UserClientNotices.Count(n => n.User == userId && !n.IsReaded);
+            return Json(new
+            {
+                unReadCount
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RoleEntity(Guid roleId)
+        {
+            var repo = new AuthRepository();
+            var role = repo.GetDustRole(roleId);
+            var entities = new List<SelectListItem>();
+            var hasEntitys = false;
+            var labelContent = string.Empty;
+            if (role.DisplayName == "工程管理员")
+            {
+                hasEntitys = true;
+                labelContent = "所属工程";
+                entities.AddRange(_ctx.KsDustProjects.Where(obj => obj.Id != Guid.Empty).Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                }));
+            }
+            else if (role.DisplayName == "区县管理员")
+            {
+                hasEntitys = true;
+                labelContent = "所属区县";
+                entities.AddRange(_ctx.Districts.Where(obj => obj.Id != Guid.Empty).Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                }));
+            }
+
+            return Json(new
+            {
+                hasEntitys,
+                labelContent,
+                entities = entities.Select(e => new
+                {
+                    id = e.Value,
+                    text = e.Text
+                })
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }

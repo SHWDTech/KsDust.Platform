@@ -29,8 +29,13 @@
                     <li><a href="/Setting"><span class="glyphicon glyphicon-cog" style="margin-right: 10px;"></span>设置</a></li>
                 </ul>
                 @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right logout-form" }))
-            {
+                {
                     <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/Admin/Message" style="cursor: pointer;">
+                                <span class="glyphicon glyphicon-envelope" style="margin-right: 5px;"></span>消息<span class="badge" id="clientNotices"></span>
+                            </a>
+                        </li>
                         <li>
                             <a href="javascript:document.getElementById('logoutForm').submit()">
                                 <span class="glyphicon glyphicon-log-out"></span>
@@ -67,5 +72,10 @@
     @Scripts.Render("~/bundles/base")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $.get("/Ajax/ClientNotices", null, function(ret) {
+            $('#clientNotices').html(ret.unReadCount);
+        })
+    </script>
 </body>
 </html>

@@ -25,14 +25,16 @@ namespace Dust.Platform.Web
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
-                      "~/Scripts/Utility/popUp.js"));
+                      "~/Scripts/Utility/popUp.js",
+                      "~/Scripts/select2.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/camera").Include(
                       "~/Scripts/Utility/camera.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/css/select2.css"));
         }
     }
 }

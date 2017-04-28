@@ -87,6 +87,7 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult DeleteNotice(NoticeClientType type, long[] notices)
         {
+            if (notices == null) return null;
             var userId = Guid.Parse(((DustPrincipal)User).Id);
             var clientNotices =
                 _ctx.UserClientNotices.Where(n => n.User == userId && n.NoticeClientType == type &&

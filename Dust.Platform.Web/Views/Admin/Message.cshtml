@@ -97,6 +97,7 @@
             if (!confirm('确定要删除选中消息吗？')) return;
             var msgIds = $('#userclientnotices').bootstrapTable('getSelections', null)
                 .map(function (row) { return row.Id });
+            if (msgIds.length === 0) return;
             $.post('/Admin/DeleteNotice', { type:0, notices: msgIds }, function () {
                 $('#userclientnotices').bootstrapTable('refresh',
                     {

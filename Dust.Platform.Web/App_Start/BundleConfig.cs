@@ -34,7 +34,7 @@ namespace Dust.Platform.Web
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Content/css/select2.css"));
+                      "~/Content/select2.css"));
         }
     }
 }

@@ -249,3 +249,7 @@ td textarea {
     min-width: 180px;
     max-width: 180px;
 }
+
+a.notice.readed{
+    color: #999;
+}

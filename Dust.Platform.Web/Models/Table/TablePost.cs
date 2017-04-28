@@ -95,4 +95,11 @@ namespace Dust.Platform.Web.Models.Table
     {
         public Guid devideGuid { get; set; }
     }
+
+    public class MessageTablePost : TablePost
+    {
+        public NoticeType? Type { get; set; }
+
+        public bool? Status { get; set; }
+    }
 }

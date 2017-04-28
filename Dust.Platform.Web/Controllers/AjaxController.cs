@@ -157,10 +157,10 @@ namespace Dust.Platform.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ClientNotices()
+        public ActionResult ClientNotices(NoticeClientType clientType)
         {
             var userId = Guid.Parse(((DustPrincipal)User).Id);
-            var unReadCount = _ctx.UserClientNotices.Count(n => n.User == userId && !n.IsReaded);
+            var unReadCount = _ctx.UserClientNotices.Count(n => n.User == userId && n.NoticeClientType == clientType && !n.IsReaded);
             return Json(new
             {
                 unReadCount

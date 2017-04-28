@@ -33,7 +33,8 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a href="/Admin/Message" style="cursor: pointer;">
-                                <span class="glyphicon glyphicon-envelope" style="margin-right: 5px;"></span>消息<span class="badge" id="clientNotices"></span>
+                                <span>消息</span>
+                                <span class="badge" id="clientNotices"></span>
                             </a>
                         </li>
                         <li>
@@ -73,7 +74,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
     <script type="text/javascript">
-        $.get("/Ajax/ClientNotices", null, function(ret) {
+        $.get("/Ajax/ClientNotices", { clientType: 0}, function(ret) {
             $('#clientNotices').html(ret.unReadCount);
         })
     </script>

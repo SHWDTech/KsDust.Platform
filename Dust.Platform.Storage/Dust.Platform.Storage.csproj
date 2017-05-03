@@ -101,7 +101,7 @@
     <Compile Include="AuthMigrations\201704130841472_ReModelRole.Designer.cs">
       <DependentUpon>201704130841472_ReModelRole.cs</DependentUpon>
     </Compile>
-    <Compile Include="AuthMigrations\Configuration.cs" />
+    <Compile Include="AuthMigrations\AuthContextConfiguration.cs" />
     <Compile Include="Migrations\201702210254579_Initial.cs" />
     <Compile Include="Migrations\201702210254579_Initial.Designer.cs">
       <DependentUpon>201702210254579_Initial.cs</DependentUpon>
@@ -129,6 +129,10 @@
     <Compile Include="Migrations\201704111000367_AlterTableVendor.cs" />
     <Compile Include="Migrations\201704111000367_AlterTableVendor.Designer.cs">
       <DependentUpon>201704111000367_AlterTableVendor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705030626523_AverageCategory.cs" />
+    <Compile Include="Migrations\201705030626523_AverageCategory.Designer.cs">
+      <DependentUpon>201705030626523_AverageCategory.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
@@ -228,6 +232,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704111000367_AlterTableVendor.resx">
       <DependentUpon>201704111000367_AlterTableVendor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705030626523_AverageCategory.resx">
+      <DependentUpon>201705030626523_AverageCategory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

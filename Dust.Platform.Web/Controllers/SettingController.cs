@@ -140,7 +140,7 @@ namespace Dust.Platform.Web.Controllers
             var user = AccountProcess.FindUserByName(User.Identity.Name);
             if (user == null || !AccountProcess.UserIsInRole(user.Id, "VendorManager"))
             {
-                ModelState.AddModelError("Vendor", @"设备注册成功！");
+                ModelState.AddModelError("Vendor", @"只有设备供应商才能注册设备！");
                 return View(model);
             }
             model.Device.InstallDateTime = DateTime.Now;

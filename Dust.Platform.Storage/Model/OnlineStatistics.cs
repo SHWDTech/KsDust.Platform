@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SHWDTech.Platform.StorageConstrains.Model;
 
@@ -11,7 +10,7 @@ namespace Dust.Platform.Storage.Model
         public Guid TargetGuid { get; set; }
 
         [Index("Ix_ProjectType_Target_AverageType_DateTime", IsClustered = true, IsUnique = true, Order = 0)]
-        public ProjectType Category { get; set; }
+        public AverageCategory Category { get; set; }
 
         [Index("Ix_ProjectType_Target_AverageType_DateTime", IsClustered = true, IsUnique = true, Order = 3)]
         public DateTime UpdateTime { get; set; }

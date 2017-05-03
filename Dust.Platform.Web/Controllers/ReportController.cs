@@ -64,6 +64,16 @@ namespace Dust.Platform.Web.Controllers
                 },
                 new Nodes
                 {
+                    id = "onlineStatus",
+                    name = "在线率报表",
+                    routeValue = new
+                    {
+                        type = ReportType.OnlineStatus
+                    },
+                    ajaxurl = "/Report/OnLineStatus"
+                },
+                new Nodes
+                {
                     id = "avgReport",
                     name = "均值排名报表",
                     ajaxurl = "/Report/AvgReport",
@@ -325,5 +335,7 @@ namespace Dust.Platform.Web.Controllers
                 rows = datas
             }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult OnLineStatus() => View();
     }
 }

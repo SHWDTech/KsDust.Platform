@@ -54,11 +54,17 @@
                 function (ret) {
                     $($('.present')[$('.present').length - 1]).append(ret);
                     if (treenode.callBack != null) {
-                        window[treenode.callBack](treenode.param, function () {
-                            currentli.find('a').click(function () {
-                                tabSwitch(currentli.find('a'));
-                            });
-                        }, treenode);
+                        window[treenode.callBack](treenode.param,
+                            function() {
+                                currentli.find('a').click(function() {
+                                    tabSwitch(currentli.find('a'));
+                                });
+                            },
+                            treenode);
+                    } else {
+                        currentli.find('a').click(function() {
+                            tabSwitch(currentli.find('a'));
+                        });
                     }
                 });
         }
@@ -76,7 +82,6 @@
                 viewMode: 'years',
                 format: 'YYYY-MM'
             });
-            debugger;
             $('#avg-report-table').bootstrapTable({
                 height: $('#avg-report-table').parents('.present').height() - 60
             });

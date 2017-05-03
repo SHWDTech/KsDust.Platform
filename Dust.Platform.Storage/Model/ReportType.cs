@@ -10,6 +10,11 @@
         /// <summary>
         /// 年报表
         /// </summary>
-        Year = 0x20
+        Year = 0x20,
+
+        /// <summary>
+        /// 在线率统计报表
+        /// </summary>
+        OnlineStatus = 0x30
     }
 }

@@ -316,18 +316,18 @@ namespace Dust.Platform.Web.Controllers
                                                            && d.AverageDateTime > post.start
                                                            && d.AverageDateTime < post.end)
                 .GroupBy(g => g.TargetId)
-                .Select(t => new {Project = t.Key, Avg = t.Sum(p => p.ParticulateMatter) / t.Count()})
+                .Select(t => new { Project = t.Key, Avg = t.Sum(p => p.ParticulateMatter) / t.Count() })
                 .OrderBy(t => t.Avg).ToList();
             var table = avgs.Take((int)(avgs.Count * 1.0 / 100 * post.percent)).ToList();
             var datas = (from td in table
-                        let project = _ctx.KsDustProjects.Include("Enterprise").FirstOrDefault(p => p.Id == td.Project)
-                        select new
-                        {
-                            Rank = table.IndexOf(td) + 1,
-                            ProjectName = project?.Name,
-                            EnterpriseName = project?.Enterprise.Name,
-                            AvgPm = Math.Round(td.Avg, 3)
-                        }).ToList();
+                         let project = _ctx.KsDustProjects.Include("Enterprise").FirstOrDefault(p => p.Id == td.Project)
+                         select new
+                         {
+                             Rank = table.IndexOf(td) + 1,
+                             ProjectName = project?.Name,
+                             EnterpriseName = project?.Enterprise.Name,
+                             AvgPm = Math.Round(td.Avg, 3)
+                         }).ToList();
 
             return Json(new
             {
@@ -337,5 +337,40 @@ namespace Dust.Platform.Web.Controllers
         }
 
         public ActionResult OnLineStatus() => View();
+
+        public ActionResult OnlineStatisticsDates(OnlineStatisticsDatesParam post)
+        {
+            var query = _ctx.OnlineStatisticses.Where(s => s.Category == post.ObjectType &&
+                                                           s.StatusType == post.DateType);
+            var ret = query.GroupBy(o => o.UpdateTime)
+                .OrderBy(g => g.Key)
+                .Select(item => item.Key)
+                .ToList()
+                .Select(obj => new
+                {
+                    id = obj.Ticks,
+                    text = DatesString(obj, post.DateType)
+                });
+
+            return Json(new
+            {
+                ret
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string DatesString(DateTime date, AverageType dateType)
+        {
+            switch (dateType)
+            {
+                case AverageType.DayAvg:
+                    return $"{date:yyyy年MM月dd日}";
+                case AverageType.MonthAvg:
+                    return $"{date:yyyy年MM月}";
+                case AverageType.Year:
+                    return $"{date:yyyy年}";
+            }
+
+            return string.Empty;
+        }
     }
 }

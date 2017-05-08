@@ -372,5 +372,42 @@ namespace Dust.Platform.Web.Controllers
 
             return string.Empty;
         }
+
+        public ActionResult OnlineStatisticsTargets(OnlineStatisticsDatesParam post)
+        {
+            switch (post.ObjectType)
+            {
+                    case AverageCategory.District:
+                        var disRet = _ctx.Districts.Where(dis => dis.Id != Guid.Empty).Select(d => new
+                        {
+                            id = d.Id,
+                            text = d.Name
+                        });
+                        return Json(disRet, JsonRequestBehavior.AllowGet);
+                case AverageCategory.Enterprise:
+                    var entRet = _ctx.Enterprises.Where(ent => ent.Id != Guid.Empty).Select(d => new
+                    {
+                        id = d.Id,
+                        text = d.Name
+                    });
+                    return Json(entRet, JsonRequestBehavior.AllowGet);
+                case AverageCategory.Project:
+                    var prjRet = _ctx.KsDustProjects.Where(prj => prj.Id != Guid.Empty).Select(d => new
+                    {
+                        id = d.Id,
+                        text = d.Name
+                    });
+                    return Json(prjRet, JsonRequestBehavior.AllowGet);
+                case AverageCategory.Device:
+                    var devRet = _ctx.KsDustDevices.Where(dev => dev.Id != Guid.Empty).Select(d => new
+                    {
+                        id = d.Id,
+                        text = d.Name
+                    });
+                    return Json(devRet, JsonRequestBehavior.AllowGet);
+            }
+
+            return null;
+        }
     }
 }

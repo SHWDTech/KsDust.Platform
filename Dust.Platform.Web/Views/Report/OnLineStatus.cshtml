@@ -13,10 +13,10 @@
             </select>
             <span for="onlineObjectType">在线率统计对象类型：</span>
             <select id="onlineObjectType" style="width: 160px;">
-                <option value="0">设备在线率统计</option>
-                <option value="1">工程在线率统计</option>
-                <option value="2">企业在线率统计</option>
                 <option value="3">区县在线率统计</option>
+                <option value="2">企业在线率统计</option>
+                <option value="1">工程在线率统计</option>
+                <option value="0">设备在线率统计</option>
             </select>
             <span for="onlineDateTime">在线率统计时间：</span>
             <select id="onlineDateTime" style="width: 160px;"></select>
@@ -76,7 +76,7 @@
             cache: true,
             processResults: function (data) {
                 return {
-                    results: data.ret
+                    results: data
                 }
             }
         }

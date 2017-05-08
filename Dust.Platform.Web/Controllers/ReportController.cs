@@ -343,7 +343,7 @@ namespace Dust.Platform.Web.Controllers
             var query = _ctx.OnlineStatisticses.Where(s => s.Category == post.ObjectType &&
                                                            s.StatusType == post.DateType);
             var ret = query.GroupBy(o => o.UpdateTime)
-                .OrderBy(g => g.Key)
+                .OrderByDescending(g => g.Key)
                 .Select(item => item.Key)
                 .ToList()
                 .Select(obj => new
@@ -377,13 +377,13 @@ namespace Dust.Platform.Web.Controllers
         {
             switch (post.ObjectType)
             {
-                    case AverageCategory.District:
-                        var disRet = _ctx.Districts.Where(dis => dis.Id != Guid.Empty).Select(d => new
-                        {
-                            id = d.Id,
-                            text = d.Name
-                        });
-                        return Json(disRet, JsonRequestBehavior.AllowGet);
+                case AverageCategory.District:
+                    var disRet = _ctx.Districts.Where(dis => dis.Id != Guid.Empty).Select(d => new
+                    {
+                        id = d.Id,
+                        text = d.Name
+                    });
+                    return Json(disRet, JsonRequestBehavior.AllowGet);
                 case AverageCategory.Enterprise:
                     var entRet = _ctx.Enterprises.Where(ent => ent.Id != Guid.Empty).Select(d => new
                     {
@@ -406,6 +406,80 @@ namespace Dust.Platform.Web.Controllers
                     });
                     return Json(devRet, JsonRequestBehavior.AllowGet);
             }
+
+            return null;
+        }
+
+        public ActionResult OnlineStatisticsRankTable(OnlineStatisticsRankTablePost post)
+        {
+            var query = _ctx.OnlineStatisticses.Where(o => o.Category == post.Category
+                                                           && o.StatusType == post.StatusType);
+            post.TargetObjects.RemoveAll(o => o == Guid.Empty);
+            if (post.TargetObjects != null && post.TargetObjects.Count > 0)
+            {
+                query = query.Where(o => post.TargetObjects.Contains(o.TargetGuid));
+            }
+            query = query.Where(q => q.UpdateTime == post.UpdateTime);
+            var total = query.Count();
+            var ranks = query
+                .OrderBy(q => q.Id)
+                .Skip(post.offset)
+                .Take(post.limit)
+                .Select(r => new
+                {
+                    r.TargetGuid,
+                    r.Statistics,
+                    r.UpdateTime
+                })
+                .ToList();
+            switch (post.Category)
+            {
+                case AverageCategory.Device:
+                    return Json(new
+                    {
+                        total,
+                        rows = ranks.Select(r => new
+                        {
+                            TargetName = _ctx.KsDustDevices.First(d => d.Id == r.TargetGuid).Name,
+                            OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
+                            DateTime = $"{r.UpdateTime:yyyy年MM月}"
+                        })
+                    }, JsonRequestBehavior.AllowGet);
+                case AverageCategory.Project:
+                    return Json(new
+                    {
+                        total,
+                        rows = ranks.Select(r => new
+                        {
+                            TargetName = _ctx.KsDustProjects.First(d => d.Id == r.TargetGuid).Name,
+                            OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
+                            DateTime = $"{r.UpdateTime:yyyy年MM月}"
+                        })
+                    }, JsonRequestBehavior.AllowGet);
+                case AverageCategory.Enterprise:
+                    return Json(new
+                    {
+                        total,
+                        rows = ranks.Select(r => new
+                        {
+                            TargetName = _ctx.Enterprises.First(d => d.Id == r.TargetGuid).Name,
+                            OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
+                            DateTime = $"{r.UpdateTime:yyyy年MM月}"
+                        })
+                    }, JsonRequestBehavior.AllowGet);
+                case AverageCategory.District:
+                    return Json(new
+                    {
+                        total,
+                        rows = ranks.Select(r => new
+                        {
+                            TargetName = _ctx.Districts.First(d => d.Id == r.TargetGuid).Name,
+                            OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
+                            DateTime = $"{r.UpdateTime:yyyy年MM月}"
+                        })
+                    }, JsonRequestBehavior.AllowGet);
+            }
+
 
             return null;
         }

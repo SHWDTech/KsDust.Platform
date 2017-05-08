@@ -1,6 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
 
 using System;
+using System.Collections.Generic;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Web.Models.Ajax;
 using Dust.Platform.Web.Models.Setting;
@@ -101,5 +102,18 @@ namespace Dust.Platform.Web.Models.Table
         public NoticeType? Type { get; set; }
 
         public bool? Status { get; set; }
+    }
+
+    public class OnlineStatisticsRankTablePost : TablePost
+    {
+        public AverageType StatusType { get; set; }
+
+        public AverageCategory Category { get; set; }
+
+        public long DateTimeTicks { get; set; }
+
+        public DateTime UpdateTime => new DateTime(DateTimeTicks);
+
+        public List<Guid> TargetObjects { get; set; }
     }
 }

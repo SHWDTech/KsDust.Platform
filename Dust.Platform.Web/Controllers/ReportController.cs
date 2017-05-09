@@ -414,10 +414,11 @@ namespace Dust.Platform.Web.Controllers
         {
             var query = _ctx.OnlineStatisticses.Where(o => o.Category == post.Category
                                                            && o.StatusType == post.StatusType);
-            post.TargetObjects.RemoveAll(o => o == Guid.Empty);
-            if (post.TargetObjects != null && post.TargetObjects.Count > 0)
+            var targetObjects = Request["TargetObjects[]"]?.Split(',').Select(Guid.Parse).ToList();
+            if (targetObjects != null && targetObjects.Count > 0)
             {
-                query = query.Where(o => post.TargetObjects.Contains(o.TargetGuid));
+                targetObjects.RemoveAll(o => o == Guid.Empty);
+                query = query.Where(o => targetObjects.Contains(o.TargetGuid));
             }
             query = query.Where(q => q.UpdateTime == post.UpdateTime);
             var total = query.Count();

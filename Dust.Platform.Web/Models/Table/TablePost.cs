@@ -113,7 +113,5 @@ namespace Dust.Platform.Web.Models.Table
         public long DateTimeTicks { get; set; }
 
         public DateTime UpdateTime => new DateTime(DateTimeTicks);
-
-        public List<Guid> TargetObjects { get; set; }
     }
 }

@@ -111,6 +111,7 @@
 
     $('#onlineStatisticsRank').bootstrapTable({
         queryParams: function (params) {
+            debugger;
             params.StatusType = $('#onlineDateType').val();
             params.Category = $('#onlineObjectType').val();
             params.DateTimeTicks = $('#onlineDateTime').val();

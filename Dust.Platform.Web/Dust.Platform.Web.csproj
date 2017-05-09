@@ -490,6 +490,7 @@
     <Content Include="Views\Setting\DeviceHistoryData.cshtml" />
     <Content Include="Views\Admin\Message.cshtml" />
     <Content Include="Views\Report\OnLineStatus.cshtml" />
+    <Content Include="Views\Statistics\GeneralComparison.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

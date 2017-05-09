@@ -97,11 +97,17 @@
                 function (ret) {
                     $($('.present')[$('.present').length - 1]).append(ret);
                     if (treenode.callBack != null) {
-                        window[treenode.callBack](treenode.param, function () {
-                            currentli.find('a').click(function () {
-                                tabSwitch(currentli.find('a'));
-                            });
-                        }, treenode);
+                        window[treenode.callBack](treenode.param,
+                            function() {
+                                currentli.find('a').click(function() {
+                                    tabSwitch(currentli.find('a'));
+                                });
+                            },
+                            treenode);
+                    } else {
+                        currentli.find('a').click(function() {
+                            tabSwitch(currentli.find('a'));
+                        });
                     }
                 });
         }
@@ -343,6 +349,12 @@
                     type: 1,
                     url: '/Statistics/HistoryRankTable'
                 }
+            },
+            {
+                name: "数据综合对比",
+                id: 4,
+                ajaxurl: '/Statistics/GeneralComparison',
+                tabTailfix: ''
             }
         ];
         $.fn.zTree.init($('#infotree'), setting, basicNodes);

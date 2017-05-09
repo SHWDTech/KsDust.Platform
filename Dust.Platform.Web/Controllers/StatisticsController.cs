@@ -412,5 +412,7 @@ namespace Dust.Platform.Web.Controllers
                 })
             }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GeneralComparison() => View();
     }
 }

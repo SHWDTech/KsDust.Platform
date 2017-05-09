@@ -98,7 +98,7 @@ namespace Dust.Platform.Web.Controllers
             return null;
         }
 
-        private string GetNoticeTypeName(NoticeType noticeType)
+        private static string GetNoticeTypeName(NoticeType noticeType)
         {
             var memberInfo = typeof(NoticeType).GetMember(noticeType.ToString())
                 .FirstOrDefault();

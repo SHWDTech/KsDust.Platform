@@ -1,7 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 
 using System;
-using System.Collections.Generic;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Web.Models.Ajax;
 using Dust.Platform.Web.Models.Setting;

@@ -3,4 +3,114 @@
     Layout = null;
 }
 
-<h1>On Developing</h1>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="form-horizontal">
+            <span>选择区县：</span>
+            <select style="width: 150px;" id="districtSel" multiple="multiple"></select>
+            <span>选择企业：</span>
+            <select style="width: 150px;" id="enterpriseSel" multiple="multiple"></select>
+            <span>选择工程：</span>
+            <select style="width: 150px;" id="projectSel" multiple="multiple"></select>
+            <span>选择设备：</span>
+            <select style="width: 150px;" id="deviceSel" multiple="multiple"></select>
+        </div>
+        <div class="form-horizontal" style="margin-top: 10px;">
+            <span>数据类型：</span>
+            <select style="width: 150px;" id="dataTimeType">
+                <option value="2">日均值</option>
+                <option value="3">月均值</option>
+                <option value="0">十五分钟均值</option>
+                <option value="1">小时均值</option>
+            </select>
+            <span>时间范围：</span>
+            <input type="text" style="width: 150px;" id="startTime" value="@($"{DateTime.Now.AddMonths(-1):yyyy-MM-dd HH:mm}")"/>
+            <span> - </span>
+            <input type="text" style="width: 150px;" id="endTime" value="@($"{DateTime.Now:yyyy-MM-dd HH:mm}")"/>
+            <input type="button" class="btn btn-primary" value="开始对比" id="startCompare"/>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div style="overflow-x: hidden; height: 42px;">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a>颗粒物</a>
+                </li>
+                <li role="presentation" class="">
+                    <a>噪音</a>
+                </li>
+                <li role="presentation" class="">
+                    <a>PM25</a>
+                </li>
+                <li role="presentation" class="">
+                    <a>PM100</a>
+                </li>
+                <li role="presentation" class="">
+                    <a>温度</a>
+                </li>
+                <li role="presentation" class="">
+                    <a>湿度</a>
+                </li>
+                <li role="presentation" class="">
+                    <a>风速</a>
+                </li>
+            </ul>
+        </div>
+        <div style="padding: 10px; height: 550px;">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#startTime').datetimepicker({
+        locale: 'zh-cn',
+        format: 'YYYY年MM月DD日 HH点'
+    });
+    $('#endTime').datetimepicker({
+        locale: 'zh-cn',
+        format: 'YYYY年MM月DD日 HH点'
+    });
+    $('#dataTimeType').select2();
+    $.get('/Admin/GetObjectTargets', function(ret) {
+        $('#districtSel').select2({
+            placeholder: '选择区县',
+            data: ret.dis
+        });
+        $('#enterpriseSel').select2({
+            placeholder: '选择企业',
+            data: ret.ent
+        });
+        $('#projectSel').select2({
+            placeholder: '选择工程',
+            data: ret.prj
+        });
+        $('#deviceSel').select2({
+            placeholder: '选择设备',
+            data: ret.dev
+        });
+    });
+
+    $('#startCompare').on('click', function () {
+        var targetObjects = [];
+        if ($('#districtSel').val() != null) {
+            targetObjects = targetObjects.concat($('#districtSel').val());
+        }
+        if ($('#enterpriseSel').val() != null) {
+            targetObjects = targetObjects.concat($('#enterpriseSel'));
+        }
+        if ($('#projectSel').val() != null) {
+            targetObjects = targetObjects.concat($('#projectSel'));
+        }
+        if ($('#deviceSel').val() != null) {
+            targetObjects = targetObjects.concat($('#deviceSel'));
+        }
+        $.post("/Admin/GeneralComparsionResult", {
+            TargetObjects: targetObjects,
+            DataType: $('#dataTimeType').val(),
+            StartDateTime: $('#startTime').data('DateTimePicker').date()._d.toISOString(),
+            EndDateTime: $('#endTime').data('DateTimePicker').date()._d.toISOString()
+        }, function (ret) {
+            console.log(ret.length);
+        });
+    });
+</script>

@@ -5,7 +5,9 @@ using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Account;
+using Dust.Platform.Web.Models.Admin;
 using Dust.Platform.Web.Models.Table;
+using Microsoft.Ajax.Utilities;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -108,6 +110,43 @@ namespace Dust.Platform.Web.Controllers
                 memberInfo.GetCustomAttributes(typeof(DisplayAttribute), false)
                     .FirstOrDefault();
             return attribute?.Name;
+        }
+
+        public ActionResult GetObjectTargets()
+        {
+            var obj = new
+            {
+                dis = _ctx.Districts.Where(item => item.Id != Guid.Empty).Select(d => new
+                {
+                    id = d.Id,
+                    text = d.Name
+                }).ToList(),
+                ent = _ctx.Enterprises.Where(item => item.Id != Guid.Empty).Select(e => new
+                {
+                    id = e.Id,
+                    text = e.Name
+                }).ToList(),
+                prj = _ctx.KsDustProjects.Where(item => item.Id != Guid.Empty).Select(p => new
+                {
+                    id = p.Id,
+                    text = p.Name
+                }).ToList(),
+                dev = _ctx.KsDustDevices.Where(item => item.Id != Guid.Empty).Select(de => new
+                {
+                    id = de.Id,
+                    text = de.Name
+                }).ToList()
+            };
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GeneralComparsionResult(GeneralComparsionResultViewModel model)
+        {
+            var query = _ctx.AverageMonitorDatas.Where(m => m.Type == model.DataType &&
+                                                            m.AverageDateTime > model.StartDateTime &&
+                                                            m.AverageDateTime < model.EndDateTime &&
+                                                            model.TargetObjects.Contains(m.TargetId)).ToList();
+            return Json(query, JsonRequestBehavior.AllowGet);
         }
     }
 }

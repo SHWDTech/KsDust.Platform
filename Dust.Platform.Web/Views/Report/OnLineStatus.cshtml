@@ -4,7 +4,7 @@
 }
 
 <div class="panel panel-info">
-    <div class="panel-body">
+    <div class="panel-heading">
         <div class="form-horizontal">
             <span for="onlineDateType">在线率统计时间类型：</span>
             <select id="onlineDateType" style="width: 120px;">
@@ -27,20 +27,20 @@
             <input type="button" class="btn btn-primary" value="查看" style="margin-right: 5px;" id="viewOnlineStatistics" />
             <input type="button" class="btn btn-primary" value="导出" />
         </div>
-        <div style="margin-top: 15px;">
-            @{ var table = Html.BootstrapTable(null, TablePaginationOption.server, new
-                {
-                    id = "onlineStatisticsRank",
-                    data_url = "/Report/OnlineStatisticsRankTable",
-                    data_page_size = 50,
-                    data_height = 550
-                });
-                var builder = table.Column("对象名称", "TargetName")
-                    .Column("在线率", "OnlineRank")
-                    .Column("统计时间", "DateTime");
-            }
-            @(builder)
-        </div>
+    </div>
+    <div class="panel-body" style="margin-top: 15px;">
+        @{ var table = Html.BootstrapTable(null, TablePaginationOption.server, new
+            {
+                id = "onlineStatisticsRank",
+                data_url = "/Report/OnlineStatisticsRankTable",
+                data_page_size = 50,
+                data_height = 550
+            });
+            var builder = table.Column("对象名称", "TargetName")
+                .Column("在线率", "OnlineRank")
+                .Column("统计时间", "DateTime");
+        }
+        @(builder)
     </div>
 </div>
 

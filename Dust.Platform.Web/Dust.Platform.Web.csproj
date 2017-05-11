@@ -186,6 +186,7 @@
     <Compile Include="Models\Account\SignInStatus.cs" />
     <Compile Include="Models\Account\UserEditModel.cs" />
     <Compile Include="Models\Account\UserPasswordModel.cs" />
+    <Compile Include="Models\Admin\AdminViewModel.cs" />
     <Compile Include="Models\Ajax\AjaxViewModel.cs" />
     <Compile Include="Models\Home\IndexViewModel.cs" />
     <Compile Include="Models\Home\MonitorContentViewModel.cs" />

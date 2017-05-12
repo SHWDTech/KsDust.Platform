@@ -130,3 +130,34 @@ chartsOption.timelineOptions = function(params) {
 
     return option;
 }
+
+chartsOption.compareLineOptions = function (params) {
+    var option = {
+        title: {
+            text: params['title'],
+            textAlign: 'center',
+            left: '50%'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                animation: true
+            }
+        },
+        grid: {
+            left: '30px',
+            right: '20px'
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: params['category']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: params['series']
+    };
+
+    return option;
+};

@@ -24,44 +24,73 @@
                 <option value="1">小时均值</option>
             </select>
             <span>时间范围：</span>
-            <input type="text" style="width: 150px;" id="startTime" value="@($"{DateTime.Now.AddMonths(-1):yyyy-MM-dd HH:mm}")"/>
+            <input type="text" style="width: 150px;" id="startTime" value="@($"{DateTime.Now.AddMonths(-1):yyyy-MM-dd HH:mm}")" />
             <span> - </span>
-            <input type="text" style="width: 150px;" id="endTime" value="@($"{DateTime.Now:yyyy-MM-dd HH:mm}")"/>
-            <input type="button" class="btn btn-primary" value="开始对比" id="startCompare"/>
+            <input type="text" style="width: 150px;" id="endTime" value="@($"{DateTime.Now:yyyy-MM-dd HH:mm}")" />
+            <input type="button" class="btn btn-primary" value="开始对比" id="startCompare" />
         </div>
     </div>
     <div class="panel-body">
         <div style="overflow-x: hidden; height: 42px;">
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs" role="tablist" id="chartTabs">
                 <li role="presentation" class="active">
-                    <a>颗粒物</a>
+                    <a href="javascript:void(0)" data-target="ParticulateMatterChart">颗粒物</a>
                 </li>
                 <li role="presentation" class="">
-                    <a>噪音</a>
+                    <a href="javascript:void(0)" data-target="NoiseChart">噪音</a>
                 </li>
                 <li role="presentation" class="">
-                    <a>PM25</a>
+                    <a href="javascript:void(0)" data-target="Pm25Chart">PM25</a>
                 </li>
                 <li role="presentation" class="">
-                    <a>PM100</a>
+                    <a href="javascript:void(0)" data-target="Pm100Chart">PM100</a>
                 </li>
                 <li role="presentation" class="">
-                    <a>温度</a>
+                    <a href="javascript:void(0)" data-target="TemperatureChart">温度</a>
                 </li>
                 <li role="presentation" class="">
-                    <a>湿度</a>
+                    <a href="javascript:void(0)" data-target="HumidityChart">湿度</a>
                 </li>
                 <li role="presentation" class="">
-                    <a>风速</a>
+                    <a href="javascript:void(0)" data-target="WindSpeedChart">风速</a>
                 </li>
             </ul>
         </div>
-        <div style="padding: 10px; height: 550px;">
+        <div style="padding: 10px; height: 560px; overflow: hidden;" id="chartContainer">
+            <div id="ParticulateMatterChart" style="height: 540px;"></div>
+            <div id="Pm25Chart" style="height: 540px; display: none;"></div>
+            <div id="NoiseChart" style="height: 540px; display: none;"></div>
+            <div id="Pm100Chart" style="height: 540px; display: none;"></div>
+            <div id="TemperatureChart" style="height: 540px; display: none;"></div>
+            <div id="HumidityChart" style="height: 540px; display: none;"></div>
+            <div id="WindSpeedChart" style="height: 540px; display: none;"></div>
         </div>
     </div>
 </div>
 
+<script src="~/Scripts/Utility/chartsOption.js"></script>
 <script type="text/javascript">
+    var compareCharts = {};
+    $(function () {
+        $('#chartContainer').children().width($('#chartContainer').width() - 20);
+        $('#chartTabs li a').on('click', function (event) {
+            $('#chartTabs li').removeClass('active');
+            $(event.target).parent().addClass('active');
+            $('#chartContainer').children().hide();
+            $('#' + $(event.target).attr('data-target')).show();
+        });
+        var dataCharts = [];
+        compareCharts.getChart = function (dataName) {
+            var exist = dataCharts.filter(function (chart) {
+                return chart.dataName === dataName;
+            })[0];
+            if (exist == undefined) {
+                exist = echarts.init(document.getElementById(dataName + 'Chart'));
+                dataCharts.push(exist);
+            };
+            return exist;
+        };
+    });
     $('#startTime').datetimepicker({
         locale: 'zh-cn',
         format: 'YYYY年MM月DD日 HH点'
@@ -71,7 +100,7 @@
         format: 'YYYY年MM月DD日 HH点'
     });
     $('#dataTimeType').select2();
-    $.get('/Admin/GetObjectTargets', function(ret) {
+    $.get('/Admin/GetObjectTargets', function (ret) {
         $('#districtSel').select2({
             placeholder: '选择区县',
             data: ret.dis
@@ -90,19 +119,31 @@
         });
     });
 
+    var prepareSeries = function (data, name) {
+        var series = [];
+        for (var i = 0; i < data.length; i++) {
+            series.push({
+                name: data[i].Key.Name,
+                type: 'line',
+                data: data[i].Values.map(function(v) { return v[name]; })
+            });
+        }
+        return series;
+    }
+
     $('#startCompare').on('click', function () {
         var targetObjects = [];
         if ($('#districtSel').val() != null) {
             targetObjects = targetObjects.concat($('#districtSel').val());
         }
         if ($('#enterpriseSel').val() != null) {
-            targetObjects = targetObjects.concat($('#enterpriseSel'));
+            targetObjects = targetObjects.concat($('#enterpriseSel').val());
         }
         if ($('#projectSel').val() != null) {
-            targetObjects = targetObjects.concat($('#projectSel'));
+            targetObjects = targetObjects.concat($('#projectSel').val());
         }
         if ($('#deviceSel').val() != null) {
-            targetObjects = targetObjects.concat($('#deviceSel'));
+            targetObjects = targetObjects.concat($('#deviceSel').val());
         }
         $.post("/Admin/GeneralComparsionResult", {
             TargetObjects: targetObjects,
@@ -110,7 +151,25 @@
             StartDateTime: $('#startTime').data('DateTimePicker').date()._d.toISOString(),
             EndDateTime: $('#endTime').data('DateTimePicker').date()._d.toISOString()
         }, function (ret) {
-            console.log(ret.length);
+            if (ret.length > 0) {
+                var dataInfos = [{ name: 'ParticulateMatter', title: '颗粒物' },
+                { name: 'Noise', title: '噪音' },
+                { name: 'Pm25', title: 'Pm25' },
+                { name: 'Pm100', title: 'Pm100' },
+                { name: 'Temperature', title: '温度' },
+                { name: 'Humidity', title: '湿度' },
+                { name: 'WindSpeed', title: '风速' }];
+                for (var i = 0; i < dataInfos.length; i++) {
+                    var info = dataInfos[i];
+                    var chart = compareCharts.getChart(info.name);
+                    var option = chartsOption.compareLineOptions({
+                        title: $('#startTime').val() + ' 至 ' + $('#endTime').val() + ' ' + info.title + $('#dataTimeType').select2('data')[0].text + '数据对比',
+                        category: ret[0].Values.map(function (v) { return v.AverageDateTime }),
+                        series: prepareSeries(ret, info.name)
+                    });
+                    chart.setOption(option);
+                }
+            }
         });
     });
 </script>

@@ -7,7 +7,6 @@ using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Account;
 using Dust.Platform.Web.Models.Admin;
 using Dust.Platform.Web.Models.Table;
-using Microsoft.Ajax.Utilities;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -36,17 +35,17 @@ namespace Dust.Platform.Web.Controllers
             }
 
             var query = (from clientNotice in clientNotices
-                from notice in _ctx.Notices
-                where clientNotice.Notice == notice.Id
-                select new
-                {
-                    notice.Id,
-                    NoticeTitle = notice.Title,
-                    Time = notice.NoticeDateTime,
-                    Type = notice.NoticeType,
-                    NoticeContent = notice.Content,
-                    clientNotice.IsReaded
-                });
+                         from notice in _ctx.Notices
+                         where clientNotice.Notice == notice.Id
+                         select new
+                         {
+                             notice.Id,
+                             NoticeTitle = notice.Title,
+                             Time = notice.NoticeDateTime,
+                             Type = notice.NoticeType,
+                             NoticeContent = notice.Content,
+                             clientNotice.IsReaded
+                         });
 
             if (post.Type != null)
             {
@@ -145,8 +144,60 @@ namespace Dust.Platform.Web.Controllers
             var query = _ctx.AverageMonitorDatas.Where(m => m.Type == model.DataType &&
                                                             m.AverageDateTime > model.StartDateTime &&
                                                             m.AverageDateTime < model.EndDateTime &&
-                                                            model.TargetObjects.Contains(m.TargetId)).ToList();
-            return Json(query, JsonRequestBehavior.AllowGet);
+                                                            model.TargetObjects.Contains(m.TargetId))
+                                                            .Select(item => new
+                                                            {
+                                                                item.TargetId,
+                                                                item.Category,
+                                                                item.ParticulateMatter,
+                                                                item.Noise,
+                                                                item.Pm25,
+                                                                item.Pm100,
+                                                                item.Temperature,
+                                                                item.Humidity,
+                                                                item.WindSpeed,
+                                                                item.AverageDateTime
+                                                            })
+                                                            .ToList()
+                                                            .GroupBy(obj => new { obj.TargetId , obj.Category});
+
+            var rows = query.Select(q => new
+            {
+                Key = new
+                {
+                    Id = q.Key.TargetId,
+                    Name = GetTargetName(q.Key.TargetId, q.Key.Category)
+                },
+                Values = q.Select(obj => new
+                {
+                    obj.ParticulateMatter,
+                    obj.Noise,
+                    obj.Pm25,
+                    obj.Pm100,
+                    obj.Temperature,
+                    obj.Humidity,
+                    obj.WindSpeed,
+                    AverageDateTime = $"{obj.AverageDateTime:yyyy-MM-dd HH:mm}"
+                }).ToList()
+            });
+            return Json(rows, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetTargetName(Guid targetGuid, AverageCategory taregetCategory)
+        {
+            switch (taregetCategory)
+            {
+                case AverageCategory.Device:
+                    return _ctx.KsDustDevices.First(d => d.Id == targetGuid).Name;
+                case AverageCategory.Project:
+                    return _ctx.KsDustProjects.First(d => d.Id == targetGuid).Name;
+                case AverageCategory.Enterprise:
+                    return _ctx.Enterprises.First(d => d.Id == targetGuid).Name;
+                case AverageCategory.District:
+                    return _ctx.Districts.First(d => d.Id == targetGuid).Name;
+                default:
+                    return string.Empty;
+            }
         }
     }
 }

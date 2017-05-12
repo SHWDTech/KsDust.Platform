@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
-using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Models.Account;
 using Dust.Platform.Web.Process;
 
@@ -8,13 +7,6 @@ namespace Dust.Platform.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AuthContext _ctx;
-
-        public AccountController()
-        {
-            _ctx = new AuthContext();
-        }
-
         // GET: Account
         [HttpGet]
         [AllowAnonymous]
@@ -40,12 +32,11 @@ namespace Dust.Platform.Web.Controllers
                 ModelState.AddModelError(result.ErrorElement, result.ErrorMessage);
                 return View(model);
             }
-
+            Response.Cookies.Add(result.SignInCookie);
             if (string.IsNullOrWhiteSpace(returnUrl))
             {
                 return RedirectToAction("Index", "Home");
             }
-            Response.Cookies.Add(result.SignInCookie);
 
             return Redirect(returnUrl);
         }

@@ -12,7 +12,10 @@ try:
         weatherJson = json.loads(content)
         nowDate = time.strftime('%Y-%m-%d')
         daily = weatherJson[u'results'][0][u'daily'][0]
-        cursor.execute("""INSERT INTO dayweathers (Date,DayText,DayCode,NightText,NightCode,TemperatureHigh,TemperatureLow,WindDirection,WindDirectionDegree,WindSpeed,WindScale) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""", (nowDate, daily[u'text_day'],daily[u'code_day'],daily[u'text_night'],daily[u'code_night'],daily[u'high'],daily[u'low'],daily[u'wind_direction'],daily[u'wind_direction_degree'],daily[u'wind_speed'],daily[u'wind_scale']))
+        cursor.execute("""INSERT INTO dayweathers (Date,DayText,DayCode,NightText,NightCode,TemperatureHigh,TemperatureLow,WindDirection,
+                WindDirectionDegree,WindSpeed,WindScale) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (nowDate, daily[u'text_day'],daily[u'code_day'],daily[u'text_night'],daily[u'code_night'],
+                daily[u'high'],daily[u'low'],daily[u'wind_direction'],daily[u'wind_direction_degree'],daily[u'wind_speed'],daily[u'wind_scale']))
         cnxn.commit()
         print(time.strftime('ExecuteTime: %Y-%m-%d %H:%M:%S'))
 except Exception as error:

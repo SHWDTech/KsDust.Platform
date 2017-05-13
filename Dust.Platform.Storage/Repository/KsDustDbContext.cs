@@ -13,12 +13,10 @@ namespace Dust.Platform.Storage.Repository
         /// </summary>
         public KsDustDbContext() : base("Ks_Dust_Platform")
         {
-            
         }
 
         public KsDustDbContext(string connString) : base(connString)
         {
-            
         }
 
         /// <summary>
@@ -105,5 +103,10 @@ namespace Dust.Platform.Storage.Repository
         /// 用户通知列表
         /// </summary>
         public virtual DbSet<UserClientNotice> UserClientNotices { get; set; }
+
+        /// <summary>
+        /// 历史天气信息记录
+        /// </summary>
+        public virtual DbSet<DayWeather> DayWeathers { get; set; }
     }
 }

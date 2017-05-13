@@ -134,6 +134,10 @@
     <Compile Include="Migrations\201705030626523_AverageCategory.Designer.cs">
       <DependentUpon>201705030626523_AverageCategory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705130425489_AddDayWeather.cs" />
+    <Compile Include="Migrations\201705130425489_AddDayWeather.Designer.cs">
+      <DependentUpon>201705130425489_AddDayWeather.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -142,6 +146,7 @@
     <Compile Include="Model\CameraNode.cs" />
     <Compile Include="Model\CityArea.cs" />
     <Compile Include="Model\Client.cs" />
+    <Compile Include="Model\DayWeather.cs" />
     <Compile Include="Model\DeviceMantanceRecord.cs" />
     <Compile Include="Model\District.cs" />
     <Compile Include="Model\DustPermission.cs" />
@@ -235,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705030626523_AverageCategory.resx">
       <DependentUpon>201705030626523_AverageCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705130425489_AddDayWeather.resx">
+      <DependentUpon>201705130425489_AddDayWeather.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

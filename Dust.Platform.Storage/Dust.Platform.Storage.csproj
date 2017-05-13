@@ -138,6 +138,10 @@
     <Compile Include="Migrations\201705130425489_AddDayWeather.Designer.cs">
       <DependentUpon>201705130425489_AddDayWeather.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705130602120_AddDayAverageValid.cs" />
+    <Compile Include="Migrations\201705130602120_AddDayAverageValid.Designer.cs">
+      <DependentUpon>201705130602120_AddDayAverageValid.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -243,6 +247,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705130425489_AddDayWeather.resx">
       <DependentUpon>201705130425489_AddDayWeather.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705130602120_AddDayAverageValid.resx">
+      <DependentUpon>201705130602120_AddDayAverageValid.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

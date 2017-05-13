@@ -71,6 +71,11 @@ namespace Dust.Platform.Storage.Model
         public double WindSpeed { get; set; }
 
         /// <summary>
+        /// 是否可统计信息的天气（每日均值专用字段）
+        /// </summary>
+        public double IsWeaterValid { get; set; }
+
+        /// <summary>
         /// 均值时间
         /// </summary>
         [Index("IX_ProjectType_AverageCategory_AverageType_TargetId_UpdateTime", IsClustered = true, Order = 4)]

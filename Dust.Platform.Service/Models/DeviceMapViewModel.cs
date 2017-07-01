@@ -11,7 +11,7 @@ namespace Dust.Platform.Service.Models
 
         public string name { get; set; }
 
-        public DateTime time { get; set; }
+        public string time { get; set; }
 
         public double tsp { get; set; }
 

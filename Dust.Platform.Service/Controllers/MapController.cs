@@ -73,7 +73,7 @@ namespace Dust.Platform.Service.Controllers
                     {
                         id = device.id.ToString(),
                         name = device.name,
-                        time = last.UpdateTime,
+                        time = $"{last.UpdateTime:yyyy-MM-dd HH:mm:ss}",
                         tsp = last.ParticulateMatter,
                         pm25 = last.Pm25,
                         pm100 = last.Pm100,

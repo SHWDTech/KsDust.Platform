@@ -20,7 +20,7 @@ namespace Dust.Platform.Service
         {
             if(value < 0.4) return 0;
 
-            if (value > 0.4 && value < 1.0) return 1;
+            if (value >= 0.4 && value < 1.0) return 1;
 
             return 2;
         }

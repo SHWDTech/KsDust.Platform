@@ -63,17 +63,19 @@ namespace Dust.Platform.Web.Controllers
                     ajaxurl = "/Setting/DeviceRegister"
                 }
             };
-
-            var menus = new AuthRepository().FindModuleByParentName(((DustPrincipal)User).Id, "设置", false);
-            nodes.AddRange(menus.Select(module => new Nodes
+            using (var authRepository = new AuthRepository())
             {
-                id = module.Id.ToString(),
-                name = module.ModuleName,
-                nodetype = "setting",
-                ajaxurl = $"/{module.Controller}/{module.Action}"
-            }));
+                var menus = authRepository.FindModuleByParentName(((DustPrincipal)User).Id, "设置", false);
+                nodes.AddRange(menus.Select(module => new Nodes
+                {
+                    id = module.Id.ToString(),
+                    name = module.ModuleName,
+                    nodetype = "setting",
+                    ajaxurl = $"/{module.Controller}/{module.Action}"
+                }));
 
-            return nodes;
+                return nodes;
+            }
         }
 
         public ActionResult DeviceMantance() => View();
@@ -121,7 +123,7 @@ namespace Dust.Platform.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private MantanceStatus GetStatus(DateTime lastDateTime)
+        private static MantanceStatus GetStatus(DateTime lastDateTime)
         {
             var diff = DateTime.Now - lastDateTime;
             if (diff.TotalDays > 180)
@@ -154,10 +156,10 @@ namespace Dust.Platform.Web.Controllers
             {
                 _ctx.SaveChanges();
             }
-            catch
+            catch (Exception ex)
             {
                 var errorCode = Globals.NewIdentityCode();
-                LogService.Instance.Error($"新增设备失败，错误码：{errorCode}");
+                LogService.Instance.Error($"新增设备失败，错误码：{errorCode}", ex);
                 ModelState.AddModelError("Save", $@"保存设备信息失败，请联系管理员， 错误码：{errorCode}。");
                 return View(model);
             }
@@ -324,27 +326,29 @@ namespace Dust.Platform.Web.Controllers
             {
                 Id = id
             };
-            var repo = new AuthRepository();
-            ViewBag.Roles = repo.GetDustRoles(null)
-                .Select(r => new SelectListItem
-                {
-                    Text = r.DisplayName,
-                    Value = r.Id.ToString()
-                })
-                .ToList();
-            var user = repo.FindById(id).Result;
-            if (user == null)
+            using (var repo = new AuthRepository())
             {
+                ViewBag.Roles = repo.GetDustRoles(null)
+                                .Select(r => new SelectListItem
+                                {
+                                    Text = r.DisplayName,
+                                    Value = r.Id.ToString()
+                                })
+                                .ToList();
+                var user = repo.FindById(id).Result;
+                if (user == null)
+                {
+                    return View(model);
+                }
+                model.Id = user.Id;
+                model.UserName = user.UserName;
+                model.PhoneNumber = user.PhoneNumber;
+                model.UserRole = repo.GetDustRole(user).Id.ToString();
+                var relateEntity = user.Claims.FirstOrDefault(c => c.ClaimType == nameof(UserRelatedEntity));
+                model.UserRelateEntity = relateEntity != null ? relateEntity.ClaimValue : "";
+
                 return View(model);
             }
-            model.Id = user.Id;
-            model.UserName = user.UserName;
-            model.PhoneNumber = user.PhoneNumber;
-            model.UserRole = repo.GetDustRole(user).Id.ToString();
-            var relateEntity = user.Claims.FirstOrDefault(c => c.ClaimType == "UserRelatedEntity");
-            model.UserRelateEntity = relateEntity != null ? relateEntity.ClaimValue : "";
-
-            return View(model);
         }
 
         [HttpPost]
@@ -420,9 +424,9 @@ namespace Dust.Platform.Web.Controllers
             return View(model);
         }
 
-        private void RefreshUserRelatedEntity(IdentityUser user, UserEditModel model)
+        private static void RefreshUserRelatedEntity(IdentityUser user, UserEditModel model)
         {
-            var relatedEntity = user.Claims.FirstOrDefault(c => c.ClaimType == "UserRelatedEntity");
+            var relatedEntity = user.Claims.FirstOrDefault(c => c.ClaimType == nameof(UserRelatedEntity));
             if (relatedEntity != null)
             {
                 relatedEntity.ClaimValue = model.UserRelateEntity;
@@ -431,7 +435,7 @@ namespace Dust.Platform.Web.Controllers
             {
                 user.Claims.Add(new IdentityUserClaim
                 {
-                    ClaimType = "UserRelatedEntity",
+                    ClaimType = nameof(UserRelatedEntity),
                     ClaimValue = model.UserRelateEntity
                 });
             }
@@ -439,39 +443,43 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult DeleteUser(string id)
         {
-            var repo = new AuthRepository();
-            if (repo.DeleteUser(id).Succeeded)
+            using (var repo = new AuthRepository())
             {
+                if (repo.DeleteUser(id).Succeeded)
+                {
+                    return Json(new
+                    {
+                        message = "删除成功！"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
                 return Json(new
                 {
-                    message = "删除成功！"
+                    message = "删除失败！"
                 }, JsonRequestBehavior.AllowGet);
             }
-
-            return Json(new
-            {
-                message = "删除失败！"
-            }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult RoleManager() => View();
 
         public ActionResult RoleTable(TablePost post)
         {
-            var repo = new AuthRepository();
-            var total = repo.GetRoleCount(null);
-            var roles = repo.GetDustRoleTable(post.offset, post.limit);
-            var rows = roles.Select(u => new
+            using (var repo = new AuthRepository())
             {
-                u.Id,
-                RoleName = u.DisplayName
-            });
+                var total = repo.GetRoleCount(null);
+                var roles = repo.GetDustRoleTable(post.offset, post.limit);
+                var rows = roles.Select(u => new
+                {
+                    u.Id,
+                    RoleName = u.DisplayName
+                });
 
-            return Json(new
-            {
-                total,
-                rows
-            }, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    total,
+                    rows
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpGet]
@@ -484,68 +492,74 @@ namespace Dust.Platform.Web.Controllers
         [HttpPost]
         public ActionResult UserPassword(UserPasswordModel model)
         {
-            var repo = new AuthRepository();
-            if (string.IsNullOrWhiteSpace(model.CurrentPassword))
+            using (var repo = new AuthRepository())
             {
-                ModelState.AddModelError("Failed", @"密码不能为空！");
-                return View(model);
-            }
-            if (string.IsNullOrWhiteSpace(model.Password))
-            {
-                ModelState.AddModelError("Failed", @"密码不能为空！");
-                return View(model);
-            }
-            if (model.Password != model.ConfirmPassword)
-            {
-                ModelState.AddModelError("Failed", @"两次输入的密码不一致！");
-                return View(model);
-            }
-            var ret = repo.ChangePassword(model.UserId, model.CurrentPassword, model.Password);
-            ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"修改密码成功！" : @"修改密码失败");
+                if (string.IsNullOrWhiteSpace(model.CurrentPassword))
+                {
+                    ModelState.AddModelError("Failed", @"密码不能为空！");
+                    return View(model);
+                }
+                if (string.IsNullOrWhiteSpace(model.Password))
+                {
+                    ModelState.AddModelError("Failed", @"密码不能为空！");
+                    return View(model);
+                }
+                if (model.Password != model.ConfirmPassword)
+                {
+                    ModelState.AddModelError("Failed", @"两次输入的密码不一致！");
+                    return View(model);
+                }
+                var ret = repo.ChangePassword(model.UserId, model.CurrentPassword, model.Password);
+                ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"修改密码成功！" : @"修改密码失败");
 
-            return View(model);
+                return View(model);
+            }
         }
 
         [HttpGet]
         public ActionResult RolePermissions(string id)
         {
-            var repo = new AuthRepository();
-            var role = repo.FindDustRoleById(id);
-            var permissions = repo.FindRolePermissions(role);
-
-            return View(new RolePermissionsModel
+            using (var repo = new AuthRepository())
             {
-                RoleId = role.Id.ToString(),
-                RoleName = role.DisplayName,
-                Permissions = repo.GetDustPermissions(null),
-                RolePermissions = permissions
-            });
+                var role = repo.FindDustRoleById(id);
+                var permissions = repo.FindRolePermissions(role);
+
+                return View(new RolePermissionsModel
+                {
+                    RoleId = role.Id.ToString(),
+                    RoleName = role.DisplayName,
+                    Permissions = repo.GetDustPermissions(null),
+                    RolePermissions = permissions
+                });
+            }
         }
 
         [HttpPost]
         public ActionResult RolePermissions(RolePermissionsModel model)
         {
-            var repo = new AuthRepository();
-            var role = repo.FindDustRoleById(model.RoleId);
-            model.RoleName = role.DisplayName;
-            model.Permissions = repo.GetDustPermissions(null);
+            using (var repo = new AuthRepository())
+            {
+                var role = repo.FindDustRoleById(model.RoleId);
+                model.RoleName = role.DisplayName;
+                model.Permissions = repo.GetDustPermissions(null);
 
-            var rolePermissions = Request["RolePermissions"]?.Split(',').Select(Guid.Parse).ToList();
-            try
-            {
-                repo.UpdateRolePermissions(model.RoleId, rolePermissions);
-            }
-            catch (Exception)
-            {
-                ModelState.AddModelError("Failed", @"更新角色权限失败！");
+                var rolePermissions = Request[nameof(RolePermissions)]?.Split(',').Select(Guid.Parse).ToList();
+                try
+                {
+                    repo.UpdateRolePermissions(model.RoleId, rolePermissions);
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("Failed", @"更新角色权限失败！");
+                    model.RolePermissions = repo.FindRolePermissions(role);
+                    return View(model);
+                }
+
+                ModelState.AddModelError("Success", @"更新角色权限成功！");
                 model.RolePermissions = repo.FindRolePermissions(role);
+
                 return View(model);
             }
-
-            ModelState.AddModelError("Success", @"更新角色权限成功！");
-            model.RolePermissions = repo.FindRolePermissions(role);
-
-            return View(model);
         }
 
         [HttpGet]
@@ -640,5 +654,31 @@ namespace Dust.Platform.Web.Controllers
                 rows
             }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult AlarmPhotoTable(TablePost post)
+        {
+            var userId = Guid.Parse(((DustPrincipal) HttpContext.User).Id);
+            var devs = AccountProcess.UserIsInRole(userId.ToString(), "admin") ? _ctx.KsDustDevices.AsQueryable() : _ctx.KsDustDevices.Where(d => d.VendorId == userId);
+            var alarms = _ctx.KsDustAlarms.Include("Device").Where(a => devs.Contains(a.Device));
+            var total = devs.Count();
+            var rows = alarms.OrderByDescending(d => d.AlarmDateTime)
+                .Skip(post.offset)
+                .Take(post.limit)
+                .ToList()
+                .Select(q => new
+                {
+                    DeviceName = q.Device.Name,
+                    AlarmDateTime = $"{q.AlarmDateTime:yyyy-MM-dd HH:mm:ss fff}",
+                    q.AlarmValue
+                });
+
+            return Json(new
+            {
+                total,
+                rows
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ExceedPhoto() => View();
     }
 }

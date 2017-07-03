@@ -1,0 +1,47 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="modal fade" id="exceedModal" tabindex="-1" role="dialog" aria-labelledby="exceedModallabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div> 
+</div>
+<div>
+    @(Html.BootstrapTable("exceedphoto", "/Setting/AlarmPhotoTable", TablePaginationOption.server, new
+      {
+          data_page_size = 25
+      })
+          .Column("超标工地", "DeviceName")
+          .Column("超标时间", "AlarmDateTime")
+          .Column("超标值", "AlarmValue")
+          .Column("超标照片")
+          .Apply(ColumnOption.formatter, "exceedPhotoOperaterFormatter")
+          .Apply(ColumnOption.events, "operateEvents"))
+</div>
+
+<script type="text/javascript">
+    $('#exceedphoto').bootstrapTable({
+        height: $('#exceedphoto').parents('.tab-content').height() - 75
+    });
+    window.exceedPhotoOperaterFormatter = function () {
+        return [
+            '<a class="permission" href="javascript:void(0)" title="查看超标照片">查看</a>',
+            '<a class="permission" href="javascript:void(0)" title="添加超标照片">添加</a>'
+        ].join('');
+    }
+
+    window.operateEvents = {
+        'click .permission': function (e, value, row) {
+            $.get('/Setting/RolePermissions', { id: row.Id }, function (ret) {
+                $('#roleModal .modal-body').html(ret);
+                $('#roleModal').modal();
+            });
+        }
+    };
+</script>

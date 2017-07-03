@@ -40,9 +40,8 @@ namespace Dust.Platform.Web
                 Response.Redirect("Account/Login");
                 return;
             }
-            var newUser = new DustPrincipal(serializeModel);
 
-            HttpContext.Current.User = newUser;
+            HttpContext.Current.User = new DustPrincipal(serializeModel);
         }
     }
 }

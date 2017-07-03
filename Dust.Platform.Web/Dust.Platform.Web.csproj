@@ -492,6 +492,7 @@
     <Content Include="Views\Admin\Message.cshtml" />
     <Content Include="Views\Report\OnLineStatus.cshtml" />
     <Content Include="Views\Statistics\GeneralComparison.cshtml" />
+    <Content Include="Views\Setting\ExceedPhoto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

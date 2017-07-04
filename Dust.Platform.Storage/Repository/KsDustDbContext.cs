@@ -108,5 +108,10 @@ namespace Dust.Platform.Storage.Repository
         /// 历史天气信息记录
         /// </summary>
         public virtual DbSet<DayWeather> DayWeathers { get; set; }
+
+        /// <summary>
+        /// 超标报警图片
+        /// </summary>
+        public virtual DbSet<ExceedPhoto> ExceedPhotos { get; set; }
     }
 }

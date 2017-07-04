@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
@@ -14,6 +16,7 @@ using Dust.Platform.Web.Process;
 using Microsoft.AspNet.Identity.EntityFramework;
 using SHWDTech.Platform.Utility;
 using System.Transactions;
+using Dust.Platform.Web.Helper;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -667,6 +670,7 @@ namespace Dust.Platform.Web.Controllers
                 .ToList()
                 .Select(q => new
                 {
+                    q.Id,
                     DeviceName = q.Device.Name,
                     AlarmDateTime = $"{q.AlarmDateTime:yyyy-MM-dd HH:mm:ss fff}",
                     q.AlarmValue
@@ -680,5 +684,48 @@ namespace Dust.Platform.Web.Controllers
         }
 
         public ActionResult ExceedPhoto() => View();
+
+        public ActionResult ViewExceedPhoto(Guid alarmIdGuid)
+        {
+
+            return null;
+        }
+
+        public ActionResult ExceedPhotoUpload(ExceedPhotoUploadViewModel model)
+        {
+            try
+            {
+                var bitmap = (Bitmap)Image.FromStream(model.File.InputStream);
+                ImageHelper.GetImageThumbSize(bitmap, out int width, out int height);
+                var thumb = bitmap.GetThumbnailImage(width, height, () => false, IntPtr.Zero);
+                var fileName = $"{WebSiteConfigHelper.ExceedPhotoStoratePath}\\{model.Id}-{DateTime.Now:yyyy-MM-dd_HH-mm-ss_fff}";
+                var photoPath = $"{fileName}.png";
+                var thumbPath = $"{fileName}_thumb_128.png";
+                bitmap.Save(photoPath, ImageFormat.Png);
+                thumb.Save(thumbPath, ImageFormat.Png);
+                var info = new ExceedPhoto
+                {
+                    AlarmGuid = model.Id,
+                    Comment = model.Comment,
+                    PhotoPath = photoPath,
+                    PhotoThumbPath = thumbPath,
+                    UploadDateTime = DateTime.Now
+                };
+                _ctx.ExceedPhotos.Add(info);
+                _ctx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Error("保存图片失败！", ex);
+                return Json(new
+                {
+                    successed = false
+                });
+            }
+            return Json(new
+            {
+                successed = true
+            });
+        }
     }
 }

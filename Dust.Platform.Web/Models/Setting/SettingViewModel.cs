@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
 using Dust.Platform.Web.Models.Home;
 
 namespace Dust.Platform.Web.Models.Setting
@@ -18,5 +20,14 @@ namespace Dust.Platform.Web.Models.Setting
         NeedMantance = 0x01,
 
         Overdue = 0xFF
+    }
+
+    public class ExceedPhotoUploadViewModel
+    {
+        public Guid Id { get; set; }
+
+        public HttpPostedFileBase File { get; set; }
+
+        public string Comment { get; set; }
     }
 }

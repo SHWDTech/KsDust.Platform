@@ -142,6 +142,14 @@
     <Compile Include="Migrations\201705130602120_AddDayAverageValid.Designer.cs">
       <DependentUpon>201705130602120_AddDayAverageValid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201707040242343_AddExceedphoto.cs" />
+    <Compile Include="Migrations\201707040242343_AddExceedphoto.Designer.cs">
+      <DependentUpon>201707040242343_AddExceedphoto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707040807279_AddExceedphotoThumb.cs" />
+    <Compile Include="Migrations\201707040807279_AddExceedphotoThumb.Designer.cs">
+      <DependentUpon>201707040807279_AddExceedphotoThumb.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -157,6 +165,7 @@
     <Compile Include="Model\DustRole.cs" />
     <Compile Include="Model\Enterprise.cs" />
     <Compile Include="Model\Enum.cs" />
+    <Compile Include="Model\ExceedPhoto.cs" />
     <Compile Include="Model\KsDustAlarm.cs" />
     <Compile Include="Model\KsDustCamera.cs" />
     <Compile Include="Model\KsDustDevice.cs" />
@@ -250,6 +259,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705130602120_AddDayAverageValid.resx">
       <DependentUpon>201705130602120_AddDayAverageValid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707040242343_AddExceedphoto.resx">
+      <DependentUpon>201707040242343_AddExceedphoto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707040807279_AddExceedphotoThumb.resx">
+      <DependentUpon>201707040807279_AddExceedphotoThumb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

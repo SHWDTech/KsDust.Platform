@@ -178,6 +178,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\ImageHelper.cs" />
+    <Compile Include="Helper\WebSiteConfigHelper.cs" />
     <Compile Include="Models\Account\DustPrincipalModel.cs" />
     <Compile Include="Models\Account\DustPrincipal.cs" />
     <Compile Include="Models\Account\LoginViewModel.cs" />

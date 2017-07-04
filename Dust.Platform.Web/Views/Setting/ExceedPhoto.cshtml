@@ -12,6 +12,56 @@
         </div>
     </div> 
 </div>
+<div class="modal fade" id="addExceedPhotoModal" tabindex="-1" role="dialog" aria-labelledby="addExceedPhotoModallabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <table class="table table-bordered table-hover table-condensed">
+                    <tr>
+                        <td>
+                            <label>超标工地</label>
+                        </td>
+                        <td>
+                            <label id="device"></label>
+                            <input type="hidden" id="alarmId"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>超标时间</label>
+                        </td>
+                        <td>
+                            <label id="time">
+                                
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>选择需要上传的文件</label>
+                        </td>
+                        <td>
+                            <input id="uploadFile" type="file"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>备注</label>
+                        </td>
+                        <td>
+                            <textarea id="comment" style="height: 300px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input id="btnFileUpload" class="btn btn-info" type="button" value="提交" style="float: right; margin-right: 10px;"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <div>
     @(Html.BootstrapTable("exceedphoto", "/Setting/AlarmPhotoTable", TablePaginationOption.server, new
       {
@@ -31,17 +81,46 @@
     });
     window.exceedPhotoOperaterFormatter = function () {
         return [
-            '<a class="permission" href="javascript:void(0)" title="查看超标照片">查看</a>',
-            '<a class="permission" href="javascript:void(0)" title="添加超标照片">添加</a>'
+            '<a class="viewPhoto" href="javascript:void(0)" title="查看超标照片">查看</a>',
+            '<a class="addPhoto" style="margin-left: 10px;" href="javascript:void(0)" title="添加超标照片">添加</a>'
         ].join('');
     }
 
     window.operateEvents = {
-        'click .permission': function (e, value, row) {
-            $.get('/Setting/RolePermissions', { id: row.Id }, function (ret) {
+        'click .viewPhoto': function (e, value, row) {
+            $.get('/Setting/ViewExceedPhoto', { id: row.Id }, function (ret) {
                 $('#roleModal .modal-body').html(ret);
                 $('#roleModal').modal();
             });
+        },
+        'click .addPhoto': function (e, value, row) {
+            $('#alarmId').val(row.Id);
+            $('#device').html(row.DeviceName);
+            $('#time').html(row.AlarmDateTime);
+            $('#addExceedPhotoModal').modal();
         }
     };
+
+    $('#btnFileUpload').on('click', function () {
+        if (document.getElementById("uploadFile").files.length <= 0) {
+            alert('请选择需要上传的图片！');
+        }
+        var formData = new FormData();
+        formData.append("File", document.getElementById("uploadFile").files[0]);
+        formData.append("Id", $('#alarmId').val());
+        formData.append("Comment", $('#comment').val());
+        $.ajax({
+            type: "POST",
+            url: '/Setting/ExceedPhotoUpload',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (successed) {
+                if (successed) {
+                    alert("上传成功！");
+                }
+            }
+        });
+    });
 </script>

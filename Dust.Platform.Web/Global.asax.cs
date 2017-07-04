@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -6,6 +7,8 @@ using System.Web.Routing;
 using System.Web.Security;
 using Dust.Platform.Web.Models.Account;
 using Newtonsoft.Json;
+using Dust.Platform.Storage.Repository;
+using Dust.Platform.Web.Helper;
 
 namespace Dust.Platform.Web
 {
@@ -17,6 +20,16 @@ namespace Dust.Platform.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            LoadInitThing();
+        }
+
+        protected static void LoadInitThing()
+        {
+            using (var ctx = new KsDustDbContext())
+            {
+                var systemConfigurations = ctx.SystemConfigurations.Where(c => c.ConfigType == "SystemConfig").ToList();
+                WebSiteConfigHelper.LoadSystemConfigurations(systemConfigurations);
+            }
         }
 
         protected void Application_PostAuthenticateRequest(object sender, EventArgs e)

@@ -30,4 +30,13 @@ namespace Dust.Platform.Web.Models.Setting
 
         public string Comment { get; set; }
     }
+
+    public class ExceedPhotoViewModel
+    {
+        public string PhotoName { get; set; }
+
+        public string PhotoPath { get; set; }
+
+        public string ThumbPath { get; set; }
+    }
 }

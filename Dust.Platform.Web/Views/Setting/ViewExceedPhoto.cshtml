@@ -1,0 +1,20 @@
+﻿@model List<Dust.Platform.Web.Models.Setting.ExceedPhotoViewModel>
+@{
+    Layout = null;
+}
+
+<div class="row">
+    @{
+        foreach (var viewModel in Model)
+        {
+            <div class="col-xs-6 col-md-3">
+                <a href="@viewModel.PhotoPath" class="thumbnail">
+                    <img data-src="@viewModel.ThumbPath" alt="@viewModel.PhotoName" style="height: auto; width: auto; display: block;" src="@viewModel.ThumbPath" data-holder-rendered="true"/>
+                    <div class="caption">
+                        <p>@viewModel.PhotoName</p>
+                    </div>
+                </a>
+            </div>
+        }
+    }
+</div>

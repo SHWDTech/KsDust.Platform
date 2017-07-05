@@ -6,6 +6,10 @@
 <div class="modal fade" id="exceedModal" tabindex="-1" role="dialog" aria-labelledby="exceedModallabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">超标报警现场图片</h4>
+            </div>
             <div class="modal-body">
 
             </div>
@@ -88,9 +92,9 @@
 
     window.operateEvents = {
         'click .viewPhoto': function (e, value, row) {
-            $.get('/Setting/ViewExceedPhoto', { id: row.Id }, function (ret) {
-                $('#roleModal .modal-body').html(ret);
-                $('#roleModal').modal();
+            $.get('/Setting/ViewExceedPhoto', { alarmIdGuid: row.Id }, function (ret) {
+                $('#exceedModal .modal-body').html(ret);
+                $('#exceedModal').modal();
             });
         },
         'click .addPhoto': function (e, value, row) {

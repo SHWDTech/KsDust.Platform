@@ -687,8 +687,15 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult ViewExceedPhoto(Guid alarmIdGuid)
         {
+            var images = _ctx.ExceedPhotos.Where(e => e.AlarmGuid == alarmIdGuid).ToList();
+            var model = images.Select(r => new ExceedPhotoViewModel
+            {
+                PhotoName = $"{r.UploadDateTime:yyyy-MM-dd HH:mm:ss}",
+                PhotoPath = r.PhotoPath.Replace("d:", string.Empty).Replace("\\", "/"),
+                ThumbPath = r.PhotoThumbPath.Replace("d:", string.Empty).Replace("\\", "/")
+            }).ToList();
 
-            return null;
+            return View(model);
         }
 
         public ActionResult ExceedPhotoUpload(ExceedPhotoUploadViewModel model)

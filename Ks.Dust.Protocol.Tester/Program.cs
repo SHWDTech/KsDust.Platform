@@ -24,7 +24,9 @@ namespace Ks.Dust.Protocol.Tester
 
         private static IPAddress _localIp;
 
-        static void Main(string[] args)
+        private static readonly Random Rd = new Random();
+
+        static void Main()
         {
             _localIp = IPAddress.Parse(ConfigurationManager.AppSettings["localIp"]);
             _devices = new[]
@@ -113,8 +115,7 @@ namespace Ks.Dust.Protocol.Tester
 
         static string RandomDouble(int start, int end)
         {
-            var rd = new Random();
-            return (rd.Next(start * 100, end * 100) / 100.0).ToString("F1");
+            return (Rd.Next(start * 100, end * 100) / 100.0).ToString("F1");
         }
     }
 }

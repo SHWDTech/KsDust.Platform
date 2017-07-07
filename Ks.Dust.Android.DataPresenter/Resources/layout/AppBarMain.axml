@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="@mipmap/bg"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+  <RelativeLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/fragment_title_height">
+    <ImageView
+      android:id="@+id/goDrawer"
+      android:layout_alignParentLeft="true"
+      android:src="@mipmap/godrawer"
+      android:clickable="true"
+      android:scaleType="centerInside"
+      android:padding="14dp"
+      android:layout_width="@dimen/fragment_title_height"
+      android:layout_height="@dimen/fragment_title_height" />
+    <TextView
+      android:id="@+id/title"
+      android:textSize="16sp"
+      android:textColor="@android:color/white"
+      android:textStyle="bold"
+      android:layout_centerInParent="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:id="@+id/CascadeElement"
+      android:textSize="16sp"
+      android:textColor="@android:color/white"
+      android:textStyle="bold"
+      android:text="层级"
+      android:layout_centerVertical="true"
+      android:layout_toLeftOf="@+id/Statistics"
+      android:layout_width="48dp"
+      android:gravity="center"
+      android:layout_height="match_parent" />
+    <TextView
+      android:id="@+id/Statistics"
+      android:textSize="16sp"
+      android:textColor="@android:color/white"
+      android:textStyle="bold"
+      android:text="统计"
+      android:gravity="center"
+      android:layout_centerVertical="true"
+      android:layout_alignParentRight="true"
+      android:layout_width="48dp"
+      android:layout_height="match_parent" />
+  </RelativeLayout>
+  <FrameLayout
+    android:background="@color/search_bg"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <TextView
+      android:id="@+id/search"
+      android:layout_width="match_parent"
+      android:layout_height="36dp"
+      android:layout_gravity="center_vertical"
+      android:background="@drawable/chat_bg"
+      android:gravity="left|center_vertical"
+      android:paddingLeft="40dp"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:shadowColor="#55000000"
+      android:shadowDy="1"
+      android:shadowRadius="5"
+      android:textColor="@android:color/black" />
+    <ImageView
+      android:layout_gravity="center_vertical"
+      android:layout_marginLeft="20dp"
+      android:src="@mipmap/search"
+      android:scaleType="centerInside"
+      android:layout_width="20dp"
+      android:layout_height="20dp" />
+  </FrameLayout>
+
+  <FrameLayout
+    android:id="@+id/contentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
+
+  <LinearLayout
+    android:id="@+id/bottomLayout"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/activity_main_bottom_height">
+    <ImageView
+      android:id="@+id/home"
+      android:layout_weight="1"
+      android:layout_width="0dp"
+      android:src="@mipmap/home_yes"
+      android:layout_height="wrap_content" />
+    <ImageView
+      android:id="@+id/build"
+      android:layout_weight="1"
+      android:layout_width="0dp"
+      android:src="@mipmap/build_no"
+      android:layout_height="wrap_content" />
+    <ImageView
+      android:id="@+id/municipal"
+      android:layout_weight="1"
+      android:layout_width="0dp"
+      android:src="@mipmap/municipal_no"
+      android:layout_height="wrap_content" />
+    <ImageView
+      android:id="@+id/mixing"
+      android:layout_weight="1"
+      android:layout_width="0dp"
+      android:src="@mipmap/mixingplant_no"
+      android:layout_height="wrap_content" />
+  </LinearLayout>
+
+</LinearLayout>

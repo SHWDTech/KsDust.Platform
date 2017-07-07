@@ -41,11 +41,163 @@ namespace Ks.Dust.Android.DataPresenter
 			}
 		}
 		
+		public partial class Color
+		{
+			
+			// aapt resource value: 0x7f050006
+			public const int backgroud_blue = 2131034118;
+			
+			// aapt resource value: 0x7f050009
+			public const int bad_color = 2131034121;
+			
+			// aapt resource value: 0x7f05000a
+			public const int chart_bg = 2131034122;
+			
+			// aapt resource value: 0x7f050002
+			public const int colorAccent = 2131034114;
+			
+			// aapt resource value: 0x7f050000
+			public const int colorPrimary = 2131034112;
+			
+			// aapt resource value: 0x7f050001
+			public const int colorPrimaryDark = 2131034113;
+			
+			// aapt resource value: 0x7f050005
+			public const int loading_color = 2131034117;
+			
+			// aapt resource value: 0x7f050003
+			public const int me_item_bg_normal = 2131034115;
+			
+			// aapt resource value: 0x7f050004
+			public const int me_item_bg_press = 2131034116;
+			
+			// aapt resource value: 0x7f050008
+			public const int middle_color = 2131034120;
+			
+			// aapt resource value: 0x7f05000b
+			public const int search_bg = 2131034123;
+			
+			// aapt resource value: 0x7f050007
+			public const int well_color = 2131034119;
+			
+			static Color()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Color()
+			{
+			}
+		}
+		
+		public partial class Dimension
+		{
+			
+			// aapt resource value: 0x7f060002
+			public const int activity_horizontal_margin = 2131099650;
+			
+			// aapt resource value: 0x7f060004
+			public const int activity_main_bottom_height = 2131099652;
+			
+			// aapt resource value: 0x7f060003
+			public const int activity_vertical_margin = 2131099651;
+			
+			// aapt resource value: 0x7f060009
+			public const int county_item_leftmargin = 2131099657;
+			
+			// aapt resource value: 0x7f06000a
+			public const int county_item_rightmargin = 2131099658;
+			
+			// aapt resource value: 0x7f06000b
+			public const int custom_chart_height = 2131099659;
+			
+			// aapt resource value: 0x7f06000c
+			public const int device_current_data_padding = 2131099660;
+			
+			// aapt resource value: 0x7f060005
+			public const int fragment_title_height = 2131099653;
+			
+			// aapt resource value: 0x7f060008
+			public const int home_item_chartview = 2131099656;
+			
+			// aapt resource value: 0x7f060007
+			public const int home_item_imageview = 2131099655;
+			
+			// aapt resource value: 0x7f060001
+			public const int nav_header_height = 2131099649;
+			
+			// aapt resource value: 0x7f060000
+			public const int nav_header_vertical_spacing = 2131099648;
+			
+			// aapt resource value: 0x7f060006
+			public const int status_bar_height = 2131099654;
+			
+			static Dimension()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Dimension()
+			{
+			}
+		}
+		
 		public partial class Drawable
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int Icon = 2130837504;
+			public const int chat_bg = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int gray_selector = 2130837505;
+			
+			// aapt resource value: 0x7f020002
+			public const int ic_menu_camera = 2130837506;
+			
+			// aapt resource value: 0x7f020003
+			public const int ic_menu_gallery = 2130837507;
+			
+			// aapt resource value: 0x7f020004
+			public const int ic_menu_manage = 2130837508;
+			
+			// aapt resource value: 0x7f020005
+			public const int ic_menu_send = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int ic_menu_share = 2130837510;
+			
+			// aapt resource value: 0x7f020007
+			public const int ic_menu_slideshow = 2130837511;
+			
+			// aapt resource value: 0x7f020008
+			public const int Icon = 2130837512;
+			
+			// aapt resource value: 0x7f020009
+			public const int jiantou_selector = 2130837513;
+			
+			// aapt resource value: 0x7f02000a
+			public const int map_selector = 2130837514;
+			
+			// aapt resource value: 0x7f02000b
+			public const int menu_item_arrow_selector = 2130837515;
+			
+			// aapt resource value: 0x7f02000c
+			public const int menu_item_bg_selector = 2130837516;
+			
+			// aapt resource value: 0x7f02000d
+			public const int no_network_selector = 2130837517;
+			
+			// aapt resource value: 0x7f02000e
+			public const int side_nav_bar = 2130837518;
+			
+			// aapt resource value: 0x7f02000f
+			public const int tsp_bad_bg = 2130837519;
+			
+			// aapt resource value: 0x7f020010
+			public const int tsp_good_bg = 2130837520;
+			
+			// aapt resource value: 0x7f020011
+			public const int tsp_normal_bg = 2130837521;
 			
 			static Drawable()
 			{
@@ -60,8 +212,41 @@ namespace Ks.Dust.Android.DataPresenter
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050000
-			public const int btnHello = 2131034112;
+			// aapt resource value: 0x7f090002
+			public const int CascadeElement = 2131296258;
+			
+			// aapt resource value: 0x7f090003
+			public const int Statistics = 2131296259;
+			
+			// aapt resource value: 0x7f090006
+			public const int bottomLayout = 2131296262;
+			
+			// aapt resource value: 0x7f090008
+			public const int build = 2131296264;
+			
+			// aapt resource value: 0x7f090005
+			public const int contentLayout = 2131296261;
+			
+			// aapt resource value: 0x7f090000
+			public const int goDrawer = 2131296256;
+			
+			// aapt resource value: 0x7f090007
+			public const int home = 2131296263;
+			
+			// aapt resource value: 0x7f09000b
+			public const int map = 2131296267;
+			
+			// aapt resource value: 0x7f09000a
+			public const int mixing = 2131296266;
+			
+			// aapt resource value: 0x7f090009
+			public const int municipal = 2131296265;
+			
+			// aapt resource value: 0x7f090004
+			public const int search = 2131296260;
+			
+			// aapt resource value: 0x7f090001
+			public const int title = 2131296257;
 			
 			static Id()
 			{
@@ -76,8 +261,14 @@ namespace Ks.Dust.Android.DataPresenter
 		public partial class Layout
 		{
 			
-			// aapt resource value: 0x7f030000
-			public const int Main = 2130903040;
+			// aapt resource value: 0x7f040000
+			public const int AppBarMain = 2130968576;
+			
+			// aapt resource value: 0x7f040001
+			public const int fragment_category_map = 2130968577;
+			
+			// aapt resource value: 0x7f040002
+			public const int Main = 2130968578;
 			
 			static Layout()
 			{
@@ -89,14 +280,204 @@ namespace Ks.Dust.Android.DataPresenter
 			}
 		}
 		
+		public partial class Mipmap
+		{
+			
+			// aapt resource value: 0x7f030000
+			public const int arrow_menu_no = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int arrow_menu_yes = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int back = 2130903042;
+			
+			// aapt resource value: 0x7f030003
+			public const int bg = 2130903043;
+			
+			// aapt resource value: 0x7f030004
+			public const int build_no = 2130903044;
+			
+			// aapt resource value: 0x7f030005
+			public const int build_yes = 2130903045;
+			
+			// aapt resource value: 0x7f030006
+			public const int camera = 2130903046;
+			
+			// aapt resource value: 0x7f030007
+			public const int close = 2130903047;
+			
+			// aapt resource value: 0x7f030008
+			public const int construction_icon = 2130903048;
+			
+			// aapt resource value: 0x7f030009
+			public const int construction_no = 2130903049;
+			
+			// aapt resource value: 0x7f03000a
+			public const int construction_yes = 2130903050;
+			
+			// aapt resource value: 0x7f03000b
+			public const int godrawer = 2130903051;
+			
+			// aapt resource value: 0x7f03000c
+			public const int home_no = 2130903052;
+			
+			// aapt resource value: 0x7f03000d
+			public const int home_yes = 2130903053;
+			
+			// aapt resource value: 0x7f03000e
+			public const int humidity = 2130903054;
+			
+			// aapt resource value: 0x7f03000f
+			public const int icon = 2130903055;
+			
+			// aapt resource value: 0x7f030010
+			public const int infowindow_bg = 2130903056;
+			
+			// aapt resource value: 0x7f030011
+			public const int jiantou_normal = 2130903057;
+			
+			// aapt resource value: 0x7f030012
+			public const int jiantou_touch = 2130903058;
+			
+			// aapt resource value: 0x7f030013
+			public const int loadingpage_error = 2130903059;
+			
+			// aapt resource value: 0x7f030014
+			public const int loadingpage_error_press = 2130903060;
+			
+			// aapt resource value: 0x7f030015
+			public const int mixingplant_icon = 2130903061;
+			
+			// aapt resource value: 0x7f030016
+			public const int mixingplant_no = 2130903062;
+			
+			// aapt resource value: 0x7f030017
+			public const int mixingplant_yes = 2130903063;
+			
+			// aapt resource value: 0x7f030018
+			public const int municipal_no = 2130903064;
+			
+			// aapt resource value: 0x7f030019
+			public const int municipal_yes = 2130903065;
+			
+			// aapt resource value: 0x7f03001a
+			public const int noise = 2130903066;
+			
+			// aapt resource value: 0x7f03001b
+			public const int pm10 = 2130903067;
+			
+			// aapt resource value: 0x7f03001c
+			public const int pm25 = 2130903068;
+			
+			// aapt resource value: 0x7f03001d
+			public const int road_icon = 2130903069;
+			
+			// aapt resource value: 0x7f03001e
+			public const int road_no = 2130903070;
+			
+			// aapt resource value: 0x7f03001f
+			public const int road_yes = 2130903071;
+			
+			// aapt resource value: 0x7f030020
+			public const int search = 2130903072;
+			
+			// aapt resource value: 0x7f030021
+			public const int search_close = 2130903073;
+			
+			// aapt resource value: 0x7f030022
+			public const int start = 2130903074;
+			
+			// aapt resource value: 0x7f030023
+			public const int temperature = 2130903075;
+			
+			// aapt resource value: 0x7f030024
+			public const int tsp = 2130903076;
+			
+			// aapt resource value: 0x7f030025
+			public const int unmap = 2130903077;
+			
+			// aapt resource value: 0x7f030026
+			public const int uptime = 2130903078;
+			
+			// aapt resource value: 0x7f030027
+			public const int wharf_icon = 2130903079;
+			
+			// aapt resource value: 0x7f030028
+			public const int wharf_no = 2130903080;
+			
+			// aapt resource value: 0x7f030029
+			public const int wharf_yes = 2130903081;
+			
+			// aapt resource value: 0x7f03002a
+			public const int winddirection = 2130903082;
+			
+			// aapt resource value: 0x7f03002b
+			public const int windspeed = 2130903083;
+			
+			// aapt resource value: 0x7f03002c
+			public const int yesmap = 2130903084;
+			
+			static Mipmap()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Mipmap()
+			{
+			}
+		}
+		
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int ApplicationName = 2130968577;
+			// aapt resource value: 0x7f070000
+			public const int ApplicationName = 2131165184;
 			
-			// aapt resource value: 0x7f040000
-			public const int Hello = 2130968576;
+			// aapt resource value: 0x7f07000c
+			public const int action_sign_in = 2131165196;
+			
+			// aapt resource value: 0x7f07000d
+			public const int action_sign_in_short = 2131165197;
+			
+			// aapt resource value: 0x7f070004
+			public const int airmass = 2131165188;
+			
+			// aapt resource value: 0x7f070007
+			public const int districtavg_count = 2131165191;
+			
+			// aapt resource value: 0x7f070006
+			public const int districtavg_name = 2131165190;
+			
+			// aapt resource value: 0x7f070008
+			public const int districtavg_tspavg = 2131165192;
+			
+			// aapt resource value: 0x7f07000f
+			public const int error_account = 2131165199;
+			
+			// aapt resource value: 0x7f07000e
+			public const int error_password = 2131165198;
+			
+			// aapt resource value: 0x7f070005
+			public const int humidity = 2131165189;
+			
+			// aapt resource value: 0x7f070003
+			public const int more = 2131165187;
+			
+			// aapt resource value: 0x7f070002
+			public const int navigation_drawer_close = 2131165186;
+			
+			// aapt resource value: 0x7f070001
+			public const int navigation_drawer_open = 2131165185;
+			
+			// aapt resource value: 0x7f07000a
+			public const int prompt_account = 2131165194;
+			
+			// aapt resource value: 0x7f07000b
+			public const int prompt_password = 2131165195;
+			
+			// aapt resource value: 0x7f070009
+			public const int title_activity_login = 2131165193;
 			
 			static String()
 			{
@@ -104,6 +485,34 @@ namespace Ks.Dust.Android.DataPresenter
 			}
 			
 			private String()
+			{
+			}
+		}
+		
+		public partial class Style
+		{
+			
+			// aapt resource value: 0x7f080000
+			public const int ThemeCustomToolBar = 2131230720;
+			
+			// aapt resource value: 0x7f080002
+			public const int chat_dialog = 2131230722;
+			
+			// aapt resource value: 0x7f080004
+			public const int currentdata_bottom_text = 2131230724;
+			
+			// aapt resource value: 0x7f080003
+			public const int currentdata_title_text = 2131230723;
+			
+			// aapt resource value: 0x7f080001
+			public const int home_text = 2131230721;
+			
+			static Style()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Style()
 			{
 			}
 		}

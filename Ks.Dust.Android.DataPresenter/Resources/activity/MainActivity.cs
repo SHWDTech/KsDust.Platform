@@ -1,8 +1,8 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Widget;
+using CheeseBind;
 
-namespace Ks.Dust.Android.DataPresenter
+namespace Ks.Dust.Android.DataPresenter.Resources.activity
 {
     [Activity(Label = "Ks.Dust.Android.DataPresenter", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
@@ -13,11 +13,7 @@ namespace Ks.Dust.Android.DataPresenter
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-            var btn = FindViewById(Resource.Id.btnHello);
-            btn.Click += (sender, args) =>
-            {
-                Toast.MakeText(this, "Hello World!", ToastLength.Short).Show();
-            };
+            Cheeseknife.Bind(this);
         }
     }
 }

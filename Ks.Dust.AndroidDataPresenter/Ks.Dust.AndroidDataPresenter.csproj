@@ -54,7 +54,7 @@
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\..\Library\Xarmarin\json.net-7.0.1\lib\android\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\library\json.net-7.0.1\lib\android\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -98,17 +98,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainActivity.cs" />
+    <Compile Include="Xamarin\activity\MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xamarin\activity\KsDustBaseActivity.cs" />
     <Compile Include="Xamarin\activity\LoginActivity.cs" />
     <Compile Include="Xamarin\activity\SplashActivity.cs" />
+    <Compile Include="Xamarin\adapter\AbstractRecyclerAdapter.cs" />
     <Compile Include="Xamarin\adapter\LoginAnimatorListenerAdapter.cs" />
+    <Compile Include="Xamarin\adapter\SearchAdapter.cs" />
     <Compile Include="Xamarin\appplication\KsDustApplication.cs" />
     <Compile Include="Xamarin\component\AuthticationManager.cs" />
     <Compile Include="Xamarin\consts\ActivityConts.cs" />
-    <Compile Include="Xamarin\fragment\MapFragment.cs" />
+    <Compile Include="Xamarin\fragment\CategoryMapFragment.cs" />
+    <Compile Include="Xamarin\Model\SearchResult.cs" />
+    <Compile Include="Xamarin\view\SearchDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GettingStarted.Xamarin" />
@@ -125,6 +129,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\app_bar_main.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_search.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

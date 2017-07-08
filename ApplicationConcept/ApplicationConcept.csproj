@@ -42,6 +42,7 @@
     <Compile Include="HttpRerquestEventArgs.cs" />
     <Compile Include="HttpResponseAsyncResult.cs" />
     <Compile Include="HttpResponseHandler.cs" />
+    <Compile Include="MapViewType.cs" />
     <Compile Include="ProjectType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XHttpRequestParamters.cs" />

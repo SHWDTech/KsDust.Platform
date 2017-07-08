@@ -8,7 +8,7 @@ using ApplicationConcept;
 
 namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 {
-    public class MapFragment : Fragment, AMap.IOnMarkerClickListener, AMap.IOnInfoWindowClickListener, AMap.IInfoWindowAdapter
+    public class CategoryMapFragment : Fragment, AMap.IOnMarkerClickListener, AMap.IOnInfoWindowClickListener, AMap.IInfoWindowAdapter
     {
         private ProjectType _projectType;
 

@@ -21,4 +21,6 @@
   <string name="error_password">密码不能为空</string>
   <string name="error_account">账号不能为空</string>
 
+  <string name="ActivityPreferences">ActivityPreferences</string>
+
 </resources>

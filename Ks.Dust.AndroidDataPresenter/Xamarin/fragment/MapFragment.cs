@@ -6,7 +6,7 @@ using Com.Amap.Api.Maps2d;
 using Com.Amap.Api.Maps2d.Model;
 using ApplicationConcept;
 
-namespace Ks.Dust.Android.DataPresenter.Resources.fragment
+namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 {
     public class MapFragment : Fragment, AMap.IOnMarkerClickListener, AMap.IOnInfoWindowClickListener, AMap.IInfoWindowAdapter
     {
@@ -21,7 +21,7 @@ namespace Ks.Dust.Android.DataPresenter.Resources.fragment
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            _projectType = (ProjectType) Arguments.GetInt(CategorymapProjecttype, 0xFF);
+            _projectType = (ProjectType)Arguments.GetInt(CategorymapProjecttype, 0xFF);
             _districtId = Arguments.GetString(CategorymapDistrictid);
             // Create your fragment here
         }
@@ -42,7 +42,7 @@ namespace Ks.Dust.Android.DataPresenter.Resources.fragment
             }
             else
             {
-                
+
             }
         }
 

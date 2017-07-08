@@ -1,10 +1,9 @@
 ﻿using Android.App;
 using Android.OS;
-using CheeseBind;
 
-namespace Ks.Dust.Android.DataPresenter.Resources.activity
+namespace Ks.Dust.AndroidDataPresenter
 {
-    [Activity(Label = "Ks.Dust.Android.DataPresenter", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "Ks.Dust.AndroidDataPresenter", Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -12,8 +11,7 @@ namespace Ks.Dust.Android.DataPresenter.Resources.activity
             base.OnCreate(savedInstanceState);
 
             // Set our view from the "main" layout resource
-            SetContentView(Resource.Layout.Main);
-            Cheeseknife.Bind(this);
+            SetContentView (Resource.Layout.Main);
         }
     }
 }

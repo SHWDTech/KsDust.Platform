@@ -7,7 +7,7 @@ namespace ApplicationConcept
 {
     public static class ApiManager
     {
-        private static readonly string ApiServer = "http://ksdust.shweidong.com:8098";
+        private static readonly string ApiServer = "http://ksdust.shweidong.com:8090";
 
         public static readonly string Token = $"{ApiServer}/token";
 
@@ -93,30 +93,44 @@ namespace ApplicationConcept
             }
         }
 
-        private const string ParamterGrantType = "grant_type";
+        private const string ParamterNameGrantType = "grant_type";
 
-        private const string ParamterGrantTypeValue = "password";
+        private const string ParamterGrantTypePassword = "password";
 
-        private const string ParamterUserName = "username";
+        private const string ParamterGrantTypeRefreshToken = "refresh_token";
 
-        private const string ParamterPassword = "password";
+        private const string ParamterNameRefreshToken = "refresh_token";
 
-        private const string ParamterClientId = "client_id";
+        private const string ParamterNameUserName = "username";
 
-        private const string ParamterClientIdValue = "nativeAndroid";
+        private const string ParamterNamePassword = "password";
 
-        private const string ParamterClientSecret = "client_secret";
+        private const string ParamterNameClientId = "client_id";
 
-        private const string ParamterClientSecretValue = "7E0C829B32A6";
+        private const string ParamterClientId = "nativeAndroid";
+
+        private const string ParamterNameClientSecret = "client_secret";
+
+        private const string ParamterClientSecret = "7E0C829B32A6";
 
         public static void GetTokenByPassword(string username, string password, HttpResponseHandler handler)
         {
             var requestParams = new XHttpRequestParamters();
-            requestParams.AddBodyParamter(ParamterGrantType, ParamterGrantTypeValue);
-            requestParams.AddBodyParamter(ParamterUserName, username);
-            requestParams.AddBodyParamter(ParamterPassword, password);
-            requestParams.AddBodyParamter(ParamterClientId, ParamterClientIdValue);
-            requestParams.AddBodyParamter(ParamterClientSecret, ParamterClientSecretValue);
+            requestParams.AddBodyParamter(ParamterNameGrantType, ParamterGrantTypePassword);
+            requestParams.AddBodyParamter(ParamterNameUserName, username);
+            requestParams.AddBodyParamter(ParamterNamePassword, password);
+            requestParams.AddBodyParamter(ParamterNameClientId, ParamterClientId);
+            requestParams.AddBodyParamter(ParamterNameClientSecret, ParamterClientSecret);
+            StartReqest(Token, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetTokenByRefreshToken(string refreshToken, HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameGrantType, ParamterGrantTypeRefreshToken);
+            requestParams.AddBodyParamter(ParamterNameRefreshToken, refreshToken);
+            requestParams.AddBodyParamter(ParamterNameClientId, ParamterClientId);
+            requestParams.AddBodyParamter(ParamterNameClientSecret, ParamterClientSecret);
             StartReqest(Token, HttpMethodPost, requestParams, handler);
         }
     }

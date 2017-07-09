@@ -31,7 +31,7 @@ namespace ApplicationConcept
 
         public const string HttpMethodGet = "GET";
 
-        public static void StartReqest(string api, string method, XHttpRequestParamters paramter, HttpResponseHandler handler)
+        public static void StartRequest(string api, string method, XHttpRequestParamters paramter, HttpResponseHandler handler)
         {
             var request = (HttpWebRequest)WebRequest.Create(api);
             request.Method = method;
@@ -113,6 +113,14 @@ namespace ApplicationConcept
 
         private const string ParamterClientSecret = "7E0C829B32A6";
 
+        private const string ParamterNameAuthorization = "Authorization";
+
+        private const string ParamterNameSearchName = "searchName";
+
+        private const string ParamterNameProjectType = "projectType";
+
+        private const string ParamterNameDistrict = "district";
+
         public static void GetTokenByPassword(string username, string password, HttpResponseHandler handler)
         {
             var requestParams = new XHttpRequestParamters();
@@ -121,7 +129,7 @@ namespace ApplicationConcept
             requestParams.AddBodyParamter(ParamterNamePassword, password);
             requestParams.AddBodyParamter(ParamterNameClientId, ParamterClientId);
             requestParams.AddBodyParamter(ParamterNameClientSecret, ParamterClientSecret);
-            StartReqest(Token, HttpMethodPost, requestParams, handler);
+            StartRequest(Token, HttpMethodPost, requestParams, handler);
         }
 
         public static void GetTokenByRefreshToken(string refreshToken, HttpResponseHandler handler)
@@ -131,7 +139,33 @@ namespace ApplicationConcept
             requestParams.AddBodyParamter(ParamterNameRefreshToken, refreshToken);
             requestParams.AddBodyParamter(ParamterNameClientId, ParamterClientId);
             requestParams.AddBodyParamter(ParamterNameClientSecret, ParamterClientSecret);
-            StartReqest(Token, HttpMethodPost, requestParams, handler);
+            StartRequest(Token, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetSearch(string serachText, string accessToken, HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameSearchName, serachText);
+            requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
+            StartRequest(Search, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetDeviceLocationByProjectType(string projectType, string accessToken, HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameProjectType, projectType);
+            requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
+            StartRequest(Map, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetDeviceLocationByDistrictId(string projectType, string districtId, string accessToken,
+            HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameProjectType, projectType);
+            requestParams.AddBodyParamter(ParamterNameDistrict, districtId);
+            requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
+            StartRequest(Map, HttpMethodPost, requestParams, handler);
         }
     }
 }

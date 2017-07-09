@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.App;
 using Android.Runtime;
+using Android.Widget;
 using Ks.Dust.AndroidDataPresenter.Xamarin.component;
 
 namespace Ks.Dust.AndroidDataPresenter.Xamarin.appplication
@@ -17,6 +18,10 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.appplication
         {
             base.OnCreate();
             AuthticationManager.Init(this);
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                Toast.MakeText(this, $"Exception!{args.ExceptionObject}", ToastLength.Short).Show();
+            };
         }
     }
 }

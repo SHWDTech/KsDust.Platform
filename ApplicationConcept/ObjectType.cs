@@ -3,7 +3,7 @@
     /// <summary>
     /// 均值对象类型
     /// </summary>
-    public enum ProjectType
+    public enum ObjectType
     {
         /// <summary>
         /// 设备

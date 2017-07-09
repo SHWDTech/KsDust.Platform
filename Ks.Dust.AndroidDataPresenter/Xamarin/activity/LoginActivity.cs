@@ -82,12 +82,15 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             }
             else
             {
-                Toast.MakeText(this, "登录成功", ToastLength.Short).Show();
-                using (var intent = new Intent(this, typeof(MainActivity)))
+                RunOnUiThread(() =>
                 {
-                    StartActivity(intent);
-                }
-                Finish();
+                    Toast.MakeText(this, "登录成功", ToastLength.Short).Show();
+                    using (var intent = new Intent(this, typeof(MainActivity)))
+                    {
+                        StartActivity(intent);
+                    }
+                    Finish();
+                });
             }
         }
 

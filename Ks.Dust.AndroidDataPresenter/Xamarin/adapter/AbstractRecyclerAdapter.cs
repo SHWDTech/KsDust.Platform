@@ -13,10 +13,11 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
 
         protected Context _context;
 
-        protected AbstractRecyclerAdapter(Context context)
+        protected AbstractRecyclerAdapter(Context context, List<T> adapterData)
         {
             _context = context;
             _layoutInflater = LayoutInflater.From(_context);
+            AdapterData = adapterData;
         }
 
         public override int ItemCount => AdapterData?.Count ?? 0;

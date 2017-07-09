@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Xamarin\activity\DeviceDetailActivity.cs" />
     <Compile Include="Xamarin\activity\MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,8 +112,14 @@
     <Compile Include="Xamarin\component\AuthticationManager.cs" />
     <Compile Include="Xamarin\consts\ActivityConts.cs" />
     <Compile Include="Xamarin\fragment\CategoryMapFragment.cs" />
+    <Compile Include="Xamarin\Model\MapMarker.cs" />
     <Compile Include="Xamarin\Model\SearchResult.cs" />
+    <Compile Include="Xamarin\view\IOnSearchClickListener.cs" />
+    <Compile Include="Xamarin\view\IOnSearchItemClick.cs" />
     <Compile Include="Xamarin\view\SearchDialog.cs" />
+    <Compile Include="Xamarin\view\SearchDialogItemClickListener.cs" />
+    <Compile Include="Xamarin\view\SearchDialogOnScrollListener.cs" />
+    <Compile Include="Xamarin\view\SearchViewHolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GettingStarted.Xamarin" />
@@ -132,6 +139,12 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\item_search.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\dialog_search.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\marker_infowindow.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

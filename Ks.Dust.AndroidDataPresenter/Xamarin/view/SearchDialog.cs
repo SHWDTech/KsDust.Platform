@@ -29,6 +29,8 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view
 
         public View ClearView { get; private set; }
 
+        private readonly Activity _activity;
+
         public IOnSearchClickListener SearchCllickListener { get; private set; }
 
         public SearchDialog(Context context, bool cancelable, EventHandler cancelHandler) : base(context, cancelable, cancelHandler)
@@ -38,17 +40,18 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view
         public SearchDialog(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
         }
-        
+
         public SearchDialog(Context context, bool cancelable, IDialogInterfaceOnCancelListener cancelListener) : base(context, cancelable, cancelListener)
         {
         }
 
         public SearchDialog(Context context, int themeResId) : base(context, themeResId)
         {
-            
+
         }
         public SearchDialog(Context context) : this(context, Resource.Style.chat_dialog)
         {
+            _activity = (Activity) context;
             InitView(context);
         }
 
@@ -63,11 +66,11 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view
 
             ClearView = FindViewById(Resource.Id.search_clear);
             ClearView.SetOnClickListener(this);
-            EditText = (EditText) FindViewById(Resource.Id.edit);
+            EditText = (EditText)FindViewById(Resource.Id.edit);
             EditText.AddTextChangedListener(this);
             EditText.SetOnEditorActionListener(this);
-            
-            RecyclerView = (RecyclerView) FindViewById(Resource.Id.recyclerView);
+
+            RecyclerView = (RecyclerView)FindViewById(Resource.Id.recyclerView);
             RecyclerView.AddItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.Vertical));
             RecyclerView.SetLayoutManager(new LinearLayoutManager(context.ApplicationContext));
             RecyclerView.AddOnScrollListener(new SearchDialogOnScrollListener(this));
@@ -127,7 +130,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view
 
         public void BeforeTextChanged(ICharSequence s, int start, int count, int after)
         {
-            if (string.IsNullOrWhiteSpace(_currentText.ToString()))
+            if (!string.IsNullOrWhiteSpace(_currentText?.ToString()))
             {
                 _beforeCount = CountCharLength(_currentText.ToString());
             }
@@ -180,7 +183,10 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view
             {
                 SearchResults.Clear();
                 SearchResults.AddRange(JsonConvert.DeserializeObject<List<SearchResult>>(args.Response));
-                SearchAdapter.NotifyDataSetChanged();
+                _activity.RunOnUiThread(() =>
+                {
+                    SearchAdapter.NotifyDataSetChanged();
+                });
             };
             ApiManager.GetSearch(searchText, AuthticationManager.Instance.AccessToken, handler);
 

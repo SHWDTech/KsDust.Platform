@@ -59,7 +59,7 @@ namespace ApplicationConcept
             {
                 var postStream = asyncResult.Request.EndGetRequestStream(asynchronousResult);
                 var byteArray = Encoding.UTF8.GetBytes(asyncResult.BodyParamters.ToString());
-                postStream.Write(byteArray, 0, asyncResult.BodyParamters.Length);
+                postStream.Write(byteArray, 0, byteArray.Length);
 
                 asyncResult.Request.BeginGetResponse(ReadCallBack, new HttpResponseAsyncResult(asyncResult.Request, asyncResult.Handler));
             }
@@ -121,6 +121,10 @@ namespace ApplicationConcept
 
         private const string ParamterNameDistrict = "district";
 
+        private const string ParamterNameCascadeElementLevel = "CascadeElementLevel";
+
+        private const string ParamterNameCascadeElementId = "CascadeElementId";
+
         public static void GetTokenByPassword(string username, string password, HttpResponseHandler handler)
         {
             var requestParams = new XHttpRequestParamters();
@@ -166,6 +170,16 @@ namespace ApplicationConcept
             requestParams.AddBodyParamter(ParamterNameDistrict, districtId);
             requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
             StartRequest(Map, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetCascadeElement(string cascadeElementLevel, string cascadeElementId, string accessToken,
+            HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameCascadeElementLevel, cascadeElementLevel);
+            requestParams.AddBodyParamter(ParamterNameCascadeElementId, cascadeElementId);
+            requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
+            StartRequest(CascadeElement, HttpMethodPost, requestParams, handler);
         }
     }
 }

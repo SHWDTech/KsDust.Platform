@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Views;
@@ -96,7 +97,10 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         {
             new AlertDialog.Builder(this)
                 .SetMessage("确定退出吗？")
-                .SetPositiveButton("退出", delegate { Finish(); })
+                .SetPositiveButton("退出", delegate
+                {
+                    Finish();
+                })
                 .SetNegativeButton("取消", delegate { })
                 .Create()
                 .Show();
@@ -198,6 +202,16 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                     }
                     mixingTransaction.Commit();
                     break;
+                case Resource.Id.CascadeElement:
+                    var cascadeIntent = new Intent(this, typeof(CascadeElementActivity));
+                    var cascadeBundle = new Bundle();
+                    cascadeBundle.PutInt(CascadeElementActivity.CascadeElementLevel, (int) ObjectType.WholeCity);
+                    cascadeIntent.PutExtras(cascadeBundle);
+                    StartActivity(cascadeIntent);
+                    break;
+                case Resource.Id.search:
+                    _searchDialog.Show();
+                    break;
             }
         }
 
@@ -208,7 +222,33 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         public void OnSearchClick(SearchResult searchResult)
         {
-            throw new System.NotImplementedException();
+            _searchDialog.Dismiss();
+            var objectLevell = (ObjectType)searchResult.objectLevel;
+            switch (objectLevell)
+            {
+                case ObjectType.Project:
+                    break;
+                case ObjectType.Enterprise:
+                    break;
+                case ObjectType.District:
+                    var intent = new Intent(this, typeof(StatisticsActivity));
+                    var bundle = new Bundle();
+                    bundle.PutString(StatisticsActivity.NameStatisticsName, searchResult.objectName);
+                    bundle.PutString(StatisticsActivity.NameStatisticsElementId, searchResult.objectId);
+                    bundle.PutString(StatisticsActivity.NameStatisticsElementType, searchResult.objectLevel + "");
+                    bundle.PutBoolean(StatisticsActivity.NameStatisticsFromSearch, true);
+                    intent.PutExtras(bundle);
+                    StartActivity(intent);
+                    break;
+                case ObjectType.Device:
+                    var intentDev = new Intent(this, typeof(DeviceDetailActivity));
+                    var bundleDev = new Bundle();
+                    bundleDev.PutString(ActivityConts.NameDeviceName, searchResult.objectName);
+                    bundleDev.PutString(ActivityConts.NameDeviceId, searchResult.objectId);
+                    intentDev.PutExtras(bundleDev);
+                    StartActivity(intentDev);
+                    break;
+            }
         }
 
         private void SetIcon()

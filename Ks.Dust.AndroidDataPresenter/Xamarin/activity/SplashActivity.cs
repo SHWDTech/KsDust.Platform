@@ -51,6 +51,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                             using (var intent = new Intent(this, typeof(MainActivity)))
                             {
                                 StartActivity(intent);
+                                Finish();
                             }
                         }, 1500);
                     }
@@ -66,6 +67,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                             using (var intent = new Intent(this, typeof(LoginActivity)))
                             {
                                 StartActivity(intent);
+                                Finish();
                             }
                         }, 1500);
                     }

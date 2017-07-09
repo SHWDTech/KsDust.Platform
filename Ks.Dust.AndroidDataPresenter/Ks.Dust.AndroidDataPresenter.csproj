@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Xamarin\activity\CascadeElementActivity.cs" />
     <Compile Include="Xamarin\activity\DeviceDetailActivity.cs" />
     <Compile Include="Xamarin\activity\MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -105,17 +106,29 @@
     <Compile Include="Xamarin\activity\KsDustBaseActivity.cs" />
     <Compile Include="Xamarin\activity\LoginActivity.cs" />
     <Compile Include="Xamarin\activity\SplashActivity.cs" />
+    <Compile Include="Xamarin\activity\StatisticsActivity.cs" />
     <Compile Include="Xamarin\adapter\AbstractRecyclerAdapter.cs" />
+    <Compile Include="Xamarin\adapter\CascadeElementAdapter.cs" />
     <Compile Include="Xamarin\adapter\LoginAnimatorListenerAdapter.cs" />
     <Compile Include="Xamarin\adapter\SearchAdapter.cs" />
     <Compile Include="Xamarin\appplication\KsDustApplication.cs" />
     <Compile Include="Xamarin\component\AuthticationManager.cs" />
     <Compile Include="Xamarin\consts\ActivityConts.cs" />
     <Compile Include="Xamarin\fragment\CategoryMapFragment.cs" />
+    <Compile Include="Xamarin\Model\CascadeElement.cs" />
     <Compile Include="Xamarin\Model\MapMarker.cs" />
     <Compile Include="Xamarin\Model\SearchResult.cs" />
+    <Compile Include="Xamarin\Utils\BaseUtils.cs" />
+    <Compile Include="Xamarin\view\ClickListener.cs" />
     <Compile Include="Xamarin\view\IOnSearchClickListener.cs" />
     <Compile Include="Xamarin\view\IOnSearchItemClick.cs" />
+    <Compile Include="Xamarin\view\refresh\EmptyDetector.cs" />
+    <Compile Include="Xamarin\view\refresh\FooterView.cs" />
+    <Compile Include="Xamarin\view\refresh\IEmptyDetector.cs" />
+    <Compile Include="Xamarin\view\refresh\LoadMoreRecyclerView.cs" />
+    <Compile Include="Xamarin\view\refresh\RecyclerViewOnScroll.cs" />
+    <Compile Include="Xamarin\view\refresh\SuperRefreshLayout.cs" />
+    <Compile Include="Xamarin\view\refresh\WrapperBaseAdapter.cs" />
     <Compile Include="Xamarin\view\SearchDialog.cs" />
     <Compile Include="Xamarin\view\SearchDialogItemClickListener.cs" />
     <Compile Include="Xamarin\view\SearchDialogOnScrollListener.cs" />
@@ -145,6 +158,15 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\marker_infowindow.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_cascade_element.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\footerview_layout.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_cascade_element.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

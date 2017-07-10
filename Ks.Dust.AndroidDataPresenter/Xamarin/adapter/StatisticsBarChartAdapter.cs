@@ -26,6 +26,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
         public StatisticsBarChartAdapter(Context context, List<DistrictGeneralInfo> adapterData) : base(context, adapterData)
         {
             AdapterData = adapterData;
+            _reclyerViewHeight = context.Resources.GetDimensionPixelSize(Resource.Dimension.custom_chart_height);
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -44,13 +45,13 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
                 switch (data.rate)
                 {
                     case ActivityConts.RateGood:
-                        customViewHolder.BarChartStateView.SetBackgroundResource(new Color(Resource.Drawable.tsp_good_bg));
+                        customViewHolder.BarChartStateView.SetBackgroundResource(Resource.Drawable.tsp_good_bg);
                         break;
                     case ActivityConts.RateNormal:
-                        customViewHolder.BarChartStateView.SetBackgroundResource(new Color(Resource.Drawable.tsp_normal_bg));
+                        customViewHolder.BarChartStateView.SetBackgroundResource(Resource.Drawable.tsp_normal_bg);
                         break;
                     case ActivityConts.RateBad:
-                        customViewHolder.BarChartStateView.SetBackgroundResource(new Color(Resource.Drawable.tsp_bad_bg));
+                        customViewHolder.BarChartStateView.SetBackgroundResource(Resource.Drawable.tsp_bad_bg);
                         break;
                 }
             }

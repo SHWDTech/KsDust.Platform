@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Android.App;
+using Android.Content;
 using Android.Support.V7.Widget;
 using CheeseBind;
 using Ks.Dust.AndroidDataPresenter.Xamarin.adapter;
@@ -9,7 +10,11 @@ using Ks.Dust.AndroidDataPresenter.Xamarin.Model;
 using Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh;
 using Android.OS;
 using Android.Views;
+using ApplicationConcept;
+using Ks.Dust.AndroidDataPresenter.Xamarin.activity;
+using Ks.Dust.AndroidDataPresenter.Xamarin.component;
 using Ks.Dust.AndroidDataPresenter.Xamarin.Utils;
+using Newtonsoft.Json;
 using DividerItemDecoration = Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh.DividerItemDecoration;
 
 namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
@@ -39,6 +44,8 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
         [BindView(Resource.Id.statisticsRefreshLayout)] private SuperRefreshLayout _magicRefreshLayout;
 
         private readonly Activity _activity;
+
+        private double _maxTsp = 0;
 
         [OnClick(Resource.Id.districtavg_tspavg_tv)]
         private void TspClick(object sender, EventArgs args)
@@ -101,29 +108,83 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
             return view;
         }
 
+        private void GetMaxTsp()
+        {
+            var currentMax = _districtGeneralInfos.Max(info => info.tspAvg);
+            if (currentMax > _maxTsp)
+            {
+                _maxTsp = currentMax;
+            }
+        }
+
         private void GetData()
         {
-            
+            _districtGeneralInfos.Clear();
+            _maxTsp = 0;
+
+            var handler = new HttpResponseHandler();
+            handler.OnResponse += args =>
+            {
+                _activity.RunOnUiThread(() =>
+                {
+                    var avgs = JsonConvert.DeserializeObject<List<DistrictGeneralInfo>>(args.Response);
+                    _districtGeneralInfos.AddRange(avgs);
+
+                    GetMaxTsp();
+                    _statisticsBarChartAdapter.MaxValue = _maxTsp;
+                    _statisticsBarChartAdapter.NotifyDataSetChanged();
+
+                    _statisticsRecyclerAdapter.NotifyDataSetChanged();
+                    _magicRefreshLayout?.StopLoading();
+                });
+            };
+            ApiManager.GetDistrictAvg(_projectType, _dataType, AuthticationManager.Instance.AccessToken, handler);
         }
 
         public void OnStatisticsItemClick(int position)
         {
-            throw new NotImplementedException();
+            var detail = _districtGeneralInfos[position];
+            var intent = new Intent(Activity, typeof(DistrictDetailActivity));
+            var bundle = new Bundle();
+            bundle.PutString(DistrictDetailActivity.DistrictdetailProjecttype, _projectType);
+            bundle.PutString(DistrictDetailActivity.DistrictdetailDistrictname, detail.name);
+            bundle.PutString(DistrictDetailActivity.DistrictdetailDistrictid, detail.id);
+            intent.PutExtras(bundle);
+            StartActivity(intent);
         }
 
         public bool CanContentLoadMore()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public void OnRefresh()
         {
-            throw new NotImplementedException();
+            GetData();
         }
 
         public void OnLoadMore()
         {
-            throw new NotImplementedException();
+            
+        }
+
+        public override void OnDestroyView()
+        {
+            base.OnDestroyView();
+            if (_magicRefreshLayout != null)
+            {
+                _magicRefreshLayout.StopLoading();
+                _magicRefreshLayout.OnLoadingListener = null;
+                _magicRefreshLayout.OnCheckMoreContentListener = null;
+            }
+            _magicRefreshLayout = null;
+            _layoutManager = null;
+            if (_statisticsRecyclerAdapter != null)
+            {
+                _statisticsRecyclerAdapter.OnItemClickListener = null;
+                _statisticsRecyclerAdapter.AdapterData = null;
+                _statisticsRecyclerAdapter = null;
+            }
         }
     }
 }

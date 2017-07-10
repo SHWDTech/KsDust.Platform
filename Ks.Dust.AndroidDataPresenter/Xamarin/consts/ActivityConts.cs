@@ -23,5 +23,13 @@
         public const string NameDeviceName = "device_name";
 
         public const string NameDeviceHistoryDataType = "history_data_type";
+
+        public const int DataTypeFifteenMin = 0;
+
+        public const int DataTypeHour = 1;
+
+        public const int DataTypeDay = 2;
+
+        public const int DataTypeMonth = 3;
     }
 }

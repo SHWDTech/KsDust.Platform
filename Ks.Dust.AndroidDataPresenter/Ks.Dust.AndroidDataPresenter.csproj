@@ -105,6 +105,8 @@
   <ItemGroup>
     <Compile Include="Xamarin\activity\CascadeElementActivity.cs" />
     <Compile Include="Xamarin\activity\DeviceDetailActivity.cs" />
+    <Compile Include="Xamarin\activity\DistrictDetailActivity.cs" />
+    <Compile Include="Xamarin\activity\DistrictDetailMapActivity.cs" />
     <Compile Include="Xamarin\activity\MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Xamarin\adapter\AbstractRecyclerAdapter.cs" />
     <Compile Include="Xamarin\adapter\CascadeElementAdapter.cs" />
     <Compile Include="Xamarin\adapter\DeviceHistoryDataAdapter.cs" />
+    <Compile Include="Xamarin\adapter\DistrictDetailAdapter.cs" />
     <Compile Include="Xamarin\adapter\LoginAnimatorListenerAdapter.cs" />
     <Compile Include="Xamarin\adapter\SearchAdapter.cs" />
     <Compile Include="Xamarin\adapter\StatisticsBarChartAdapter.cs" />
@@ -130,6 +133,7 @@
     <Compile Include="Xamarin\Model\CascadeElement.cs" />
     <Compile Include="Xamarin\Model\DeviceCurrentInfo.cs" />
     <Compile Include="Xamarin\Model\DeviceHistoryData.cs" />
+    <Compile Include="Xamarin\Model\DistrictDetail.cs" />
     <Compile Include="Xamarin\Model\DistrictGeneralInfo.cs" />
     <Compile Include="Xamarin\Model\MapMarker.cs" />
     <Compile Include="Xamarin\Model\SearchResult.cs" />
@@ -204,6 +208,18 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\fragment_statistics.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_statistics.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_districtdetail.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_districtdetail.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_disdetail_map.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

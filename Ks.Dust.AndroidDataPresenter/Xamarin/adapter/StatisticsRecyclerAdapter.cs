@@ -37,13 +37,13 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
                 switch (districtInfo.rate)
                 {
                     case ActivityConts.RateGood:
-                        viewHolder.DistrictavgItemNameTextView.SetBackgroundColor(new Color(Resource.Drawable.tsp_good_bg));
+                        viewHolder.DistrictavgTspavgTextView.SetBackgroundResource(Resource.Drawable.tsp_good_bg);
                         break;
                     case ActivityConts.RateNormal:
-                        viewHolder.DistrictavgItemNameTextView.SetBackgroundColor(new Color(Resource.Drawable.tsp_normal_bg));
+                        viewHolder.DistrictavgTspavgTextView.SetBackgroundResource(Resource.Drawable.tsp_normal_bg);
                         break;
                     case ActivityConts.RateBad:
-                        viewHolder.DistrictavgItemNameTextView.SetBackgroundColor(new Color(Resource.Drawable.tsp_bad_bg));
+                        viewHolder.DistrictavgTspavgTextView.SetBackgroundResource(Resource.Drawable.tsp_bad_bg);
                         break;
                 }
             }

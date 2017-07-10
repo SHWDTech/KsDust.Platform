@@ -135,6 +135,14 @@ namespace ApplicationConcept
 
         private const string ParamterNameElementId = "elementId";
 
+        private const string ParamterNameDistrictProjectType = "projectType";
+
+        private const string ParamterNameDistrictDataType = "dataType";
+
+        private const string ParamterNameDistrictDetailProjectType = "projectType";
+
+        private const string ParamterNameDistrictDetialDistrict = "district";
+
         public static void GetTokenByPassword(string username, string password, HttpResponseHandler handler)
         {
             var requestParams = new XHttpRequestParamters();
@@ -219,6 +227,26 @@ namespace ApplicationConcept
             requestParams.AddBodyParamter(ParamterNameElementId, elementId);
             requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
             StartRequest(DeviceHistoryData, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetDistrictAvg(string projectType, string dataType, string accessToken,
+            HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameDistrictProjectType, projectType);
+            requestParams.AddBodyParamter(ParamterNameDistrictDataType, dataType);
+            requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
+            StartRequest(DistrictAvg, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetDistrictDetial(string projectType, string districtId, string accessToken,
+            HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameDistrictDetailProjectType, projectType);
+            requestParams.AddBodyParamter(ParamterNameDistrictDetialDistrict, districtId);
+            requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
+            StartRequest(DistrictDetail, HttpMethodPost, requestParams, handler);
         }
     }
 }

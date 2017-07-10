@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.Design.Widget;
+using Android.Support.V4.View;
+using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
 using ApplicationConcept;
 using CheeseBind;
+using Ks.Dust.AndroidDataPresenter.Xamarin.component;
 using Ks.Dust.AndroidDataPresenter.Xamarin.consts;
 using Ks.Dust.AndroidDataPresenter.Xamarin.fragment;
 using Ks.Dust.AndroidDataPresenter.Xamarin.Model;
@@ -18,7 +22,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
     public class MainActivity : KsDustBaseActivity, View.IOnClickListener, NavigationView.IOnNavigationItemSelectedListener, IOnSearchClickListener
     {
         [BindView(Resource.Id.main_layout)]
-        private LinearLayout _mainLayout;
+        private DrawerLayout _drawer;
 
         [BindView(Resource.Id.goDrawer)]
         private View _indexView;
@@ -57,13 +61,22 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         private SearchDialog _searchDialog;
 
+        private bool _isCheckByUser;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-            Cheeseknife.Bind(this);
+            try
+            {
+                Cheeseknife.Bind(this);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             InitView();
             InitFragment();
             _searchDialog = new SearchDialog(this);
@@ -81,7 +94,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             _statisticsView.SetOnClickListener(this);
             _cityTitleView.Text = "昆山";
             _searchView.SetOnClickListener(this);
-            //((NavigationView)FindViewById(Resource.Id.nav_view)).SetNavigationItemSelectedListener(this);
+            ((NavigationView)FindViewById(Resource.Id.nav_view)).SetNavigationItemSelectedListener(this);
         }
 
         private void InitFragment()
@@ -95,15 +108,26 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         public override void OnBackPressed()
         {
-            new AlertDialog.Builder(this)
-                .SetMessage("确定退出吗？")
-                .SetPositiveButton("退出", delegate
+            if (_drawer.IsDrawerOpen(GravityCompat.Start))
+            {
+                _drawer.CloseDrawer(GravityCompat.Start);
+            }
+            else
+            {
+                using (var builder = new AlertDialog.Builder(this)
+                )
                 {
-                    Finish();
-                })
-                .SetNegativeButton("取消", delegate { })
-                .Create()
-                .Show();
+                    builder.SetMessage("确定退出吗？")
+                                      .SetPositiveButton("退出", delegate
+                                      {
+                                          Finish();
+                                      })
+                                      .SetNegativeButton("取消", delegate { })
+                                      .Create()
+                                      .Show();
+                }
+            }
+            
         }
 
         public void OnClick(View v)
@@ -113,7 +137,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                 case Resource.Id.goDrawer:
                     if (_indexView != null)
                     {
-
+                        _drawer?.OpenDrawer(GravityCompat.Start);
                     }
                     break;
                 case Resource.Id.home:
@@ -238,7 +262,25 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         public bool OnNavigationItemSelected(IMenuItem item)
         {
-            return false;
+            var id = item.ItemId;
+
+            if (id == Resource.Id.standard)
+            {
+                StartActivity(new Intent(this, typeof(ReferenceStandardActivity)));
+            }
+            else if (id == Resource.Id.versionupdate)
+            {
+                _isCheckByUser = true;
+            }
+            else if (id == Resource.Id.exit)
+            {
+                AuthticationManager.Instance.Logout();
+                StartActivity(new Intent(this, typeof(LoginActivity)));
+                Finish();
+            }
+
+            _drawer?.CloseDrawer(GravityCompat.Start);
+            return true;
         }
 
         public void OnSearchClick(SearchResult searchResult)

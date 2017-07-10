@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <group android:checkableBehavior="single">
+    <item
+      android:id="@+id/standard"
+      android:icon="@drawable/ic_menu_gallery"
+      android:title="参考标准" />
+    <item
+      android:id="@+id/versionupdate"
+      android:icon="@drawable/ic_menu_slideshow"
+      android:title="版本更新" />
+    android:title="httpTest" />
+    <item
+      android:id="@+id/exit"
+      android:icon="@drawable/ic_menu_slideshow"
+      android:title="退出登录" />
+  </group>
+
+</menu>

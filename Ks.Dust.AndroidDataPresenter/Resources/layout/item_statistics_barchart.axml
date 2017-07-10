@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="36dp"
+  android:layout_height="match_parent">
+  <TextView
+    android:id="@+id/BarChartValueTextView"
+    android:layout_above="@+id/CustomStateView"
+    android:gravity="center"
+    android:textColor="@android:color/white"
+    android:textStyle="bold"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+  <View
+    android:id="@+id/BarChartStateView"
+    android:layout_width="match_parent"
+    android:layout_above="@+id/BarChartContentView"
+    android:layout_height="3dp"/>
+  <View
+    android:id="@+id/BarChartContentView"
+    android:layout_above="@+id/BarChartBottomTv"
+    android:layout_alignParentBottom="true"
+    android:background="@color/chart_bg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+  <TextView
+    android:id="@+id/BarChartBottomTv"
+    android:gravity="center"
+    android:textColor="@android:color/white"
+    android:layout_alignParentBottom="true"
+    android:maxLines="1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+</RelativeLayout>

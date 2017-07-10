@@ -209,6 +209,27 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                     cascadeIntent.PutExtras(cascadeBundle);
                     StartActivity(cascadeIntent);
                     break;
+                case Resource.Id.Statistics:
+                    var statisticsIntent = new Intent(this, typeof(StatisticsActivity));
+                    var statisticsBundle = new Bundle();
+                    var projectType = string.Empty;
+                    switch (_currentMapViewType)
+                    {
+                            case MapViewType.Build:
+                                projectType = $"{ActivityConts.ProjectTypeBuild}";
+                                break;
+                            case MapViewType.Municipal:
+                                projectType = $"{ActivityConts.ProjectTypeMunicipal}";
+                            break;
+                            case MapViewType.Mixing:
+                                projectType = $"{ActivityConts.ProjectTypeMixing}";
+                            break;
+                    }
+                    statisticsBundle.PutString(StatisticsActivity.NameStatisticsName, "全部区县");
+                    statisticsBundle.PutString(StatisticsActivity.NameStatisticsType, projectType);
+                    statisticsIntent.PutExtras(statisticsBundle);
+                    StartActivity(statisticsIntent);
+                    break;
                 case Resource.Id.search:
                     _searchDialog.Show();
                     break;

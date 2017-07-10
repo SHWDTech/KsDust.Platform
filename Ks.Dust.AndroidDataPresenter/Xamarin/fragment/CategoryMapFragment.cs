@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
 using ApplicationConcept;
@@ -46,7 +47,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
         {
             // Use this to return your custom view for this Fragment
             // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
-            return inflater.Inflate(Resource.Layout.fragment_category_map, container, false); ;
+            return inflater.Inflate(Resource.Layout.fragment_category_map, container, false);
         }
 
         public override void OnActivityCreated(Bundle savedInstanceState)
@@ -205,18 +206,18 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
                 {
                     case ActivityConts.RateGood:
                         rateView.Text = "好";
-                        rateView.SetTextColor(Resources.GetColor(Resource.Color.well_color));
-                        backGround.SetBackgroundColor(new Color(Resource.Color.well_color));
+                        rateView.SetTextColor(new Color(ContextCompat.GetColor(Activity, Resource.Color.well_color)));
+                        backGround.SetBackgroundColor(new Color(ContextCompat.GetColor(Activity, Resource.Color.well_color)));
                         break;
                     case ActivityConts.RateNormal:
                         rateView.Text = "中";
-                        rateView.SetTextColor(Resources.GetColor(Resource.Color.middle_color));
-                        backGround.SetBackgroundColor(new Color(Resource.Color.middle_color));
+                        rateView.SetTextColor(new Color(ContextCompat.GetColor(Activity, Resource.Color.middle_color)));
+                        backGround.SetBackgroundColor(new Color(ContextCompat.GetColor(Activity, Resource.Color.middle_color)));
                         break;
                     case ActivityConts.RateBad:
                         rateView.Text = "差";
-                        rateView.SetTextColor(Resources.GetColor(Resource.Color.bad_color));
-                        backGround.SetBackgroundColor(new Color(Resource.Color.bad_color));
+                        rateView.SetTextColor(new Color(ContextCompat.GetColor(Activity, Resource.Color.bad_color)));
+                        backGround.SetBackgroundColor(new Color(ContextCompat.GetColor(Activity, Resource.Color.bad_color)));
                         break;
                 }
                 var timeView = (TextView) v.FindViewById(Resource.Id.marker_time);

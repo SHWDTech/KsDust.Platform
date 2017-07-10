@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/name"
+            style="@style/currentdata_title_text"
+            android:text="监测点" />
+        <TextView
+            android:id="@+id/address"
+            android:text="地址"
+            style="@style/currentdata_title_text" />
+        <TextView
+            android:id="@+id/vendor"
+            style="@style/currentdata_title_text"
+            android:text="供应商" />
+        <TextView
+            android:id="@+id/enterprise"
+            android:text="施工单位"
+            style="@style/currentdata_title_text" />
+        <TextView
+            android:id="@+id/superintend"
+            android:text="负责人"
+            style="@style/currentdata_title_text" />
+        <TextView
+            android:id="@+id/mobile"
+            android:text="联系电话"
+            style="@style/currentdata_title_text" />
+        <TextView
+            android:id="@+id/isOnline"
+            android:text="是否在线"
+            style="@style/currentdata_title_text" />
+        <View
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:scaleType="centerInside"
+                android:src="@mipmap/uptime"
+                android:layout_toLeftOf="@+id/updatetime"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+            <TextView
+                android:id="@+id/updatetime"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/white"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <View
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tsp"
+                android:text="tsp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:drawableTop="@mipmap/tsp"
+                style="@style/currentdata_bottom_text" />
+            <TextView
+                android:id="@+id/pm25"
+                android:text="PM2.5"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:drawableTop="@mipmap/pm25"
+                style="@style/currentdata_bottom_text" />
+            <TextView
+                android:id="@+id/pm100"
+                android:text="PM10"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:drawableTop="@mipmap/pm10"
+                style="@style/currentdata_bottom_text" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/noise"
+                android:text="噪声"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:drawableTop="@mipmap/noise"
+                style="@style/currentdata_bottom_text" />
+            <TextView
+                android:id="@+id/winddirection"
+                android:text="风向"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:drawableTop="@mipmap/winddirection"
+                style="@style/currentdata_bottom_text" />
+            <TextView
+                android:id="@+id/windspeed"
+                android:text="风速"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:drawableTop="@mipmap/windspeed"
+                style="@style/currentdata_bottom_text" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/temperature"
+                android:text="温度"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:drawableTop="@mipmap/temperature"
+                style="@style/currentdata_bottom_text" />
+            <TextView
+                android:id="@+id/humidity"
+                android:text="湿度"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:drawableTop="@mipmap/humidity"
+                style="@style/currentdata_bottom_text" />
+            <TextView
+                android:id="@+id/camera"
+                android:text="视频"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:drawableTop="@mipmap/camera"
+                style="@style/currentdata_bottom_text" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

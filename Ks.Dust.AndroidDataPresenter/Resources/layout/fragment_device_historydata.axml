@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@mipmap/bg"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+  <com.github.mikephil.charting.charts.LineChart
+    android:id="@+id/lineChart"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"/>
+
+  <View
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="1px"/>
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+    <TextView
+      android:id="@+id/historydata_no_tv"
+      android:text="序号"
+      android:textColor="@android:color/white"
+      android:textStyle="bold"
+      android:textSize="14sp"
+      android:layout_marginLeft="@dimen/county_item_leftmargin"
+      android:layout_alignParentLeft="true"
+      android:layout_centerVertical="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:id="@+id/historydata_tsp_tv"
+      android:text="@string/districtavg_tspavg"
+      android:layout_alignParentRight="true"
+      android:textColor="@android:color/white"
+      android:textStyle="bold"
+      android:textSize="14sp"
+      android:layout_marginRight="@dimen/county_item_rightmargin"
+      android:drawablePadding="3dp"
+      android:layout_centerVertical="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:id="@+id/historydata_time_tv"
+      android:text="监测时间"
+      android:textColor="@android:color/white"
+      android:textStyle="bold"
+      android:textSize="14sp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignBaseline="@+id/historydata_no_tv"
+      android:layout_alignBottom="@+id/historydata_no_tv"
+      android:layout_centerHorizontal="true" />
+  </RelativeLayout>
+  <View
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="1px"/>
+
+  <Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh.SuperRefreshLayout
+        android:id="@+id/historydataRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+    <Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh.LoadMoreRecyclerView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:clipToPadding="false" />
+  </Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh.SuperRefreshLayout>
+</LinearLayout>

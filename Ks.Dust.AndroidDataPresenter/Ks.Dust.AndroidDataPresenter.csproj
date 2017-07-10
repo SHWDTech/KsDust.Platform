@@ -36,15 +36,17 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>PdbOnly</DebugType>
-    <DebugSymbols>True</DebugSymbols>
+    <DebugSymbols>true</DebugSymbols>
     <Optimize>True</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
+    <AndroidSupportedAbis />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cheeseknife, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -52,9 +54,12 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Android" />
+    <Reference Include="MPAndroidChart, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MPAndroidChart.3.0.2\lib\MonoAndroid\MPAndroidChart.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\..\Library\Xarmarin\json.net-7.0.1\lib\android\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\library\json.net-7.0.1\lib\android\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -109,19 +114,30 @@
     <Compile Include="Xamarin\activity\StatisticsActivity.cs" />
     <Compile Include="Xamarin\adapter\AbstractRecyclerAdapter.cs" />
     <Compile Include="Xamarin\adapter\CascadeElementAdapter.cs" />
+    <Compile Include="Xamarin\adapter\DeviceHistoryDataAdapter.cs" />
     <Compile Include="Xamarin\adapter\LoginAnimatorListenerAdapter.cs" />
     <Compile Include="Xamarin\adapter\SearchAdapter.cs" />
+    <Compile Include="Xamarin\adapter\StatisticsBarChartAdapter.cs" />
+    <Compile Include="Xamarin\adapter\StatisticsRecyclerAdapter.cs" />
     <Compile Include="Xamarin\appplication\KsDustApplication.cs" />
     <Compile Include="Xamarin\component\AuthticationManager.cs" />
     <Compile Include="Xamarin\consts\ActivityConts.cs" />
     <Compile Include="Xamarin\fragment\CategoryMapFragment.cs" />
+    <Compile Include="Xamarin\fragment\DeviceCurrentDataFragment.cs" />
+    <Compile Include="Xamarin\fragment\DeviceHistoryDataFragment.cs" />
+    <Compile Include="Xamarin\fragment\SearchStatisticsFragment.cs" />
+    <Compile Include="Xamarin\fragment\StatisticsFragment.cs" />
     <Compile Include="Xamarin\Model\CascadeElement.cs" />
+    <Compile Include="Xamarin\Model\DeviceCurrentInfo.cs" />
+    <Compile Include="Xamarin\Model\DeviceHistoryData.cs" />
+    <Compile Include="Xamarin\Model\DistrictGeneralInfo.cs" />
     <Compile Include="Xamarin\Model\MapMarker.cs" />
     <Compile Include="Xamarin\Model\SearchResult.cs" />
     <Compile Include="Xamarin\Utils\BaseUtils.cs" />
     <Compile Include="Xamarin\view\ClickListener.cs" />
     <Compile Include="Xamarin\view\IOnSearchClickListener.cs" />
     <Compile Include="Xamarin\view\IOnSearchItemClick.cs" />
+    <Compile Include="Xamarin\view\refresh\DividerItemDecoration.cs" />
     <Compile Include="Xamarin\view\refresh\EmptyDetector.cs" />
     <Compile Include="Xamarin\view\refresh\FooterView.cs" />
     <Compile Include="Xamarin\view\refresh\IEmptyDetector.cs" />
@@ -167,6 +183,27 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\item_cascade_element.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_device_detail.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\fragment_currentdata.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\fragment_device_historydata.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_historydata.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_statistics_recyler.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_statistics_barchart.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\fragment_statistics.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -246,139 +283,139 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\arrow_menu_no.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\arrow_menu_no.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\arrow_menu_yes.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\arrow_menu_yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\back.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\back.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\bg.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\bg.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\build_no.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\build_no.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\build_yes.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\build_yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\camera.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\camera.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\close.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\close.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\construction_icon.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\construction_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\construction_no.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\construction_no.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\construction_yes.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\construction_yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\godrawer.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\godrawer.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\home_no.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\home_no.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\home_yes.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\home_yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\humidity.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\humidity.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\icon.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\infowindow_bg.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\infowindow_bg.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\jiantou_normal.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\jiantou_normal.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\jiantou_touch.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\jiantou_touch.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\loadingpage_error.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\loadingpage_error.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\loadingpage_error_press.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\loadingpage_error_press.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\mixingplant_icon.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\mixingplant_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\mixingplant_no.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\mixingplant_no.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\mixingplant_yes.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\mixingplant_yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\municipal_no.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\municipal_no.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\municipal_yes.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\municipal_yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\noise.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\noise.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\pm10.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\pm10.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\pm25.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\pm25.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\road_icon.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\road_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\road_no.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\road_no.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\road_yes.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\road_yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\search.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\search.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\search_close.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\search_close.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\start.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\start.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\temperature.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\temperature.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\tsp.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\tsp.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\unmap.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\unmap.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\uptime.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\uptime.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\wharf_icon.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\wharf_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\wharf_no.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\wharf_no.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\wharf_yes.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\wharf_yes.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\winddirection.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\winddirection.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\windspeed.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\windspeed.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap\yesmap.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\yesmap.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\colors.xml" />
@@ -389,7 +426,9 @@
   <ItemGroup>
     <AndroidResource Include="Resources\values\styles.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\mipmap\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="ApiManager.cs" />
     <Compile Include="AuthticationResult.cs" />
+    <Compile Include="HistoryDataType.cs" />
     <Compile Include="HttpRequestAsyncResult.cs" />
     <Compile Include="HttpRerquestEventArgs.cs" />
     <Compile Include="HttpResponseAsyncResult.cs" />

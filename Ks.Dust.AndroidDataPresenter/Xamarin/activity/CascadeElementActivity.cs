@@ -14,6 +14,7 @@ using Ks.Dust.AndroidDataPresenter.Xamarin.Model;
 using Ks.Dust.AndroidDataPresenter.Xamarin.Utils;
 using Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh;
 using Newtonsoft.Json;
+using DividerItemDecoration = Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh.DividerItemDecoration;
 
 namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 {

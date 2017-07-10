@@ -125,6 +125,16 @@ namespace ApplicationConcept
 
         private const string ParamterNameCascadeElementId = "CascadeElementId";
 
+        private const string ParamterNameDeviceCurrentId = "device";
+
+        private const string ParamterNameHistoryDataType = "dataType";
+
+        private const string ParamterNameStatisticsDetialDataType = "dataType";
+
+        private const string ParamterNameElementType = "elementType";
+
+        private const string ParamterNameElementId = "elementId";
+
         public static void GetTokenByPassword(string username, string password, HttpResponseHandler handler)
         {
             var requestParams = new XHttpRequestParamters();
@@ -180,6 +190,35 @@ namespace ApplicationConcept
             requestParams.AddBodyParamter(ParamterNameCascadeElementId, cascadeElementId);
             requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
             StartRequest(CascadeElement, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetDeviceCurrentData(string deviceId, string accessToken, HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameDeviceCurrentId, deviceId);
+            requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
+            StartRequest(DeviceCurrent, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetDeviceHistoryData(string deviceId, string dataType, string accessToken,
+            HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameDeviceCurrentId, deviceId);
+            requestParams.AddBodyParamter(ParamterNameHistoryDataType, dataType);
+            requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
+            StartRequest(DeviceHistoryData, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetStatisticsDetail(string dataType, string elementType, string elementId,
+            string accessToken, HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            requestParams.AddBodyParamter(ParamterNameStatisticsDetialDataType, dataType);
+            requestParams.AddBodyParamter(ParamterNameElementType, elementType);
+            requestParams.AddBodyParamter(ParamterNameElementId, elementId);
+            requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
+            StartRequest(DeviceHistoryData, HttpMethodPost, requestParams, handler);
         }
     }
 }

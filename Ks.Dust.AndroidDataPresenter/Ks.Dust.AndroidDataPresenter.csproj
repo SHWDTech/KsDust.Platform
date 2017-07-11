@@ -33,6 +33,9 @@
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidSupportedAbis>armeabi;armeabi-v7a</AndroidSupportedAbis>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>PdbOnly</DebugType>
@@ -105,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Xamarin\activity\CascadeElementActivity.cs" />
+    <Compile Include="Xamarin\activity\DeviceCameraActivity.cs" />
     <Compile Include="Xamarin\activity\DeviceDetailActivity.cs" />
     <Compile Include="Xamarin\activity\DistrictDetailActivity.cs" />
     <Compile Include="Xamarin\activity\DistrictDetailMapActivity.cs" />
@@ -158,6 +162,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GettingStarted.Xamarin" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libAudioEngine.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libCpuFeatures.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libHCAlarm.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libHCCore.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libHCCoreDevCfg.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libHCDisplay.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libHCGeneralCfgMgr.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libHCIndustry.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libhcnetsdk.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libHCPlayBack.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libHCPreview.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libHCVoiceTalk.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libjnidispatch.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libPlayCtrl.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libPlayCtrl_v5.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libPlayCtrl_v7.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libSystemTransform.so" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -228,6 +249,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\nav_header_main.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_device_camera.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -304,6 +328,14 @@
     <ProjectReference Include="..\ApplicationConcept\ApplicationConcept.csproj">
       <Project>{8de48706-96f9-4829-bee2-c55d3c5fa57f}</Project>
       <Name>ApplicationConcept</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HCNetSDK\HCNetSDK.csproj">
+      <Project>{2a68d92d-fd80-4daf-999a-aec41bf866f4}</Project>
+      <Name>HCNetSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PlayerSDK\PlayerSDK.csproj">
+      <Project>{7e44aa96-8791-4b96-b376-4a42eb040bc4}</Project>
+      <Name>PlayerSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,12 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
 using ApplicationConcept;
 using CheeseBind;
+using Ks.Dust.AndroidDataPresenter.Xamarin.activity;
 using Ks.Dust.AndroidDataPresenter.Xamarin.component;
 using Ks.Dust.AndroidDataPresenter.Xamarin.consts;
 using Ks.Dust.AndroidDataPresenter.Xamarin.Model;
@@ -116,11 +119,23 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
             _windspeed.Text = $"风速：{_deviceCurrentInfo.windspeed}m/s";
             _winddirection.Text = $"风向：{_deviceCurrentInfo.winddirection}°";
             _updatetime.Text = $"{_deviceCurrentInfo.updatetime}";
+            if (!string.IsNullOrWhiteSpace(_deviceCurrentInfo.serialNumber))
+            {
+                _camera.Visibility = ViewStates.Visible;
+            }
         }
 
         public void OnClick(View v)
         {
             Toast.MakeText(Activity, "正在加载,请稍候", ToastLength.Short).Show();
+            var intent = new Intent(Activity, typeof(DeviceCameraActivity));
+            var bundle = new Bundle();
+            bundle.PutString(DeviceCameraActivity.Ip, _deviceCurrentInfo.ipServerAddr);
+            bundle.PutString(DeviceCameraActivity.Serialnumber, _deviceCurrentInfo.serialNumber);
+            bundle.PutString(DeviceCameraActivity.UserName, _deviceCurrentInfo.userName);
+            bundle.PutString(DeviceCameraActivity.UserPassword, _deviceCurrentInfo.password);
+            intent.PutExtras(bundle);
+            StartActivity(intent);
         }
     }
 }

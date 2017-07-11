@@ -140,6 +140,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:drawableTop="@mipmap/camera"
+                android:visibility="invisible"
                 style="@style/currentdata_bottom_text" />
         </LinearLayout>
     </LinearLayout>

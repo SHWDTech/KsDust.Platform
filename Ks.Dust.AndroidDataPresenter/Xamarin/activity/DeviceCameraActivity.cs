@@ -86,7 +86,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         {
             new Thread(() =>
             {
-                var info = GetDvrIp(_ip, (short)_iPort, _dvrName, _dvrNameLen, _dvrSerialNumber, _dvrSerialLen);
+                var info = GetDvrIp(_ip, Port, _dvrName, _dvrNameLen, _dvrSerialNumber, _dvrSerialLen);
                 var finalIp = string.Empty;
                 try
                 {
@@ -111,7 +111,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             Preview();
         }
 
-    protected override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
@@ -240,9 +240,10 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             {
                 _iStartChan = _oNetDvrDeviceInfoV30.ByStartChan;
                 _iChanNum = _oNetDvrDeviceInfoV30.ByChanNum;
-            }else if (_oNetDvrDeviceInfoV30.ByChanNum > 0)
+            }
+            else if (_oNetDvrDeviceInfoV30.ByIPChanNum > 0)
             {
-                _iStartChan = _oNetDvrDeviceInfoV30.ByStartChan;
+                _iStartChan = _oNetDvrDeviceInfoV30.ByStartDChan;
                 _iChanNum = _oNetDvrDeviceInfoV30.ByChanNum + _oNetDvrDeviceInfoV30.ByHighDChanNum * 256;
             }
 
@@ -293,7 +294,8 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             _iPlayID = HCNetSDK.Instance.NET_DVR_RealPlay_V40(_iLogID, previewInfo, realDataCallBack);
             if (_iPlayID < 0)
             {
-                Console.WriteLine("Error");
+                var errorCode = HCNetSDK.Instance.NET_DVR_GetLastError();
+                Console.WriteLine(errorCode);
             }
         }
 
@@ -330,7 +332,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         {
             if (!_bNeedDecode)
             {
-                
+
             }
             else
             {
@@ -356,7 +358,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
                             if (i % 100 == 0)
                             {
-                                
+
                             }
 
                             try
@@ -375,7 +377,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         public void SurfaceChanged(ISurfaceHolder holder, Format format, int width, int height)
         {
-            
+
         }
 
         public void SurfaceCreated(ISurfaceHolder holder)
@@ -412,7 +414,10 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         public void CleanupUp()
         {
-            Player.Instance.FreePort(_iPort);
+            if (_iPort > 0)
+            {
+                Player.Instance.FreePort(_iPort);
+            }
             _iPort = -1;
             HCNetSDK.Instance.NET_DVR_Cleanup();
         }

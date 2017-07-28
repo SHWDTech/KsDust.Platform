@@ -14,38 +14,38 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
     public class LoginActivity : KsDustBaseActivity
     {
         [BindView(Resource.Id.account)]
-        private AutoCompleteTextView _accountView;
+        protected AutoCompleteTextView AccountView;
 
         [BindView(Resource.Id.password)]
-        private EditText _passwordView;
+        protected EditText PasswordView;
 
         [BindView(Resource.Id.login_progress)]
-        private View _progressView;
+        protected View ProgressView;
 
         [BindView(Resource.Id.login_form)]
-        private View _loginFormView;
+        protected View LoginFormView;
 
         private readonly AuthticationManager _authcicationManager = AuthticationManager.Instance;
 
         [OnClick(Resource.Id.sign_in_button)]
-        void TryLogin(object sender, EventArgs e)
+        protected void TryLogin(object sender, EventArgs e)
         {
-            _accountView.SetError(string.Empty, null);
-            _passwordView.SetError(string.Empty, null);
+            AccountView.SetError(string.Empty, null);
+            PasswordView.SetError(string.Empty, null);
 
             var cancel = false;
             View focusView = null;
-            if (string.IsNullOrWhiteSpace(_passwordView.Text))
+            if (string.IsNullOrWhiteSpace(PasswordView.Text))
             {
-                _passwordView.SetError("账号不能为空", null);
+                PasswordView.SetError("账号不能为空", null);
                 cancel = true;
-                focusView = _passwordView;
+                focusView = PasswordView;
             }
-            if (string.IsNullOrWhiteSpace(_accountView.Text))
+            if (string.IsNullOrWhiteSpace(AccountView.Text))
             {
-                _accountView.SetError("账号不能为空", null);
+                AccountView.SetError("账号不能为空", null);
                 cancel = true;
-                focusView = _accountView;
+                focusView = AccountView;
             }
 
             if (cancel)
@@ -56,7 +56,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             {
                 ShowProgress(true);
 
-                _authcicationManager.Login(_accountView.Text, _passwordView.Text);
+                _authcicationManager.Login(AccountView.Text, PasswordView.Text);
             }
         }
 
@@ -99,26 +99,26 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             if (Build.VERSION.SdkInt >= BuildVersionCodes.Honeycomb)
             {
                 var shortAnimTime = Resources.GetInteger(Android.Resource.Integer.ConfigShortAnimTime);
-                _loginFormView.Visibility = show ? ViewStates.Gone : ViewStates.Visible;
-                _loginFormView.Animate().SetDuration(shortAnimTime).Alpha(show ? 0 : 1)
+                LoginFormView.Visibility = show ? ViewStates.Gone : ViewStates.Visible;
+                LoginFormView.Animate().SetDuration(shortAnimTime).Alpha(show ? 0 : 1)
                     .SetListener(new LoginAnimatorListenerAdapter
                     {
                         IsShow = show,
-                        LoginView = _loginFormView
+                        LoginView = LoginFormView
                     });
 
-                _progressView.Visibility = !show ? ViewStates.Gone : ViewStates.Visible;
-                _loginFormView.Animate().SetDuration(shortAnimTime).Alpha(show ? 0 : 1)
+                ProgressView.Visibility = !show ? ViewStates.Gone : ViewStates.Visible;
+                LoginFormView.Animate().SetDuration(shortAnimTime).Alpha(show ? 0 : 1)
                     .SetListener(new LoginAnimatorListenerAdapter
                     {
                         IsShow = !show,
-                        LoginView = _progressView
+                        LoginView = ProgressView
                     });
             }
             else
             {
-                _progressView.Visibility = !show ? ViewStates.Gone : ViewStates.Visible;
-                _loginFormView.Visibility = show ? ViewStates.Gone : ViewStates.Visible;
+                ProgressView.Visibility = !show ? ViewStates.Gone : ViewStates.Visible;
+                LoginFormView.Visibility = show ? ViewStates.Gone : ViewStates.Visible;
             }
         }
     }

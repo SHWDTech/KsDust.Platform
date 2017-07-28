@@ -30,15 +30,17 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 
         private readonly List<DeviceHistoryData> _deviceHistoryDatas = new List<DeviceHistoryData>();
 
-        [BindView(Resource.Id.historydataRefreshLayout)] private SuperRefreshLayout _magicRefreshLayout;
+        [BindView(Resource.Id.historydataRefreshLayout)]
+        private SuperRefreshLayout _magicRefreshLayout;
 
         private RecyclerView.LayoutManager _layoutManager;
 
-        private IParcelable _layoutManagerState;
+        //private IParcelable _layoutManagerState;
 
         private DeviceHistoryDataAdapter _adapter;
 
-        [BindView(Resource.Id.lineChart)] private LineChart _lineChart;
+        [BindView(Resource.Id.lineChart)]
+        protected LineChart LineChart;
 
         private readonly Activity _ownerActivity;
 
@@ -71,7 +73,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
             _magicRefreshLayout.StopLoading();
             _magicRefreshLayout.OnLoadingListener = null;
             _magicRefreshLayout.OnCheckMoreContentListener = null;
-            _layoutManagerState = _layoutManager.OnSaveInstanceState();
+            //_layoutManagerState = _layoutManager.OnSaveInstanceState();
             _magicRefreshLayout = null;
             _layoutManager = null;
             if (_adapter == null) return;
@@ -101,18 +103,18 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 
         private void InitChartView()
         {
-            _lineChart.SetTouchEnabled(true);
-            _lineChart.DragEnabled = true;
-            _lineChart.SetScaleEnabled(true);
-            _lineChart.ScaleYEnabled = false;
-            _lineChart.SetPinchZoom(true);
-            _lineChart.EnableScroll();
+            LineChart.SetTouchEnabled(true);
+            LineChart.DragEnabled = true;
+            LineChart.SetScaleEnabled(true);
+            LineChart.ScaleYEnabled = false;
+            LineChart.SetPinchZoom(true);
+            LineChart.EnableScroll();
 
-            _lineChart.Description.Enabled = false;
+            LineChart.Description.Enabled = false;
 
-            _lineChart.XAxis.Enabled = false;
-            _lineChart.AxisLeft.Enabled = false;
-            _lineChart.AxisRight.Enabled = false;
+            LineChart.XAxis.Enabled = false;
+            LineChart.AxisLeft.Enabled = false;
+            LineChart.AxisRight.Enabled = false;
         }
 
         private void GetData()
@@ -135,7 +137,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 
         private void SetLineChartData()
         {
-            _lineChart.Clear();
+            LineChart.Clear();
             var yVals1 = new List<Entry>();
             for (var i = 0; i < _deviceHistoryDatas.Count; i++)
             {
@@ -145,13 +147,13 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 
             LineDataSet set1;
 
-            if (_lineChart.LineData != null && _lineChart.LineData.DataSetCount > 0)
+            if (LineChart.LineData != null && LineChart.LineData.DataSetCount > 0)
             {
-                set1 = (LineDataSet)_lineChart.LineData.GetDataSetByIndex(0);
+                set1 = (LineDataSet)LineChart.LineData.GetDataSetByIndex(0);
                 set1.Values = yVals1;
 
-                _lineChart.LineData.NotifyDataChanged();
-                _lineChart.NotifyDataSetChanged();
+                LineChart.LineData.NotifyDataChanged();
+                LineChart.NotifyDataSetChanged();
             }
             else
             {
@@ -175,8 +177,8 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
                 data.SetValueTextColor(Color.White);
                 data.SetValueTextSize(12f);
 
-                _lineChart.Data = data;
-                _lineChart.Invalidate();
+                LineChart.Data = data;
+                LineChart.Invalidate();
             }
         }
 

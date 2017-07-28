@@ -24,30 +24,30 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
-            if (holder is DistrictDetailAdapterViewHolder) {
-                var detailViewHolder = (DistrictDetailAdapterViewHolder)holder;
-                var detail = AdapterData[position];
-                detailViewHolder.ItemDistrictdetailNo.Text = $"{position}";
-                detailViewHolder.ItemDistrictdetailCountyname.Text = detail.districtName.Trim();
-                detailViewHolder.ItemDistrictdetailName.Text = detail.name;
-                detailViewHolder.ItemDistrictdetailTsp.Text = $"{detail.tsp}";
-                switch (detail.rate) {
-                    case ActivityConts.RateGood:
-                        detailViewHolder.ItemDistrictdetailTsp.SetBackgroundResource(Resource.Drawable.tsp_good_bg);
-                        break;
-                    case ActivityConts.RateNormal:
-                        detailViewHolder.ItemDistrictdetailTsp.SetBackgroundResource(Resource.Drawable.tsp_normal_bg);
-                        break;
-                    case ActivityConts.RateBad:
-                        detailViewHolder.ItemDistrictdetailTsp.SetBackgroundResource(Resource.Drawable.tsp_bad_bg);
-                        break;
-                }
+            var viewHolder = holder as DistrictDetailAdapterViewHolder;
+            if (viewHolder == null) return;
+            var detailViewHolder = viewHolder;
+            var detail = AdapterData[position];
+            detailViewHolder.ItemDistrictdetailNo.Text = $"{position}";
+            detailViewHolder.ItemDistrictdetailCountyname.Text = detail.districtName.Trim();
+            detailViewHolder.ItemDistrictdetailName.Text = detail.name;
+            detailViewHolder.ItemDistrictdetailTsp.Text = $"{detail.tsp}";
+            switch (detail.rate) {
+                case ActivityConts.RateGood:
+                    detailViewHolder.ItemDistrictdetailTsp.SetBackgroundResource(Resource.Drawable.tsp_good_bg);
+                    break;
+                case ActivityConts.RateNormal:
+                    detailViewHolder.ItemDistrictdetailTsp.SetBackgroundResource(Resource.Drawable.tsp_normal_bg);
+                    break;
+                case ActivityConts.RateBad:
+                    detailViewHolder.ItemDistrictdetailTsp.SetBackgroundResource(Resource.Drawable.tsp_bad_bg);
+                    break;
             }
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            var holder = new DistrictDetailAdapterViewHolder(_layoutInflater.Inflate(Resource.Layout.item_districtdetail, parent, false))
+            var holder = new DistrictDetailAdapterViewHolder(LayoutInflater.Inflate(Resource.Layout.item_districtdetail, parent, false))
             {
                 OnDistrictDetailItemClickListener = OnDistrictDetailItemClickListener,
                 AdapterData = AdapterData

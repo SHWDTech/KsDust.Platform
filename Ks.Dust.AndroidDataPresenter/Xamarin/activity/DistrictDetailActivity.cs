@@ -56,7 +56,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         private View _mapImageView;
 
         [OnClick(Resource.Id.back)]
-        private void Back(object sender, EventArgs args)
+        protected void Back(object sender, EventArgs args)
         {
             Finish();
         }

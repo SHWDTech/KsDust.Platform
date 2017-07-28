@@ -9,20 +9,20 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
     {
         public List<T> AdapterData { get; set; }
 
-        protected LayoutInflater _layoutInflater;
+        protected LayoutInflater LayoutInflater;
 
-        protected Context _context;
+        protected Context Context;
 
         protected AbstractRecyclerAdapter(Context context)
         {
-            _context = context;
-            _layoutInflater = LayoutInflater.From(_context);
+            Context = context;
+            LayoutInflater = LayoutInflater.From(Context);
         }
 
         protected AbstractRecyclerAdapter(Context context, List<T> adapterData)
         {
-            _context = context;
-            _layoutInflater = LayoutInflater.From(_context);
+            Context = context;
+            LayoutInflater = LayoutInflater.From(Context);
             AdapterData = adapterData;
         }
 

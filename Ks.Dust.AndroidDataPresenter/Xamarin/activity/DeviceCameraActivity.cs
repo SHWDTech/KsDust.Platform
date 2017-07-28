@@ -17,33 +17,33 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
     {
         [BindView(Resource.Id.surfaceView)]
 
-        SurfaceView _surfaceView;
+        protected SurfaceView SurfaceView;
 
-        private NET_DVR_DEVICEINFO_V30 _oNetDvrDeviceInfoV30 = null;
+        private NET_DVR_DEVICEINFO_V30 _oNetDvrDeviceInfoV30;
 
-        private int _iLogID = -1; // return by NET_DVR_Login_v30
+        private int _iLogId = -1; // return by NET_DVR_Login_v30
 
-        private int _iPlayID = -1; // return by NET_DVR_RealPlay_V30
+        private int _iPlayId = -1; // return by NET_DVR_RealPlay_V30
 
-        private int _iPlaybackID = -1; // return by NET_DVR_PlayBackByTime
+        private int _iPlaybackId = -1; // return by NET_DVR_PlayBackByTime
 
         private int _iPort = -1; // play port
 
-        private int _iStartChan = 0; // start channel no
+        private int _iStartChan; // start channel no
 
-        private int _iChanNum = 0; // channel number
+        //private int _iChanNum; // channel number
 
-        private bool _bTalkOn = false;
+        //private bool _bTalkOn;
 
-        private bool _bPTZL = false;
+        //private bool _bPtzl;
 
-        private bool _bMultiPlay = false;
+        //private bool _bMultiPlay;
 
         private bool _bNeedDecode = true;
 
-        private bool _bSaveRealData = false;
+        //private bool _bSaveRealData;
 
-        private bool _bStopPlayback = false;
+        //private bool _bStopPlayback;
 
         public const string Ip = "ip";
 
@@ -82,15 +82,14 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         private Action _action;
 
         [OnClick(Resource.Id.login)]
-        void LoginBtnClick(object sender, EventArgs args)
+        protected void LoginBtnClick(object sender, EventArgs args)
         {
             new Thread(() =>
             {
                 var info = GetDvrIp(_ip, Port, _dvrName, _dvrNameLen, _dvrSerialNumber, _dvrSerialLen);
-                var finalIp = string.Empty;
                 try
                 {
-                    finalIp = System.Text.Encoding.UTF8.GetString(info.SGetIP.ToArray());
+                    var finalIp = System.Text.Encoding.UTF8.GetString(info.SGetIP.ToArray());
                     finalIp = finalIp.Replace("\0", string.Empty);
                     Login(finalIp, info.DwPort, _user, _password);
                 }
@@ -106,7 +105,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         }
 
         [OnClick(Resource.Id.preview)]
-        void PreviewBtnClick(object sender, EventArgs args)
+        protected void PreviewBtnClick(object sender, EventArgs args)
         {
             Preview();
         }
@@ -122,7 +121,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             Cheeseknife.Bind(this);
 
             PreviewBtn.Clickable = false;
-            _surfaceView.Holder.AddCallback(this);
+            SurfaceView.Holder.AddCallback(this);
             if (!InitSdk())
             {
                 Finish();
@@ -189,27 +188,19 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         {
             try
             {
-                if (_iLogID < 0)
+                if (_iLogId < 0)
                 {
-                    _iLogID = LoginNormalDevice(loginIp, loginPort, user, password);
-                    if (_iLogID < 0)
-                    {
-                        _mainHandler.SendEmptyMessage(LoginFailed);
-                        return;
-                    }
-                    else
-                    {
-                        _mainHandler.SendEmptyMessage(LoginSuccess);
-                    }
+                    _iLogId = LoginNormalDevice(loginIp, loginPort, user, password);
+                    _mainHandler.SendEmptyMessage(_iLogId < 0 ? LoginFailed : LoginSuccess);
 
-                    var exceptionCallBack = GetExceptionCallBack();
-                    if (exceptionCallBack == null) return;
-                    if (!HCNetSDK.Instance.NET_DVR_SetExceptionCallBack(exceptionCallBack)) return;
+                    //var exceptionCallBack = GetExceptionCallBack();
+                    //if (exceptionCallBack == null) return;
+                    //if (!HCNetSDK.Instance.NET_DVR_SetExceptionCallBack(exceptionCallBack)) return;
                 }
                 else
                 {
-                    if (!HCNetSDK.Instance.NET_DVR_Logout_V30(_iLogID)) return;
-                    _iLogID = -1;
+                    if (!HCNetSDK.Instance.NET_DVR_Logout_V30(_iLogId)) return;
+                    _iLogId = -1;
                 }
             }
             catch (Exception)
@@ -239,18 +230,18 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             if (_oNetDvrDeviceInfoV30.ByChanNum > 0)
             {
                 _iStartChan = _oNetDvrDeviceInfoV30.ByStartChan;
-                _iChanNum = _oNetDvrDeviceInfoV30.ByChanNum;
+                //_iChanNum = _oNetDvrDeviceInfoV30.ByChanNum;
             }
             else if (_oNetDvrDeviceInfoV30.ByIPChanNum > 0)
             {
                 _iStartChan = _oNetDvrDeviceInfoV30.ByStartDChan;
-                _iChanNum = _oNetDvrDeviceInfoV30.ByChanNum + _oNetDvrDeviceInfoV30.ByHighDChanNum * 256;
+                //_iChanNum = _oNetDvrDeviceInfoV30.ByChanNum + _oNetDvrDeviceInfoV30.ByHighDChanNum * 256;
             }
 
             return loginId;
         }
 
-        private IExceptionCallBack GetExceptionCallBack()
+        protected static IExceptionCallBack GetExceptionCallBack()
         {
             var callBack = new ExceptionCallBack();
             return callBack;
@@ -260,10 +251,10 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         {
             try
             {
-                if (_iLogID < 0) return;
+                if (_iLogId < 0) return;
                 if (_bNeedDecode)
                 {
-                    if (_iPlayID < 0)
+                    if (_iPlayId < 0)
                     {
                         StartSinglePreview();
                     }
@@ -281,7 +272,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         private void StartSinglePreview()
         {
-            if (_iPlaybackID >= 0) return;
+            if (_iPlaybackId >= 0) return;
             var realDataCallBack = GetRealPlayerCallBack();
             if (realDataCallBack == null) return;
             var previewInfo = new NET_DVR_PREVIEWINFO
@@ -291,8 +282,8 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                 BBlocked = 1
             };
 
-            _iPlayID = HCNetSDK.Instance.NET_DVR_RealPlay_V40(_iLogID, previewInfo, realDataCallBack);
-            if (_iPlayID < 0)
+            _iPlayId = HCNetSDK.Instance.NET_DVR_RealPlay_V40(_iLogId, previewInfo, realDataCallBack);
+            if (_iPlayId < 0)
             {
                 var errorCode = HCNetSDK.Instance.NET_DVR_GetLastError();
                 Console.WriteLine(errorCode);
@@ -301,15 +292,15 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         private void StopSinglePreview()
         {
-            if (_iPlayID < 0) return;
+            if (_iPlayId < 0) return;
 
-            if (!HCNetSDK.Instance.NET_DVR_StopRealPlay(_iPlayID))
+            if (!HCNetSDK.Instance.NET_DVR_StopRealPlay(_iPlayId))
             {
                 Console.WriteLine("Error");
                 return;
             }
 
-            _iPlayID = -1;
+            _iPlayId = -1;
             StopSinglePlayer();
         }
 
@@ -343,16 +334,16 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                     if (_iPort == -1) return;
                     if (iDataSize > 0)
                     {
-                        if (!Player.Instance.SetStreamOpenMode(_iPort, iStreamMode)) return;
-                        if (!Player.Instance.OpenStream(_iPort, pDataBuffer, iDataSize, 2 * 1024 * 1024)) return;
-                        if (!Player.Instance.Play(_iPort, _surfaceView.Holder)) ;
+                        //if (!Player.Instance.SetStreamOpenMode(_iPort, iStreamMode)) return;
+                        //if (!Player.Instance.OpenStream(_iPort, pDataBuffer, iDataSize, 2 * 1024 * 1024)) return;
+                        //if (!Player.Instance.Play(_iPort, SurfaceView.Holder))
                     }
                 }
                 else
                 {
                     if (!Player.Instance.InputData(_iPort, pDataBuffer, iDataSize))
                     {
-                        for (var i = 0; i < 4000 && _iPlaybackID >= 0; i++)
+                        for (var i = 0; i < 4000 && _iPlaybackId >= 0; i++)
                         {
                             if (Player.Instance.InputData(_iPort, pDataBuffer, iDataSize)) break;
 
@@ -382,12 +373,12 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         public void SurfaceCreated(ISurfaceHolder holder)
         {
-            _surfaceView.Holder.SetFormat(Format.Translucent);
+            SurfaceView.Holder.SetFormat(Format.Translucent);
             if (_iPort == -1) return;
             var surface = holder.Surface;
             if (surface.IsValid)
             {
-                if (!Player.Instance.SetVideoWindow(_iPort, 0, holder)) return;
+                //if (!Player.Instance.SetVideoWindow(_iPort, 0, holder)) return;
             }
         }
 
@@ -396,19 +387,19 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             if (_iPort == -1) return;
             if (holder.Surface.IsValid)
             {
-                if (!Player.Instance.SetVideoWindow(_iPort, 0, null)) return;
+                //if (!Player.Instance.SetVideoWindow(_iPort, 0, null)) return;
             }
         }
 
         protected override void OnSaveInstanceState(Bundle outState)
         {
-            outState.PutInt("_iPort", _iPort);
+            outState.PutInt(nameof(_iPort), _iPort);
             base.OnSaveInstanceState(outState);
         }
 
         protected override void OnRestoreInstanceState(Bundle savedInstanceState)
         {
-            _iPort = savedInstanceState.GetInt("_iPort");
+            _iPort = savedInstanceState.GetInt(nameof(_iPort));
             base.OnRestoreInstanceState(savedInstanceState);
         }
 

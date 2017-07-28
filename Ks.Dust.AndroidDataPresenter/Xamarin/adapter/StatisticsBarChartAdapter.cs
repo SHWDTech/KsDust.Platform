@@ -59,7 +59,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            return new StatisticsBarChartAdapterViewHolder(_layoutInflater.Inflate(Resource.Layout.item_statistics_barchart, parent, false));
+            return new StatisticsBarChartAdapterViewHolder(LayoutInflater.Inflate(Resource.Layout.item_statistics_barchart, parent, false));
         }
     }
 

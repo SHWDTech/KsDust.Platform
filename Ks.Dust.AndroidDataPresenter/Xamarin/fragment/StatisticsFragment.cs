@@ -37,28 +37,29 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 
         private RecyclerView.LayoutManager _layoutManager;
 
-        private bool _isOrderBYTsgAvgAsc = false;
+        protected bool IsOrderByTsgAvgAsc;
 
-        [BindView(Resource.Id.recyclerView)] private RecyclerView _barChartChartRecyclerView;
+        [BindView(Resource.Id.recyclerView)]
+        protected RecyclerView BarChartChartRecyclerView;
 
         [BindView(Resource.Id.statisticsRefreshLayout)] private SuperRefreshLayout _magicRefreshLayout;
 
         private readonly Activity _activity;
 
-        private double _maxTsp = 0;
+        private double _maxTsp;
 
         [OnClick(Resource.Id.districtavg_tspavg_tv)]
-        private void TspClick(object sender, EventArgs args)
+        protected void TspClick(object sender, EventArgs args)
         {
-            if (_isOrderBYTsgAvgAsc)
+            if (IsOrderByTsgAvgAsc)
             {
                 _districtGeneralInfos = _districtGeneralInfos.OrderByDescending(info => info.tspAvg).ToList();
-                _isOrderBYTsgAvgAsc = false;
+                IsOrderByTsgAvgAsc = false;
             }
             else
             {
                 _districtGeneralInfos = _districtGeneralInfos.OrderBy(info => info.tspAvg).ToList();
-                _isOrderBYTsgAvgAsc = true;
+                IsOrderByTsgAvgAsc = true;
             }
             _statisticsRecyclerAdapter.NotifyDataSetChanged();
         }
@@ -96,13 +97,13 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
             _magicRefreshLayout.OnCheckMoreContentListener = this;
 
             var layoutManager = new LinearLayoutManager(Activity, LinearLayoutManager.Horizontal, false);
-            _barChartChartRecyclerView.SetLayoutManager(layoutManager);
+            BarChartChartRecyclerView.SetLayoutManager(layoutManager);
             var dividerItemDecoration = new DividerItemDecoration(Activity, DividerItemDecoration.Horizontal, true)
             {
                 Width = 30
             };
-            _barChartChartRecyclerView.AddItemDecoration(dividerItemDecoration);
-            _barChartChartRecyclerView.SetAdapter(_statisticsBarChartAdapter);
+            BarChartChartRecyclerView.AddItemDecoration(dividerItemDecoration);
+            BarChartChartRecyclerView.SetAdapter(_statisticsBarChartAdapter);
 
             GetData();
             return view;

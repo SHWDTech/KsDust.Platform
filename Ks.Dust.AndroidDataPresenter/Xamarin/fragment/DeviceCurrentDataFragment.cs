@@ -1,5 +1,4 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
@@ -21,55 +20,55 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
         private DeviceCurrentInfo _deviceCurrentInfo;
 
         [BindView(Resource.Id.name)]
-        private TextView _name;
+        protected TextView Name;
 
         [BindView(Resource.Id.address)]
-        private TextView _address;
+        protected TextView Address;
 
         [BindView(Resource.Id.vendor)]
-        private TextView _vendor;
+        protected TextView Vendor;
 
         [BindView(Resource.Id.enterprise)]
-        private TextView _enterprise;
+        protected TextView Enterprise;
 
         [BindView(Resource.Id.superintend)]
-        private TextView _superintend;
+        protected TextView Superintend;
 
         [BindView(Resource.Id.mobile)]
-        private TextView _mobile;
+        protected TextView Mobile;
 
         [BindView(Resource.Id.isOnline)]
-        private TextView _isOnline;
+        protected TextView IsOnline;
 
         [BindView(Resource.Id.tsp)]
-        private TextView _tsp;
+        protected TextView Tsp;
 
         [BindView(Resource.Id.pm25)]
-        private TextView _pm25;
+        protected TextView Pm25;
 
         [BindView(Resource.Id.pm100)]
-        private TextView _pm100;
+        protected TextView Pm100;
 
         [BindView(Resource.Id.noise)]
-        private TextView _noise;
+        protected TextView Noise;
 
         [BindView(Resource.Id.temperature)]
-        private TextView _temperature;
+        protected TextView Temperature;
 
         [BindView(Resource.Id.humidity)]
-        private TextView _humidity;
+        protected TextView Humidity;
 
         [BindView(Resource.Id.windspeed)]
-        private TextView _windspeed;
+        protected TextView Windspeed;
 
         [BindView(Resource.Id.winddirection)]
-        private TextView _winddirection;
+        protected TextView Winddirection;
 
         [BindView(Resource.Id.updatetime)]
-        private TextView _updatetime;
+        protected TextView Updatetime;
 
         [BindView(Resource.Id.camera)]
-        private View _camera;
+        protected View Camera;
 
         private readonly Activity _ownerActivity;
 
@@ -90,7 +89,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
         {
             var view = inflater.Inflate(Resource.Layout.fragment_currentdata, container, false);
             Cheeseknife.Bind(this, view);
-            _camera.SetOnClickListener(this);
+            Camera.SetOnClickListener(this);
             var handler = new HttpResponseHandler();
             handler.OnResponse += args =>
             {
@@ -103,25 +102,25 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 
         private void UpdateData()
         {
-            _name.Text = $"监测点：{_deviceCurrentInfo.name}";
-            _address.Text = $"地址：{_deviceCurrentInfo.address}"; 
-            _vendor.Text = $"供应商：{_deviceCurrentInfo.vendor}"; 
-            _enterprise.Text = $"施工单位：{_deviceCurrentInfo.enterprise}"; 
-            _superintend.Text = $"负责人：{_deviceCurrentInfo.superintend}"; 
-            _mobile.Text = $"联系电话：{_deviceCurrentInfo.mobile}";
-            _isOnline.Text = $"是否在线：{(_deviceCurrentInfo.isOnline ? "是" : "否")}"; 
-            _tsp.Text = $"tsp：{_deviceCurrentInfo.tsp}mg/m³";
-            _pm25.Text = $"pm2.5：{_deviceCurrentInfo.pm25}ug/m³";
-            _pm100.Text = $"pm10：{_deviceCurrentInfo.pm100}ug/m³";
-            _noise.Text = $"噪声：{_deviceCurrentInfo.noise}dB"; 
-            _temperature.Text = $"温度：{_deviceCurrentInfo.temperature}℃";
-            _humidity.Text = $"湿度：{_deviceCurrentInfo.humidity}%";
-            _windspeed.Text = $"风速：{_deviceCurrentInfo.windspeed}m/s";
-            _winddirection.Text = $"风向：{_deviceCurrentInfo.winddirection}°";
-            _updatetime.Text = $"{_deviceCurrentInfo.updatetime}";
+            Name.Text = $"监测点：{_deviceCurrentInfo.name}";
+            Address.Text = $"地址：{_deviceCurrentInfo.address}"; 
+            Vendor.Text = $"供应商：{_deviceCurrentInfo.vendor}"; 
+            Enterprise.Text = $"施工单位：{_deviceCurrentInfo.enterprise}"; 
+            Superintend.Text = $"负责人：{_deviceCurrentInfo.superintend}"; 
+            Mobile.Text = $"联系电话：{_deviceCurrentInfo.mobile}";
+            IsOnline.Text = $"是否在线：{(_deviceCurrentInfo.isOnline ? "是" : "否")}"; 
+            Tsp.Text = $"tsp：{_deviceCurrentInfo.tsp}mg/m³";
+            Pm25.Text = $"pm2.5：{_deviceCurrentInfo.pm25}ug/m³";
+            Pm100.Text = $"pm10：{_deviceCurrentInfo.pm100}ug/m³";
+            Noise.Text = $"噪声：{_deviceCurrentInfo.noise}dB"; 
+            Temperature.Text = $"温度：{_deviceCurrentInfo.temperature}℃";
+            Humidity.Text = $"湿度：{_deviceCurrentInfo.humidity}%";
+            Windspeed.Text = $"风速：{_deviceCurrentInfo.windspeed}m/s";
+            Winddirection.Text = $"风向：{_deviceCurrentInfo.winddirection}°";
+            Updatetime.Text = $"{_deviceCurrentInfo.updatetime}";
             if (!string.IsNullOrWhiteSpace(_deviceCurrentInfo.serialNumber))
             {
-                _camera.Visibility = ViewStates.Visible;
+                Camera.Visibility = ViewStates.Visible;
             }
         }
 

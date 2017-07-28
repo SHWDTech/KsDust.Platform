@@ -73,27 +73,29 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
         private void ClientDecoded(ActiveClientEventArgs args)
         {
             DecodedProtocol++;
-            var ctx = new ProtocolContext();
-            ctx.ProtocolDatas.Add((ProtocolData) args.ProtocolData);
-            ctx.SaveChanges();
+            using (var ctx = new ProtocolContext())
+            {
+                ctx.ProtocolDatas.Add((ProtocolData)args.ProtocolData);
+                ctx.SaveChanges();
+            }
         }
 
-        private void ClientAuthenticated(ActiveClientEventArgs args)
+        private static void ClientAuthenticated(ActiveClientEventArgs args)
         {
             ReportService.Instance.Info($"客户端授权通过，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}");
         }
 
-        private void ClientAuthenticaFaild(ActiveClientEventArgs args)
+        private static void ClientAuthenticaFaild(ActiveClientEventArgs args)
         {
             ReportService.Instance.Info($"客户端授权失败，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}");
         }
 
-        private void ClientDisconnected(ActiveClientEventArgs args)
+        private static void ClientDisconnected(ActiveClientEventArgs args)
         {
             ReportService.Instance.Info($"客户端连接断开，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}，异常信息：{args.ExceptionMessage}", args.Exception);
         }
 
-        private void ClientDecodeFailed(ActiveClientEventArgs args)
+        private static void ClientDecodeFailed(ActiveClientEventArgs args)
         {
             ReportService.Instance.Error($"客户端解码失败，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}，异常信息：{args.ExceptionMessage}", args.Exception);
         }

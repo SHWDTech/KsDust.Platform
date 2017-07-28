@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -22,46 +21,44 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
     public class MainActivity : KsDustBaseActivity, View.IOnClickListener, NavigationView.IOnNavigationItemSelectedListener, IOnSearchClickListener
     {
         [BindView(Resource.Id.main_layout)]
-        private DrawerLayout _drawer;
+        protected DrawerLayout Drawer;
 
         [BindView(Resource.Id.goDrawer)]
-        private View _indexView;
+        protected View IndexView;
 
         [BindView(Resource.Id.home)]
-        private ImageView _homeView;
+        protected ImageView HomeView;
 
         [BindView(Resource.Id.build)]
-        private ImageView _buildView;
+        protected ImageView BuildView;
 
         [BindView(Resource.Id.municipal)]
-        private ImageView _municipalView;
+        protected ImageView MunicipalView;
 
         [BindView(Resource.Id.mixing)]
-        private ImageView _mixingView;
+        protected ImageView MixingView;
 
         [BindView(Resource.Id.title)]
-        private TextView _cityTitleView;
+        protected TextView CityTitleView;
 
         [BindView(Resource.Id.CascadeElement)]
-        private View _cascadeElementView;
+        protected View CascadeElementView;
 
         [BindView(Resource.Id.Statistics)]
-        private View _statisticsView;
+        protected View StatisticsView;
 
         private MapViewType _currentMapViewType = MapViewType.Home;
 
         private CategoryMapFragment _homeFragment, _buildFragment, _municipalFragment, _mixingFragment;
 
-        private List<string> _cityList = new List<string>();
-
-        private PopupWindow _indexPopupWindow;
+        protected PopupWindow IndexPopupWindow;
 
         [BindView(Resource.Id.search)]
-        private View _searchView;
+        protected View SearchView;
 
         private SearchDialog _searchDialog;
 
-        private bool _isCheckByUser;
+        protected bool IsCheckByUser;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -85,15 +82,15 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         private void InitView()
         {
-            _indexView.SetOnClickListener(this);
-            _homeView.SetOnClickListener(this);
-            _buildView.SetOnClickListener(this);
-            _municipalView.SetOnClickListener(this);
-            _mixingView.SetOnClickListener(this);
-            _cascadeElementView.SetOnClickListener(this);
-            _statisticsView.SetOnClickListener(this);
-            _cityTitleView.Text = "昆山";
-            _searchView.SetOnClickListener(this);
+            IndexView.SetOnClickListener(this);
+            HomeView.SetOnClickListener(this);
+            BuildView.SetOnClickListener(this);
+            MunicipalView.SetOnClickListener(this);
+            MixingView.SetOnClickListener(this);
+            CascadeElementView.SetOnClickListener(this);
+            StatisticsView.SetOnClickListener(this);
+            CityTitleView.Text = "昆山";
+            SearchView.SetOnClickListener(this);
             ((NavigationView)FindViewById(Resource.Id.nav_view)).SetNavigationItemSelectedListener(this);
         }
 
@@ -108,9 +105,9 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         public override void OnBackPressed()
         {
-            if (_drawer.IsDrawerOpen(GravityCompat.Start))
+            if (Drawer.IsDrawerOpen(GravityCompat.Start))
             {
-                _drawer.CloseDrawer(GravityCompat.Start);
+                Drawer.CloseDrawer(GravityCompat.Start);
             }
             else
             {
@@ -135,9 +132,9 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             switch (v.Id)
             {
                 case Resource.Id.goDrawer:
-                    if (_indexView != null)
+                    if (IndexView != null)
                     {
-                        _drawer?.OpenDrawer(GravityCompat.Start);
+                        Drawer?.OpenDrawer(GravityCompat.Start);
                     }
                     break;
                 case Resource.Id.home:
@@ -270,7 +267,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             }
             else if (id == Resource.Id.versionupdate)
             {
-                _isCheckByUser = true;
+                IsCheckByUser = true;
             }
             else if (id == Resource.Id.exit)
             {
@@ -279,7 +276,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                 Finish();
             }
 
-            _drawer?.CloseDrawer(GravityCompat.Start);
+            Drawer?.CloseDrawer(GravityCompat.Start);
             return true;
         }
 
@@ -319,28 +316,28 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             switch (_currentMapViewType)
             {
                 case MapViewType.Home:
-                    _homeView.SetImageResource(Resource.Mipmap.home_yes);
-                    _buildView.SetImageResource(Resource.Mipmap.build_no);
-                    _municipalView.SetImageResource(Resource.Mipmap.municipal_no);
-                    _mixingView.SetImageResource(Resource.Mipmap.mixingplant_no);
+                    HomeView.SetImageResource(Resource.Mipmap.home_yes);
+                    BuildView.SetImageResource(Resource.Mipmap.build_no);
+                    MunicipalView.SetImageResource(Resource.Mipmap.municipal_no);
+                    MixingView.SetImageResource(Resource.Mipmap.mixingplant_no);
                     break;
                 case MapViewType.Build:
-                    _homeView.SetImageResource(Resource.Mipmap.home_no);
-                    _buildView.SetImageResource(Resource.Mipmap.build_yes);
-                    _municipalView.SetImageResource(Resource.Mipmap.municipal_no);
-                    _mixingView.SetImageResource(Resource.Mipmap.mixingplant_no);
+                    HomeView.SetImageResource(Resource.Mipmap.home_no);
+                    BuildView.SetImageResource(Resource.Mipmap.build_yes);
+                    MunicipalView.SetImageResource(Resource.Mipmap.municipal_no);
+                    MixingView.SetImageResource(Resource.Mipmap.mixingplant_no);
                     break;
                 case MapViewType.Municipal:
-                    _homeView.SetImageResource(Resource.Mipmap.home_no);
-                    _buildView.SetImageResource(Resource.Mipmap.build_no);
-                    _municipalView.SetImageResource(Resource.Mipmap.municipal_yes);
-                    _mixingView.SetImageResource(Resource.Mipmap.mixingplant_no);
+                    HomeView.SetImageResource(Resource.Mipmap.home_no);
+                    BuildView.SetImageResource(Resource.Mipmap.build_no);
+                    MunicipalView.SetImageResource(Resource.Mipmap.municipal_yes);
+                    MixingView.SetImageResource(Resource.Mipmap.mixingplant_no);
                     break;
                 case MapViewType.Mixing:
-                    _homeView.SetImageResource(Resource.Mipmap.home_no);
-                    _buildView.SetImageResource(Resource.Mipmap.build_no);
-                    _municipalView.SetImageResource(Resource.Mipmap.municipal_no);
-                    _mixingView.SetImageResource(Resource.Mipmap.mixingplant_yes);
+                    HomeView.SetImageResource(Resource.Mipmap.home_no);
+                    BuildView.SetImageResource(Resource.Mipmap.build_no);
+                    MunicipalView.SetImageResource(Resource.Mipmap.municipal_no);
+                    MixingView.SetImageResource(Resource.Mipmap.mixingplant_yes);
                     break;
             }
         }

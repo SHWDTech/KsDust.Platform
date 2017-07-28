@@ -1,5 +1,4 @@
-﻿using System.Security;
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Support.V7.Widget;
@@ -16,7 +15,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh
 
         public static readonly int Vertical = LinearLayoutManager.Vertical;
 
-        private Drawable _divider;
+        private readonly Drawable _divider;
 
         public int Width { get; set; }
 

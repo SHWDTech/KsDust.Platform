@@ -37,7 +37,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         private SuperRefreshLayout _magicRefreshLayout;
 
         [BindView(Resource.Id.title)]
-        TextView _titleView;
+        protected TextView TitleView;
 
         private RecyclerView.LayoutManager _layoutManager;
 
@@ -56,11 +56,12 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             _cascadeElementId = bundle.GetString(CascadeElementId);
             _cascadeElementName = bundle.GetString(CascadeElementName);
             _cascadeElementLevel = (ObjectType)bundle.GetInt(CascadeElementLevel);
-            _titleView.Text = _cascadeElementLevel == ObjectType.WholeCity ? "全部区县" : _cascadeElementName;
+            TitleView.Text = _cascadeElementLevel == ObjectType.WholeCity ? "全部区县" : _cascadeElementName;
 
-            _adapter = new CascadeElementAdapter(this, _cascadeElements);
-            _adapter.OnCascadeElementItemListener = this;
-
+            _adapter = new CascadeElementAdapter(this, _cascadeElements)
+            {
+                OnCascadeElementItemListener = this
+            };
             _layoutManager = new LinearLayoutManager(ApplicationContext);
 
             _magicRefreshLayout.SetProgressViewEndTarget(false, Resources.GetDimensionPixelSize(Resource.Dimension.status_bar_height) + BaseUtils.Dip2Px(this, 37));
@@ -92,7 +93,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         }
 
         [OnClick(Resource.Id.back)]
-        void Back(object sender, EventArgs args)
+        protected void Back(object sender, EventArgs args)
         {
             Finish();
         }

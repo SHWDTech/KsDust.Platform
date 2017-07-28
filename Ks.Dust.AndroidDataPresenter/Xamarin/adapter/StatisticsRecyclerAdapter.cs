@@ -10,7 +10,7 @@ using Ks.Dust.AndroidDataPresenter.Xamarin.Model;
 
 namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
 {
-    class StatisticsRecyclerAdapter : AbstractRecyclerAdapter<DistrictGeneralInfo>
+    public class StatisticsRecyclerAdapter : AbstractRecyclerAdapter<DistrictGeneralInfo>
     {
         public IOnStatisticsRecyclerItemClickListener OnItemClickListener { get; set; }
 
@@ -52,7 +52,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
         {
             var holder =
                 new StatisticsRecyclerAdapterViewHolder(
-                    _layoutInflater.Inflate(Resource.Layout.item_statistics_recyler, parent, false))
+                    LayoutInflater.Inflate(Resource.Layout.item_statistics_recyler, parent, false))
                 {
                     OnItemClickListener = OnItemClickListener,
                     AdapterData = AdapterData

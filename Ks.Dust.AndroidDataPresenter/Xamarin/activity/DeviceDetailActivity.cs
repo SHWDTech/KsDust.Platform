@@ -6,7 +6,6 @@ using Android.Widget;
 using CheeseBind;
 using Ks.Dust.AndroidDataPresenter.Xamarin.fragment;
 using Android.Graphics;
-using Android.Util;
 using ApplicationConcept;
 using Ks.Dust.AndroidDataPresenter.Xamarin.consts;
 
@@ -19,25 +18,25 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         private DeviceHistoryDataFragment _fifteenMinFragment, _hourFragment, _dayFragment, _monthFragment;
 
-        [BindView(Resource.Id.device_name)] private TextView _titleTextView;
+        [BindView(Resource.Id.device_name)] protected TextView TitleTextView;
 
-        [BindView(Resource.Id.back)] private View _backView;
+        [BindView(Resource.Id.back)] protected View BackView;
 
-        [BindView(Resource.Id.current)] private TextView _currentTextView;
+        [BindView(Resource.Id.current)] protected TextView CurrentTextView;
 
-        [BindView(Resource.Id.min15)] private TextView _fifteenMinTextView;
+        [BindView(Resource.Id.min15)] protected TextView FifteenMinTextView;
 
-        [BindView(Resource.Id.hour)] private TextView _hourTextView;
+        [BindView(Resource.Id.hour)] protected TextView HourTextView;
 
-        [BindView(Resource.Id.day)] private TextView _dayTextView;
+        [BindView(Resource.Id.day)] protected TextView DayTextView;
 
-        [BindView(Resource.Id.month)] private TextView _monthTextView;
+        [BindView(Resource.Id.month)] protected TextView MonthTextView;
 
         private string _deviceId;
 
         private string _deviceName;
 
-        private int _currentDataType = 0;
+        private int _currentDataType;
 
         private FragmentManager _fragmentManager;
 
@@ -197,7 +196,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             var bundle = Intent.Extras;
             _deviceId = bundle.GetString(ActivityConts.NameDeviceId);
             _deviceName = bundle.GetString(ActivityConts.NameDeviceName);
-            _titleTextView.Text = _deviceName;
+            TitleTextView.Text = _deviceName;
 
             InitFragment();
         }
@@ -241,39 +240,39 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             switch (_currentDataType)
             {
                 case CurrentDataType:
-                    _currentTextView.SetTextColor(Color.White);
-                    _fifteenMinTextView.SetTextColor(Color.Black);
-                    _hourTextView.SetTextColor(Color.Black);
-                    _dayTextView.SetTextColor(Color.Black);
-                    _monthTextView.SetTextColor(Color.Black);
+                    CurrentTextView.SetTextColor(Color.White);
+                    FifteenMinTextView.SetTextColor(Color.Black);
+                    HourTextView.SetTextColor(Color.Black);
+                    DayTextView.SetTextColor(Color.Black);
+                    MonthTextView.SetTextColor(Color.Black);
                     break;
                 case DataTypeFifteenMin:
-                    _currentTextView.SetTextColor(Color.Black);
-                    _fifteenMinTextView.SetTextColor(Color.White);
-                    _hourTextView.SetTextColor(Color.Black);
-                    _dayTextView.SetTextColor(Color.Black);
-                    _monthTextView.SetTextColor(Color.Black);
+                    CurrentTextView.SetTextColor(Color.Black);
+                    FifteenMinTextView.SetTextColor(Color.White);
+                    HourTextView.SetTextColor(Color.Black);
+                    DayTextView.SetTextColor(Color.Black);
+                    MonthTextView.SetTextColor(Color.Black);
                     break;
                 case DataTypeHour:
-                    _currentTextView.SetTextColor(Color.Black);
-                    _fifteenMinTextView.SetTextColor(Color.Black);
-                    _hourTextView.SetTextColor(Color.White);
-                    _dayTextView.SetTextColor(Color.Black);
-                    _monthTextView.SetTextColor(Color.Black);
+                    CurrentTextView.SetTextColor(Color.Black);
+                    FifteenMinTextView.SetTextColor(Color.Black);
+                    HourTextView.SetTextColor(Color.White);
+                    DayTextView.SetTextColor(Color.Black);
+                    MonthTextView.SetTextColor(Color.Black);
                     break;
                 case DataTypeDay:
-                    _currentTextView.SetTextColor(Color.Black);
-                    _fifteenMinTextView.SetTextColor(Color.Black);
-                    _hourTextView.SetTextColor(Color.Black);
-                    _dayTextView.SetTextColor(Color.White);
-                    _monthTextView.SetTextColor(Color.Black);
+                    CurrentTextView.SetTextColor(Color.Black);
+                    FifteenMinTextView.SetTextColor(Color.Black);
+                    HourTextView.SetTextColor(Color.Black);
+                    DayTextView.SetTextColor(Color.White);
+                    MonthTextView.SetTextColor(Color.Black);
                     break;
                 case DataTypeMonth:
-                    _currentTextView.SetTextColor(Color.Black);
-                    _fifteenMinTextView.SetTextColor(Color.Black);
-                    _hourTextView.SetTextColor(Color.Black);
-                    _dayTextView.SetTextColor(Color.Black);
-                    _monthTextView.SetTextColor(Color.White);
+                    CurrentTextView.SetTextColor(Color.Black);
+                    FifteenMinTextView.SetTextColor(Color.Black);
+                    HourTextView.SetTextColor(Color.Black);
+                    DayTextView.SetTextColor(Color.Black);
+                    MonthTextView.SetTextColor(Color.White);
                     break;
             }
         }

@@ -29,35 +29,41 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         private string _elementId = string.Empty;
 
-        private bool _isFromSearch = false;
+        private bool _isFromSearch;
 
         private string _name = string.Empty;
 
-        [BindView(Resource.Id.title)] private TextView _titleTextView;
+        [BindView(Resource.Id.title)]
+        protected TextView TitleTextView;
 
-        [BindView(Resource.Id.back)] private View _backView;
+        [BindView(Resource.Id.back)]
+        protected View BackView;
 
-        [BindView(Resource.Id.min15)] private TextView _fifteenMinTextView;
+        [BindView(Resource.Id.min15)]
+        protected TextView FifteenMinTextView;
 
-        [BindView(Resource.Id.hour)] private TextView _hourTextView;
+        [BindView(Resource.Id.hour)]
+        protected TextView HourTextView;
 
-        [BindView(Resource.Id.day)] private TextView _dayTextView;
+        [BindView(Resource.Id.day)]
+        protected TextView DayTextView;
 
-        [BindView(Resource.Id.month)] private TextView _monthTextView;
+        [BindView(Resource.Id.month)]
+        protected TextView MonthTextView;
 
         private Fragment _fifteenMinFragment, _hourFragment, _dayFragment, _monthFragment;
 
-        private int _currentPosition = 0;
+        private int _currentPosition;
 
         private FragmentManager _fragmentManager;
 
-        public const int _positionFifteenMin = 0;
+        public const int PositionFifteenMin = 0;
 
-        public const int _positionHour = 1;
+        public const int PositionHour = 1;
 
-        public const int _positionDay = 2;
+        public const int PositionDay = 2;
 
-        public const int _positionMonth = 3;
+        public const int PositionMonth = 3;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -71,7 +77,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             _elementId = bundle.GetString(NameStatisticsElementId);
             _isFromSearch = bundle.GetBoolean(NameStatisticsFromSearch);
             _name = bundle.GetString(NameStatisticsName);
-            _titleTextView.Text = _name;
+            TitleTextView.Text = _name;
 
             _fragmentManager = FragmentManager;
 
@@ -113,9 +119,9 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         [OnClick(Resource.Id.min15)]
         public void ClickFifteenMin(object sender, EventArgs args)
         {
-            if (_currentPosition == _positionFifteenMin) return;
+            if (_currentPosition == PositionFifteenMin) return;
 
-            _currentPosition = _positionFifteenMin;
+            _currentPosition = PositionFifteenMin;
             SetIcon();
 
             var transaction = _fragmentManager.BeginTransaction();
@@ -135,9 +141,9 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         [OnClick(Resource.Id.hour)]
         public void ClickHour(object sender, EventArgs args)
         {
-            if (_currentPosition == _positionHour) return;
+            if (_currentPosition == PositionHour) return;
 
-            _currentPosition = _positionHour;
+            _currentPosition = PositionHour;
             SetIcon();
 
             var transaction = _fragmentManager.BeginTransaction();
@@ -157,9 +163,9 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         [OnClick(Resource.Id.day)]
         public void ClickDay(object sender, EventArgs args)
         {
-            if (_currentPosition == _positionDay) return;
+            if (_currentPosition == PositionDay) return;
 
-            _currentPosition = _positionDay;
+            _currentPosition = PositionDay;
             SetIcon();
 
             var transaction = _fragmentManager.BeginTransaction();
@@ -179,9 +185,9 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         [OnClick(Resource.Id.month)]
         public void ClickMonth(object sender, EventArgs args)
         {
-            if (_currentPosition == _positionMonth) return;
+            if (_currentPosition == PositionMonth) return;
 
-            _currentPosition = _positionMonth;
+            _currentPosition = PositionMonth;
             SetIcon();
 
             var transaction = _fragmentManager.BeginTransaction();
@@ -199,7 +205,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         }
 
         [OnClick(Resource.Id.back)]
-        private void Back(object sender, EventArgs args)
+        protected void Back(object sender, EventArgs args)
         {
             Finish();
         }
@@ -235,29 +241,29 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         {
             switch (_currentPosition)
             {
-                case _positionFifteenMin:
-                    _fifteenMinTextView.SetTextColor(Color.White);
-                    _hourTextView.SetTextColor(Color.Black);
-                    _dayTextView.SetTextColor(Color.Black);
-                    _monthTextView.SetTextColor(Color.Black);
+                case PositionFifteenMin:
+                    FifteenMinTextView.SetTextColor(Color.White);
+                    HourTextView.SetTextColor(Color.Black);
+                    DayTextView.SetTextColor(Color.Black);
+                    MonthTextView.SetTextColor(Color.Black);
                     break;
-                case _positionHour:
-                    _fifteenMinTextView.SetTextColor(Color.Black);
-                    _hourTextView.SetTextColor(Color.White);
-                    _dayTextView.SetTextColor(Color.Black);
-                    _monthTextView.SetTextColor(Color.Black);
+                case PositionHour:
+                    FifteenMinTextView.SetTextColor(Color.Black);
+                    HourTextView.SetTextColor(Color.White);
+                    DayTextView.SetTextColor(Color.Black);
+                    MonthTextView.SetTextColor(Color.Black);
                     break;
-                case _positionDay:
-                    _fifteenMinTextView.SetTextColor(Color.Black);
-                    _hourTextView.SetTextColor(Color.Black);
-                    _dayTextView.SetTextColor(Color.White);
-                    _monthTextView.SetTextColor(Color.Black);
+                case PositionDay:
+                    FifteenMinTextView.SetTextColor(Color.Black);
+                    HourTextView.SetTextColor(Color.Black);
+                    DayTextView.SetTextColor(Color.White);
+                    MonthTextView.SetTextColor(Color.Black);
                     break;
-                case _positionMonth:
-                    _fifteenMinTextView.SetTextColor(Color.Black);
-                    _hourTextView.SetTextColor(Color.Black);
-                    _dayTextView.SetTextColor(Color.Black);
-                    _monthTextView.SetTextColor(Color.White);
+                case PositionMonth:
+                    FifteenMinTextView.SetTextColor(Color.Black);
+                    HourTextView.SetTextColor(Color.Black);
+                    DayTextView.SetTextColor(Color.Black);
+                    MonthTextView.SetTextColor(Color.White);
                     break;
             }
         }

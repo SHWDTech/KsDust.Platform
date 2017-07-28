@@ -53,7 +53,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            var itemView = _layoutInflater.Inflate(Resource.Layout.item_search, parent, false);
+            var itemView = LayoutInflater.Inflate(Resource.Layout.item_search, parent, false);
             _nameTextView = (TextView)itemView.FindViewById(Resource.Id.searchName);
             _levelTextView = (TextView)itemView.FindViewById(Resource.Id.searchLevel);
             return new SearchViewHolder(itemView, this);

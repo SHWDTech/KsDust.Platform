@@ -19,29 +19,29 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
-            if (holder is DeviceHistoryDataAdapterViewHolder) {
-                var viewHolder = (DeviceHistoryDataAdapterViewHolder)holder;
-                var historyData = AdapterData[position];
-                viewHolder.NoTextView.Text = position + "";
-                viewHolder.TimeTextView.Text = historyData.date;
-                viewHolder.TspTextView.Text = $"{historyData.tsp}";
-                switch (historyData.rate) {
-                    case 0:
-                        viewHolder.TspTextView.SetBackgroundResource(Resource.Drawable.tsp_good_bg);
-                        break;
-                    case 1:
-                        viewHolder.TspTextView.SetBackgroundResource(Resource.Drawable.tsp_normal_bg);
-                        break;
-                    case 2:
-                        viewHolder.TspTextView.SetBackgroundResource(Resource.Drawable.tsp_bad_bg);
-                        break;
-                }
+            var adapterViewHolder = holder as DeviceHistoryDataAdapterViewHolder;
+            if (adapterViewHolder == null) return;
+            var viewHolder = adapterViewHolder;
+            var historyData = AdapterData[position];
+            viewHolder.NoTextView.Text = position + "";
+            viewHolder.TimeTextView.Text = historyData.date;
+            viewHolder.TspTextView.Text = $"{historyData.tsp}";
+            switch (historyData.rate) {
+                case 0:
+                    viewHolder.TspTextView.SetBackgroundResource(Resource.Drawable.tsp_good_bg);
+                    break;
+                case 1:
+                    viewHolder.TspTextView.SetBackgroundResource(Resource.Drawable.tsp_normal_bg);
+                    break;
+                case 2:
+                    viewHolder.TspTextView.SetBackgroundResource(Resource.Drawable.tsp_bad_bg);
+                    break;
             }
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            return new DeviceHistoryDataAdapterViewHolder(_layoutInflater.Inflate(Resource.Layout.item_historydata, parent, false));
+            return new DeviceHistoryDataAdapterViewHolder(LayoutInflater.Inflate(Resource.Layout.item_historydata, parent, false));
         }
     }
 

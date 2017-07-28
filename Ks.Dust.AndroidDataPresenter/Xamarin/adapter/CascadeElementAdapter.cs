@@ -24,19 +24,20 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.adapter
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
-            if (holder is CascadeElementViewHolder)
+            var viewHolder = holder as CascadeElementViewHolder;
+            if (viewHolder != null)
             {
-                var cascadeElementViewHolder = (CascadeElementViewHolder)holder;
+                var cascadeElementViewHolder = viewHolder;
                 var cascadeElement = AdapterData[position];
                 cascadeElementViewHolder.CascadeElementName.Text = cascadeElement.cascadeElementName;
             }
-}
+        }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
             var holder =
                 new CascadeElementViewHolder(
-                    _layoutInflater.Inflate(Resource.Layout.item_cascade_element, parent, false))
+                    LayoutInflater.Inflate(Resource.Layout.item_cascade_element, parent, false))
                 {
                     OnCascadeElementItemListener = OnCascadeElementItemListener,
                     AdapterData = AdapterData

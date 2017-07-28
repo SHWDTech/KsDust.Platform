@@ -17,7 +17,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         public const string DistrictdetailmapDistrictname = "name";
 
         [OnClick(Resource.Id.back)]
-        private void Back(object sender, EventArgs args)
+        protected void Back(object sender, EventArgs args)
         {
             Finish();
         }
@@ -44,8 +44,10 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             _titleView.Text = _districtName;
 
             var transaction = FragmentManager.BeginTransaction();
-            var mapFragment = new CategoryMapFragment();
-            mapFragment.Arguments = bundle;
+            var mapFragment = new CategoryMapFragment()
+            {
+                Arguments = bundle
+            };
             transaction.Add(Resource.Id.map_content, mapFragment).Commit();
         }
     }

@@ -64,6 +64,7 @@ namespace Dust.Platform.Service.Controllers
 
             var camera = _ctx.KsDustCameras.FirstOrDefault(car => car.DeviceId == device.Id);
             if (camera == null) return Request.CreateResponse(HttpStatusCode.OK, current);
+            current.camera = camera.Name;
             current.serialNumber = camera.SerialNumber;
             current.userName = camera.UserName;
             current.password = camera.Password;

@@ -432,9 +432,9 @@ namespace Dust.Platform.Web.Controllers
             var relatedEntity = user.Claims.FirstOrDefault(c => c.ClaimType == nameof(UserRelatedEntity));
             if (relatedEntity != null)
             {
-                relatedEntity.ClaimValue = model.UserRelateEntity;
+                user.Claims.Remove(relatedEntity);
             }
-            else
+            if (!string.IsNullOrWhiteSpace(model.UserRelateEntity))
             {
                 user.Claims.Add(new IdentityUserClaim
                 {

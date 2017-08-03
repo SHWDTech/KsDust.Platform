@@ -7,8 +7,10 @@ namespace Dust.Platform.Storage.Repository
 {
     public class AuthContext : IdentityDbContext<IdentityUser>
     {
-        public AuthContext() : base("AuthContext")
+        public AuthContext() : base(nameof(AuthContext))
         {
+            Database.Connection.Close();
+            Database.Connection.Open();
         }
 
         public DbSet<Client> Clients { get; set; }

@@ -22,6 +22,8 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.appplication
             {
                 Toast.MakeText(this, $"Exception!{args.ExceptionObject}", ToastLength.Short).Show();
             };
+            SdUtils.Init(this);
+            UpdateUtil.Init(this);
         }
     }
 }

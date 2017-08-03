@@ -1,5 +1,4 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.Design.Widget;
@@ -14,6 +13,7 @@ using Ks.Dust.AndroidDataPresenter.Xamarin.consts;
 using Ks.Dust.AndroidDataPresenter.Xamarin.fragment;
 using Ks.Dust.AndroidDataPresenter.Xamarin.Model;
 using Ks.Dust.AndroidDataPresenter.Xamarin.view;
+using Newtonsoft.Json;
 
 namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 {
@@ -66,16 +66,32 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-            try
-            {
-                Cheeseknife.Bind(this);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            Cheeseknife.Bind(this);
             InitView();
             InitFragment();
+            var handler = new HttpResponseHandler();
+            handler.OnResponse += args =>
+            {
+                var versionInfo = JsonConvert.DeserializeObject<AndroidVersionInfo>(args.Response);
+                if (versionInfo.VersionCode > UpdateUtil.Instance.CurrentVersionCode)
+                {
+                    RunOnUiThread(() =>
+                    {
+                        using (var builder = new AlertDialog.Builder(this))
+                        {
+                            builder.SetMessage($"发现新版本，版本号：{versionInfo.VersionName}，是否更新？")
+                                .SetPositiveButton("立即更新", delegate
+                                {
+                                    DoUpdate(versionInfo);
+                                })
+                                .SetNegativeButton("稍后再说", delegate { })
+                                .Create()
+                                .Show();
+                        }
+                    });
+                }
+            };
+            ApiManager.GetVersionCode(handler);
             _searchDialog = new SearchDialog(this);
             _searchDialog.SetOnClickListener(this);
         }
@@ -92,6 +108,12 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             CityTitleView.Text = "昆山";
             SearchView.SetOnClickListener(this);
             ((NavigationView)FindViewById(Resource.Id.nav_view)).SetNavigationItemSelectedListener(this);
+        }
+
+        private static void DoUpdate(AndroidVersionInfo info)
+        {
+            UpdateUtil.Instance.VersionInfo = info;
+            UpdateUtil.Instance.DoUpdate();
         }
 
         private void InitFragment()

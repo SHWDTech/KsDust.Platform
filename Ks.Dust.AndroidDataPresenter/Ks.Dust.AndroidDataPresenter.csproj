@@ -129,13 +129,17 @@
     <Compile Include="Xamarin\adapter\StatisticsBarChartAdapter.cs" />
     <Compile Include="Xamarin\adapter\StatisticsRecyclerAdapter.cs" />
     <Compile Include="Xamarin\appplication\KsDustApplication.cs" />
+    <Compile Include="Xamarin\appplication\SharedData.cs" />
     <Compile Include="Xamarin\component\AuthticationManager.cs" />
+    <Compile Include="Xamarin\component\SdUtils.cs" />
+    <Compile Include="Xamarin\component\UpdateUtil.cs" />
     <Compile Include="Xamarin\consts\ActivityConts.cs" />
     <Compile Include="Xamarin\fragment\CategoryMapFragment.cs" />
     <Compile Include="Xamarin\fragment\DeviceCurrentDataFragment.cs" />
     <Compile Include="Xamarin\fragment\DeviceHistoryDataFragment.cs" />
     <Compile Include="Xamarin\fragment\SearchStatisticsFragment.cs" />
     <Compile Include="Xamarin\fragment\StatisticsFragment.cs" />
+    <Compile Include="Xamarin\Model\AndroidVersionInfo.cs" />
     <Compile Include="Xamarin\Model\CascadeElement.cs" />
     <Compile Include="Xamarin\Model\DeviceCurrentInfo.cs" />
     <Compile Include="Xamarin\Model\DeviceHistoryData.cs" />
@@ -143,6 +147,7 @@
     <Compile Include="Xamarin\Model\DistrictGeneralInfo.cs" />
     <Compile Include="Xamarin\Model\MapMarker.cs" />
     <Compile Include="Xamarin\Model\SearchResult.cs" />
+    <Compile Include="Xamarin\receiver\DownloadReceiver.cs" />
     <Compile Include="Xamarin\Utils\BaseUtils.cs" />
     <Compile Include="Xamarin\view\ClickListener.cs" />
     <Compile Include="Xamarin\view\IOnSearchClickListener.cs" />

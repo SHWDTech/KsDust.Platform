@@ -163,6 +163,7 @@
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\StatisticsDetailController.cs" />
+    <Compile Include="Controllers\VersionCodeController.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Models\AuditInfo.cs" />
     <Compile Include="Models\CascadeElementViewModel.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\StatisticsDetailPost.cs" />
     <Compile Include="Models\StatisticsViewModel.cs" />
+    <Compile Include="Models\AndroidVersionInfo.cs" />
     <Compile Include="Process\ApiControllerExtensionMethod.cs" />
     <Compile Include="Process\AuthFilterProcess.cs" />
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />

@@ -27,6 +27,8 @@ namespace ApplicationConcept
 
         public static readonly string StatisticsDetial = $"{ApiServer}/api/StatisticsDetail";
 
+        public static readonly string ApiGetVersionCode = $"{ApiServer}/api/VersionCode";
+
         public const string HttpMethodPost = "POST";
 
         public const string HttpMethodGet = "GET";
@@ -47,9 +49,19 @@ namespace ApplicationConcept
             {
                 builder.AppendFormat("&{0}={1}", bodyParamter.Key, bodyParamter.Value);
             }
-            builder.Remove(0, 1);
+            if (builder.Length > 0)
+            {
+                builder.Remove(0, 1);
+            }
 
-            request.BeginGetRequestStream(PostCallBack, new HttpRequestAsyncState(request, builder, handler));
+            if (method == HttpMethodPost)
+            {
+                request.BeginGetRequestStream(PostCallBack, new HttpRequestAsyncState(request, builder, handler));
+            }
+            if (method == HttpMethodGet)
+            {
+                request.BeginGetResponse(ReadCallBack, new HttpResponseAsyncResult(request, handler));
+            }
         }
 
         private static void PostCallBack(IAsyncResult asynchronousResult)
@@ -247,6 +259,12 @@ namespace ApplicationConcept
             requestParams.AddBodyParamter(ParamterNameDistrictDetialDistrict, districtId);
             requestParams.AddHeader(ParamterNameAuthorization, "bearer " + accessToken);
             StartRequest(DistrictDetail, HttpMethodPost, requestParams, handler);
+        }
+
+        public static void GetVersionCode(HttpResponseHandler handler)
+        {
+            var requestParams = new XHttpRequestParamters();
+            StartRequest(ApiGetVersionCode, HttpMethodGet, requestParams, handler);
         }
     }
 }

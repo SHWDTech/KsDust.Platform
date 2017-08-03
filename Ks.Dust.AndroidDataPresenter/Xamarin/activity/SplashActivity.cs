@@ -32,6 +32,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                         using (var intent = new Intent(this, typeof(LoginActivity)))
                         {
                             StartActivity(intent);
+                            Finish();
                         }
                     }, 1500);
                 }

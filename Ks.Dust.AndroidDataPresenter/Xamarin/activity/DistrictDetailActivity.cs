@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -44,7 +43,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
         // RecyclerView State
         private IParcelable _layoutManagerState;
 
-        private List<DistrictDetail> _districtDetails = new List<DistrictDetail>();
+        private readonly List<DistrictDetail> _districtDetails = new List<DistrictDetail>();
 
         private DistrictDetailAdapter _adapter;
 
@@ -177,9 +176,16 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             switch (v.Id)
             {
                 case Resource.Id.districtdetail_tsp_layout:
-                    _districtDetails = _isOrderByTsgAvgAsc 
-                        ? _districtDetails.OrderBy(d => d.tsp).ToList() 
-                        : _districtDetails.OrderByDescending(d => d.tsp).ToList();
+                    if (_isOrderByTsgAvgAsc)
+                    {
+                        _districtDetails.Sort((x, y) => x.tsp.CompareTo(y.tsp));
+                        _isOrderByTsgAvgAsc = false;
+                    }
+                    else
+                    {
+                        _districtDetails.Sort((x, y) => y.tsp.CompareTo(x.tsp));
+                        _isOrderByTsgAvgAsc = true;
+                    }
                     _adapter.NotifyDataSetChanged();
                     break;
                 case Resource.Id.title_map:

@@ -70,8 +70,8 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             _magicRefreshLayout.RecyclerView.AddItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.Vertical));
             _magicRefreshLayout.SetAdapter(_adapter);
             _magicRefreshLayout.OnLoadingListener = this;
-            _magicRefreshLayout.OnCheckMoreContentListener = this;
-
+            _magicRefreshLayout.OnCheckMoreContentListener = this; 
+             
             _magicRefreshLayout.StartRefresh();
         }
 

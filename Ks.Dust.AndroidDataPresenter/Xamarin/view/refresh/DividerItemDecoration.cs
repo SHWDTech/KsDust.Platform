@@ -4,6 +4,7 @@ using Android.Graphics.Drawables;
 using Android.Support.V7.Widget;
 using Java.Lang;
 using Android.Support.V4.View;
+using Android.Views;
 
 namespace Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh
 {
@@ -55,6 +56,18 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh
 
             Orientation = orientation;
         }
+        
+        public override void OnDraw(Canvas c, RecyclerView parent)
+        {
+            if (Orientation == Vertical)
+            {
+                DrawVertical(c, parent);
+            }
+            else
+            {
+                DrawHorizontal(c, parent);
+            }
+        }
 
         public void DrawVertical(Canvas canvas, RecyclerView parent)
         {
@@ -85,6 +98,18 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view.refresh
                 var right = left + GetDividerWidth();
                 _divider.SetBounds(left, top, right, bottom);
                 _divider.Draw(canvas);
+            }
+        }
+
+        public override void GetItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state)
+        {
+            if (Orientation == Vertical)
+            {
+                outRect.Set(0, 0, 0, GetDividerWidth());
+            }
+            else
+            {
+                outRect.Set(0, 0, GetDividerWidth(), 0);
             }
         }
 

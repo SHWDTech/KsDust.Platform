@@ -31,7 +31,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 
         private AMap _map;
 
-        public static readonly LatLng Kunshan = new LatLng(31.238068, 121.501654);
+        public static readonly LatLng Kunshan = new LatLng(31.38500283, 120.97938538);
 
         private readonly Dictionary<LatLng, MapMarker> _mapMarkers = new Dictionary<LatLng, MapMarker>();
 

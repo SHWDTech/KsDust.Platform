@@ -42,7 +42,8 @@ namespace Dust.Platform.Service.Controllers
                         id = district.Id,
                         name = district.Name,
                         count = dev.Count(),
-                        tspAvg = avg?.ParticulateMatter ?? 0
+                        tspAvg = avg?.ParticulateMatter ?? 0,
+                        rate = avg == null ? 0 : Helper.GetRate(avg.ParticulateMatter)
                     }).ToList();
         }
     }

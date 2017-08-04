@@ -69,6 +69,13 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             Cheeseknife.Bind(this);
             InitView();
             InitFragment();
+            UpdateCheck();
+            _searchDialog = new SearchDialog(this);
+            _searchDialog.SetOnClickListener(this);
+        }
+
+        private void UpdateCheck()
+        {
             var handler = new HttpResponseHandler();
             handler.OnResponse += args =>
             {
@@ -90,10 +97,16 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                         }
                     });
                 }
+                if (IsCheckByUser)
+                {
+                    RunOnUiThread(() =>
+                    {
+                        Toast.MakeText(this, "当前已经是最新版本", ToastLength.Short).Show();
+                    });
+                    IsCheckByUser = false;
+                }
             };
             ApiManager.GetVersionCode(handler);
-            _searchDialog = new SearchDialog(this);
-            _searchDialog.SetOnClickListener(this);
         }
 
         private void InitView()
@@ -290,6 +303,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
             else if (id == Resource.Id.versionupdate)
             {
                 IsCheckByUser = true;
+                UpdateCheck();
             }
             else if (id == Resource.Id.exit)
             {

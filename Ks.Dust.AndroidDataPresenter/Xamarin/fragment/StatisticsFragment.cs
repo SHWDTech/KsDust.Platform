@@ -29,7 +29,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
 
         private string _projectType = string.Empty;
 
-        private List<DistrictGeneralInfo> _districtGeneralInfos = new List<DistrictGeneralInfo>();
+        private readonly List<DistrictGeneralInfo> _districtGeneralInfos = new List<DistrictGeneralInfo>();
 
         private StatisticsRecyclerAdapter _statisticsRecyclerAdapter;
 
@@ -53,12 +53,12 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
         {
             if (IsOrderByTsgAvgAsc)
             {
-                _districtGeneralInfos = _districtGeneralInfos.OrderByDescending(info => info.tspAvg).ToList();
+                _districtGeneralInfos.Sort((x, y) => x.tspAvg.CompareTo(y.tspAvg));
                 IsOrderByTsgAvgAsc = false;
             }
             else
             {
-                _districtGeneralInfos = _districtGeneralInfos.OrderBy(info => info.tspAvg).ToList();
+                _districtGeneralInfos.Sort((x, y) => y.tspAvg.CompareTo(x.tspAvg));
                 IsOrderByTsgAvgAsc = true;
             }
             _statisticsRecyclerAdapter.NotifyDataSetChanged();

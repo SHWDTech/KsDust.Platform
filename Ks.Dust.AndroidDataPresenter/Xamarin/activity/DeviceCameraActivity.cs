@@ -334,9 +334,9 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
                     if (_iPort == -1) return;
                     if (iDataSize > 0)
                     {
-                        //if (!Player.Instance.SetStreamOpenMode(_iPort, iStreamMode)) return;
-                        //if (!Player.Instance.OpenStream(_iPort, pDataBuffer, iDataSize, 2 * 1024 * 1024)) return;
-                        //if (!Player.Instance.Play(_iPort, SurfaceView.Holder))
+                        if (!Player.Instance.SetStreamOpenMode(_iPort, iStreamMode)) return;
+                        if (!Player.Instance.OpenStream(_iPort, pDataBuffer, iDataSize, 2 * 1024 * 1024)) return;
+                        if (!Player.Instance.Play(_iPort, SurfaceView.Holder)) return;
                     }
                 }
                 else

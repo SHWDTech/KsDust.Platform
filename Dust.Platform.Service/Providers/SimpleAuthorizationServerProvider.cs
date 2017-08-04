@@ -50,13 +50,10 @@ namespace Dust.Platform.Service.Providers
                     context.SetError("invalid_clientId", "Client secret should be sent.");
                     return Task.FromResult<object>(null);
                 }
-                else
+                if (client.Secret != Helper.GetHash(clientSecret))
                 {
-                    if (client.Secret != Helper.GetHash(clientSecret))
-                    {
-                        context.SetError("invalid_clientId", "Client secret is invalid.");
-                        return Task.FromResult<object>(null);
-                    }
+                    context.SetError("invalid_clientId", "Client secret is invalid.");
+                    return Task.FromResult<object>(null);
                 }
             }
 

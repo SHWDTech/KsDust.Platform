@@ -7,7 +7,7 @@ using SHWDTech.Platform.ProtocolService.ProtocolEncoding.Generics;
 
 namespace SHWDTech.Platform.NatioanalEnvirmentEncoder
 {
-    public class NationalEnvirmentEncoder : ProtocolEncoder
+    public class NationalEnvirmentEncoder : ProtocolEncoder<string>
     {
         public override IProtocolPackage Decode(byte[] bufferBytes)
             => Decode(bufferBytes, Protocol);

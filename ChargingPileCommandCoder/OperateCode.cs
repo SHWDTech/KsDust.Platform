@@ -7,7 +7,7 @@ namespace SHWDTech.Platform.ChargingPileCommandCoder
         public OperateCode(byte code)
         {
             OperateByte = code;
-            Action = (Action)(code & (1 << 7));
+            Action = (Action)((code >> 7) & 1);
             Operate = (Operate)(code & 0x0F);
         }
 
@@ -29,11 +29,11 @@ namespace SHWDTech.Platform.ChargingPileCommandCoder
 
     public enum Operate
     {
-        [Display(Name = "读取")]
-        Read = 0x01,
-
         [Display(Name = "写入")]
-        Write = 0x02,
+        Write = 0x01,
+
+        [Display(Name = "读取")]
+        Read = 0x02,
 
         [Display(Name = "控制")]
         Control = 0x03,

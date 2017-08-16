@@ -39,7 +39,7 @@ namespace SHWDTech.Platform.ChargingPileCommandCoder
                     DetectCommand(package, protocol);
                     if (package.Command == null)
                     {
-                        package.Status = PackageStatus.InvalidHead;
+                        package.Status = PackageStatus.InvalidCommand;
                         return package;
                     }
                     componentDataLength = package.Command.ReceiveBytesLength == 0 ? componentDataLength : package.Command.ReceiveBytesLength;

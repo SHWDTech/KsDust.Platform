@@ -75,9 +75,11 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
             DecodedProtocol++;
             using (var ctx = new ProtocolContext())
             {
-                ctx.ProtocolDatas.Add((ProtocolData)args.ProtocolData);
+                ctx.ProtocolDatas.Add((ProtocolData)args.Package.ProtocolData);
                 ctx.SaveChanges();
             }
+            if (!args.Package.DeliverParams.Contains("Factor")) return;
+            ReportService.Instance.Info($"协议解码完成，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}\r\n协议分解显示：{args.Package.PackageComponentFactors}");
         }
 
         private static void ClientAuthenticated(ActiveClientEventArgs args)

@@ -19,7 +19,5 @@ namespace KsDust.Platform.Protocol
         public string ClientNodeId => Device.NodeId;
 
         public string BusinessName { get; }
-
-        public IProtocolEncoder ProtocolEncoder { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Net;
 using Ks_Dust_Protocl_AdminTool.Common;
 using SHWDTech.Platform.ProtocolService;
 using SHWDTech.Platform.ProtocolService.DataBase;
+using SHWDTech.Platform.ProtocolService.ProtocolEncoding;
 
 namespace Ks_Dust_Protocl_AdminTool.TcpCore
 {
@@ -72,9 +73,15 @@ namespace Ks_Dust_Protocl_AdminTool.TcpCore
 
         private void ClientDecoded(ActiveClientEventArgs args)
         {
+            if (!args.Package.Finalized)
+            {
+                ReportService.Instance.Info($"协议解码未完成，中断原因：{EnumHelper<PackageStatus>.GetDisplayValue(args.Package.Status)}，设备地址：{args.SourceActiveClient.ClientAddress}，设备ID号：{args.SourceActiveClient.ClientIdentity}");
+                return;
+            }
             DecodedProtocol++;
             using (var ctx = new ProtocolContext())
             {
+                args.Package.SetupProtocolData();
                 ctx.ProtocolDatas.Add((ProtocolData)args.Package.ProtocolData);
                 ctx.SaveChanges();
             }

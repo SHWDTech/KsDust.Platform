@@ -108,7 +108,7 @@ namespace Ks.Dust.Protocol.Tester
             var dataStr = string.Format(baseStr, qnStr, cmd, nodeId, dateStr, RandomDouble(0, 1), RandomDouble(0, 1), RandomDouble(0, 1), RandomDouble(50, 80), RandomDouble(20, 30), RandomDouble(25, 70), RandomDouble(0, 15), RandomDouble(0, 360));
             var crc = Globals.GetCrcModBus(Encoding.ASCII.GetBytes(dataStr));
             dataStr = $"##{dataStr.Length:D4}{dataStr}";
-            dataStr += crc;
+            dataStr += crc.ToString("X4");
             dataStr += "\r\n";
             return Encoding.ASCII.GetBytes(dataStr);
         }

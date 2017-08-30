@@ -30,7 +30,7 @@ namespace Dust.Platform.Storage.Model
         /// <summary>
         /// 所属区县
         /// </summary>
-        [ForeignKey("DistrictId")]
+        [ForeignKey(nameof(DistrictId))]
         [Display(Name = "所属区县")]
         public District District { get; set; }
 
@@ -45,7 +45,7 @@ namespace Dust.Platform.Storage.Model
         /// <summary>
         /// 所属施工单位
         /// </summary>
-        [ForeignKey("EnterpriseId")]
+        [ForeignKey(nameof(EnterpriseId))]
         [Display(Name = "所属施工单位")]
         public Enterprise Enterprise { get; set; }
 
@@ -59,7 +59,7 @@ namespace Dust.Platform.Storage.Model
         /// <summary>
         /// 所属供应商
         /// </summary>
-        [ForeignKey("VendorId")]
+        [ForeignKey(nameof(VendorId))]
         [Display(Name = "所属供应商")]
         public Vendor Vendor { get; set; }
 

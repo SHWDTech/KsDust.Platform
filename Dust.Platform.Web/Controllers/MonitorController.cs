@@ -32,7 +32,7 @@ namespace Dust.Platform.Web.Controllers
             {
                 Tsp = monitorData.ParticulateMatter,
                 monitorData.Noise,
-                PM25 = monitorData.Pm25,
+                PM2_5 = monitorData.Pm25,
                 PM100 = monitorData.Pm100,
                 monitorData.UpdateTime
             }, JsonRequestBehavior.AllowGet);
@@ -55,7 +55,7 @@ namespace Dust.Platform.Web.Controllers
             {
                 Tsp = monitorData.ParticulateMatter,
                 monitorData.Noise,
-                PM25 = monitorData.Pm25,
+                PM2_5 = monitorData.Pm25,
                 PM100 = monitorData.Pm100,
                 monitorData.UpdateTime
             }, JsonRequestBehavior.AllowGet);
@@ -83,7 +83,7 @@ namespace Dust.Platform.Web.Controllers
                 {
                     Tsp = da.ParticulateMatter,
                     da.Noise,
-                    PM25 = da.Pm25,
+                    PM2_5 = da.Pm25,
                     PM100 = da.Pm100,
                     da.UpdateTime
                 }).ToList();

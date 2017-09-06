@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Dust.Platform.Service.Models;
+using Dust.Platform.Service.Process;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
 
@@ -21,7 +22,7 @@ namespace Dust.Platform.Service.Controllers
         [Authorize]
         public List<DistrictAvgViewModel> Post([FromBody]DistrictAvgPostParams model)
         {
-            var districts = _ctx.Districts.Where(dis => dis.Id != Guid.Empty).Select(d => new { d.Id, d.Name }).ToList();
+            var districts = this.CreateFilterProcess().GetAuthedDistricts(null);
 
             var avgs = _ctx.AverageMonitorDatas.Where(tsp => tsp.Type == model.dataType
                                                                       && tsp.Category == AverageCategory.District);

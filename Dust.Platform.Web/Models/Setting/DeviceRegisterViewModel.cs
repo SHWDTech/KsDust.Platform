@@ -20,10 +20,18 @@ namespace Dust.Platform.Web.Models.Setting
         public string SerialNumber { get; set; }
 
         [Display(Name = "登录用户名")]
-        public string UserName { get; set; }
+        public string CameraUserName { get; set; }
 
         [Display(Name = "登陆密码")]
-        public string Password { get; set; }
+        public string CameraPassword { get; set; }
+
+        [Display(Name = "设备所处经度")]
+        [Required(ErrorMessage = "必须填写设备经度")]
+        public string Longitude { get; set; }
+
+        [Display(Name = "设备所处纬度")]
+        [Required(ErrorMessage = "必须填写设备纬度")]
+        public string Latitude { get; set; }
 
         [Display(Name = "所属设备")]
         [Required(ErrorMessage = "必须选择所属工程")]

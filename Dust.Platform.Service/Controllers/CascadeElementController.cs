@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -26,13 +25,7 @@ namespace Dust.Platform.Service.Controllers
             switch (model.CascadeElementLevel)
             {
                 case AverageCategory.WholeCity:
-                    var districts =
-                        _ctx.Districts.Where(obj => obj.Id != Guid.Empty).ToList().Select(item => new CascadeElementViewModel
-                        {
-                            CascadeElementId = item.Id,
-                            CascadeElementLevel = AverageCategory.District,
-                            CascadeElementName = item.Name
-                        });
+                    var districts = this.CreateFilterProcess().GetAuthedDistricts(null);
                     return Request.CreateResponse(HttpStatusCode.OK, districts);
                 case AverageCategory.District:
                     var enterprises = this.CreateFilterProcess().GetAuthedProjects(null)

@@ -35,7 +35,7 @@ namespace Dust.Platform.Service.Process
             }
             else if (user.IsInRole("VendorManager"))
             {
-                authedQuery = authedQuery.Where(dev => userEntities.Contains(dev.Id));
+                authedQuery = authedQuery.Where(dev => userEntities.Contains(dev.VendorId));
             }
             else if (user.IsInRole("ProjectManager"))
             {
@@ -63,10 +63,50 @@ namespace Dust.Platform.Service.Process
 
                 authedQuery = authedQuery.Where(prj => userEntities.Contains(prj.DistrictId));
             }
-
-            if (user.IsInRole("ProjectManager"))
+            else if (user.IsInRole("VendorManager"))
+            {
+                var devPrjs = _dbContext.KsDustDevices.Where(dev => userEntities.Contains(dev.VendorId))
+                    .Select(d => d.ProjectId).Distinct();
+                authedQuery = authedQuery.Where(prj => devPrjs.Contains(prj.Id));
+            }
+            else if (user.IsInRole("ProjectManager"))
             {
                 authedQuery = authedQuery.Where(prj => userEntities.Contains(prj.Id));
+            }
+
+            if (exp != null)
+            {
+                authedQuery = authedQuery.Where(exp);
+            }
+            return authedQuery.ToList();
+        }
+
+        public List<District> GetAuthedDistricts(Expression<Func<District, bool>> exp)
+        {
+            var user = _owinContext.Authentication.User;
+            IQueryable<District> authedQuery = _dbContext.Districts.Where(obj => obj.Id != Guid.Empty);
+            var userId = Guid.Parse(user.Identity.GetUserId());
+            var userEntities =
+                _dbContext.UserRelatedEntities.Where(ent => ent.User == userId).Select(id => id.Entity).ToList();
+            if (user.IsInRole("DistrictManager"))
+            {
+
+                authedQuery = authedQuery.Where(dis => userEntities.Contains(dis.Id));
+            }
+            else if (user.IsInRole("VendorManager"))
+            {
+                var authedPrjs = (from dev in _dbContext.KsDustDevices
+                    let prjs = _dbContext.KsDustProjects.AsQueryable()
+                    where userEntities.Contains(dev.VendorId)
+                    select dev.Project.DistrictId).Distinct();
+
+                authedQuery = authedQuery.Where(dis => authedPrjs.Contains(dis.Id));
+            }
+            else if (user.IsInRole("ProjectManager"))
+            {
+                var prjDis = _dbContext.KsDustProjects.Where(prj => userEntities.Contains(prj.Id))
+                    .Select(p => p.DistrictId).Distinct();
+                authedQuery = authedQuery.Where(dis => prjDis.Contains(dis.Id));
             }
 
             if (exp != null)

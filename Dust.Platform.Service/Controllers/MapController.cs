@@ -56,33 +56,28 @@ namespace Dust.Platform.Service.Controllers
                     .OrderBy(dat => dat.UpdateTime)
                     .FirstOrDefault();
 
+                var mapViewModel = new DeviceMapViewModel
+                {
+                    id = device.id.ToString(),
+                    name = device.name,
+                    longitude = double.Parse(device.longitude),
+                    latitude = double.Parse(device.latitude)
+                };
+                
                 if (last == null)
                 {
-                    mapList.Add(new DeviceMapViewModel
-                    {
-                        id = device.id.ToString(),
-                        name = device.name,
-                        longitude = double.Parse(device.longitude),
-                        latitude = double.Parse(device.latitude),
-                        isOnline = false
-                    });
+                    mapViewModel.isOnline = false;
                 }
                 else
                 {
-                    mapList.Add(new DeviceMapViewModel
-                    {
-                        id = device.id.ToString(),
-                        name = device.name,
-                        time = $"{last.UpdateTime:yyyy-MM-dd HH:mm:ss}",
-                        tsp = last.ParticulateMatter,
-                        pm25 = last.Pm25,
-                        pm100 = last.Pm100,
-                        rate = Helper.GetRate(last.ParticulateMatter),
-                        longitude = double.Parse(device.longitude),
-                        latitude = double.Parse(device.latitude),
-                        isOnline = true
-                    });
+                    mapViewModel.time = $"{last.UpdateTime:yyyy-MM-dd HH:mm:ss}";
+                    mapViewModel.tsp = last.ParticulateMatter;
+                    mapViewModel.pm25 = last.Pm25;
+                    mapViewModel.pm100 = last.Pm100;
+                    mapViewModel.rate = Helper.GetRate(last.ParticulateMatter);
+                    mapViewModel.isOnline = true;
                 }
+                mapList.Add(mapViewModel);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, mapList);

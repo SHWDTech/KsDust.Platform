@@ -186,6 +186,8 @@ namespace Dust.Platform.Web.Controllers
                 StartDateTime = DateTime.Now,
                 LastMaintenance = DateTime.Now,
                 VendorId = AccountProcess.FindVendorId(user),
+                Longitude = model.Longitude,
+                Latitude = model.Latitude,
                 ProjectId = model.ProjectId
             };
 
@@ -202,8 +204,8 @@ namespace Dust.Platform.Web.Controllers
                     Device = device,
                     Name = model.CameraName,
                     SerialNumber = model.SerialNumber,
-                    UserName = model.UserName,
-                    Password = model.Password
+                    UserName = model.CameraUserName,
+                    Password = model.CameraPassword
                 };
                 _ctx.KsDustCameras.Add(camera);
             }
@@ -220,6 +222,7 @@ namespace Dust.Platform.Web.Controllers
                 return View(model);
             }
 
+            ModelState.Clear();
             ModelState.AddModelError("Save", @"保存设备信息成功");
             return View();
         }

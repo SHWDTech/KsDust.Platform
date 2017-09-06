@@ -25,8 +25,7 @@
     </div>
     <div class="col-lg-10" style="height: 100%; overflow-y: hidden;">
         <div class="tabBar" style="overflow-x: hidden;">
-            <ul class="nav nav-tabs" role="tablist">
-            </ul>
+            <ul class="nav nav-tabs" role="tablist"></ul>
         </div>
         <div class="tab-content">
         </div>
@@ -48,13 +47,15 @@
             $('.present[data-id="' + $(a).attr('data-target') + '"]').show();
         }
         var treeNodes = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.TreeNodes))');
-        var tabPopUp = function (event, treeid, treenode) {
+        var tabPopUp = function (event, treeid, treenode, arg, removeClose) {
             if ($('.tabBar a[data-target=' + treenode.id + ']').length !== 0) {
                 var existLi = $('.tabBar a[data-target=' + treenode.id + ']')[0];
                 tabSwitch($(existLi));
                 return;
             }
-            var li = '<li role="presentation"><a data-target="' + treenode.id + '" href="#">' + treenode.name + '</a></li>';
+
+            var close = removeClose ? '' : '<span class="close">×</span>';
+            var li = '<li role="presentation"><a data-target="' + treenode.id + '" href="#">' + treenode.name + close + '</a></li>';
             $('.tabBar ul').append(li);
             $('.tabBar ul>li').removeClass('active');
             var currentli = $($('.tabBar ul>li')[$('.tabBar ul>li').length - 1]);
@@ -80,11 +81,16 @@
                     $('#dtable_' + treenode.id).bootstrapTable('refresh',
                     {
                         url: $('#dtable_' + treenode.id).attr('url')
-                    });
-                    initMap(prefix + treenode.id + 'mapContainer', 10, [121.458911, 31.231119], treenode.id, treenode.viewType);
+                        });
+                        initMap(prefix + treenode.id + 'mapContainer', 10, [120.97938538, 31.38500283], treenode.id, treenode.viewType);
                     updateMonitorChart(setupChart(prefix + treenode.id + 'chart', treenode.id, treenode.viewType, prefix + treenode.id + 'Selecter'), treenode.id, treenode.viewType, 1, 1, 24);
                     currentli.find('a').click(function () {
                         tabSwitch(currentli.find('a'));
+                    });
+                    currentli.find('.close').click(function () {
+                        $('.present[data-id="' + treenode.id + '"]').remove();
+                        $(currentli).remove();
+                        tabSwitch($('.tabBar ul>li:last').find('a'));
                     });
                 });
         }
@@ -99,7 +105,7 @@
 
         zTreeObj = $.fn.zTree.init($('#treeNodes'), setting, treeNodes);
         $(function () {
-            tabPopUp(null, null, { name: '所有数据', viewType: 4, id: '00000000-0000-0000-0000-000000000000' });
+            tabPopUp(null, null, { name: '所有数据', viewType: 4, id: '00000000-0000-0000-0000-000000000000' }, null, true);
         });
         $('.search-input').on('input propertychange', function () {
             hideAllNodes(zTreeObj.getNodes());

@@ -78,13 +78,14 @@
             $('.present').hide();
             $('.present[data-id="' + $(a).attr('data-target') + '"]').show();
         }
-        var tabPopUp = function (event, treeid, treenode) {
+        var tabPopUp = function (event, treeid, treenode, args, removeClose) {
             if ($('.tabBar a[data-target=' + treenode.id + '-' + treenode.nodetype + ']').length !== 0) {
                 var existLi = $('.tabBar a[data-target=' + treenode.id + '-' + treenode.nodetype + ']')[0];
                 tabSwitch($(existLi));
                 return;
             }
-            var li = '<li role="presentation"><a data-target="' + treenode.id + '-' + treenode.nodetype + '" href="#">' + treenode.name + treenode.tabTailfix + '</a></li>';
+            var close = removeClose ? '' : '<span class="close">×</span>';
+            var li = '<li role="presentation"><a data-target="' + treenode.id + '-' + treenode.nodetype + '" href="#">' + treenode.name + treenode.tabTailfix + close + '</a></li>';
             $('.tabBar ul').append(li);
             $('.tabBar ul>li').removeClass('active');
             var currentli = $($('.tabBar ul>li')[$('.tabBar ul>li').length - 1]);
@@ -109,6 +110,11 @@
                             tabSwitch(currentli.find('a'));
                         });
                     }
+                    currentli.find('.close').click(function () {
+                        $('.present[data-id="' + treenode.id + '-' + treenode.nodetype + '"]').remove();
+                        $(currentli).remove();
+                        tabSwitch($('.tabBar ul>li:last').find('a'));
+                    });
                 });
         }
         var setting = {

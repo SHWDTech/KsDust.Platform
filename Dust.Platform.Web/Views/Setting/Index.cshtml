@@ -44,7 +44,7 @@
                 tabSwitch($(existLi));
                 return;
             }
-            var li = '<li role="presentation"><a data-target="' + treenode.id + '-' + treenode.nodetype + '" href="#">' + treenode.name + '</a></li>';
+            var li = '<li role="presentation"><a data-target="' + treenode.id + '-' + treenode.nodetype + '" href="#">' + treenode.name + '<span class="close">×</span></a></li>';
             $('.tabBar ul').append(li);
             $('.tabBar ul>li').removeClass('active');
             var currentli = $($('.tabBar ul>li')[$('.tabBar ul>li').length - 1]);
@@ -71,6 +71,11 @@
                                 tabSwitch(currentli.find('a'));
                             });
                     }
+                    currentli.find('.close').click(function () {
+                        $('.present[data-id="' + treenode.id + '-' + treenode.nodetype + '"]').remove();
+                        $(currentli).remove();
+                        tabSwitch($('.tabBar ul>li:last').find('a'));
+                    });
                 });
         }
 

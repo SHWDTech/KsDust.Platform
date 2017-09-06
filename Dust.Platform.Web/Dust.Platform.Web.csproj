@@ -327,6 +327,10 @@
     <Content Include="Resources\Images\Site\32_32_green.png" />
     <Content Include="Resources\Images\Site\32_32_red.png" />
     <Content Include="Resources\Images\Site\32_32_yellow.png" />
+    <Content Include="Resources\Images\Site\marker_gray.png" />
+    <Content Include="Resources\Images\Site\marker_green.png" />
+    <Content Include="Resources\Images\Site\marker_red.png" />
+    <Content Include="Resources\Images\Site\marker_yellow.png" />
     <Content Include="Resources\Images\Site\swirl_pattern.png" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />

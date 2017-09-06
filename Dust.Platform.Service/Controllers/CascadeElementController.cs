@@ -25,7 +25,14 @@ namespace Dust.Platform.Service.Controllers
             switch (model.CascadeElementLevel)
             {
                 case AverageCategory.WholeCity:
-                    var districts = this.CreateFilterProcess().GetAuthedDistricts(null);
+                    var districts = this.CreateFilterProcess().GetAuthedDistricts(null)
+                        .Select(item => new CascadeElementViewModel
+                        {
+                            CascadeElementId = item.Id,
+                            CascadeElementLevel = AverageCategory.District,
+                            CascadeElementName = item.Name
+                        });
+
                     return Request.CreateResponse(HttpStatusCode.OK, districts);
                 case AverageCategory.District:
                     var enterprises = this.CreateFilterProcess().GetAuthedProjects(null)

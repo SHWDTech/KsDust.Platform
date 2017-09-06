@@ -27,7 +27,7 @@
           .Column("联系电话", "Mobile")
           .Column("操作")
           .Apply(ColumnOption.formatter, "vendorOperaterFormatter")
-          .Apply(ColumnOption.events, "operateEvents"))
+          .Apply(ColumnOption.events, "vendorOperateEvents"))
 </div>
 
 <script type="text/javascript">
@@ -47,7 +47,7 @@
         });
     };
 
-    window.operateEvents = {
+    window.vendorOperateEvents = {
         'click .update': function (e, value, row) {
             $.get('/Setting/Vendor', { id: row.Id }, function (ret) {
                 $('#vendorModal .modal-body').html(ret);

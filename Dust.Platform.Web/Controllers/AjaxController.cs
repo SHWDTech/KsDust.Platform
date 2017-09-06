@@ -193,6 +193,15 @@ namespace Dust.Platform.Web.Controllers
                     Value = p.Id.ToString(),
                     Text = p.Name
                 }));
+            }else if (role.DisplayName == "供应商")
+            {
+                hasEntitys = true;
+                labelContent = "所属供应商";
+                entities.AddRange(_ctx.Vendors.Where(obj => obj.Id != Guid.Empty).Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                }));
             }
 
             return Json(new

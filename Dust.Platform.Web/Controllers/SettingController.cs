@@ -136,25 +136,78 @@ namespace Dust.Platform.Web.Controllers
             return diff.TotalDays > 150 ? MantanceStatus.NeedMantance : MantanceStatus.Mantanced;
         }
 
+        private void LoadProjects()
+        {
+            ViewBag.ProjectSelectItems = _ctx.KsDustProjects.Select(p => new SelectListItem
+            {
+                Text = p.Name,
+                Value = p.Id.ToString()
+            }).ToList();
+        }
+
         [HttpGet]
-        public ActionResult DeviceRegister() => View();
+        public ActionResult DeviceRegister()
+        {
+            LoadProjects();
+            return View();
+        }
 
         [HttpPost]
         public ActionResult DeviceRegister(DeviceRegisterViewModel model)
         {
+            LoadProjects();
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             var user = AccountProcess.FindUserByName(User.Identity.Name);
             if (user == null || !AccountProcess.UserIsInRole(user.Id, "VendorManager"))
             {
                 ModelState.AddModelError("Vendor", @"只有设备供应商才能注册设备！");
                 return View(model);
             }
-            model.Device.InstallDateTime = DateTime.Now;
-            model.Device.StartDateTime = DateTime.Now;
-            model.Device.LastMaintenance = DateTime.Now;
-            model.Device.VendorId = AccountProcess.FindVendorId(user);
-            _ctx.KsDustDevices.Add(model.Device);
-            model.Camera.Device = model.Device;
-            _ctx.KsDustCameras.Add(model.Camera);
+            if (_ctx.KsDustDevices.Any(d => d.Name == model.Name))
+            {
+                ModelState.AddModelError("Save", @"已存在相同名称的设备");
+                return View(model);
+            }
+            if (_ctx.KsDustDevices.Any(d => d.NodeId == model.NodeId))
+            {
+                ModelState.AddModelError("Save", @"已存在相同MN码的设备");
+                return View(model);
+            }
+            var device = new KsDustDevice
+            {
+                Id = Guid.NewGuid(),
+                Name = model.Name,
+                NodeId = model.NodeId,
+                InstallDateTime = DateTime.Now,
+                StartDateTime = DateTime.Now,
+                LastMaintenance = DateTime.Now,
+                VendorId = AccountProcess.FindVendorId(user),
+                ProjectId = model.ProjectId
+            };
+
+
+            _ctx.KsDustDevices.Add(device);
+            if (!string.IsNullOrWhiteSpace(model.SerialNumber))
+            {
+                if (string.IsNullOrWhiteSpace(model.Name))
+                {
+                    model.Name = model.SerialNumber;
+                }
+                var camera = new KsDustCamera
+                {
+                    Device = device,
+                    Name = model.CameraName,
+                    SerialNumber = model.SerialNumber,
+                    UserName = model.UserName,
+                    Password = model.Password
+                };
+                _ctx.KsDustCameras.Add(camera);
+            }
+            
             try
             {
                 _ctx.SaveChanges();
@@ -167,6 +220,7 @@ namespace Dust.Platform.Web.Controllers
                 return View(model);
             }
 
+            ModelState.AddModelError("Save", @"保存设备信息成功");
             return View();
         }
 
@@ -193,14 +247,20 @@ namespace Dust.Platform.Web.Controllers
         {
             try
             {
+                var nowDate = DateTime.Now;
                 var record = new DeviceMantanceRecord
                 {
                     Device = model.Device,
                     MantancePerson = model.MantancePerson,
                     MantanceReport = model.MantanceReport,
-                    MantanceDateTime = DateTime.Now
+                    MantanceDateTime = nowDate
                 };
                 _ctx.DeviceMantanceRecords.Add(record);
+                var dev = _ctx.KsDustDevices.FirstOrDefault(d => d.Id == model.Device);
+                if (dev != null)
+                {
+                    dev.LastMaintenance = nowDate;
+                }
                 _ctx.SaveChanges();
             }
             catch (Exception ex)
@@ -322,55 +382,53 @@ namespace Dust.Platform.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public ActionResult UserEdit(string id)
+        private void LoadRoles()
         {
-            var model = new UserEditModel
-            {
-                Id = id
-            };
-            using (var repo = new AuthRepository())
-            {
-                ViewBag.Roles = repo.GetDustRoles(null)
-                                .Select(r => new SelectListItem
-                                {
-                                    Text = r.DisplayName,
-                                    Value = r.Id.ToString()
-                                })
-                                .ToList();
-                var user = repo.FindById(id).Result;
-                if (user == null)
-                {
-                    return View(model);
-                }
-                model.Id = user.Id;
-                model.UserName = user.UserName;
-                model.PhoneNumber = user.PhoneNumber;
-                model.UserRole = repo.GetDustRole(user).Id.ToString();
-                var relateEntity = user.Claims.FirstOrDefault(c => c.ClaimType == nameof(UserRelatedEntity));
-                model.UserRelateEntity = relateEntity != null ? relateEntity.ClaimValue : "";
-
-                return View(model);
-            }
-        }
-
-        [HttpPost]
-        public ActionResult UserEdit(UserEditModel model)
-        {
-            var repo = new AuthRepository();
-            ViewBag.Roles = repo.GetDustRoles(null)
+            ViewBag.Roles = new AuthRepository().GetDustRoles(null)
                 .Select(r => new SelectListItem
                 {
                     Text = r.DisplayName,
                     Value = r.Id.ToString()
                 })
                 .ToList();
-            var user = repo.FindById(model.Id).Result;
-            return user != null ? UpdateUser(repo, user, model) : AddNewUser(repo, model);
         }
 
-        private ActionResult UpdateUser(AuthRepository repo, IdentityUser user, UserEditModel model)
+        [HttpGet]
+        public ActionResult UpdateUser(string id)
         {
+            var repo = new AuthRepository();
+            var user = repo.FindById(id).Result;
+            if (user == null)
+            {
+                ModelState.AddModelError("", @"未找到用户信息");
+                return View();
+            }
+            var model = new UserEditModel
+            {
+                Id = user.Id,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName,
+                UserRole = repo.GetDustRole(user).Id.ToString(),
+                UserRelateEntity = user.Claims.FirstOrDefault(c => c.ClaimType == nameof(UserRelatedEntity))?.ClaimValue
+            };
+            LoadRoles();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult AddNewUser()
+        {
+            LoadRoles();
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UpdateUser(UserEditModel model)
+        {
+            var repo = new AuthRepository();
+            var user = repo.FindById(model.Id).Result;
             using (var scope = new TransactionScope())
             {
                 user.UserName = model.UserName;
@@ -387,14 +445,16 @@ namespace Dust.Platform.Web.Controllers
                 ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"更新用户信息成功！" : @"更新用户信息失败！");
             }
 
+            LoadRoles();
             return View(model);
         }
 
-        private ActionResult AddNewUser(AuthRepository repo, UserEditModel model)
+        [HttpPost]
+        public ActionResult AddNewUser(AuthRepository repo, NewUserModel model)
         {
-            if (model.Password != model.ConfirmPassword)
+            LoadRoles();
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("Failed", @"两次输入的密码不一致！");
                 return View(model);
             }
             using (var scope = new TransactionScope())
@@ -406,7 +466,7 @@ namespace Dust.Platform.Web.Controllers
                     ConfirmPassword = model.ConfirmPassword,
                     PhoneNumber = model.PhoneNumber
                 });
-                if (!ret.Result.Succeeded)
+                if (ret.Result == null || !ret.Result.Succeeded)
                 {
                     ModelState.AddModelError("Failed", @"新增用户失败！");
                     return View(model);
@@ -418,7 +478,7 @@ namespace Dust.Platform.Web.Controllers
                     UserId = user.Id,
                     RoleId = model.UserRole
                 });
-                RefreshUserRelatedEntity(user, model);
+                AddUserRelatedEntity(user, model);
                 var updateRet = repo.Update(user);
                 ModelState.AddModelError(updateRet.Succeeded ? "Success" : "Failed", updateRet.Succeeded ? @"新增用户信息成功！" : @"新增用户信息失败！");
                 scope.Complete();
@@ -427,20 +487,58 @@ namespace Dust.Platform.Web.Controllers
             return View(model);
         }
 
-        private static void RefreshUserRelatedEntity(IdentityUser user, UserEditModel model)
+        private void AddUserRelatedEntity(IdentityUser user, NewUserModel model)
         {
-            var relatedEntity = user.Claims.FirstOrDefault(c => c.ClaimType == nameof(UserRelatedEntity));
-            if (relatedEntity != null)
-            {
-                user.Claims.Remove(relatedEntity);
-            }
             if (!string.IsNullOrWhiteSpace(model.UserRelateEntity))
             {
-                user.Claims.Add(new IdentityUserClaim
+                var relatedEntityClaim = new IdentityUserClaim
                 {
+                    UserId = user.Id,
                     ClaimType = nameof(UserRelatedEntity),
                     ClaimValue = model.UserRelateEntity
-                });
+                };
+                user.Claims.Add(relatedEntityClaim);
+                var relatedEntity = new UserRelatedEntity
+                {
+                    User = Guid.Parse(user.Id)
+                };
+                _ctx.UserRelatedEntities.Add(relatedEntity);
+                _ctx.SaveChanges();
+            }
+        }
+
+        private void RefreshUserRelatedEntity(IdentityUser user, UserEditModel model)
+        {
+            var relatedEntityClaim = user.Claims.FirstOrDefault(c => c.ClaimType == nameof(UserRelatedEntity));
+
+            if (!string.IsNullOrWhiteSpace(model.UserRelateEntity))
+            {
+                if (relatedEntityClaim == null)
+                {
+                    relatedEntityClaim = new IdentityUserClaim
+                    {
+                        UserId = user.Id,
+                        ClaimType = nameof(UserRelatedEntity),
+                        ClaimValue = model.UserRelateEntity
+                    };
+                    user.Claims.Add(relatedEntityClaim);
+                }
+                else
+                {
+                    relatedEntityClaim.ClaimValue = model.UserRelateEntity;
+                }
+                var relatedEntity = _ctx.UserRelatedEntities.FirstOrDefault(r => r.User.ToString() == user.Id);
+                if (relatedEntity != null)
+                {
+                    _ctx.UserRelatedEntities.Remove(relatedEntity);
+                }
+                relatedEntity = new UserRelatedEntity
+                {
+                    User = Guid.Parse(user.Id),
+                    Entity = Guid.Parse(model.UserRelateEntity)
+                };
+                _ctx.UserRelatedEntities.Add(relatedEntity);
+                _ctx.SaveChanges();
             }
         }
 
@@ -568,11 +666,21 @@ namespace Dust.Platform.Web.Controllers
         [HttpGet]
         public ActionResult DevicePreview()
         {
-            ViewBag.Vendors = _ctx.Vendors.Where(ve => ve.Id != Guid.Empty).Select(v => new SelectListItem
+            var vendorList = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = @"所有供应商",
+                    Value = null
+                }
+            };
+            var exists = _ctx.Vendors.Where(ve => ve.Id != Guid.Empty).Select(v => new SelectListItem
             {
                 Text = v.Name,
                 Value = v.Id.ToString()
             }).ToList();
+            vendorList.AddRange(exists);
+            ViewBag.Vendors = vendorList;
 
             return View();
         }
@@ -660,7 +768,7 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult AlarmPhotoTable(TablePost post)
         {
-            var userId = Guid.Parse(((DustPrincipal) HttpContext.User).Id);
+            var userId = Guid.Parse(((DustPrincipal)HttpContext.User).Id);
             var devs = AccountProcess.UserIsInRole(userId.ToString(), "admin") ? _ctx.KsDustDevices.AsQueryable() : _ctx.KsDustDevices.Where(d => d.VendorId == userId);
             var alarms = _ctx.KsDustAlarms.Include("Device").Where(a => devs.Contains(a.Device));
             var total = devs.Count();

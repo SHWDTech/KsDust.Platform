@@ -35,10 +35,10 @@
           .Column("联系电话", "Mobile")
           .Column("维保时间", "LastMaintenance")
           .Column("维保状态", "MantanceStatus")
-          .Apply(ColumnOption.formatter, "mantanceFormatter")
+          .Apply(ColumnOption.formatter, "mantanceStatusFormatter")
           .Column("维保记录")
-          .Apply(ColumnOption.formatter, "operater")
-          .Apply(ColumnOption.events, "operateEvents"))
+          .Apply(ColumnOption.formatter, "mantanceRecordFormatter")
+          .Apply(ColumnOption.events, "deviceOperateEvents"))
 </div>
 
 <div class="modal fade" id="dmrModal" tabindex="-1" role="dialog" aria-labelledby="dmrModallabel">
@@ -88,7 +88,7 @@
             });
     }
 
-    var mantanceFormatter = function (value) {
+    var mantanceStatusFormatter = function (value) {
         if (value === mantanceStatus.Mantanced) {
             return '<img src="/Resources/Images/Site/32_32_green.png" />';
         } else if (value === mantanceStatus.NeedMantance) {
@@ -98,14 +98,14 @@
         }
     }
 
-    var operater = function () {
+    var mantanceRecordFormatter = function () {
         return [
             '<a class="view" href="javascript:void(0)" title="查看维保记录">查看</a>',
             '<a class="add" href="javascript:void(0)" title="添加维保记录" style="margin-left: 10px;">添加</a>'
         ].join('');
     }
 
-    window.operateEvents = {
+    window.deviceOperateEvents = {
         'click .view': function (e, value, row) {
             $.get('/Setting/DeviceMantanceRecord', { deviceGuid: row.Id }, function (ret) {
                 $('#dmrModal .modal-body').html(ret);

@@ -235,7 +235,7 @@ namespace Dust.Platform.Storage.Repository
         public Guid FindVendorId(IdentityUser usr)
         {
             var claims = _userManager.GetClaimsAsync(usr.Id).Result;
-            return Guid.Parse(claims.First(c => c.Type == "VendorId").Value);
+            return Guid.Parse(claims.First(c => c.Type == "UserRelatedEntity").Value);
         }
 
         public List<Module> FindModuleByParentName(string userId, string pModule, bool includeNonMenu = true)

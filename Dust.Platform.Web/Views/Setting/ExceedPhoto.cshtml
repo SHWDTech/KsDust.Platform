@@ -76,7 +76,7 @@
           .Column("超标值", "AlarmValue")
           .Column("超标照片")
           .Apply(ColumnOption.formatter, "exceedPhotoOperaterFormatter")
-          .Apply(ColumnOption.events, "operateEvents"))
+          .Apply(ColumnOption.events, "exceeedPhotoOperateEvents"))
 </div>
 
 <script type="text/javascript">
@@ -90,7 +90,7 @@
         ].join('');
     }
 
-    window.operateEvents = {
+    window.exceeedPhotoOperateEvents = {
         'click .viewPhoto': function (e, value, row) {
             $.get('/Setting/ViewExceedPhoto', { alarmIdGuid: row.Id }, function (ret) {
                 $('#exceedModal .modal-body').html(ret);

@@ -18,7 +18,7 @@
           .Column("角色名称", "RoleName")
           .Column("操作")
           .Apply(ColumnOption.formatter, "roleOperaterFormatter")
-          .Apply(ColumnOption.events, "operateEvents"))
+          .Apply(ColumnOption.events, "roleOperateEvents"))
 </div>
 
 <script type="text/javascript">
@@ -31,7 +31,7 @@
         ].join('');
     }
 
-    window.operateEvents = {
+    window.roleOperateEvents = {
         'click .permission': function (e, value, row) {
             $.get('/Setting/RolePermissions', { id: row.Id }, function (ret) {
                 $('#roleModal .modal-body').html(ret);

@@ -188,6 +188,7 @@
     <Compile Include="Models\Account\RolePermissionsModel.cs" />
     <Compile Include="Models\Account\SignInResult.cs" />
     <Compile Include="Models\Account\SignInStatus.cs" />
+    <Compile Include="Models\Account\NewUserModel.cs" />
     <Compile Include="Models\Account\UserEditModel.cs" />
     <Compile Include="Models\Account\UserPasswordModel.cs" />
     <Compile Include="Models\Admin\AdminViewModel.cs" />
@@ -491,7 +492,7 @@
     <Content Include="Views\Setting\VendorsInfo.cshtml" />
     <Content Include="Views\Setting\Vendor.cshtml" />
     <Content Include="Views\Setting\UserManager.cshtml" />
-    <Content Include="Views\Setting\UserEdit.cshtml" />
+    <Content Include="Views\Setting\AddNewUser.cshtml" />
     <Content Include="Views\Setting\RoleManager.cshtml" />
     <Content Include="Views\Setting\UserPassword.cshtml" />
     <Content Include="Views\Setting\RolePermissions.cshtml" />
@@ -502,6 +503,7 @@
     <Content Include="Views\Statistics\GeneralComparison.cshtml" />
     <Content Include="Views\Setting\ExceedPhoto.cshtml" />
     <Content Include="Views\Setting\ViewExceedPhoto.cshtml" />
+    <Content Include="Views\Setting\UpdateUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

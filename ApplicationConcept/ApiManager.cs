@@ -86,12 +86,8 @@ namespace ApplicationConcept
             var asyncResult = (HttpResponseAsyncResult) asynchronousResult.AsyncState;
             try
             {
-                var response = (HttpWebResponse)asyncResult.Request.EndGetResponse(asynchronousResult);
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    asyncResult.Handler.UnAuthorized(response.StatusCode);
-                    return;
-                }
+                var response = (HttpWebResponse) asyncResult.Request.EndGetResponse(asynchronousResult);
+                
                 var stream = response.GetResponseStream();
                 if (stream == null)
                 {
@@ -102,6 +98,15 @@ namespace ApplicationConcept
                 {
                     var responseStr = reader.ReadToEnd();
                     asyncResult.Handler.Response(responseStr);
+                }
+            }
+            catch (Exception ex) when(ex is WebException)
+            {
+                var e = (WebException) ex;
+                var httpStatusCode = ((HttpWebResponse)e.Response).StatusCode;
+                if (httpStatusCode == HttpStatusCode.Unauthorized)
+                {
+                    asyncResult.Handler.UnAuthorized(httpStatusCode);
                 }
             }
             catch (Exception ex)

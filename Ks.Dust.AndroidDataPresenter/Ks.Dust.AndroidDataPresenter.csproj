@@ -36,6 +36,7 @@
     <AndroidSupportedAbis>armeabi;armeabi-v7a</AndroidSupportedAbis>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <AndroidCreatePackagePerAbi>true</AndroidCreatePackagePerAbi>
+    <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>PdbOnly</DebugType>

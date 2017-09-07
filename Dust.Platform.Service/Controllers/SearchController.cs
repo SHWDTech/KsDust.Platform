@@ -19,6 +19,7 @@ namespace Dust.Platform.Service.Controllers
             _ctx = new KsDustDbContext();
         }
 
+        [Authorize]
         public HttpResponseMessage Post([FromBody]SearchPost post)
         {
             var resultList = new List<SearchViewModel>();

@@ -4,7 +4,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        @Html.DropDownList("vendorsSelect", (List<SelectListItem>)ViewBag.Vendors, new { style = "height: 34px; width: 180px;"})
+        @Html.DropDownList("vendorsSelect", (List<SelectListItem>)ViewBag.Vendors, new { style = ""})
         <input type="button" class="btn btn-primary" value="查询" id="devPreviewQuery"/>
     </div>
     <div class="panel-body">
@@ -40,6 +40,7 @@
 </div>
 
 <script type="text/javascript">
+    $('#vendorsSelect').select2();
     var devicePreviewOperater = function () {
         return [
             '<a class="preview" href="javascript:void(0)" title="查看历史数据">历史数据</a>'

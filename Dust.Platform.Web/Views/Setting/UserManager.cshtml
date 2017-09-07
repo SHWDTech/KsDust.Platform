@@ -34,6 +34,30 @@
     $('#users').bootstrapTable({
         height: $('#users').parents('.tab-content').height() - 75
     });
+    $('#usrModal').on('shown.bs.modal', function () {
+        $.fn.modal.Constructor.prototype.enforceFocus = function () { };
+        $('#UserRole').select2();
+        var $ureSelect2 = $('#ure').find('select').select2();
+        $('#UserRole').on('change', function (e) {
+            $.get('/Ajax/RoleEntity', { roleId: e.target.value }, function (ret) {
+                if (ret.hasEntitys) {
+                    $('#ure').show();
+                    $('#ure').find('label').html(ret.labelContent);
+                } else {
+                    $('#ure').hide();
+                }
+                $('#ure').find('select').empty();
+                $ureSelect2 = $('#ure').find('select').select2({
+                    data: ret.entities
+                });
+                if ($('#ureVal').length > 0) {
+                    $ureSelect2.val($('#ureVal').val()).trigger("change");
+                    $('#ureVal').remove();
+                }
+            });
+        });
+        $('#UserRole').change();
+    });
     window.userOperaterFormatter = function () {
         return [
             '<a class="update" href="javascript:void(0)" title="更新用户信息">更新</a>',
@@ -53,13 +77,12 @@
         'click .update': function (e, value, row) {
             $.get('/Setting/UpdateUser', { id: row.Id }, function (ret) {
                 $('#usrModal .modal-body').html(ret);
-                $('#usrModal').modal();
+                $('#usrModal').modal('show');
             });
         },
         'click .delete': function (e, value, row) {
             if (confirm("确定要删除用户：" + row.UserName + "吗？")) {
                 $.get('/Setting/DeleteUser', { id: row.Id }, function (ret) {
-                    debugger;
                     $('#usrModal .modal-body').html(ret.message);
                     $('#usrModal').modal();
                 });

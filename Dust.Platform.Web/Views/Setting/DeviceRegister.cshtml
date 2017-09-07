@@ -5,83 +5,83 @@
 
 <div id="deviceRegisterForm">
     @using (Ajax.BeginForm("DeviceRegister",
-                                 new
-                                 {
-                                     @class = "form"
-                                 },
-                                 new AjaxOptions
-                                 {
-                                     InsertionMode = InsertionMode.Replace,
-                                     UpdateTargetId = "deviceRegisterForm",
-                                     HttpMethod = "POST"
-                                 }))
+                                         new
+                                         {
+                                             @class = "form"
+                                         },
+                                         new AjaxOptions
+                                         {
+                                             InsertionMode = InsertionMode.Replace,
+                                             UpdateTargetId = "deviceRegisterForm",
+                                             HttpMethod = "POST"
+                                         }))
     {
         <table class="table table-striped table-bordered table-hover">
             <tbody>
-            <tr>
-                <td>@Html.LabelFor(m => m.Name)</td>
-                <td>
-                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", PlaceHolder = "请输入设备名称" })
-                    @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
-                </td>
-                <td>
-                    @Html.LabelFor(m => m.NodeId)
-                </td>
-                <td>
-                    @Html.TextBoxFor(m => m.NodeId, new { @class = "form-control", PlaceHolder = "请输入设备MN码" })
-                    @Html.ValidationMessageFor(m => m.NodeId, null, new { @class = "text-danger" })
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(m => m.ProjectId)
-                </td>
-                <td colspan="3">
-                    @Html.DropDownListFor(m => m.ProjectId, (List<SelectListItem>)ViewBag.ProjectSelectItems, new { id = "projects", @class = "form-control" })
-                </td>
-            </tr>
-            <tr>
-                <td>@Html.LabelFor(m => m.Longitude)</td>
-                <td>
-                    @Html.TextBoxFor(m => m.Longitude, new { @class = "form-control", PlaceHolder = "请输入设备经度" })
-                    @Html.ValidationMessageFor(m => m.Longitude, null, new { @class = "text-danger" })
-                </td>
-                <td>@Html.LabelFor(m => m.Latitude)</td>
-                <td>
-                    @Html.TextBoxFor(m => m.Latitude, new {@class = "form-control", PlaceHolder = "请输入设备纬度"})
-                    @Html.ValidationMessageFor(m => m.Latitude, null, new {@class = "text-danger"})
-                </td>
-            </tr>
-            <tr>
-                <td>@Html.LabelFor(m => m.CameraName)</td>
-                <td>
-                    @Html.TextBoxFor(m => m.CameraName, new { @class = "form-control", PlaceHolder = "请输入摄像头名称" })
-                    @Html.ValidationMessageFor(m => m.CameraName, null, new { @class = "text-danger" })
-                </td>
-                <td>@Html.LabelFor(m => m.SerialNumber)</td>
-                <td>
-                    @Html.TextBoxFor(m => m.SerialNumber, new {@class = "form-control", PlaceHolder = "请输入摄像头序列号"})
-                    @Html.ValidationMessageFor(m => m.SerialNumber, null, new {@class = "text-danger"})
-                </td>
-            </tr>
-            <tr>
-                <td>@Html.LabelFor(m => m.CameraUserName)</td>
-                <td>
-                    @Html.TextBoxFor(m => m.CameraUserName, new { @class = "form-control", PlaceHolder = "请输入摄像头登陆用户名" })
-                    @Html.ValidationMessageFor(m => m.CameraUserName, null, new { @class = "text-danger" })
-                </td>
-                <td>@Html.LabelFor(m => m.CameraPassword)</td>
-                <td>
-                    @Html.PasswordFor(m => m.CameraPassword, new { @class = "form-control", PlaceHolder = "请输入摄像头登陆密码" })
-                    @Html.ValidationMessageFor(m => m.CameraPassword, null, new { @class = "text-danger" })
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    @Html.ValidationMessage("Vendor", null, new { @class = "text-danger" })
-                    @Html.ValidationMessage("Save", null, new { @class = "text-danger" })
-                </td>
-            </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Name)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", PlaceHolder = "请输入设备名称" })
+                        @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                    </td>
+                    <td>
+                        @Html.LabelFor(m => m.NodeId)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.NodeId, new { @class = "form-control", PlaceHolder = "请输入设备MN码" })
+                        @Html.ValidationMessageFor(m => m.NodeId, null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(m => m.ProjectId)
+                    </td>
+                    <td colspan="3">
+                        @Html.DropDownListFor(m => m.ProjectId, (List<SelectListItem>)ViewBag.ProjectSelectItems, new { id = "projects", @class = "form-control" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Longitude)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Longitude, new { @class = "form-control", PlaceHolder = "请输入设备经度" })
+                        @Html.ValidationMessageFor(m => m.Longitude, null, new { @class = "text-danger" })
+                    </td>
+                    <td>@Html.LabelFor(m => m.Latitude)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Latitude, new { @class = "form-control", PlaceHolder = "请输入设备纬度" })
+                        @Html.ValidationMessageFor(m => m.Latitude, null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.CameraName)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.CameraName, new { @class = "form-control", PlaceHolder = "请输入摄像头名称" })
+                        @Html.ValidationMessageFor(m => m.CameraName, null, new { @class = "text-danger" })
+                    </td>
+                    <td>@Html.LabelFor(m => m.SerialNumber)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.SerialNumber, new { @class = "form-control", PlaceHolder = "请输入摄像头序列号" })
+                        @Html.ValidationMessageFor(m => m.SerialNumber, null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.CameraUserName)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.CameraUserName, new { @class = "form-control", PlaceHolder = "请输入摄像头登陆用户名" })
+                        @Html.ValidationMessageFor(m => m.CameraUserName, null, new { @class = "text-danger" })
+                    </td>
+                    <td>@Html.LabelFor(m => m.CameraPassword)</td>
+                    <td>
+                        @Html.PasswordFor(m => m.CameraPassword, new { @class = "form-control", PlaceHolder = "请输入摄像头登陆密码" })
+                        @Html.ValidationMessageFor(m => m.CameraPassword, null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        @Html.ValidationMessage("Vendor", null, new { @class = "text-danger" })
+                        @Html.ValidationMessage("Save", null, new { @class = "text-danger" })
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="4">
                         <input type="submit" value="提交注册" class="btn btn-primary" />
@@ -91,3 +91,7 @@
         </table>
     }
 </div>
+<script type="text/javascript">
+    $('#projects').width($('#projects').parent('td').outerWidth(true));
+    $('#projects').select2();
+</script>

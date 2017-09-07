@@ -39,7 +39,7 @@
                         </td>
                         <td>
                             @Html.HiddenFor(m => m.UserRelateEntity, new { id = "ureVal" })
-                            <select id="UserRelateEntity" name="UserRelateEntity" class="form-control" style="width: 370px;"></select>
+                            <select id="UserRelateEntity" name="UserRelateEntity" class="form-control"></select>
                             @Html.ValidationMessageFor(m => m.UserRelateEntity)
                         </td>
                     </tr>
@@ -67,27 +67,3 @@
         </div>
                         }
 </div>
-
-<script type="text/javascript">
-    $.fn.modal.Constructor.prototype.enforceFocus = function () { };
-    var $ureSelect2 = $('#ure').find('select').select2();
-    $('#UserRole').on('change', function (e) {
-        $.get('/Ajax/RoleEntity', { roleId: e.target.value }, function (ret) {
-            if (ret.hasEntitys) {
-                $('#ure').show();
-                $('#ure').find('label').html(ret.labelContent);
-            } else {
-                $('#ure').hide();
-            }
-            $('#ure').find('select').empty();
-            $ureSelect2 = $('#ure').find('select').select2({
-                data: ret.entities
-            });
-            if ($('#ureVal').length > 0) {
-                $ureSelect2.val($('#ureVal').val()).trigger("change");
-                $('#ureVal').remove();
-            }
-        });
-    });
-    $('#UserRole').change();
-</script>

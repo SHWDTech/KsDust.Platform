@@ -157,14 +157,15 @@ namespace Dust.Platform.Web.Controllers
         {
             LoadProjects();
 
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
             var user = AccountProcess.FindUserByName(User.Identity.Name);
             if (user == null || !AccountProcess.UserIsInRole(user.Id, "VendorManager"))
             {
+                ModelState.Clear();
                 ModelState.AddModelError("Vendor", @"只有设备供应商才能注册设备！");
+                return View();
+            }
+            if (!ModelState.IsValid)
+            {
                 return View(model);
             }
             if (_ctx.KsDustDevices.Any(d => d.Name == model.Name))

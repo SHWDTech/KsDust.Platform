@@ -98,11 +98,18 @@ namespace Dust.Platform.Web.Controllers
             var ret = new List<DeviceCurrentStatus>();
             var devLocal =
                 _ctx.KsDustDevices.Where(obj => deviceList.Contains(obj.Id))
-                    .Select(dev => new { dev.Id, dev.Name, dev.Longitude, dev.Latitude }).ToList();
+                    .Select(dev => new { dev.Id, dev.Name, dev.Longitude, dev.Latitude, dev.Project })
+                    .ToList();
+            var checkTime = DateTime.Now.AddMinutes(-3);
             foreach (var dev in devLocal)
             {
                 var last =
-                    _ctx.KsDustMonitorDatas.Where(obj => obj.DeviceId == dev.Id)
+                    _ctx.KsDustMonitorDatas.Where(obj => obj.MonitorType == MonitorType.RealTime
+                    && obj.DistrictId == dev.Project.DistrictId
+                    && obj.EnterpriseId == dev.Project.EnterpriseId
+                    && obj.ProjectId == dev.Project.Id
+                    && obj.DeviceId == dev.Id
+                    && obj.UpdateTime > checkTime)
                         .OrderByDescending(item => item.UpdateTime)
                         .FirstOrDefault();
                 ret.Add(new DeviceCurrentStatus

@@ -71,6 +71,7 @@ var getMarkerContent = function (dev) {
 var setupChart = function (chartdiv, target, tType, select) {
     $('#' + chartdiv).height($($('#' + chartdiv).parents('.panel')[1]).height() - 28);
     var chart = echarts.init(document.getElementById(chartdiv));
+    $('#' + select).select2();
     $('#' + select).change(function () {
         updateMonitorChart(chart, target, tType, 1, $('#' + select).val(), 24);
     });

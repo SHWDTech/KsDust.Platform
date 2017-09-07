@@ -5,7 +5,7 @@
 <div class="panel panel-info">
     <div class="panel-heading">
         <div style="">
-            <a class="glyphicon glyphicon-floppy-save" download href="" style="float: right; margin-top: 6px; cursor: pointer;" title="导出为Excel"></a>
+            <a class="glyphicon glyphicon-floppy-save" id="avgRankReportDownload" download href="" style="float: right; margin-top: 6px; cursor: pointer;" title="导出为Excel"></a>
             <label>开始时间：</label>
             <input type="text" class="form-control datepicker" id="avgrpStart" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.AddYears(-1).ToString("yyyy-MM")" />
             <label>结束时间：</label>
@@ -20,15 +20,22 @@
     </div>
     <div class="panel-body" style="overflow-y: auto;">
         @{ var table = Html.BootstrapTable(null, TablePaginationOption.server, new
-            {
-                id = "avg-report-table",
-                data_page_size = 50
-            });
+           {
+               id = "avg-report-table",
+               data_page_size = 50,
+               data_response_handler = "avgRankResponseHandler"
+           });
             var builder = table.Column("排名", "Rank")
-                                       .Column("工程名称", "ProjectName")
-                                       .Column("建设单位", "EnterpriseName")
-                                       .Column("颗粒物均值(mg/m³)", "AvgPm");
+                .Column("工程名称", "ProjectName")
+                .Column("建设单位", "EnterpriseName")
+                .Column("颗粒物均值(mg/m³)", "AvgPm");
         }
         @(builder)
     </div>
 </div>
+<script type="text/javascript">
+    var avgRankResponseHandler = function (ret) {
+        $('#avgRankReportDownload').prop('href', 'Report/ExportAvgRankReport?id=' + ret.reportId);
+        return ret;
+    }
+</script>

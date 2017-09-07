@@ -28,8 +28,8 @@
                         <option value="2">天</option>
                         <option value="3">月</option>
                     </select>
-                    <input type="text" class="form-control datepicker" id="@Model.StartDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm")" />
-                    <input type="text" class="form-control datepicker" id="@Model.EndDateId" style="width: 200px; display: inline-block; height: 24px;" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" />
+                    <input type="text" class="form-control datepicker" id="@Model.StartDateId" style="width: 200px; display: inline-block; height: 28px;" value="@DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd HH:mm")" />
+                    <input type="text" class="form-control datepicker" id="@Model.EndDateId" style="width: 200px; display: inline-block; height: 28px;" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" />
                     <button type="button" class="query-button" style="border: 0; background: transparent;">
                         <span class="glyphicon glyphicon-search" style="display: inline-block; cursor: pointer; width: 20px;"></span>
                     </button>
@@ -47,20 +47,24 @@
             </div>
             <div class="panel-body">
                 @{ var table = Html.BootstrapTable(null, TablePaginationOption.server, new
-                    {
-                        id = Model.TableId,
-                        data_page_size = 50
-                    });
+                   {
+                       id = Model.TableId,
+                       data_page_size = 50
+                   });
                     var builder = table.Column("粉尘(mg/m³)", "ParticulateMatter")
-                                               .Column("PM2.5(mg/m³)", "Pm25")
-                                               .Column("PM10(mg/m³)", "Pm100")
-                                               .Column("噪音(dB)", "Noise")
-                                               .Column("温度(℃)", "Temperature")
-                                               .Column("湿度(%)", "Humidity")
-                                               .Column("监测时间", "AverageDateTime");
+                        .Column("PM2.5(mg/m³)", "Pm25")
+                        .Column("PM10(mg/m³)", "Pm100")
+                        .Column("噪音(dB)", "Noise")
+                        .Column("温度(℃)", "Temperature")
+                        .Column("湿度(%)", "Humidity")
+                        .Column("监测时间", "AverageDateTime");
                 }
                 @(builder)
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $('.dataSelect').select2();
+    $('.dateSelect').select2();
+</script>

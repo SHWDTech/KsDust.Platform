@@ -321,20 +321,32 @@ namespace Dust.Platform.Web.Controllers
                 .Select(t => new { Project = t.Key, Avg = t.Sum(p => p.ParticulateMatter) / t.Count() })
                 .OrderBy(t => t.Avg).ToList();
             var table = avgs.Take((int)(avgs.Count * 1.0 / 100 * post.percent)).ToList();
-            var datas = (from td in table
-                         let project = _ctx.KsDustProjects.Include("Enterprise").FirstOrDefault(p => p.Id == td.Project)
-                         select new
-                         {
-                             Rank = table.IndexOf(td) + 1,
-                             ProjectName = project?.Name,
-                             EnterpriseName = project?.Enterprise.Name,
-                             AvgPm = Math.Round(td.Avg, 3)
-                         }).ToList();
-
+            var title = $"{post.start:yyyy-MM-dd}至{post.end:yyyy-MM-dd}期间排名前{post.percent}工程报表";
+            var report = new AvgRankReport
+            {
+                ReportTitle = title,
+                FileName = title,
+                Items = (from td in table
+                    let project = _ctx.KsDustProjects.Include("Enterprise").FirstOrDefault(p => p.Id == td.Project)
+                    select new AvgRankReportItem
+                    {
+                        Rank = table.IndexOf(td) + 1,
+                        ProjectName = project?.Name,
+                        EnterpriseName = project?.Enterprise.Name,
+                        AvgPm = Math.Round(td.Avg, 3)
+                    }).ToList()
+            };
+            var reportId = string.Empty;
+            if (report.Items != null && report.Items.Count > 0)
+            {
+                reportId = Globals.NewIdentityCode();
+                HttpContext.Cache.Insert(reportId, report, null, DateTime.Now.AddMinutes(10), Cache.NoSlidingExpiration);
+            }
             return Json(new
             {
-                total = datas.Count,
-                rows = datas
+                total = report.Items.Count,
+                rows = report.Items,
+                reportId
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -494,8 +506,8 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult ExportOnlineStatusReport(string id)
         {
-            var report = (OnlineStatisticsReport) HttpContext.Cache.Get(id);
-            if (report == null) return new HttpNotFoundResult();
+            var reportObj = HttpContext.Cache.Get(id);
+            if (!(reportObj is OnlineStatisticsReport report)) return new HttpNotFoundResult();
 
             var excelPackage = new ExcelPackage();
             var worksheet = excelPackage.Workbook.Worksheets.Add("在线率报表");
@@ -527,6 +539,47 @@ namespace Dust.Platform.Web.Controllers
                 worksheet.Cells[$"A{i}"].Value = item.TargetName;
                 worksheet.Cells[$"B{i}"].Value = item.OnlineRank;
                 worksheet.Cells[$"C{i}"].Value = item.DateTime;
+            }
+
+            return new ExcelResult(excelPackage, $"{report.FileName}.xlsx");
+        }
+
+        public ActionResult ExportAvgRankReport(string id)
+        {
+            var reportObj = HttpContext.Cache.Get(id);
+            if (!(reportObj is AvgRankReport report)) return new HttpNotFoundResult();
+
+            var excelPackage = new ExcelPackage();
+            var worksheet = excelPackage.Workbook.Worksheets.Add("均值排名报表");
+            worksheet.Column(1).Width = 20;
+            worksheet.Column(2).Width = 40;
+            worksheet.Column(3).Width = 40;
+            worksheet.Column(4).Width = 40;
+            using (var range = worksheet.Cells["A1:D1"])
+            {
+                range.Merge = true;
+                range.Style.Font.Size = 22;
+                range.Value = report.ReportTitle;
+            }
+
+            //数据表
+            worksheet.Cells["A2"].Value = "排名";
+            worksheet.Cells["B2"].Value = "工程名称";
+            worksheet.Cells["C2"].Value = "建设单位";
+            worksheet.Cells["D2"].Value = "颗粒物均值(mg/m³)";
+            using (var range = worksheet.Cells["A2:D2"])
+            {
+                range.Style.Font.Size = 14;
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#d9edf7"));
+            }
+            for (var i = 3; i < report.Items.Count + 3; i++)
+            {
+                var item = report.Items[i - 3];
+                worksheet.Cells[$"A{i}"].Value = item.Rank;
+                worksheet.Cells[$"B{i}"].Value = item.ProjectName;
+                worksheet.Cells[$"C{i}"].Value = item.EnterpriseName;
+                worksheet.Cells[$"D{i}"].Value = item.AvgPm;
             }
 
             return new ExcelResult(excelPackage, $"{report.FileName}.xlsx");

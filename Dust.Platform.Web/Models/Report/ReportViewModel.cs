@@ -34,4 +34,24 @@ namespace Dust.Platform.Web.Models.Report
 
         public List<OnlineStatisticsReportItem> Items { get; set; }
     }
+
+    public class AvgRankReportItem
+    {
+        public int Rank { get; set; }
+
+        public string ProjectName { get; set; }
+
+        public string EnterpriseName { get; set; }
+
+        public double AvgPm { get; set; }
+    }
+
+    public class AvgRankReport
+    {
+        public string ReportTitle { get; set; }
+
+        public string FileName { get; set; }
+
+        public List<AvgRankReportItem> Items { get; set; }
+    }
 }

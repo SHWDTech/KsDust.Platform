@@ -323,3 +323,10 @@ a.notice.readed{
         filter: alpha(opacity=40);
         cursor: pointer;
     }
+.selectbar {
+    height: 34px;
+    line-height: 34px;
+}
+.selectbar .select2-container {
+    float: right;
+}

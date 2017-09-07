@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Dust.Platform.Storage.Model;
@@ -21,7 +20,7 @@ namespace Dust.Platform.Service.Process
             _dbContext = new KsDustDbContext();
         }
 
-        public List<KsDustDevice> GetAuthedDevices(Expression<Func<KsDustDevice, bool>> exp)
+        public IQueryable<KsDustDevice> GetAuthedDevices(Expression<Func<KsDustDevice, bool>> exp)
         {
             var user = _owinContext.Authentication.User;
             IQueryable<KsDustDevice> authedQuery = _dbContext.KsDustDevices;
@@ -46,10 +45,10 @@ namespace Dust.Platform.Service.Process
             {
                 authedQuery = authedQuery.Where(exp);
             }
-            return authedQuery.ToList();
+            return authedQuery;
         }
 
-        public List<KsDustProject> GetAuthedProjects(Expression<Func<KsDustProject, bool>> exp)
+        public IQueryable<KsDustProject> GetAuthedProjects(Expression<Func<KsDustProject, bool>> exp)
         {
             var user = _owinContext.Authentication.User;
             IQueryable<KsDustProject> authedQuery = _dbContext.KsDustProjects.Where(obj => obj.Id != Guid.Empty);
@@ -78,10 +77,10 @@ namespace Dust.Platform.Service.Process
             {
                 authedQuery = authedQuery.Where(exp);
             }
-            return authedQuery.ToList();
+            return authedQuery;
         }
 
-        public List<District> GetAuthedDistricts(Expression<Func<District, bool>> exp)
+        public IQueryable<District> GetAuthedDistricts(Expression<Func<District, bool>> exp)
         {
             var user = _owinContext.Authentication.User;
             IQueryable<District> authedQuery = _dbContext.Districts.Where(obj => obj.Id != Guid.Empty);
@@ -113,7 +112,7 @@ namespace Dust.Platform.Service.Process
             {
                 authedQuery = authedQuery.Where(exp);
             }
-            return authedQuery.ToList();
+            return authedQuery;
         }
     }
 }

@@ -30,19 +30,19 @@ namespace Dust.Platform.Service.Controllers
                 : this.CreateFilterProcess().GetAuthedDevices(dev => dev.Project.ProjectType == model.projectType.Value);
             if (model.district != null)
             {
-                authedDevices = authedDevices.Where(obj => obj.Project.DistrictId == model.district.Value).ToList();
+                authedDevices = authedDevices.Where(obj => obj.Project.DistrictId == model.district.Value);
             }
             if (model.enterprise != null)
             {
-                authedDevices = authedDevices.Where(obj => obj.Project.EnterpriseId == model.enterprise.Value).ToList();
+                authedDevices = authedDevices.Where(obj => obj.Project.EnterpriseId == model.enterprise.Value);
             }
             if (model.project != null)
             {
-                authedDevices = authedDevices.Where(obj => obj.ProjectId == model.project.Value).ToList();
+                authedDevices = authedDevices.Where(obj => obj.ProjectId == model.project.Value);
             }
             if (model.device != null)
             {
-                authedDevices = authedDevices.Where(obj => obj.Id == model.device.Value).ToList();
+                authedDevices = authedDevices.Where(obj => obj.Id == model.device.Value);
             }
             var devices = authedDevices
                     .Select(dev => new { id = dev.Id, name = dev.Name, longitude = dev.Longitude, latitude = dev.Latitude })

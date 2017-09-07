@@ -28,13 +28,22 @@ namespace Dust.Platform.Service.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "区县不存在。");
             }
 
-            var devs = this.CreateFilterProcess().GetAuthedDevices(dev => dev.Project.ProjectType == model.ProjectType && dev.Project.DistrictId == district.Id);
+            var devs = this.CreateFilterProcess().GetAuthedDevices(dev => dev.Project.ProjectType == model.ProjectType 
+            && dev.Project.DistrictId == district.Id).ToList();
             var devList = (
                 from dev in devs
-                let data = _ctx.AverageMonitorDatas.Where(dat => dat.Type == AverageType.HourAvg && dat.TargetId == dev.Id).OrderBy(da => da.AverageDateTime).FirstOrDefault()
+                let data = _ctx.AverageMonitorDatas.Where(dat => dat.Type == AverageType.HourAvg && dat.TargetId == dev.Id)
+                .OrderBy(da => da.AverageDateTime)
+                .FirstOrDefault()
                 select new DistrictDetailViewModel
                 {
-                    id = dev.Id, districtName = district.Name, name = dev.Name, tsp = data?.ParticulateMatter ?? 0, pm25 = data?.Pm25 ?? 0, pm100 = data?.Pm100 ?? 0, rate = Helper.GetRate(data?.ParticulateMatter ?? 0)
+                    id = dev.Id,
+                    districtName = district.Name,
+                    name = dev.Name,
+                    tsp = data?.ParticulateMatter ?? 0,
+                    pm25 = data?.Pm25 ?? 0,
+                    pm100 = data?.Pm100 ?? 0,
+                    rate = Helper.GetRate(data?.ParticulateMatter ?? 0)
                 }).ToList();
 
             return Request.CreateResponse(HttpStatusCode.OK, devList);

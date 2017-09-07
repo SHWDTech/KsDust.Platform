@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
 using Dust.Platform.Service.Models;
@@ -21,7 +22,7 @@ namespace Dust.Platform.Service.Controllers
         [Authorize]
         public List<DistrictAvgViewModel> Post([FromBody]DistrictAvgPostParams model)
         {
-            var districts = this.CreateFilterProcess().GetAuthedDistricts(null);
+            var districts = this.CreateFilterProcess().GetAuthedDistricts(null).ToList();
 
             var avgs = _ctx.AverageMonitorDatas.Where(tsp => tsp.Type == model.dataType
                                                                       && tsp.Category == AverageCategory.District);
@@ -31,8 +32,8 @@ namespace Dust.Platform.Service.Controllers
             }
 
             var devs = model.projectType == null
-                ? this.CreateFilterProcess().GetAuthedDevices(null)
-                : this.CreateFilterProcess().GetAuthedDevices(d => d.Project.ProjectType == model.projectType);
+                ? this.CreateFilterProcess().GetAuthedDevices(null).Include("Project").ToList()
+                : this.CreateFilterProcess().GetAuthedDevices(d => d.Project.ProjectType == model.projectType).Include("Project").ToList();
 
             return (from district in districts
                     let avg = avgs.OrderByDescending(a => a.AverageDateTime).FirstOrDefault(av => av.TargetId == district.Id)

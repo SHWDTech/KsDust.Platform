@@ -86,8 +86,13 @@ namespace ApplicationConcept
             var asyncResult = (HttpResponseAsyncResult) asynchronousResult.AsyncState;
             try
             {
-                var reponse = asyncResult.Request.EndGetResponse(asynchronousResult);
-                var stream = reponse.GetResponseStream();
+                var response = (HttpWebResponse)asyncResult.Request.EndGetResponse(asynchronousResult);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    asyncResult.Handler.UnAuthorized(response.StatusCode);
+                    return;
+                }
+                var stream = response.GetResponseStream();
                 if (stream == null)
                 {
                     asyncResult.Handler.Response(string.Empty);
@@ -268,4 +273,6 @@ namespace ApplicationConcept
         }
     }
 }
+
+
 

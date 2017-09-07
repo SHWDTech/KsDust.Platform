@@ -178,7 +178,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view
                 return true;
             }
 
-            var handler = new HttpResponseHandler();
+            var handler = new AndroidHttpResponseHandler(_activity);
             handler.OnResponse += args =>
             {
                 SearchResults.Clear();

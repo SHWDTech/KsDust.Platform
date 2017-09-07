@@ -100,7 +100,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         private void GetData()
         {
-            var handler = new HttpResponseHandler();
+            var handler = new AndroidHttpResponseHandler(this);
             handler.OnResponse += (args) =>
             {
                 RunOnUiThread(() =>

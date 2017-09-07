@@ -76,7 +76,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         private void UpdateCheck()
         {
-            var handler = new HttpResponseHandler();
+            var handler = new AndroidHttpResponseHandler(this);
             handler.OnResponse += args =>
             {
                 var versionInfo = JsonConvert.DeserializeObject<AndroidVersionInfo>(args.Response);

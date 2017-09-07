@@ -25,7 +25,7 @@
             <span for="objectFilter">筛选查询对象：</span>
             <select id="objectFilter" style="width: 270px;" multiple="multiple"></select>
             <input type="button" class="btn btn-primary" value="查看" style="margin-right: 5px;" id="viewOnlineStatistics" />
-            <input type="button" class="btn btn-primary" value="导出" />
+            <a id="exportExcel" class="btn btn-primary" download href="" title="导出为Excel">导出</a>
         </div>
     </div>
     <div class="panel-body" style="margin-top: 15px;">
@@ -34,7 +34,8 @@
                 id = "onlineStatisticsRank",
                 data_url = "/Report/OnlineStatisticsRankTable",
                 data_page_size = 50,
-                data_height = 550
+                data_height = 550,
+                data_response_handler = "onlineStatisticsResponseHandler"
             });
             var builder = table.Column("对象名称", "TargetName")
                 .Column("在线率", "OnlineRank")
@@ -118,4 +119,9 @@
             return params;
         }
     });
+
+    var onlineStatisticsResponseHandler = function (ret) {
+        $('#exportExcel').prop('href', 'Report/ExportOnlineStatusReport?id=' + ret.reportId);
+        return ret;
+    }
 </script>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Web.Caching;
 using System.Web.Mvc;
 using Dust.Platform.Storage.Model;
 using Dust.Platform.Storage.Repository;
@@ -14,6 +15,7 @@ using Newtonsoft.Json;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
+using SHWDTech.Platform.Utility;
 
 namespace Dust.Platform.Web.Controllers
 {
@@ -433,56 +435,101 @@ namespace Dust.Platform.Web.Controllers
                     r.UpdateTime
                 })
                 .ToList();
+            var report = new OnlineStatisticsReport();
             switch (post.Category)
             {
                 case AverageCategory.Device:
-                    return Json(new
+                    report.ReportTitle = "设备在线率统计";
+                    report.Items = ranks.Select(r => new OnlineStatisticsReportItem
                     {
-                        total,
-                        rows = ranks.Select(r => new
-                        {
-                            TargetName = _ctx.KsDustDevices.First(d => d.Id == r.TargetGuid).Name,
-                            OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
-                            DateTime = $"{r.UpdateTime:yyyy年MM月}"
-                        })
-                    }, JsonRequestBehavior.AllowGet);
+                        TargetName = _ctx.KsDustDevices.First(d => d.Id == r.TargetGuid).Name,
+                        OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
+                        DateTime = $"{r.UpdateTime:yyyy年MM月}"
+                    }).ToList();
+                    break;
                 case AverageCategory.Project:
-                    return Json(new
+                    report.ReportTitle = "工程在线率统计";
+                    report.Items = ranks.Select(r => new OnlineStatisticsReportItem
                     {
-                        total,
-                        rows = ranks.Select(r => new
-                        {
-                            TargetName = _ctx.KsDustProjects.First(d => d.Id == r.TargetGuid).Name,
-                            OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
-                            DateTime = $"{r.UpdateTime:yyyy年MM月}"
-                        })
-                    }, JsonRequestBehavior.AllowGet);
+                        TargetName = _ctx.KsDustProjects.First(d => d.Id == r.TargetGuid).Name,
+                        OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
+                        DateTime = $"{r.UpdateTime:yyyy年MM月}"
+                    }).ToList();
+                    break;
                 case AverageCategory.Enterprise:
-                    return Json(new
+                    report.ReportTitle = "企业在线率统计";
+                    report.Items = ranks.Select(r => new OnlineStatisticsReportItem
                     {
-                        total,
-                        rows = ranks.Select(r => new
-                        {
-                            TargetName = _ctx.Enterprises.First(d => d.Id == r.TargetGuid).Name,
-                            OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
-                            DateTime = $"{r.UpdateTime:yyyy年MM月}"
-                        })
-                    }, JsonRequestBehavior.AllowGet);
+                        TargetName = _ctx.Enterprises.First(d => d.Id == r.TargetGuid).Name,
+                        OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
+                        DateTime = $"{r.UpdateTime:yyyy年MM月}"
+                    }).ToList();
+                    break;
                 case AverageCategory.District:
-                    return Json(new
+                    report.ReportTitle = "区县在线率统计";
+                    report.Items = ranks.Select(r => new OnlineStatisticsReportItem
                     {
-                        total,
-                        rows = ranks.Select(r => new
-                        {
-                            TargetName = _ctx.Districts.First(d => d.Id == r.TargetGuid).Name,
-                            OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
-                            DateTime = $"{r.UpdateTime:yyyy年MM月}"
-                        })
-                    }, JsonRequestBehavior.AllowGet);
+                        TargetName = _ctx.Districts.First(d => d.Id == r.TargetGuid).Name,
+                        OnlineRank = $"{Math.Round(r.Statistics * 100, 3)}%",
+                        DateTime = $"{r.UpdateTime:yyyy年MM月}"
+                    }).ToList();
+                    break;
             }
 
+            var reportId = string.Empty;
+            if (report.Items != null && report.Items.Count > 0)
+            {
+                reportId = Globals.NewIdentityCode();
+                report.ReportTitle = report.Items[0].DateTime + report.ReportTitle;
+                report.FileName = report.ReportTitle;
+                HttpContext.Cache.Insert(reportId, report, null, DateTime.Now.AddMinutes(10), Cache.NoSlidingExpiration);
+            }
+            return Json(new
+            {
+                total,
+                rows = report.Items,
+                reportId
+            }, JsonRequestBehavior.AllowGet);
+        }
 
-            return null;
+        public ActionResult ExportOnlineStatusReport(string id)
+        {
+            var report = (OnlineStatisticsReport) HttpContext.Cache.Get(id);
+            if (report == null) return new HttpNotFoundResult();
+
+            var excelPackage = new ExcelPackage();
+            var worksheet = excelPackage.Workbook.Worksheets.Add("在线率报表");
+            worksheet.Column(1).Width = 40;
+            for (var i = 2; i < 4; i++)
+            {
+                worksheet.Column(i).Width = 20;
+            }
+            using (var range = worksheet.Cells["A1:C1"])
+            {
+                range.Merge = true;
+                range.Style.Font.Size = 22;
+                range.Value = report.ReportTitle;
+            }
+
+            //数据表
+            worksheet.Cells["A2"].Value = "对象名称";
+            worksheet.Cells["B2"].Value = "在线率";
+            worksheet.Cells["C2"].Value = "统计时间";
+            using (var range = worksheet.Cells["A2:C2"])
+            {
+                range.Style.Font.Size = 14;
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#d9edf7"));
+            }
+            for (var i = 3; i < report.Items.Count + 3; i++)
+            {
+                var item = report.Items[i - 3];
+                worksheet.Cells[$"A{i}"].Value = item.TargetName;
+                worksheet.Cells[$"B{i}"].Value = item.OnlineRank;
+                worksheet.Cells[$"C{i}"].Value = item.DateTime;
+            }
+
+            return new ExcelResult(excelPackage, $"{report.FileName}.xlsx");
         }
     }
 }

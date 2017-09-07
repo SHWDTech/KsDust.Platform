@@ -31,8 +31,8 @@ namespace Dust.Platform.Service.Controllers
             }
 
             var devs = model.projectType == null
-                ? _ctx.KsDustDevices
-                : _ctx.KsDustDevices.Where(c => c.Project.ProjectType == model.projectType);
+                ? this.CreateFilterProcess().GetAuthedDevices(null)
+                : this.CreateFilterProcess().GetAuthedDevices(d => d.Project.ProjectType == model.projectType);
 
             return (from district in districts
                     let avg = avgs.OrderByDescending(a => a.AverageDateTime).FirstOrDefault(av => av.TargetId == district.Id)

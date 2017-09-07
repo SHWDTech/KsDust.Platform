@@ -33,7 +33,7 @@ namespace Dust.Platform.Web.Models.Setting
         [Required(ErrorMessage = "必须填写设备纬度")]
         public string Latitude { get; set; }
 
-        [Display(Name = "所属设备")]
+        [Display(Name = "所属工程")]
         [Required(ErrorMessage = "必须选择所属工程")]
         public Guid ProjectId { get; set; }
     }

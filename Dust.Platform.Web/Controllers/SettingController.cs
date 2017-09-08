@@ -741,17 +741,31 @@ namespace Dust.Platform.Web.Controllers
         public ActionResult DeviceHistoryDataTable(DeviceHistoryDataTablePost post)
         {
             var dev = _ctx.KsDustDevices.Include("Project").First(d => d.Id == post.devideGuid);
-            var datas = _ctx.KsDustMonitorDatas.Where(md => md.MonitorType == MonitorType.RealTime
+            var query = _ctx.KsDustMonitorDatas.Where(md => md.MonitorType == MonitorType.RealTime
                                                             && md.DistrictId == dev.Project.DistrictId
                                                             && md.EnterpriseId == dev.Project.EnterpriseId
                                                             && md.ProjectId == dev.ProjectId
                                                             && md.DeviceId == dev.Id);
-            var total = datas.Count();
-            var rows = datas.OrderByDescending(d => d.Id)
+            var ids = query
+                .OrderByDescending(d => d.Id)
                 .Skip(post.offset)
                 .Take(post.limit)
-                .ToList()
-                .Select(q => new
+                .Select(de => de.Id);
+
+            var datas = _ctx.KsDustMonitorDatas.AsQueryable().Join(ids, m => m.Id, l => l, (m, l) => new
+            {
+                m.Id,
+                m.ParticulateMatter,
+                m.Pm25,
+                m.Pm100,
+                m.Noise,
+                m.Temperature,
+                m.Humidity,
+                m.WindSpeed,
+                m.UpdateTime
+            }).ToList();
+            var total = query.Count();
+            var rows = datas.Select(q => new
                 {
                     q.ParticulateMatter,
                     q.Pm25,

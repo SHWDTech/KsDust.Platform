@@ -747,7 +747,7 @@ namespace Dust.Platform.Web.Controllers
                                                             && md.ProjectId == dev.ProjectId
                                                             && md.DeviceId == dev.Id);
             var total = datas.Count();
-            var rows = datas.OrderByDescending(d => d.UpdateTime)
+            var rows = datas.OrderByDescending(d => d.Id)
                 .Skip(post.offset)
                 .Take(post.limit)
                 .ToList()

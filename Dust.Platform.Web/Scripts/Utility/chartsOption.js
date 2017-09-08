@@ -144,7 +144,12 @@ chartsOption.compareLineOptions = function (params) {
                 animation: true
             }
         },
+        legend: {
+            top: '40px',
+            data: params['legendData']
+        },
         grid: {
+            top: '80px',
             left: '30px',
             right: '20px'
         },

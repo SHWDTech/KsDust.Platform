@@ -3,7 +3,7 @@
     Layout = null;
 }
 
-<div class="panel panel-info">
+<div class="panel panel-info" style="height: 100%; overflow: scroll">
     <div class="panel-heading">
         <div class="form-horizontal">
             <span>选择区县：</span>
@@ -131,6 +131,14 @@
         return series;
     }
 
+    var setLegend = function (data) {
+        var legendData = [];
+        for (var i = 0; i < data.length; i++) {
+            legendData.push(data[i].Key.Name);
+        }
+        return legendData;
+    }
+
     $('#startCompare').on('click', function () {
         var targetObjects = [];
         if ($('#districtSel').val() != null) {
@@ -165,7 +173,8 @@
                     var option = chartsOption.compareLineOptions({
                         title: $('#startTime').val() + ' 至 ' + $('#endTime').val() + ' ' + info.title + $('#dataTimeType').select2('data')[0].text + '数据对比',
                         category: ret[0].Values.map(function (v) { return v.AverageDateTime }),
-                        series: prepareSeries(ret, info.name)
+                        series: prepareSeries(ret, info.name),
+                        legendData: setLegend(ret)
                     });
                     chart.setOption(option);
                 }

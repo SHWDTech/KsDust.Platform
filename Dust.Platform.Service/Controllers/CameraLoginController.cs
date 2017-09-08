@@ -29,7 +29,7 @@ namespace Dust.Platform.Service.Controllers
         public HttpResponseMessage Get([FromUri]Guid cameraId)
         {
             var camera = _ctx.KsDustCameras.FirstOrDefault(obj => obj.Id == cameraId);
-            if (camera == null) return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "未找到此摄像头信息。");
+            if (camera == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, "未找到此摄像头信息。");
             var cameraLogin = new CameraLogin
             {
                 SerialNumber = camera.SerialNumber,

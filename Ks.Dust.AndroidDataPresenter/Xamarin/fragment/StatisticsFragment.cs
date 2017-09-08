@@ -123,7 +123,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
             _districtGeneralInfos.Clear();
             _maxTsp = 0;
 
-            var handler = new AndroidHttpResponseHandler(Activity);
+            var handler = new AndroidHttpResponseHandler((KsDustBaseActivity)Activity);
             handler.OnResponse += args =>
             {
                 _activity.RunOnUiThread(() =>

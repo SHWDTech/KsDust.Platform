@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Net;
-using Android.App;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
 using Android.Widget;
@@ -11,9 +10,11 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.component
 {
     public class AndroidHttpResponseHandler : HttpResponseHandler
     {
-        private readonly Activity _activity;
+        private readonly KsDustBaseActivity _activity;
 
-        public AndroidHttpResponseHandler(Activity activity)
+        private HttpRequestParamState _state;
+
+        public AndroidHttpResponseHandler(KsDustBaseActivity activity)
         {
             _activity = activity;
         }
@@ -27,9 +28,42 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.component
             });
         }
 
-        public override void UnAuthorized(HttpStatusCode code)
+        public override void UnAuthorized(HttpRequestParamState state)
         {
-            base.UnAuthorized(code);
+            _state = state;
+            base.UnAuthorized(state);
+
+            if (!state.IsRepeat)
+            {
+                _activity.AuthticationManager.OnRefreshTokenFinished += OnOnRefreshTokenFinished;
+                _activity.AuthticationManager.UpdateAccessTokenByRefreshToken();
+            }
+            else
+            {
+                RedirectToLogin();
+            }
+        }
+
+        private void OnOnRefreshTokenFinished(AuthticationEventArgs args)
+        {
+            _activity.AuthticationManager.OnRefreshTokenFinished -= OnOnRefreshTokenFinished;
+            if (args.AuthSuccess)
+            {
+                _state.Paramter.HeaderStrings[ApiManager.ParamterNameAuthorization] =
+                    $"bearer {_activity.AuthticationManager.AccessToken}";
+                Task.Factory.StartNew(() =>
+                {
+                    ApiManager.StartRequest(_state);
+                });
+            }
+            else
+            {
+                RedirectToLogin();
+            }
+        }
+
+        private void RedirectToLogin()
+        {
             _activity.RunOnUiThread(() =>
             {
                 Toast.MakeText(_activity, "当前登录信息已失效，请重新登陆！", ToastLength.Long).Show();

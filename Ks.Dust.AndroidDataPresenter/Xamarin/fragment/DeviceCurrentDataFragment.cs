@@ -90,7 +90,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
             var view = inflater.Inflate(Resource.Layout.fragment_currentdata, container, false);
             Cheeseknife.Bind(this, view);
             Camera.SetOnClickListener(this);
-            var handler = new AndroidHttpResponseHandler(Activity);
+            var handler = new AndroidHttpResponseHandler((KsDustBaseActivity)Activity);
             handler.OnResponse += args =>
             {
                 _deviceCurrentInfo = JsonConvert.DeserializeObject<DeviceCurrentInfo>(args.Response);

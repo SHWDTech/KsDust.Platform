@@ -68,6 +68,16 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.component
             return expireTime >= currentTime;
         }
 
+        public bool IsLoginAndTokenInValid()
+        {
+            var token = _sharedPreferences.GetString(SpNameRefreshToken, string.Empty);
+            if (string.IsNullOrWhiteSpace(token)) return false;
+
+            DateTime.TryParse(_sharedPreferences.GetString(SpNameTokenExpireTime, string.Empty), out DateTime expireTime);
+            var currentTime = DateTime.Now;
+            return expireTime < currentTime;
+        }
+
         public void UpdateAccessTokenByRefreshToken()
         {
             var refreshToken = _sharedPreferences.GetString(SpNameRefreshToken, string.Empty);

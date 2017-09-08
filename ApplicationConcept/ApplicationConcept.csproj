@@ -40,6 +40,7 @@
     <Compile Include="AuthticationResult.cs" />
     <Compile Include="HistoryDataType.cs" />
     <Compile Include="HttpRequestAsyncResult.cs" />
+    <Compile Include="HttpRequestParamState.cs" />
     <Compile Include="HttpRerquestEventArgs.cs" />
     <Compile Include="HttpResponseAsyncResult.cs" />
     <Compile Include="HttpResponseHandler.cs" />

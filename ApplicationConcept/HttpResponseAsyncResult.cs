@@ -8,10 +8,13 @@ namespace ApplicationConcept
 
         public HttpResponseHandler Handler { get; }
 
-        public HttpResponseAsyncResult(HttpWebRequest request, HttpResponseHandler handler)
+        public HttpRequestParamState State { get; }
+
+        public HttpResponseAsyncResult(HttpWebRequest request, HttpResponseHandler handler, HttpRequestParamState state)
         {
             Request = request;
             Handler = handler;
+            State = state;
         }
     }
 }

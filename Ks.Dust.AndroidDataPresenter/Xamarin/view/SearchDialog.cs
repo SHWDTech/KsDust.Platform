@@ -10,6 +10,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using ApplicationConcept;
 using Java.Lang;
+using Ks.Dust.AndroidDataPresenter.Xamarin.activity;
 using Ks.Dust.AndroidDataPresenter.Xamarin.adapter;
 using Ks.Dust.AndroidDataPresenter.Xamarin.component;
 using Ks.Dust.AndroidDataPresenter.Xamarin.Model;
@@ -178,7 +179,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.view
                 return true;
             }
 
-            var handler = new AndroidHttpResponseHandler(_activity);
+            var handler = new AndroidHttpResponseHandler((KsDustBaseActivity)_activity);
             handler.OnResponse += args =>
             {
                 SearchResults.Clear();

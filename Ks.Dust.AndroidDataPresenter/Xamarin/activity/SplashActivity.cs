@@ -9,19 +9,16 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
     [Activity(Label = "昆山扬尘在线监控平台", MainLauncher = true)]
     public class SplashActivity : KsDustBaseActivity
     {
-        private AuthticationManager _authticationManager;
-
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_splash);
             // Create your application here
             Toast.MakeText(this, "登录中...", ToastLength.Short).Show();
-            _authticationManager = AuthticationManager.Instance;
-            _authticationManager.OnRefreshTokenFinished += OnRefreshTokenFinished;
-            if (_authticationManager.IsLoginAndTokenValid())
+            if (AuthticationManager.IsLoginAndTokenValid())
             {
-                _authticationManager.UpdateAccessTokenByRefreshToken();
+                AuthticationManager.OnRefreshTokenFinished += OnRefreshTokenFinished;
+                AuthticationManager.UpdateAccessTokenByRefreshToken();
             }
             else
             {
@@ -41,6 +38,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.activity
 
         protected void OnRefreshTokenFinished(AuthticationEventArgs args)
         {
+            AuthticationManager.OnRefreshTokenFinished -= OnRefreshTokenFinished;
             RunOnUiThread(() =>
             {
                 if (args.AuthSuccess)

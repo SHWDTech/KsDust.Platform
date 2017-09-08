@@ -7,7 +7,7 @@ namespace ApplicationConcept
 
     public delegate void OnError(HttpRerquestEventArgs e);
 
-    public delegate void OnUnAuthorized(HttpStatusCode code);
+    public delegate void OnUnAuthorized(HttpRequestParamState state);
 
     public class HttpResponseHandler
     {
@@ -33,9 +33,9 @@ namespace ApplicationConcept
             });
         }
 
-        public virtual void UnAuthorized(HttpStatusCode code)
+        public virtual void UnAuthorized(HttpRequestParamState state)
         {
-            OnUnAuthorized?.Invoke(code);
+            OnUnAuthorized?.Invoke(state);
         }
     }
 }

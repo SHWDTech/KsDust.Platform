@@ -7,6 +7,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using ApplicationConcept;
 using CheeseBind;
+using Ks.Dust.AndroidDataPresenter.Xamarin.activity;
 using Ks.Dust.AndroidDataPresenter.Xamarin.adapter;
 using Ks.Dust.AndroidDataPresenter.Xamarin.component;
 using Ks.Dust.AndroidDataPresenter.Xamarin.Model;
@@ -126,7 +127,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
             _districtGeneralInfos.Clear();
             _maxTsp = 0;
 
-            var handler = new AndroidHttpResponseHandler(Activity);
+            var handler = new AndroidHttpResponseHandler((KsDustBaseActivity)Activity);
             handler.OnResponse += args =>
             {
                 _activity.RunOnUiThread(() =>

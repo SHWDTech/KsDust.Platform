@@ -11,11 +11,14 @@ namespace ApplicationConcept
 
         public HttpResponseHandler Handler { get; }
 
-        public HttpRequestAsyncState(HttpWebRequest request, StringBuilder bodyParamters, HttpResponseHandler handler)
+        public HttpRequestParamState State { get; }
+
+        public HttpRequestAsyncState(HttpWebRequest request, StringBuilder bodyParamters, HttpResponseHandler handler, HttpRequestParamState state)
         {
             Request = request;
             BodyParamters = bodyParamters;
             Handler = handler;
+            State = state;
         }
     }
 }

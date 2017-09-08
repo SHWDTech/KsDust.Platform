@@ -61,7 +61,7 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.fragment
             _map.SetOnMarkerClickListener(this);
             var bounds = new LatLngBounds.Builder().Include(Kunshan).Build();
             _map.MoveCamera(CameraUpdateFactory.NewLatLngBounds(bounds, 10));
-            var handler = new AndroidHttpResponseHandler(Activity);
+            var handler = new AndroidHttpResponseHandler((KsDustBaseActivity)Activity);
             if (string.IsNullOrWhiteSpace(_districtId))
             {
                 handler.OnResponse += args =>

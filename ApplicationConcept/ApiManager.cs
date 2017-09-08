@@ -33,7 +33,10 @@ namespace ApplicationConcept
 
         public const string HttpMethodGet = "GET";
 
-        public static void StartRequest(string api, string method, XHttpRequestParamters paramter, HttpResponseHandler handler)
+        public static void StartRequest(HttpRequestParamState state)
+        => StartRequest(state.Api, state.Method, state.Paramter, state.Handler, true);
+
+        public static void StartRequest(string api, string method, XHttpRequestParamters paramter, HttpResponseHandler handler, bool isRepeat = false)
         {
             var request = (HttpWebRequest)WebRequest.Create(api);
             request.Method = method;
@@ -54,13 +57,21 @@ namespace ApplicationConcept
                 builder.Remove(0, 1);
             }
 
+            var state = new HttpRequestParamState
+            {
+                Api = api,
+                Method = method,
+                Paramter = paramter,
+                Handler = handler,
+                IsRepeat = isRepeat
+            };
             if (method == HttpMethodPost)
             {
-                request.BeginGetRequestStream(PostCallBack, new HttpRequestAsyncState(request, builder, handler));
+                request.BeginGetRequestStream(PostCallBack, new HttpRequestAsyncState(request, builder, handler, state));
             }
             if (method == HttpMethodGet)
             {
-                request.BeginGetResponse(ReadCallBack, new HttpResponseAsyncResult(request, handler));
+                request.BeginGetResponse(ReadCallBack, new HttpResponseAsyncResult(request, handler, state));
             }
         }
 
@@ -73,7 +84,7 @@ namespace ApplicationConcept
                 var byteArray = Encoding.UTF8.GetBytes(asyncResult.BodyParamters.ToString());
                 postStream.Write(byteArray, 0, byteArray.Length);
 
-                asyncResult.Request.BeginGetResponse(ReadCallBack, new HttpResponseAsyncResult(asyncResult.Request, asyncResult.Handler));
+                asyncResult.Request.BeginGetResponse(ReadCallBack, new HttpResponseAsyncResult(asyncResult.Request, asyncResult.Handler, asyncResult.State));
             }
             catch (Exception ex)
             {
@@ -106,7 +117,7 @@ namespace ApplicationConcept
                 var httpStatusCode = ((HttpWebResponse)e.Response).StatusCode;
                 if (httpStatusCode == HttpStatusCode.Unauthorized)
                 {
-                    asyncResult.Handler.UnAuthorized(httpStatusCode);
+                    asyncResult.Handler.UnAuthorized(asyncResult.State);
                 }
             }
             catch (Exception ex)
@@ -135,7 +146,7 @@ namespace ApplicationConcept
 
         private const string ParamterClientSecret = "7E0C829B32A6";
 
-        private const string ParamterNameAuthorization = "Authorization";
+        public const string ParamterNameAuthorization = "Authorization";
 
         private const string ParamterNameSearchName = "searchName";
 

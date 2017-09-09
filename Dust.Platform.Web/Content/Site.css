@@ -330,3 +330,7 @@ a.notice.readed{
 .selectbar .select2-container {
     float: right;
 }
+
+.field-validation-error {
+    color: red;
+}

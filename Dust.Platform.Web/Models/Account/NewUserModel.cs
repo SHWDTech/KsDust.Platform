@@ -13,6 +13,7 @@ namespace Dust.Platform.Web.Models.Account
         [Required(ErrorMessage = "必须填写登陆密码")]
         [Display(Name = "登陆密码")]
         [DataType(DataType.Password)]
+        [StringLength(32, ErrorMessage = "密码长度必须在6-32个字符之间", MinimumLength = 6)]
         public string Password { get; set; } = string.Empty;
 
         [Compare(nameof(Password), ErrorMessage = "两次输入的密码不一样")]

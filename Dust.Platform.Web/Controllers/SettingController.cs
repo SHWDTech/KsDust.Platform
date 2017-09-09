@@ -161,7 +161,7 @@ namespace Dust.Platform.Web.Controllers
             if (user == null || !AccountProcess.UserIsInRole(user.Id, "VendorManager"))
             {
                 ModelState.Clear();
-                ModelState.AddModelError("Vendor", @"只有设备供应商才能注册设备！");
+                ModelState.AddModelError(nameof(Vendor), @"只有设备供应商才能注册设备！");
                 return View();
             }
             if (!ModelState.IsValid)
@@ -210,7 +210,7 @@ namespace Dust.Platform.Web.Controllers
                 };
                 _ctx.KsDustCameras.Add(camera);
             }
-            
+
             try
             {
                 _ctx.SaveChanges();
@@ -368,56 +368,63 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult UserTable(TablePost post)
         {
-            var repo = new AuthRepository();
-            var total = repo.GetUserCount(null);
-            var users = repo.GetUserTable(post.offset, post.limit);
-            var rows = users.Select(u => new
+            using (var repo = new AuthRepository())
             {
-                u.Id,
-                u.UserName,
-                UserRole = repo.GetDustRole(u).DisplayName,
-                u.PhoneNumber
-            });
+                var total = repo.GetUserCount(null);
+                var users = repo.GetUserTable(post.offset, post.limit);
+                var rows = users.Select(u => new
+                {
+                    u.Id,
+                    u.UserName,
+                    UserRole = repo.GetDustRole(u).DisplayName,
+                    u.PhoneNumber
+                }).ToList();
 
-            return Json(new
-            {
-                total,
-                rows
-            }, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    total,
+                    rows
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         private void LoadRoles()
         {
-            ViewBag.Roles = new AuthRepository().GetDustRoles(null)
-                .Select(r => new SelectListItem
-                {
-                    Text = r.DisplayName,
-                    Value = r.Id.ToString()
-                })
-                .ToList();
+            using (var authRepository = new AuthRepository())
+            {
+                ViewBag.Roles = authRepository.GetDustRoles(null)
+                    .Select(r => new SelectListItem
+                    {
+                        Text = r.DisplayName,
+                        Value = r.Id.ToString()
+                    })
+                    .ToList();
+            }
         }
 
         [HttpGet]
         public ActionResult UpdateUser(string id)
         {
-            var repo = new AuthRepository();
-            var user = repo.FindById(id).Result;
-            if (user == null)
+            using (var repo = new AuthRepository())
             {
-                ModelState.AddModelError("", @"未找到用户信息");
-                return View();
-            }
-            var model = new UserEditModel
-            {
-                Id = user.Id,
-                PhoneNumber = user.PhoneNumber,
-                UserName = user.UserName,
-                UserRole = repo.GetDustRole(user).Id.ToString(),
-                UserRelateEntity = user.Claims.FirstOrDefault(c => c.ClaimType == nameof(UserRelatedEntity))?.ClaimValue
-            };
-            LoadRoles();
+                var user = repo.FindById(id).Result;
+                if (user == null)
+                {
+                    ModelState.AddModelError("", @"未找到用户信息");
+                    return View();
+                }
+                var model = new UserEditModel
+                {
+                    Id = user.Id,
+                    PhoneNumber = user.PhoneNumber,
+                    UserName = user.UserName,
+                    UserRole = repo.GetDustRole(user).Id.ToString(),
+                    UserRelateEntity = user.Claims.FirstOrDefault(c => c.ClaimType == nameof(UserRelatedEntity))?.ClaimValue
+                };
+                LoadRoles();
 
-            return View(model);
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -431,26 +438,28 @@ namespace Dust.Platform.Web.Controllers
         [HttpPost]
         public ActionResult UpdateUser(UserEditModel model)
         {
-            var repo = new AuthRepository();
-            var user = repo.FindById(model.Id).Result;
-            using (var scope = new TransactionScope())
+            using (var repo = new AuthRepository())
             {
-                user.UserName = model.UserName;
-                user.PhoneNumber = model.PhoneNumber;
-                user.Roles.Clear();
-                user.Roles.Add(new IdentityUserRole
+                var user = repo.FindById(model.Id).Result;
+                using (var scope = new TransactionScope())
                 {
-                    UserId = user.Id,
-                    RoleId = model.UserRole
-                });
-                RefreshUserRelatedEntity(user, model);
-                var ret = repo.Update(user);
-                scope.Complete();
-                ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"更新用户信息成功！" : @"更新用户信息失败！");
-            }
+                    user.UserName = model.UserName;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.Roles.Clear();
+                    user.Roles.Add(new IdentityUserRole
+                    {
+                        UserId = user.Id,
+                        RoleId = model.UserRole
+                    });
+                    RefreshUserRelatedEntity(user, model);
+                    var ret = repo.Update(user);
+                    scope.Complete();
+                    ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"更新用户信息成功！" : @"更新用户信息失败！");
+                }
 
-            LoadRoles();
-            return View(model);
+                LoadRoles();
+                return View(model);
+            }
         }
 
         [HttpPost]
@@ -463,33 +472,35 @@ namespace Dust.Platform.Web.Controllers
             }
             try
             {
-                var repo = new AuthRepository();
-                using (var scope = new TransactionScope())
+                using (var repo = new AuthRepository())
                 {
-                    var ret = repo.RegisterUser(new UserModel
+                    using (var scope = new TransactionScope())
                     {
-                        UserName = model.UserName,
-                        Password = model.Password,
-                        ConfirmPassword = model.ConfirmPassword,
-                        PhoneNumber = model.PhoneNumber
-                    });
-                    if (ret.Result == null || !ret.Result.Succeeded)
-                    {
-                        ModelState.AddModelError("Failed", @"新增用户失败！");
-                        return View(model);
-                    }
+                        var ret = repo.RegisterUser(new UserModel
+                        {
+                            UserName = model.UserName,
+                            Password = model.Password,
+                            ConfirmPassword = model.ConfirmPassword,
+                            PhoneNumber = model.PhoneNumber
+                        });
+                        if (ret.Result == null || !ret.Result.Succeeded)
+                        {
+                            ModelState.AddModelError("Failed", @"新增用户失败！");
+                            return View(model);
+                        }
 
-                    var user = repo.FindByName(model.UserName);
-                    user.Roles.Add(new IdentityUserRole
-                    {
-                        UserId = user.Id,
-                        RoleId = model.UserRole
-                    });
-                    AddUserRelatedEntity(user, model);
-                    var updateRet = repo.Update(user);
-                    ModelState.AddModelError(updateRet.Succeeded ? "Success" : "Failed",
-                        updateRet.Succeeded ? @"新增用户信息成功！" : @"新增用户信息失败！");
-                    scope.Complete();
+                        var user = repo.FindByName(model.UserName);
+                        user.Roles.Add(new IdentityUserRole
+                        {
+                            UserId = user.Id,
+                            RoleId = model.UserRole
+                        });
+                        AddUserRelatedEntity(user, model);
+                        var updateRet = repo.Update(user);
+                        ModelState.AddModelError(updateRet.Succeeded ? "Success" : "Failed",
+                            updateRet.Succeeded ? @"新增用户信息成功！" : @"新增用户信息失败！");
+                        scope.Complete();
+                    }
                 }
             }
             catch (Exception ex)

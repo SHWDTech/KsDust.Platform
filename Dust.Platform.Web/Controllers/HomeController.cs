@@ -182,13 +182,13 @@ namespace Dust.Platform.Web.Controllers
                     }
                     break;
                 case AverageCategory.Project:
-                    model.Project = _ctx.KsDustProjects.Include("District")
-                        .Include("Vendor")
-                        .Include("Enterprise")
+                    model.Project = _ctx.KsDustProjects.Include(nameof(District))
+                        .Include(nameof(Vendor))
+                        .Include(nameof(Enterprise))
                         .First(obj => obj.Id == model.TargetId);
                     break;
                 case AverageCategory.Device:
-                    model.Device = _ctx.KsDustDevices.Include("Vendor")
+                    model.Device = _ctx.KsDustDevices.Include(nameof(Vendor))
                         .Include("Project")
                         .Include("Project.District")
                         .Include("Project.Enterprise")

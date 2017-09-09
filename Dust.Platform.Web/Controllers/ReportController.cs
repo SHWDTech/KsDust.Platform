@@ -38,7 +38,7 @@ namespace Dust.Platform.Web.Controllers
             return View(model);
         }
 
-        private List<Nodes> ReportNodes()
+        private static List<Nodes> ReportNodes()
         {
             var nodes = new List<Nodes>
             {
@@ -344,7 +344,7 @@ namespace Dust.Platform.Web.Controllers
             }
             return Json(new
             {
-                total = report.Items.Count,
+                total = report.Items?.Count ?? 0,
                 rows = report.Items,
                 reportId
             }, JsonRequestBehavior.AllowGet);
@@ -372,7 +372,7 @@ namespace Dust.Platform.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private string DatesString(DateTime date, AverageType dateType)
+        private static string DatesString(DateTime date, AverageType dateType)
         {
             switch (dateType)
             {

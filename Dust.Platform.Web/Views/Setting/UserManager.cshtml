@@ -34,8 +34,13 @@
     $('#users').bootstrapTable({
         height: $('#users').parents('.tab-content').height() - 75
     });
+
+    $.fn.modal.Constructor.prototype.enforceFocus = function () { };
     $('#usrModal').on('shown.bs.modal', function () {
-        $.fn.modal.Constructor.prototype.enforceFocus = function () { };
+        setupUserEdit();
+    });
+
+    var setupUserEdit = function() {
         $('#UserRole').select2();
         var $ureSelect2 = $('#ure').find('select').select2();
         $('#UserRole').on('change', function (e) {
@@ -57,7 +62,8 @@
             });
         });
         $('#UserRole').change();
-    });
+    }
+
     window.userOperaterFormatter = function () {
         return [
             '<a class="update" href="javascript:void(0)" title="更新用户信息">更新</a>',

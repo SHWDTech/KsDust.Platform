@@ -7,7 +7,8 @@
     @using (Ajax.BeginForm("AddNewUser", "Setting", null, new AjaxOptions
     {
         HttpMethod = "POST",
-        UpdateTargetId = "userContent"
+        UpdateTargetId = "userContent",
+        OnComplete = "setupUserEdit"
     }, new { @class = "form-group" }))
     {
         <div>
@@ -15,15 +16,15 @@
             <table class="table table-bordered table-hover table-striped">
                 <col style="width:180px">
                 <tbody>
-                    <tr>
-                        <td>
-                            @Html.LabelFor(m => m.UserName)
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.UserName)
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(m => m.UserName)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.UserName)
+                    </td>
+                </tr>
                 <tr>
                     <td>
                         @Html.LabelFor(m => m.Password)
@@ -42,21 +43,21 @@
                         @Html.ValidationMessageFor(m => m.ConfirmPassword)
                     </td>
                 </tr>
-                    <tr>
-                        <td>
-                            @Html.LabelFor(m => m.UserRole)
-                        </td>
-                        <td>
-                            @Html.DropDownList("UserRole", (List<SelectListItem>)ViewBag.Roles, new { id = "UserRole", @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.UserRole)
-                        </td>
-                    </tr>
-                    <tr style="display: none;" name="ure" id="ure">
-                        <td>
-                            @Html.LabelFor(m => m.UserRelateEntity)
-                        </td>
-                        <td>
-                            @Html.HiddenFor(m => m.UserRelateEntity, new { id = "ureVal" })
+                <tr>
+                    <td>
+                        @Html.LabelFor(m => m.UserRole)
+                    </td>
+                    <td>
+                        @Html.DropDownList("UserRole", (List<SelectListItem>)ViewBag.Roles, new { id = "UserRole", @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.UserRole)
+                    </td>
+                </tr>
+                <tr style="display: none;" name="ure" id="ure">
+                    <td>
+                        @Html.LabelFor(m => m.UserRelateEntity)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(m => m.UserRelateEntity, new { id = "ureVal" })
                         <select id="UserRelateEntity" name="UserRelateEntity" class="form-control"></select>
                         @Html.ValidationMessageFor(m => m.UserRelateEntity)
                     </td>
@@ -80,8 +81,8 @@
                         <input type="submit" value="确认" class="btn btn-success" />
                     </td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-                        }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>

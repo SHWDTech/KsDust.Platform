@@ -34,7 +34,13 @@ namespace Dust.Platform.Service.Controllers
                         dat.TargetId == device.Id).OrderByDescending(d => d.AverageDateTime).Take(30)
                         .ToList()
                         .OrderByDescending(obj => obj.AverageDateTime)
-                        .Select(data => new HistoryDataViewModel { date = data.AverageDateTime.ToString("yyyy-MM-dd HH:mm:ss"), tsp = data.ParticulateMatter, pm25 = data.Pm25, pm100 = data.Pm100 }).ToList();
+                        .Select(data => new HistoryDataViewModel
+                        {
+                            date = data.AverageDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                            tsp = data.ParticulateMatter,
+                            pm25 = data.Pm25,
+                            pm100 = data.Pm100
+                        }).ToList();
 
             return Request.CreateResponse(HttpStatusCode.OK, avgDatas);
         }

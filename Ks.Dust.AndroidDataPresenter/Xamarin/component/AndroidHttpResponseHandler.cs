@@ -19,13 +19,28 @@ namespace Ks.Dust.AndroidDataPresenter.Xamarin.component
             _activity = activity;
         }
 
+        public override void Response(string response)
+        {
+            try
+            {
+                base.Response(response);
+            }
+            catch (Exception)
+            {
+                _activity.RunOnUiThread(() =>
+                {
+                    Toast.MakeText(_activity, "获取数据失败！", ToastLength.Long);
+                });
+            }
+        }
+
         public override void Error(Exception exception)
         {
-            base.Error(exception);
             _activity.RunOnUiThread(() =>
             {
                 Toast.MakeText(_activity, "获取数据失败！", ToastLength.Long);
             });
+            base.Error(exception);
         }
 
         public override void UnAuthorized(HttpRequestParamState state)

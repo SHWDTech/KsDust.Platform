@@ -454,7 +454,7 @@ namespace Dust.Platform.Web.Controllers
                     RefreshUserRelatedEntity(user, model);
                     var ret = repo.Update(user);
                     scope.Complete();
-                    ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"更新用户信息成功！" : @"更新用户信息失败！");
+                    ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"更新用户信息成功！" : string.Join("\r\n", ret.Errors));
                 }
 
                 LoadRoles();
@@ -485,7 +485,7 @@ namespace Dust.Platform.Web.Controllers
                         });
                         if (ret.Result == null || !ret.Result.Succeeded)
                         {
-                            ModelState.AddModelError("Failed", @"新增用户失败！");
+                            ModelState.AddModelError("Failed", ret.Result == null ?  "新增用户失败" :string.Join("\r\n", ret.Result.Errors));
                             return View(model);
                         }
 
@@ -498,7 +498,7 @@ namespace Dust.Platform.Web.Controllers
                         AddUserRelatedEntity(user, model);
                         var updateRet = repo.Update(user);
                         ModelState.AddModelError(updateRet.Succeeded ? "Success" : "Failed",
-                            updateRet.Succeeded ? @"新增用户信息成功！" : @"新增用户信息失败！");
+                            updateRet.Succeeded ? @"新增用户信息成功！" : string.Join("\r\n", updateRet.Errors));
                         scope.Complete();
                     }
                 }
@@ -622,23 +622,12 @@ namespace Dust.Platform.Web.Controllers
         {
             using (var repo = new AuthRepository())
             {
-                if (string.IsNullOrWhiteSpace(model.CurrentPassword))
+                if (!ModelState.IsValid)
                 {
-                    ModelState.AddModelError("Failed", @"密码不能为空！");
-                    return View(model);
-                }
-                if (string.IsNullOrWhiteSpace(model.Password))
-                {
-                    ModelState.AddModelError("Failed", @"密码不能为空！");
-                    return View(model);
-                }
-                if (model.Password != model.ConfirmPassword)
-                {
-                    ModelState.AddModelError("Failed", @"两次输入的密码不一致！");
                     return View(model);
                 }
                 var ret = repo.ChangePassword(model.UserId, model.CurrentPassword, model.Password);
-                ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"修改密码成功！" : @"修改密码失败");
+                ModelState.AddModelError(ret.Succeeded ? "Success" : "Failed", ret.Succeeded ? @"修改密码成功！" : string.Join("\r\n", ret.Errors));
 
                 return View(model);
             }

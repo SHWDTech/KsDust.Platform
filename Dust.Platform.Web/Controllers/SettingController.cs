@@ -454,38 +454,50 @@ namespace Dust.Platform.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddNewUser(AuthRepository repo, NewUserModel model)
+        public ActionResult AddNewUser(NewUserModel model)
         {
             LoadRoles();
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            using (var scope = new TransactionScope())
+            try
             {
-                var ret = repo.RegisterUser(new UserModel
+                var repo = new AuthRepository();
+                using (var scope = new TransactionScope())
                 {
-                    UserName = model.UserName,
-                    Password = model.Password,
-                    ConfirmPassword = model.ConfirmPassword,
-                    PhoneNumber = model.PhoneNumber
-                });
-                if (ret.Result == null || !ret.Result.Succeeded)
-                {
-                    ModelState.AddModelError("Failed", @"新增用户失败！");
-                    return View(model);
-                }
+                    var ret = repo.RegisterUser(new UserModel
+                    {
+                        UserName = model.UserName,
+                        Password = model.Password,
+                        ConfirmPassword = model.ConfirmPassword,
+                        PhoneNumber = model.PhoneNumber
+                    });
+                    if (ret.Result == null || !ret.Result.Succeeded)
+                    {
+                        ModelState.AddModelError("Failed", @"新增用户失败！");
+                        return View(model);
+                    }
 
-                var user = repo.FindByName(model.UserName);
-                user.Roles.Add(new IdentityUserRole
-                {
-                    UserId = user.Id,
-                    RoleId = model.UserRole
-                });
-                AddUserRelatedEntity(user, model);
-                var updateRet = repo.Update(user);
-                ModelState.AddModelError(updateRet.Succeeded ? "Success" : "Failed", updateRet.Succeeded ? @"新增用户信息成功！" : @"新增用户信息失败！");
-                scope.Complete();
+                    var user = repo.FindByName(model.UserName);
+                    user.Roles.Add(new IdentityUserRole
+                    {
+                        UserId = user.Id,
+                        RoleId = model.UserRole
+                    });
+                    AddUserRelatedEntity(user, model);
+                    var updateRet = repo.Update(user);
+                    ModelState.AddModelError(updateRet.Succeeded ? "Success" : "Failed",
+                        updateRet.Succeeded ? @"新增用户信息成功！" : @"新增用户信息失败！");
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorCode = Globals.NewIdentityCode();
+                LogService.Instance.Error($"新增用户失败，错误码：{errorCode}", ex);
+                ModelState.AddModelError("Save", $@"新增用户失败，请联系管理员， 错误码：{errorCode}。");
+                return View(model);
             }
 
             return View(model);

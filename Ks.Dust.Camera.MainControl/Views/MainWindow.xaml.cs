@@ -462,13 +462,30 @@ namespace Ks.Dust.Camera.MainControl.Views
         {
             if (File.Exists(FileDownloadFullName))
             {
-                MessageBox.Show("此文件已经存在，下载中断！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                var result = MessageBox.Show("此文件已经存在，是否重新下载？", "警告！", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        File.Delete(FileDownloadFullName);
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleLog.Error("delete downloaded vedio file failed", ex);
+                        UpdateInfo($"尝试删除视频文件失败，错误码：{_contorlSdk.LastErrorCode}");
+                        return;
+                    }
+                }
             }
             var downloadRet = false;
             if (!string.IsNullOrWhiteSpace(recordName))
             {
-                _contorlSdk.DownloadFileByName(recordName, FileDownloadFullName);
+                downloadRet = _contorlSdk.DownloadFileByName(recordName, FileDownloadFullName);
             }
             else if (cond != null)
             {

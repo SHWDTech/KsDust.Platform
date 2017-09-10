@@ -138,5 +138,7 @@ namespace Ks.Dust.Camera.MainControl.Application
                 VedioStorageReady = true;
             }
         }
+
+        public static string NotFinishedDownloadFileName { get; set; }
     }
 }

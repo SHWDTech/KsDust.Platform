@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Timers;
 using System.Windows;
 using Dust.Platform.Storage.Model;
@@ -11,6 +14,7 @@ using Ks.Dust.Camera.MainControl.Camera;
 using Ks.Dust.Camera.MainControl.Storage;
 using Newtonsoft.Json;
 using MessageBox = System.Windows.MessageBox;
+using Timer = System.Timers.Timer;
 
 namespace Ks.Dust.Camera.MainControl.Views
 {
@@ -35,17 +39,22 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private bool IsCameraLoged { get; set; }
 
-        private readonly Timer _playbackTimer = new Timer() { Enabled = false, Interval = 1000 };
+        private bool IsDownloading { get; set; }
 
-        private readonly Timer _downloadTimer = new Timer() { Enabled = false, Interval = 1000 };
+        private string FileDownloadFullName { get; set; }
 
-        private readonly Timer _localPlayTimer = new Timer() { Enabled = false, Interval = 1000 };
+        private readonly Timer _playbackTimer = new Timer { Enabled = false, Interval = 1000 };
+
+        private readonly Timer _downloadTimer = new Timer { Enabled = false, Interval = 1000 };
+
+        private readonly Timer _localPlayTimer = new Timer { Enabled = false, Interval = 1000 };
 
         private uint _fileTime;
 
         public MainWindow()
         {
             InitializeComponent();
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("zh-cn");
         }
 
         private void OnLoaded(object sender, RoutedEventArgs args)
@@ -55,8 +64,9 @@ namespace Ks.Dust.Camera.MainControl.Views
             _playbackTimer.Elapsed += PlaybackTimerOnElapsed;
             _downloadTimer.Elapsed += DownloadTimerOnElapsed;
             _localPlayTimer.Elapsed += LocalPlayTimerOnElapsed;
-            DpStart.Text = $"{DateTime.Now.AddDays(-7): yyyy-MM-dd HH:mm:ss}";
-            DpEnd.Text = $"{DateTime.Now: yyyy-MM-dd HH:mm:ss}";
+            DpStart.FormatString = DpEnd.FormatString = "yyyy-MM-dd HH:mm:ss";
+            DpStart.Text = $"{DateTime.Now.AddDays(-7):yyyy年MM月dd日 HH:mm:ss}";
+            DpEnd.Text = $"{DateTime.Now:yyyy年MM月dd日 HH:mm:ss}";
         }
 
         private void LocalPlayTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -77,21 +87,24 @@ namespace Ks.Dust.Camera.MainControl.Views
             var pos = _contorlSdk.GetDownloadTpos();
             Dispatcher.Invoke(() =>
             {
-                if ((pos > DownloadProgressBar.Minimum) && (pos <= DownloadProgressBar.Maximum))
+                if (pos > DownloadProgressBar.Minimum && pos <= DownloadProgressBar.Maximum)
                 {
                     DownloadProgressBar.Value = pos;
                 }
 
                 if (pos == 100)
                 {
+                    FileDownloadFullName = string.Empty;
                     _contorlSdk.StopDownload();
                     _downloadTimer.Stop();
                     BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = true;
-                    UpdateInfo("下载完成！");
+                    MessageBox.Show("下载完成！", "信息！", MessageBoxButton.OK, MessageBoxImage.Information);
+                    SetupDownloadRelatedBtnStatus(true);
                 }
 
                 if (pos == 200) //网络异常，回放失败
                 {
+                    FileDownloadFullName = string.Empty;
                     _downloadTimer.Stop();
                     BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = true;
                     UpdateInfo("网络故障，下载失败！");
@@ -140,7 +153,7 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void OpenConfigWindow(object sender, RoutedEventArgs args)
         {
-            var configWindow = new AppSetup()
+            var configWindow = new AppSetup
             {
                 Owner = this
             };
@@ -149,7 +162,7 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void UpdateCameraNodes(object sender, RoutedEventArgs args)
         {
-            var updatePanel = new UpdatePanel() { Owner = this };
+            var updatePanel = new UpdatePanel { Owner = this };
             updatePanel.Show();
         }
 
@@ -183,7 +196,11 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void LoginCamera(object sender, RoutedEventArgs args)
         {
-            if (_selectedCameraLogin == null) return;
+            if (_selectedCameraLogin == null)
+            {
+                UpdateInfo("登录摄像头失败，未选中可用的摄像头节点！");
+                return;
+            }
             if (IsCameraLoged)
             {
                 IsCameraLoged = !_contorlSdk.Logout();
@@ -203,6 +220,13 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void LogOffCamera(object sender, RoutedEventArgs args)
         {
+            var stopPlayback = StopPlayBack();
+            if (!stopPlayback)
+            {
+                MessageBox.Show("停止回放失败，请重新尝试！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            StopPlayBackAfter();
             IsCameraLoged = !_contorlSdk.Logout();
             if (IsCameraLoged)
             {
@@ -219,6 +243,7 @@ namespace Ks.Dust.Camera.MainControl.Views
             LblConnectStatus.Content = IsCameraLoged ? _selectedCameraNode.Name : string.Empty;
             BtnPausePlayback.IsEnabled = BtnSpeedDown.IsEnabled = BtnSpeedUp.IsEnabled = BtnNormalPlayback.IsEnabled = BtnContinue.IsEnabled =
                 BtnDisConnect.IsEnabled = BtnSearchHistory.IsEnabled = BtnStartPlaybackByTime.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = IsCameraLoged;
+            LvHistory.ItemsSource = null;
         }
 
         private void LoadLocalStorage()
@@ -344,16 +369,13 @@ namespace Ks.Dust.Camera.MainControl.Views
             }
         }
 
-        private void StopPlayback(object sender, RoutedEventArgs args)
+        private void StopPlaybackAction(object sender, RoutedEventArgs args)
         {
-            var ret = _contorlSdk.StopPlayback();
+            var ret = StopPlayBack();
             if (ret)
             {
-                BtnStartPlaybackByName.IsEnabled = BtnStartPlaybackByTime.IsEnabled = true;
-                BtnStopPlayback.IsEnabled = false;
-                _playbackTimer.Stop();
+                StopPlayBackAfter();
                 UpdateInfo("回放结束！");
-                PbPreview.Refresh();
             }
             else
             {
@@ -361,74 +383,52 @@ namespace Ks.Dust.Camera.MainControl.Views
             }
         }
 
+        private bool StopPlayBack() => _contorlSdk.StopPlayback();
+
+        private void StopPlayBackAfter()
+        {
+            BtnStartPlaybackByName.IsEnabled = BtnStartPlaybackByTime.IsEnabled = true;
+            BtnStopPlayback.IsEnabled = false;
+            _playbackTimer.Stop();
+            PbPreview.Refresh();
+        }
+
         private void DownloadPlaybackByName(object sender, RoutedEventArgs args)
         {
-            DownloadProgressBar.Value = 0;
-            var record = LvHistory.SelectedItem as CameraHistoryRecord;
-            if (!Config.VedioStorageReady)
+            if (!CheckBeforeDownlod(out Guid camera))
             {
-                MessageBox.Show("视频存储目录未通过检查，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (record == null)
+
+            if (!(LvHistory.SelectedItem is CameraHistoryRecord record))
             {
                 MessageBox.Show("必须选择一个记录！", "提示！", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
+            FileDownloadFullName = $"{Config.VedioStorageDirectory}\\{camera}\\{record.FileName}.mp4";
+            StartDownloadProcess(record.FileName, null);
+        }
 
-            var camera = _loginCameraNode.Id;
-            if (!Directory.Exists($"{Config.VedioStorageDirectory}\\{camera}"))
-            {
-                try
-                {
-                    Directory.CreateDirectory($"{Config.VedioStorageDirectory}\\{camera}");
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("创建存储目录失败，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-            }
-
-            var ret = _contorlSdk.DownloadFileByName(record.FileName, $"{Config.VedioStorageDirectory}\\{camera}\\{record.FileName}.mp4");
-            if (ret)
-            {
-                _downloadTimer.Start();
-                BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = false;
-                UpdateInfo("下载开始！");
-            }
-            else
-            {
-                UpdateInfo($"启动下载失败，错误码：{_contorlSdk.LastErrorCode}");
-            }
+        private void HistoryRecordSelected(object sender, RoutedEventArgs args)
+        {
+            if (!(LvHistory.SelectedItem is CameraHistoryRecord)) return;
+            var record = (CameraHistoryRecord)LvHistory.SelectedItem;
+            LblSelectedFileName.Content = record.FileName;
+            LblRecordStartDt.Content = record.StartDateTime;
+            LblRecordEndDt.Content = record.EndDateTime;
         }
 
         private void DownloadPlaybackByTime(object sender, RoutedEventArgs args)
         {
-            DownloadProgressBar.Value = 0;
-            if (!Config.VedioStorageReady)
+            if (!CheckBeforeDownlod(out Guid camera))
             {
-                MessageBox.Show("视频存储目录未通过检查，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
             if (DpStart.Value == null || DpEnd.Value == null)
             {
                 MessageBox.Show("请选择开始时间和结束时间", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
-            }
-
-            var camera = _loginCameraNode.Id;
-            if (!Directory.Exists($"{Config.VedioStorageDirectory}\\{camera}"))
-            {
-                try
-                {
-                    Directory.CreateDirectory($"{Config.VedioStorageDirectory}\\{camera}");
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("创建存储目录失败，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
             }
 
             var struDownPara = new CHCNetSDK.NET_DVR_PLAYCOND
@@ -454,9 +454,30 @@ namespace Ks.Dust.Camera.MainControl.Views
                 }
             };
 
-            var ret = _contorlSdk.DownloadFileByTime(struDownPara, $"{Config.VedioStorageDirectory}\\{camera}\\{DpStart.Value:yyyy-MM-dd(HH-mm-ss)}-{DpEnd.Value:yyyy-MM-dd(HH-mm-ss)}.mp4");
-            if (ret)
+            FileDownloadFullName = $"{Config.VedioStorageDirectory}\\{camera}\\{DpStart.Value:yyyy-MM-dd(HH-mm-ss)}-{DpEnd.Value:yyyy-MM-dd(HH-mm-ss)}.mp4";
+            StartDownloadProcess(null, struDownPara);
+        }
+
+        private void StartDownloadProcess(string recordName, CHCNetSDK.NET_DVR_PLAYCOND? cond)
+        {
+            if (File.Exists(FileDownloadFullName))
             {
+                MessageBox.Show("此文件已经存在，下载中断！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            var downloadRet = false;
+            if (!string.IsNullOrWhiteSpace(recordName))
+            {
+                _contorlSdk.DownloadFileByName(recordName, FileDownloadFullName);
+            }
+            else if (cond != null)
+            {
+                downloadRet = _contorlSdk.DownloadFileByTime(cond.Value, FileDownloadFullName);
+            }
+
+            if (downloadRet)
+            {
+                SetupDownloadRelatedBtnStatus(false);
                 _downloadTimer.Start();
                 BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = false;
                 UpdateInfo("下载开始！");
@@ -465,6 +486,39 @@ namespace Ks.Dust.Camera.MainControl.Views
             {
                 UpdateInfo($"启动下载失败，错误码：{_contorlSdk.LastErrorCode}");
             }
+        }
+
+        private bool CheckBeforeDownlod(out Guid cameraId)
+        {
+            cameraId = Guid.Empty;
+            DownloadProgressBar.Value = 0;
+            if (!Config.VedioStorageReady)
+            {
+                MessageBox.Show("视频存储目录未通过检查，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            cameraId = _loginCameraNode.Id;
+            if (!Directory.Exists($"{Config.VedioStorageDirectory}\\{cameraId}"))
+            {
+                try
+                {
+                    Directory.CreateDirectory($"{Config.VedioStorageDirectory}\\{cameraId}");
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("创建存储目录失败，请检查设置！", "警告！", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void SetupDownloadRelatedBtnStatus(bool status)
+        {
+            BtnDisConnect.IsEnabled = BtnStartPlaybackByName.IsEnabled = BtnStartPlaybackByTime.IsEnabled = status;
+            IsDownloading = !status;
         }
 
         private void PausePlayback(object sender, RoutedEventArgs args)
@@ -499,15 +553,14 @@ namespace Ks.Dust.Camera.MainControl.Views
                 MessageBox.Show("请先选择一个视频文件！", "提示！", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-            var fileName = ((CameraVedioStorage) LvLocalVedio.SelectedItem).FileFullPathWithName;
+            var fileName = ((CameraVedioStorage)LvLocalVedio.SelectedItem).FileFullPathWithName;
             var ret = LocalPlayCtrl.OpenFile(fileName);
             if (!ret)
             {
                 UpdateInfo($"打开视频文件失败，错误码：{LocalPlayCtrl.LastErrorCode}");
                 return;
             }
-            uint fileTime;
-            ret = LocalPlayCtrl.StartPlayLocal(PbLocalPreview.Handle, out fileTime);
+            ret = LocalPlayCtrl.StartPlayLocal(PbLocalPreview.Handle, out var fileTime);
             if (!ret)
             {
                 UpdateInfo($"播放视频文件失败，错误码：{LocalPlayCtrl.LastErrorCode}");
@@ -553,6 +606,25 @@ namespace Ks.Dust.Camera.MainControl.Views
             {
                 TbAppInfo.Text = message;
             });
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (IsDownloading)
+            {
+                var result = MessageBox.Show("正在下载中，是否确退出？", "警告！", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _contorlSdk.StopDownload();
+                    Config.NotFinishedDownloadFileName = FileDownloadFullName;
+                    _downloadTimer.Stop();
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+            base.OnClosing(e);
         }
     }
 }

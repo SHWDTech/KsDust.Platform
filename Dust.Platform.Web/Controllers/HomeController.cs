@@ -212,7 +212,7 @@ namespace Dust.Platform.Web.Controllers
             return View(model);
         }
 
-        private void QueryMenuNodes(List<Nodes> nodes)
+        private static void QueryMenuNodes(List<Nodes> nodes)
         {
             foreach (var menuNode in nodes)
             {
@@ -233,7 +233,7 @@ namespace Dust.Platform.Web.Controllers
             }
         }
 
-        private void StatisticsMenuNodes(List<Nodes> nodes)
+        private static void StatisticsMenuNodes(List<Nodes> nodes)
         {
             foreach (var menuNode in nodes)
             {

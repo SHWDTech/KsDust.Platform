@@ -94,11 +94,26 @@ namespace Ks.Dust.Camera.MainControl.Views
 
                 if (pos == 100)
                 {
-                    FileDownloadFullName = string.Empty;
                     _contorlSdk.StopDownload();
                     _downloadTimer.Stop();
                     BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = true;
                     MessageBox.Show("下载完成！", "信息！", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (_loginCameraNode != null)
+                    {
+                        ApplicationStorage.AddNewFile(_loginCameraNode.Id, FileDownloadFullName);
+                    }
+                    if (_selectedCameraNode != null)
+                    {
+                        LvLocalVedio.ItemsSource = ApplicationStorage.Files.Where(obj => obj.DeviceGuid == _selectedCameraNode.Id);
+                    }
+                    if (_selectedCameraNode != null
+                    && _selectedCameraNode.Category == AverageCategory.Device
+                    && _selectedCameraLogin != null
+                    && _selectedCameraNode != _loginCameraNode)
+                    {
+                        BtnConnect.IsEnabled = true;
+                    }
+                    FileDownloadFullName = string.Empty;
                     SetupDownloadRelatedBtnStatus(true);
                 }
 
@@ -177,15 +192,25 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void OnNodeSelected(object sender, RoutedEventArgs args)
         {
-            var node = (CameraNode)TrCamera.SelectedItem;
+            if (!(TrCamera.SelectedItem is CameraNode node)) return;
             _selectedCameraNode = node;
-            _selectedCameraLogin = CameraLogins.FirstOrDefault(obj => obj.DeviceGuid == node.Id);
-            if (node.Category == AverageCategory.Device && _selectedCameraLogin != null)
+            _selectedCameraLogin = CameraLogins.FirstOrDefault(obj => obj.DeviceGuid == _selectedCameraNode.Id);
+            if (_selectedCameraNode.Category == AverageCategory.Device && _selectedCameraLogin != null)
             {
-                TxtSelectedCamera.Text = node.Name;
-                BtnConnect.IsEnabled = true;
-                var localFiles = ApplicationStorage.Files.Where(obj => obj.DeviceGuid == node.Id).ToList();
-                LvLocalVedio.ItemsSource = localFiles;
+                TxtSelectedCamera.Text = _selectedCameraNode.Name;
+                LvLocalVedio.ItemsSource = ApplicationStorage.Files.Where(obj => obj.DeviceGuid == _selectedCameraNode.Id);
+                if (IsDownloading)
+                {
+                    BtnConnect.IsEnabled = false;
+                }
+                else if (_loginCameraNode == null || _loginCameraNode.Name != _selectedCameraNode.Name)
+                {
+                    BtnConnect.IsEnabled = true;
+                }
+                else
+                {
+                    BtnConnect.IsEnabled = false;
+                }
             }
             else
             {
@@ -199,6 +224,11 @@ namespace Ks.Dust.Camera.MainControl.Views
             if (_selectedCameraLogin == null)
             {
                 UpdateInfo("登录摄像头失败，未选中可用的摄像头节点！");
+                return;
+            }
+            if (IsDownloading)
+            {
+                MessageBox.Show("录像下载中，请等待下载完成！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             if (IsCameraLoged)
@@ -495,6 +525,7 @@ namespace Ks.Dust.Camera.MainControl.Views
             if (downloadRet)
             {
                 SetupDownloadRelatedBtnStatus(false);
+                BtnConnect.IsEnabled = false;
                 _downloadTimer.Start();
                 BtnDownloadPlaybackByName.IsEnabled = BtnDownloadPlaybackByTime.IsEnabled = false;
                 UpdateInfo("下载开始！");
@@ -534,7 +565,8 @@ namespace Ks.Dust.Camera.MainControl.Views
 
         private void SetupDownloadRelatedBtnStatus(bool status)
         {
-            BtnDisConnect.IsEnabled = BtnStartPlaybackByName.IsEnabled = BtnStartPlaybackByTime.IsEnabled = status;
+            BtnDisConnect.IsEnabled = BtnStartPlaybackByName.IsEnabled
+                = BtnStartPlaybackByTime.IsEnabled = BtnSearchHistory.IsEnabled = status;
             IsDownloading = !status;
         }
 

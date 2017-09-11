@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Ks.Dust.Camera.MainControl.Application;
 
 namespace Ks.Dust.Camera.MainControl.Storage
@@ -31,6 +32,20 @@ namespace Ks.Dust.Camera.MainControl.Storage
                     }
 
                 }
+            }
+        }
+
+        public static void AddNewFile(Guid deviceGuid, string fillnameWithFullPath)
+        {
+            var deviceDir = Directory.GetDirectories(Config.VedioStorageDirectory).FirstOrDefault(d => d.Contains(deviceGuid.ToString()));
+            if (deviceDir != null)
+            {
+                Files.Add(new CameraVedioStorage
+                {
+                    DeviceGuid = deviceGuid,
+                    FileDirectory = $"{deviceDir}",
+                    FileName = Path.GetFileName(fillnameWithFullPath)
+                });
             }
         }
 

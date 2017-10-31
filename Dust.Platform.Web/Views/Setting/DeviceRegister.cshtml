@@ -33,14 +33,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        @Html.LabelFor(m => m.ProjectId)
-                    </td>
-                    <td colspan="3">
-                        @Html.DropDownListFor(m => m.ProjectId, (List<SelectListItem>)ViewBag.ProjectSelectItems, new { id = "projects", @class = "form-control" })
-                    </td>
-                </tr>
-                <tr>
                     <td>@Html.LabelFor(m => m.Longitude)</td>
                     <td>
                         @Html.TextBoxFor(m => m.Longitude, new { @class = "form-control", PlaceHolder = "请输入设备经度" })

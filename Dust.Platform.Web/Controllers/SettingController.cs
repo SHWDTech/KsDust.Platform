@@ -170,8 +170,7 @@ namespace Dust.Platform.Web.Controllers
                 LastMaintenance = DateTime.Now,
                 VendorId = AccountProcess.FindVendorId(user),
                 Longitude = model.Longitude,
-                Latitude = model.Latitude,
-                ProjectId = model.ProjectId
+                Latitude = model.Latitude
             };
 
 

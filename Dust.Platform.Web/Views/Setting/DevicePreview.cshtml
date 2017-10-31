@@ -10,7 +10,8 @@
     <div class="panel-body">
         @(Html.BootstrapTable("devicePreview", "/Setting/DevicePreviewTable", TablePaginationOption.server, new
           {
-              data_page_size = 50
+              data_page_size = 50,
+              data_cache = false
           })
               .Column("设备名称", "Name")
               .Column("供应商", "VendorName")

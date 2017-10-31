@@ -64,21 +64,21 @@
 
     $('#mantance_all')
         .on('click',
-            function () {
-                refreshTable(baseUrl);
-            });
+        function () {
+            refreshTable(baseUrl);
+        });
 
     $('#mantance_over')
         .on('click',
-            function () {
-                refreshTable(baseUrl + '?MantanceStatus=255');
-            });
+        function () {
+            refreshTable(baseUrl + '?MantanceStatus=255');
+        });
 
     $('#mantance_need')
         .on('click',
-            function () {
-                refreshTable(baseUrl + '?MantanceStatus=1');
-            });
+        function () {
+            refreshTable(baseUrl + '?MantanceStatus=1');
+        });
 
     var refreshTable = function (url) {
         $('#deviceMantance')
@@ -127,5 +127,20 @@
             });
         }
     };
+
+    var deviceMantanceTable = function () {
+        $('#deviceMantance').bootstrapTable({
+            height: $('#deviceMantance').parents('.tab-content').height() - 75
+        });
+        $('#deviceMantance')
+            .bootstrapTable('refresh',
+            {
+                url: $('#deviceMantance').attr('url')
+            });
+    }
+
+    $(function () {
+        deviceMantanceTable();
+    });
 
 </script>

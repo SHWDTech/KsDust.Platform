@@ -88,17 +88,5 @@
             }
         }
         $.fn.zTree.init($('#reporttree'), setting, treeNodes);
-
-        var deviceMantanceTable = function (param, callback) {
-            $('#deviceMantance').bootstrapTable({
-                height: $('#deviceMantance').parents('.tab-content').height() - 75
-            });
-            $('#deviceMantance')
-                .bootstrapTable('refresh',
-                {
-                    url: $('#deviceMantance').attr('url')
-                });
-            callback();
-        }
     </script>
 }

@@ -41,34 +41,10 @@ namespace Dust.Platform.Web.Controllers
 
         private List<Nodes> SettingMenu()
         {
-            var nodes = new List<Nodes>
-            {
-                new Nodes
-                {
-                    id = "devicePreview",
-                    name = "设备预览",
-                    ajaxurl = "/Setting/DevicePreview",
-                    nodetype = "setting"
-                },
-                new Nodes
-                {
-                    id = "deviceMantance",
-                    name = "设备维保",
-                    ajaxurl = "/Setting/DeviceMantance",
-                    callBack = "deviceMantanceTable",
-                    nodetype = "setting"
-                },
-                new Nodes
-                {
-                    id = "deviceRegister",
-                    name = "设备注册",
-                    nodetype = "setting",
-                    ajaxurl = "/Setting/DeviceRegister"
-                }
-            };
             using (var authRepository = new AuthRepository())
             {
-                var menus = authRepository.FindModuleByParentName(((DustPrincipal)User).Id, "设置", false);
+                var nodes = new List<Nodes>();
+                var menus = authRepository.FindModuleByParentName(((DustPrincipal)User).Id, "设置", false).OrderBy(m => m.ModuleIndex);
                 nodes.AddRange(menus.Select(module => new Nodes
                 {
                     id = module.Id.ToString(),
@@ -88,6 +64,12 @@ namespace Dust.Platform.Web.Controllers
             var overed = DateTime.Now.AddMonths(-6);
             var needMantance = DateTime.Now.AddMonths(-5);
             var query = _ctx.KsDustDevices.Where(obj => obj.ProjectId != Guid.Empty && !obj.Project.Stopped);
+            var user = AccountProcess.FindUserByName(User.Identity.Name);
+            if (AccountProcess.UserIsInRole(user.Id, "VendorManager"))
+            {
+                var vendorId = AccountProcess.FindVendorId(user);
+                query = query.Where(v => v.VendorId == vendorId);
+            }
             switch (post.MantanceStatus)
             {
                 case MantanceStatus.Overdue:
@@ -485,7 +467,7 @@ namespace Dust.Platform.Web.Controllers
                         });
                         if (ret.Result == null || !ret.Result.Succeeded)
                         {
-                            ModelState.AddModelError("Failed", ret.Result == null ?  "新增用户失败" :string.Join("\r\n", ret.Result.Errors));
+                            ModelState.AddModelError("Failed", ret.Result == null ? "新增用户失败" : string.Join("\r\n", ret.Result.Errors));
                             return View(model);
                         }
 
@@ -690,7 +672,14 @@ namespace Dust.Platform.Web.Controllers
                     Value = null
                 }
             };
-            var exists = _ctx.Vendors.Where(ve => ve.Id != Guid.Empty).Select(v => new SelectListItem
+            var vendors = _ctx.Vendors.Where(ve => ve.Id != Guid.Empty);
+            var user = AccountProcess.FindUserByName(User.Identity.Name);
+            if (AccountProcess.UserIsInRole(user.Id, "VendorManager"))
+            {
+                var vendorId = AccountProcess.FindVendorId(user);
+                vendors = vendors.Where(v => v.Id == vendorId);
+            }
+            var exists = vendors.Select(v => new SelectListItem
             {
                 Text = v.Name,
                 Value = v.Id.ToString()
@@ -704,9 +693,15 @@ namespace Dust.Platform.Web.Controllers
         public ActionResult DevicePreviewTable(DevicePreviewTablePost post)
         {
             var devs = _ctx.KsDustDevices.AsQueryable();
+            var user = AccountProcess.FindUserByName(User.Identity.Name);
             if (post.VendorGuid != null)
             {
                 devs = devs.Where(d => d.VendorId == post.VendorGuid);
+            }
+            if (AccountProcess.UserIsInRole(user.Id, "VendorManager"))
+            {
+                var vendorId = AccountProcess.FindVendorId(user);
+                devs = devs.Where(d => d.VendorId == vendorId);
             }
 
             var total = devs.Count();
@@ -778,16 +773,16 @@ namespace Dust.Platform.Web.Controllers
             }).ToList();
             var total = query.Count();
             var rows = datas.Select(q => new
-                {
-                    q.ParticulateMatter,
-                    q.Pm25,
-                    q.Pm100,
-                    q.Noise,
-                    q.Temperature,
-                    q.Humidity,
-                    q.WindSpeed,
-                    UpdateTime = q.UpdateTime.ToString("yyyy-MM-dd HH:mm")
-                });
+            {
+                q.ParticulateMatter,
+                q.Pm25,
+                q.Pm100,
+                q.Noise,
+                q.Temperature,
+                q.Humidity,
+                q.WindSpeed,
+                UpdateTime = q.UpdateTime.ToString("yyyy-MM-dd HH:mm")
+            });
 
             return Json(new
             {

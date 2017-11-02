@@ -73,7 +73,7 @@ var setupChart = function (chartdiv, target, tType, select) {
     var chart = echarts.init(document.getElementById(chartdiv));
     $('#' + select).select2();
     $('#' + select).change(function () {
-        updateMonitorChart(chart, target, tType, $('#' + select).val(), dType, 24);
+        updateMonitorChart(chart, target, tType, 1, $('#' + select).val(), 24);
     });
     return chart;
 };

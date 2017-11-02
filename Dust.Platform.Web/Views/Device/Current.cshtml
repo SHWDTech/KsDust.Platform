@@ -1,0 +1,97 @@
+﻿@model Dust.Platform.Web.Models.Device.DeviceCurrentViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设备实时数据 - 昆山市扬尘在线监控平台</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body style="padding: 0">
+    <div style="width: 320px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 align="center">@Model.DeviceName</h3>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <h5 align="center">15分钟均值</h5>
+                </div>
+                <div>
+                    <label class="lbl80">数据时间：</label>
+                    <label>@Model.Fifteen.AverageDateTime.ToString("yyyy-MM-dd HH:mm:ss")</label>
+                </div>
+                <div>
+                    <label class="lbl80">TSP：</label>
+                    <label>@Model.Fifteen.ParticulateMatter mg/m³</label>
+                </div>
+                <div>
+                    <label class="lbl80">PM2.5：</label>
+                    <label>@Model.Fifteen.Pm25 mg/m³</label>
+                </div>
+                <div>
+                    <label class="lbl80">PM10：</label>
+                    <label>@Model.Fifteen.Pm100 mg/m³</label>
+                </div>
+                <div>
+                    <label class="lbl80">噪音：</label>
+                    <label>@Model.Fifteen.Noise dB</label>
+                </div>
+                <div>
+                    <label class="lbl80">风速：</label>
+                    <label>@Model.Fifteen.WindSpeed m/s</label>
+                </div>
+                <div>
+                    <label class="lbl80">温度：</label>
+                    <label>@Model.Fifteen.Temperature ℃</label>
+                </div>
+                <div>
+                    <label class="lbl80">湿度：</label>
+                    <label>@Model.Fifteen.Humidity %</label>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <h5 align="center">日均值</h5>
+                </div>
+                <div>
+                    <label class="lbl80">数据时间：</label>
+                    <label>@Model.Day.AverageDateTime.ToString("yyyy-MM-dd HH:mm:ss")</label>
+                </div>
+                <div>
+                    <label class="lbl80">TSP：</label>
+                    <label>@Model.Day.ParticulateMatter mg/m³</label>
+                </div>
+                <div>
+                    <label class="lbl80">PM2.5：</label>
+                    <label>@Model.Day.Pm25 mg/m³</label>
+                </div>
+                <div>
+                    <label class="lbl80">PM10：</label>
+                    <label>@Model.Day.Pm100 mg/m³</label>
+                </div>
+                <div>
+                    <label class="lbl80">噪音：</label>
+                    <label>@Model.Day.Noise dB</label>
+                </div>
+                <div>
+                    <label class="lbl80">风速：</label>
+                    <label>@Model.Day.WindSpeed m/s</label>
+                </div>
+                <div>
+                    <label class="lbl80">温度：</label>
+                    <label>@Model.Day.Temperature ℃</label>
+                </div>
+                <div>
+                    <label class="lbl80">湿度：</label>
+                    <label>@Model.Day.Humidity %</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

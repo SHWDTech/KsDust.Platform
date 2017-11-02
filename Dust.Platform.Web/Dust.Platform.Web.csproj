@@ -171,6 +171,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\CameraController.cs" />
+    <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MonitorController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Models\Account\UserPasswordModel.cs" />
     <Compile Include="Models\Admin\AdminViewModel.cs" />
     <Compile Include="Models\Ajax\AjaxViewModel.cs" />
+    <Compile Include="Models\Device\DeviceCurrentViewModel.cs" />
     <Compile Include="Models\Home\IndexViewModel.cs" />
     <Compile Include="Models\Home\MonitorContentViewModel.cs" />
     <Compile Include="Models\Home\MonitorViewModel.cs" />
@@ -503,6 +505,7 @@
     <Content Include="Views\Setting\ExceedPhoto.cshtml" />
     <Content Include="Views\Setting\ViewExceedPhoto.cshtml" />
     <Content Include="Views\Setting\UpdateUser.cshtml" />
+    <Content Include="Views\Device\Current.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

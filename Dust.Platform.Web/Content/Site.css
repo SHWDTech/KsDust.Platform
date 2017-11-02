@@ -220,6 +220,18 @@ td textarea {
     color: red;
 }
 
+.lbl60 {
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+}
+
+.lbl80 {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+}
+
 .lbl120 {
     width: 120px;
     min-width: 120px;

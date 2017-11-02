@@ -83,7 +83,7 @@
                         url: $('#dtable_' + treenode.id).attr('url')
                         });
                         initMap(prefix + treenode.id + 'mapContainer', 10, [120.97938538, 31.38500283], treenode.id, treenode.viewType);
-                    updateMonitorChart(setupChart(prefix + treenode.id + 'chart', treenode.id, treenode.viewType, prefix + treenode.id + 'Selecter'), treenode.id, treenode.viewType, 1, 1, 24);
+                    updateMonitorChart(setupChart(prefix + treenode.id + 'chart', treenode.id, treenode.viewType, prefix + treenode.id + 'Selecter'), treenode.id, treenode.viewType, 1, 0, 24);
                     currentli.find('a').click(function () {
                         tabSwitch(currentli.find('a'));
                     });

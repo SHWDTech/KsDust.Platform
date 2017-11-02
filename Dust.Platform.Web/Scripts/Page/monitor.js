@@ -71,11 +71,10 @@ var getMarkerContent = function (dev) {
 var setupChart = function (chartdiv, target, tType, select) {
     $('#' + chartdiv).height($($('#' + chartdiv).parents('.panel')[1]).height() - 28);
     var chart = echarts.init(document.getElementById(chartdiv));
-    $('#' + select).change(function () {
-        updateMonitorChart(chart, target, tType, 1, $('#' + select).val(), 24);
-    });
     $('#' + select).select2();
-
+    $('#' + select).change(function () {
+        updateMonitorChart(chart, target, tType, $('#' + select).val(), dType, 24);
+    });
     return chart;
 };
 
@@ -102,11 +101,11 @@ var updateMonitorChart = function (chart, target, tType, dCate, dType, count) {
 }
 
 var dataType = {
-    1: '粉尘(mg/m³)',
-    2: 'Pm2.5(mg/m³)',
-    3: 'Pm10(mg/m³)',
-    4: '噪音(dB)',
-    5: '温度(℃)',
-    6: '湿度(%)',
-    7: '风速(m/s)'
+    0: '粉尘(mg/m³)',
+    1: 'Pm2.5(mg/m³)',
+    2: 'Pm10(mg/m³)',
+    3: '噪音(dB)',
+    4: '温度(℃)',
+    5: '湿度(%)',
+    6: '风速(m/s)'
 }

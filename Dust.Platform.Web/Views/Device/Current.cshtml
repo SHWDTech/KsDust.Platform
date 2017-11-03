@@ -13,85 +13,95 @@
 </head>
 <body style="padding: 0">
     <div style="width: 320px;">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 align="center">@Model.DeviceName</h3>
-            </div>
-            <div class="panel-body">
-                <div>
-                    <h5 align="center">15分钟均值</h5>
+        @if (Model == null)
+        {
+            <h2>没有找到相关设备信息</h2>
+        }
+        else
+        {
+            foreach (var info in Model.DeviceCurrentInfos)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 align="center">@info.DeviceName</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <h5 align="center">15分钟均值</h5>
+                        </div>
+                        <div>
+                            <label class="lbl80">数据时间：</label>
+                            <label>@(info.Fifteen?.AverageDateTime.ToString("yyyy-MM-dd HH:mm:ss") ?? "-")</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">TSP：</label>
+                            <label>@(info.Fifteen?.ParticulateMatter.ToString("F2") ?? "-") mg/m³</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">PM2.5：</label>
+                            <label>@(info.Fifteen?.Pm25.ToString("F2") ?? "-") mg/m³</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">PM10：</label>
+                            <label>@(info.Fifteen?.Pm100.ToString("F2") ?? "-") mg/m³</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">噪音：</label>
+                            <label>@(info.Fifteen?.Noise.ToString("F2") ?? "-") dB</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">风速：</label>
+                            <label>@(info.Fifteen?.WindSpeed.ToString("F2") ?? "-") m/s</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">温度：</label>
+                            <label>@(info.Fifteen?.Temperature.ToString("F2") ?? "-") ℃</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">湿度：</label>
+                            <label>@(info.Fifteen?.Humidity.ToString("F2") ?? "-") %</label>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <h5 align="center">日均值</h5>
+                        </div>
+                        <div>
+                            <label class="lbl80">数据时间：</label>
+                            <label>@(info.Day?.AverageDateTime.ToString("yyyy-MM-dd HH:mm:ss") ?? "-")</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">TSP：</label>
+                            <label>@(info.Day?.ParticulateMatter.ToString("F2") ?? "-") mg/m³</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">PM2.5：</label>
+                            <label>@(info.Day?.Pm25.ToString("F2") ?? "-") mg/m³</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">PM10：</label>
+                            <label>@(info.Day?.Pm100.ToString("F2") ?? "-") mg/m³</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">噪音：</label>
+                            <label>@(info.Day?.Noise.ToString("F2") ?? "-") dB</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">风速：</label>
+                            <label>@(info.Day?.WindSpeed.ToString("F2") ?? "-") m/s</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">温度：</label>
+                            <label>@(info.Day?.Temperature.ToString("F2") ?? "-") ℃</label>
+                        </div>
+                        <div>
+                            <label class="lbl80">湿度：</label>
+                            <label>@(info.Day?.Humidity.ToString("F2") ?? "-") %</label>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label class="lbl80">数据时间：</label>
-                    <label>@Model.Fifteen.AverageDateTime.ToString("yyyy-MM-dd HH:mm:ss")</label>
-                </div>
-                <div>
-                    <label class="lbl80">TSP：</label>
-                    <label>@Model.Fifteen.ParticulateMatter mg/m³</label>
-                </div>
-                <div>
-                    <label class="lbl80">PM2.5：</label>
-                    <label>@Model.Fifteen.Pm25 mg/m³</label>
-                </div>
-                <div>
-                    <label class="lbl80">PM10：</label>
-                    <label>@Model.Fifteen.Pm100 mg/m³</label>
-                </div>
-                <div>
-                    <label class="lbl80">噪音：</label>
-                    <label>@Model.Fifteen.Noise dB</label>
-                </div>
-                <div>
-                    <label class="lbl80">风速：</label>
-                    <label>@Model.Fifteen.WindSpeed m/s</label>
-                </div>
-                <div>
-                    <label class="lbl80">温度：</label>
-                    <label>@Model.Fifteen.Temperature ℃</label>
-                </div>
-                <div>
-                    <label class="lbl80">湿度：</label>
-                    <label>@Model.Fifteen.Humidity %</label>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div>
-                    <h5 align="center">日均值</h5>
-                </div>
-                <div>
-                    <label class="lbl80">数据时间：</label>
-                    <label>@Model.Day.AverageDateTime.ToString("yyyy-MM-dd HH:mm:ss")</label>
-                </div>
-                <div>
-                    <label class="lbl80">TSP：</label>
-                    <label>@Model.Day.ParticulateMatter mg/m³</label>
-                </div>
-                <div>
-                    <label class="lbl80">PM2.5：</label>
-                    <label>@Model.Day.Pm25 mg/m³</label>
-                </div>
-                <div>
-                    <label class="lbl80">PM10：</label>
-                    <label>@Model.Day.Pm100 mg/m³</label>
-                </div>
-                <div>
-                    <label class="lbl80">噪音：</label>
-                    <label>@Model.Day.Noise dB</label>
-                </div>
-                <div>
-                    <label class="lbl80">风速：</label>
-                    <label>@Model.Day.WindSpeed m/s</label>
-                </div>
-                <div>
-                    <label class="lbl80">温度：</label>
-                    <label>@Model.Day.Temperature ℃</label>
-                </div>
-                <div>
-                    <label class="lbl80">湿度：</label>
-                    <label>@Model.Day.Humidity %</label>
-                </div>
-            </div>
-        </div>
+            }
+        }
     </div>
 </body>
 </html>

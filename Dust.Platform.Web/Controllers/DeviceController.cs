@@ -16,26 +16,34 @@ namespace Dust.Platform.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Current(string nodeId)
+        public ActionResult Current(string contractRecord)
         {
-            var dev = _ctx.KsDustDevices.FirstOrDefault(d => d.NodeId == nodeId);
-            if (dev == null) return null;
-            var fifteen = _ctx.AverageMonitorDatas.Where(m => m.Category == AverageCategory.Device
-                                                              && m.Type == AverageType.FifteenAvg
-                                                              && m.TargetId == dev.Id)
-                .OrderByDescending(d => d.AverageDateTime)
-                .FirstOrDefault();
-            var day = _ctx.AverageMonitorDatas.Where(m => m.Category == AverageCategory.Device
-                                                          && m.Type == AverageType.DayAvg
-                                                          && m.TargetId == dev.Id)
-                .OrderByDescending(d => d.AverageDateTime)
-                .FirstOrDefault();
-            var model = new DeviceCurrentViewModel
+            var project = _ctx.KsDustProjects.FirstOrDefault(p => p.ContractRecord == contractRecord);
+            if (project == null) return View();
+
+            var devs = _ctx.KsDustDevices.Where(d => d.ProjectId == project.Id).ToList();
+            if (devs.Count <= 0) return View();
+            var model = new DeviceCurrentViewModel();
+            foreach (var dev in devs)
             {
-                DeviceName = dev.Name,
-                Fifteen = fifteen,
-                Day = day
-            };
+                var fifteen = _ctx.AverageMonitorDatas.Where(m => m.Category == AverageCategory.Device
+                                                                  && m.Type == AverageType.FifteenAvg
+                                                                  && m.TargetId == dev.Id)
+                    .OrderByDescending(d => d.AverageDateTime)
+                    .FirstOrDefault();
+                var day = _ctx.AverageMonitorDatas.Where(m => m.Category == AverageCategory.Device
+                                                              && m.Type == AverageType.DayAvg
+                                                              && m.TargetId == dev.Id)
+                    .OrderByDescending(d => d.AverageDateTime)
+                    .FirstOrDefault();
+                var info = new DeviceCurrentInfo
+                {
+                    DeviceName = dev.Name,
+                    Fifteen = fifteen,
+                    Day = day
+                };
+                model.DeviceCurrentInfos.Add(info);
+            }
 
             return View(model);
         }

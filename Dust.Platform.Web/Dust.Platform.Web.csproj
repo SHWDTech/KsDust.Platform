@@ -333,7 +333,6 @@
     <Content Include="Resources\Images\Site\marker_green.png" />
     <Content Include="Resources\Images\Site\marker_red.png" />
     <Content Include="Resources\Images\Site\marker_yellow.png" />
-    <Content Include="Resources\Images\Site\swirl_pattern.png" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap-table\bootstrap-table.js" />

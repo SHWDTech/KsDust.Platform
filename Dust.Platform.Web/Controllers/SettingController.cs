@@ -140,10 +140,12 @@ namespace Dust.Platform.Web.Controllers
             LoadProjects();
 
             var user = AccountProcess.FindUserByName(User.Identity.Name);
-            if (user == null || !AccountProcess.UserIsInRole(user.Id, "VendorManager"))
+            if (user == null 
+                || !AccountProcess.UserIsInRole(user.Id, "VendorManager")
+                && !AccountProcess.UserIsInRole(user.Id, "admin"))
             {
                 ModelState.Clear();
-                ModelState.AddModelError(nameof(Vendor), @"只有设备供应商才能注册设备！");
+                ModelState.AddModelError(nameof(Vendor), @"只有管理员或设备供应商才能注册设备！");
                 return View();
             }
             if (!ModelState.IsValid)
@@ -155,6 +157,10 @@ namespace Dust.Platform.Web.Controllers
                 ModelState.AddModelError("Save", @"已存在相同名称的设备");
                 return View(model);
             }
+            
+            var vendorId = AccountProcess.FindVendorId(user);
+            var vendor = _ctx.Vendors.First(v => v.Id == vendorId);
+            model.NodeId = $"{vendor.ShortCode}{model.NodeId}";
             if (_ctx.KsDustDevices.Any(d => d.NodeId == model.NodeId))
             {
                 ModelState.AddModelError("Save", @"已存在相同MN码的设备");
@@ -168,7 +174,7 @@ namespace Dust.Platform.Web.Controllers
                 InstallDateTime = DateTime.Now,
                 StartDateTime = DateTime.Now,
                 LastMaintenance = DateTime.Now,
-                VendorId = AccountProcess.FindVendorId(user),
+                VendorId = vendorId,
                 Longitude = model.Longitude,
                 Latitude = model.Latitude
             };

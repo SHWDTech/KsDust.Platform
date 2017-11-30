@@ -25,6 +25,15 @@
                 </tr>
                 <tr>
                     <td>
+                        @Html.LabelFor(m => m.ShortCode)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.ShortCode, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.ShortCode)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         @Html.LabelFor(m => m.Susperintend)
                     </td>
                     <td>

@@ -11,6 +11,8 @@ namespace Dust.Platform.Web.Models.Setting
 
         [Display(Name = "设备MN码")]
         [Required(ErrorMessage = "必须填写设备MN码")]
+        [MinLength(10, ErrorMessage = "MN码必须为10位")]
+        [MaxLength(10, ErrorMessage = "MN码必须为10位")]
         public string NodeId { get; set; }
 
         [Display(Name = "摄像头名称")]

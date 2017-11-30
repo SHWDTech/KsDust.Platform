@@ -148,6 +148,10 @@
     <Compile Include="Migrations\201707040807279_AddExceedphotoThumb.Designer.cs">
       <DependentUpon>201707040807279_AddExceedphotoThumb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711300531445_AddVenderoShortCode.cs" />
+    <Compile Include="Migrations\201711300531445_AddVenderoShortCode.Designer.cs">
+      <DependentUpon>201711300531445_AddVenderoShortCode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AverageCategory.cs" />
     <Compile Include="Model\AverageMonitorData.cs" />
@@ -263,6 +267,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201707040807279_AddExceedphotoThumb.resx">
       <DependentUpon>201707040807279_AddExceedphotoThumb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711300531445_AddVenderoShortCode.resx">
+      <DependentUpon>201711300531445_AddVenderoShortCode.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

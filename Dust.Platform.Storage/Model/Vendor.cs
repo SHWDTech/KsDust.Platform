@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using SHWDTech.Platform.StorageConstrains.Model;
 
 namespace Dust.Platform.Storage.Model
@@ -17,6 +18,15 @@ namespace Dust.Platform.Storage.Model
         [MaxLength(100)]
         [Required(ErrorMessage = "必须填写供应商名称！")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 供应商代码
+        /// </summary>
+        [Display(Name = "供应商代码")]
+        [Index("Ix_ShortCode", IsUnique = true)]
+        [StringLength(4, ErrorMessage = "供应商代码必须为四位")]
+        [Required(ErrorMessage = "必须填写供应商代码")]
+        public string ShortCode { get; set; }
 
         /// <summary>
         /// 负责人名称

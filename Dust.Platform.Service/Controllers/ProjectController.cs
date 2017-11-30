@@ -77,11 +77,11 @@ namespace Dust.Platform.Service.Controllers
                 var dev = _ctx.KsDustDevices.FirstOrDefault(de => de.NodeId == devId);
                 if (dev == null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"不存在的设备NODEID：{deviceNodeId}"));
+                    return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"不存在的设备MN码：{deviceNodeId}"));
                 }
                 if (dev.ProjectId != Guid.Empty)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"设备已绑定其他工程，NODEID：{deviceNodeId}"));
+                    return Request.CreateResponse(HttpStatusCode.OK, new OuterPlatformExecuteResult($"设备已绑定其他工程，MN码：{deviceNodeId}"));
                 }
                 project.VendorId = dev.VendorId;
                 dev.ProjectId = project.Id;

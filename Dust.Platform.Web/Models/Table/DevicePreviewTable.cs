@@ -16,6 +16,8 @@ namespace Dust.Platform.Web.Models.Table
 
         public string VendorName { get; set; }
 
+        public string NodeId { get; set; }
+
         public string ProjectName { get; set; }
 
         public string SuperIntend { get; set; }

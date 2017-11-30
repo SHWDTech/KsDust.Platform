@@ -717,6 +717,7 @@ namespace Dust.Platform.Web.Controllers
                 EnterpriseGuid = d.Project.EnterpriseId,
                 ProjectGuid = d.ProjectId.Value,
                 Name = d.Name,
+                NodeId = d.NodeId,
                 VendorName = d.Vendor.Name,
                 ProjectName = d.Project.Name,
                 SuperIntend = d.Project.SuperIntend,

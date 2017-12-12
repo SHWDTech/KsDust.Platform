@@ -10,6 +10,9 @@ using Dust.Platform.Web.Models.Account;
 using Newtonsoft.Json;
 using Dust.Platform.Storage.Repository;
 using Dust.Platform.Web.Helper;
+using Dust.Platform.Web.Schedules;
+using Quartz;
+using Quartz.Impl;
 
 namespace Dust.Platform.Web
 {
@@ -24,6 +27,7 @@ namespace Dust.Platform.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             LoadInitThing();
+            StartSchedule();
         }
 
         protected static void LoadInitThing()
@@ -58,6 +62,20 @@ namespace Dust.Platform.Web
             }
 
             HttpContext.Current.User = new DustPrincipal(serializeModel);
+        }
+
+        private static void StartSchedule()
+        {
+            var scheduler = StdSchedulerFactory.GetDefaultScheduler();
+            scheduler.Start();
+
+            var job = JobBuilder.Create<DayWeatherJob>()
+                .Build();
+            var trigger = TriggerBuilder.Create()
+                .StartAt(DateTime.Now.AddDays(1).AddHours(-DateTime.Now.Hour - 1))
+                .WithSimpleSchedule(x => x.WithIntervalInHours(24).RepeatForever())
+                .Build();
+            scheduler.ScheduleJob(job, trigger);
         }
     }
 }

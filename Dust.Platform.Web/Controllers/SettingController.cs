@@ -189,6 +189,7 @@ namespace Dust.Platform.Web.Controllers
                 }
                 var camera = new KsDustCamera
                 {
+                    Id = Guid.NewGuid(),
                     Device = device,
                     Name = model.CameraName,
                     SerialNumber = model.SerialNumber,

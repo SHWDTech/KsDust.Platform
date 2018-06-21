@@ -130,7 +130,7 @@
     <comment>噪音值</comment>
   </data>
   <data name="PM100" xml:space="preserve">
-    <value>a34005-Avg</value>
+    <value>a34002-Avg</value>
     <comment>颗粒物PM10含量</comment>
   </data>
   <data name="PM25" xml:space="preserve">

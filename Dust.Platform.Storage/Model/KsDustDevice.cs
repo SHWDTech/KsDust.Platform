@@ -25,6 +25,8 @@ namespace Dust.Platform.Storage.Model
         [Display(Name = "所属工程ID")]
         public Guid? ProjectId { get; set; } = Guid.Empty;
 
+        public Guid? ProjectBindRequest { get; set; }
+
         /// <summary>
         /// 设备所属工程
         /// </summary>

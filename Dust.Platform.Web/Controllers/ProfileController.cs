@@ -21,12 +21,6 @@ namespace Dust.Platform.Web.Controllers
             _ctx = new KsDustDbContext();
         }
 
-        // GET: Profile
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         [System.Web.Mvc.HttpGet]
         public ActionResult Project()
         {

@@ -1,0 +1,123 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Ajax
+@using System.Web.Mvc.Html
+@model Dust.Platform.Web.Models.ManualOuterProjectViewModel
+@{
+    Layout = null;
+    var districts = (List<SelectListItem>)ViewBag.Districts;
+    var projectType = (List<SelectListItem>)ViewBag.ProjectType;
+    var cityArea = (List<SelectListItem>)ViewBag.CityArea;
+}
+
+<div id="manualProjectRegisterForm">
+    @using (Ajax.BeginForm("Project",
+                                         new
+                                         {
+                                             @class = "form"
+                                         },
+                                         new AjaxOptions
+                                         {
+                                             InsertionMode = InsertionMode.Replace,
+                                             UpdateTargetId = "manualProjectRegisterForm",
+                                             HttpMethod = "POST"
+                                         }))
+    {
+        <table class="table table-striped table-bordered table-hover">
+            <tbody>
+                <tr>
+                    <td>@Html.LabelFor(m => m.District)</td>
+                    <td>
+                        @Html.DropDownListFor(m => m.District, districts, new { @class = "form-control", PlaceHolder = "请选择区县" })
+                        @Html.ValidationMessageFor(m => m.District, null, new { @class = "text-danger" })
+                    </td>
+                    <td>
+                        @Html.LabelFor(m => m.ProjectType)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(m => m.ProjectType, projectType, new { @class = "form-control", PlaceHolder = "请选择工程类型" })
+                        @Html.ValidationMessageFor(m => m.ProjectType, null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.ConstructionUnit)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.ConstructionUnit, new { @class = "form-control", PlaceHolder = "请输入建设单位" })
+                        @Html.ValidationMessageFor(m => m.ConstructionUnit, null, new { @class = "text-danger" })
+                    </td>
+                    <td>@Html.LabelFor(m => m.ContractRecord)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.ContractRecord, new { @class = "form-control", PlaceHolder = "请输入合同备案号" })
+                        @Html.ValidationMessageFor(m => m.ContractRecord, null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Enterprise)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Enterprise, new { @class = "form-control", PlaceHolder = "请输入施工单位名称" })
+                        @Html.ValidationMessageFor(m => m.Enterprise, null, new { @class = "text-danger" })
+                    </td>
+                    <td>@Html.LabelFor(m => m.EnterpriseId)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.EnterpriseId, new { @class = "form-control", PlaceHolder = "请输入施工单位ID号" })
+                        @Html.ValidationMessageFor(m => m.EnterpriseId, null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Project)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Project, new { @class = "form-control", PlaceHolder = "请输入工程名称" })
+                        @Html.ValidationMessageFor(m => m.Project, null, new { @class = "text-danger" })
+                    </td>
+                    <td>@Html.LabelFor(m => m.Address)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control", PlaceHolder = "请输入工程地址" })
+                        @Html.ValidationMessageFor(m => m.Address, null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Superintend)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Superintend, new { @class = "form-control", PlaceHolder = "请输入联系人姓名" })
+                        @Html.ValidationMessageFor(m => m.Superintend, null, new { @class = "text-danger" })
+                    </td>
+                    <td>@Html.LabelFor(m => m.Mobile)</td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", PlaceHolder = "请选择工程所在区域" })
+                        @Html.ValidationMessageFor(m => m.Mobile, null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.OccupiedArea)</td>
+                <td>
+                    @Html.TextBoxFor(m => m.OccupiedArea, new { @class = "form-control", PlaceHolder = "请输入占地面积" })
+                    @Html.ValidationMessageFor(m => m.OccupiedArea, null, new { @class = "text-danger" })
+                </td>
+                <td>@Html.LabelFor(m => m.Floorage)</td>
+                <td>
+                    @Html.TextBoxFor(m => m.Floorage, new { @class = "form-control", PlaceHolder = "请输入建筑面积" })
+                    @Html.ValidationMessageFor(m => m.Floorage, null, new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.CityArea)</td>
+                <td>
+                    @Html.DropDownListFor(m => m.CityArea, cityArea, new { @class = "form-control", PlaceHolder = "请选择所在区域" })
+                    @Html.ValidationMessageFor(m => m.CityArea, null, new { @class = "text-danger" })
+                </td>
+            </tr>
+                <tr>
+                    <td colspan="4">
+                        @Html.ValidationMessage("Vendor", null, new { @class = "text-danger" })
+                        @Html.ValidationMessage("Save", null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <input type="submit" value="提交注册" class="btn btn-primary" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+</div>
+

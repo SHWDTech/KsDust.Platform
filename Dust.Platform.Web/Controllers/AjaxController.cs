@@ -69,23 +69,24 @@ namespace Dust.Platform.Web.Controllers
 
         public ActionResult Devices(DevicePostData model)
         {
+            var devSource = _ctx.KsDustDevices.Where(d => d.ProjectId != Guid.Empty);
             var devices = new List<Guid>();
             switch (model.viewType)
             {
                 case AverageCategory.WholeCity:
-                    devices.AddRange(_ctx.KsDustDevices.Select(obj => obj.Id).ToList());
+                    devices.AddRange(devSource.Select(obj => obj.Id).ToList());
                     break;
                 case AverageCategory.District:
-                    devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.Project.DistrictId == model.targetId).Select(dev => dev.Id).ToList());
+                    devices.AddRange(devSource.Where(obj => obj.Project.DistrictId == model.targetId).Select(dev => dev.Id).ToList());
                     break;
                 case AverageCategory.Enterprise:
-                    devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.Project.EnterpriseId == model.targetId).Select(dev => dev.Id).ToList());
+                    devices.AddRange(devSource.Where(obj => obj.Project.EnterpriseId == model.targetId).Select(dev => dev.Id).ToList());
                     break;
                 case AverageCategory.Project:
-                    devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.ProjectId == model.targetId).Select(dev => dev.Id).ToList());
+                    devices.AddRange(devSource.Where(obj => obj.ProjectId == model.targetId).Select(dev => dev.Id).ToList());
                     break;
                 case AverageCategory.Device:
-                    devices.AddRange(_ctx.KsDustDevices.Where(obj => obj.Id == model.targetId).Select(dev => dev.Id).ToList());
+                    devices.AddRange(devSource.Where(obj => obj.Id == model.targetId).Select(dev => dev.Id).ToList());
                     break;
             }
 

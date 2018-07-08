@@ -1,0 +1,69 @@
+﻿CREATE EVENT IF NOT EXISTS insertFifteenAverage_event
+  ON SCHEDULE EVERY 15 MINUTE
+    STARTS '2000-01-01'
+  ON COMPLETION PRESERVE
+  ENABLE
+DO
+  BEGIN
+    CALL insertFifteenAverage_procedure();
+  END;
+
+CREATE EVENT IF NOT EXISTS insertHourAverage_event
+  ON SCHEDULE EVERY 1 HOUR
+    STARTS '2000-01-01'
+  ON COMPLETION PRESERVE
+  ENABLE
+DO
+  BEGIN
+    CALL insertHourAverage_procedure();
+  END;
+
+CREATE EVENT IF NOT EXISTS insertDayAverage_event
+  ON SCHEDULE EVERY 1 DAY
+    STARTS '2000-01-01'
+  ON COMPLETION PRESERVE
+  ENABLE
+DO
+  BEGIN
+    CALL insertDayAverage_procedure();
+  END;
+
+CREATE EVENT IF NOT EXISTS insertMonthAverage_event
+  ON SCHEDULE EVERY 1 MONTH
+    STARTS '2000-01-01'
+  ON COMPLETION PRESERVE
+  ENABLE
+DO
+  BEGIN
+    CALL insertMonthAverage_procedure();
+  END;
+
+CREATE EVENT IF NOT EXISTS updateDayonline_event
+  ON SCHEDULE EVERY 1 DAY
+    STARTS '2000-01-01'
+  ON COMPLETION PRESERVE
+  ENABLE
+DO
+  BEGIN
+    CALL updateDayOnlineStatistics();
+  END;
+
+CREATE EVENT IF NOT EXISTS updateMonthonline_event
+  ON SCHEDULE EVERY 1 MONTH
+    STARTS '2000-01-01'
+  ON COMPLETION PRESERVE
+  ENABLE
+DO
+  BEGIN
+    CALL updateMonthOnlineStatistics();
+  END;
+
+CREATE EVENT IF NOT EXISTS updateYearonline_event
+  ON SCHEDULE EVERY 1 YEAR
+    STARTS '2000-01-01'
+  ON COMPLETION PRESERVE
+  ENABLE
+DO
+  BEGIN
+    CALL updateYearOnlineStatistics();
+  END;

@@ -147,6 +147,7 @@ namespace Dust.Platform.Web.Controllers
             var query =
                 _ctx.AverageMonitorDatas.Where(
                         obj =>
+                            obj.TargetId != Guid.Empty &&
                             obj.Type == post.DateType &&
                             obj.Category == post.Type && obj.AverageDateTime > post.Start &&
                             obj.AverageDateTime < post.End)
@@ -219,6 +220,7 @@ namespace Dust.Platform.Web.Controllers
             var query =
                _ctx.AverageMonitorDatas.Where(
                    obj =>
+                       obj.TargetId != Guid.Empty &&
                        obj.Type == post.DateType &&
                        obj.Category == post.type && obj.AverageDateTime > post.start &&
                        obj.AverageDateTime < post.end);

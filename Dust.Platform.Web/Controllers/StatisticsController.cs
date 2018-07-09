@@ -157,7 +157,7 @@ namespace Dust.Platform.Web.Controllers
                 ? _ctx.Districts.Select(dis => new { dis.Id, dis.Name})
                 : _ctx.KsDustProjects.Select(dis => new { dis.Id, dis.Name });
 
-            object avgs = null;
+            object avgs;
             switch (post.DataType)
             {
                 case MonitorDataValueType.Pm:
@@ -167,48 +167,50 @@ namespace Dust.Platform.Web.Controllers
                         Avg = g.Any() ? Math.Round(g.Average(val => val.ParticulateMatter), 2) : 0
                     }).ToList();
                     break;
-                    case MonitorDataValueType.Pm25:
+                case MonitorDataValueType.Pm25:
                     avgs = query.Select(g => new
                     {
                         targetNames.First(tar => tar.Id == g.Key).Name,
                         Avg = g.Any() ? Math.Round(g.Average(val => val.Pm25), 2) : 0
                     }).ToList();
                     break;
-                    case MonitorDataValueType.Pm100:
+                case MonitorDataValueType.Pm100:
                     avgs = query.Select(g => new
                     {
                         targetNames.First(tar => tar.Id == g.Key).Name,
                         Avg = g.Any() ? Math.Round(g.Average(val => val.Pm100), 2) : 0
                     }).ToList();
                     break;
-                    case MonitorDataValueType.Noise:
+                case MonitorDataValueType.Noise:
                     avgs = query.Select(g => new
                     {
                         targetNames.First(tar => tar.Id == g.Key).Name,
                         Avg = g.Any() ? Math.Round(g.Average(val => val.Noise), 2) : 0
                     }).ToList();
                     break;
-                    case MonitorDataValueType.Humidity:
+                case MonitorDataValueType.Humidity:
                     avgs = query.Select(g => new
                     {
                         targetNames.First(tar => tar.Id == g.Key).Name,
                         Avg = g.Any() ? Math.Round(g.Average(val => val.Humidity), 2) : 0
                     }).ToList();
                     break;
-                    case MonitorDataValueType.Temperature:
+                case MonitorDataValueType.Temperature:
                     avgs = query.Select(g => new
                     {
                         targetNames.First(tar => tar.Id == g.Key).Name,
                         Avg = g.Any() ? Math.Round(g.Average(val => val.Temperature), 2) : 0
                     }).ToList();
                     break;
-                    case MonitorDataValueType.WindSPeed:
+                case MonitorDataValueType.WindSPeed:
                     avgs = query.Select(g => new
                     {
                         targetNames.First(tar => tar.Id == g.Key).Name,
                         Avg = g.Any() ? Math.Round(g.Average(val => val.WindSpeed), 2) : 0
                     }).ToList();
                     break;
+                default:
+                    throw new Exception("Unexpected Case");
             }
 
             return Json(avgs, JsonRequestBehavior.AllowGet);

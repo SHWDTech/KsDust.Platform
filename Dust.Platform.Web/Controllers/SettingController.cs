@@ -29,7 +29,6 @@ namespace Dust.Platform.Web.Controllers
             _ctx = new KsDustDbContext();
         }
 
-        // GET: Setting
         public ActionResult Index()
         {
             var model = new SettingViewModel

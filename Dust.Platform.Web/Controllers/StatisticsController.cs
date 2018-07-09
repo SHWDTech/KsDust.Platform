@@ -24,18 +24,18 @@ namespace Dust.Platform.Web.Controllers
         {
             var model = new ProjectsViewModel
             {
-                Districts = new List<SelectListItem>()
+                Districts = new List<SelectListItem>
                 {
-                    new SelectListItem()
+                    new SelectListItem
                     {
                         Text = @"选择区县",
                         Value = "",
                         Selected = true
                     }
                 },
-                Enterprises = new List<SelectListItem>()
+                Enterprises = new List<SelectListItem>
                 {
-                    new SelectListItem()
+                    new SelectListItem
                     {
                         Text = @"选择施工企业",
                         Value = "",
@@ -99,7 +99,7 @@ namespace Dust.Platform.Web.Controllers
             return View();
         }
 
-        public ActionResult GetDistricts(TablePost model)
+        public ActionResult GetDistricts()
         {
             var districts = _ctx.Districts.Where(obj => obj.Id != Guid.Empty).Select(obj => new { obj.Id, obj.Name }).ToList();
             var total = districts.Count;

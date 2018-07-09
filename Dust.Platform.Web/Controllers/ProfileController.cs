@@ -38,16 +38,16 @@ namespace Dust.Platform.Web.Controllers
             }
             model.Trim();
 
-            var district = _ctx.Districts.FirstOrDefault(d => d.Name == model.District);
+            var district = _ctx.Districts.FirstOrDefault(d => d.Id.ToString() == model.District);
             if (district == null)
             {
-                ModelState.AddModelError("", $@"不存在此区县：{model.District}");
+                ModelState.AddModelError("Save", $@"不存在此区县：{model.District}");
                 return View(model);
             }
 
             if (_ctx.KsDustProjects.Any(prj => prj.ContractRecord == model.ContractRecord))
             {
-                ModelState.AddModelError("", $@"合同备案号已经存在：{model.ContractRecord.Trim()}");
+                ModelState.AddModelError("Save", $@"合同备案号已经存在：{model.ContractRecord.Trim()}");
                 return View(model);
             }
 
@@ -91,10 +91,10 @@ namespace Dust.Platform.Web.Controllers
             {
                 var errorCode = $"{DateTime.Now: yyyyMMddHHmmss}";
                 LogService.Instance.Error($"新增工程失败，错误号：{errorCode}", ex);
-                ModelState.AddModelError("", $@"新增工程失败，错误号：{errorCode}");
+                ModelState.AddModelError("Save", $@"新增工程失败，错误号：{errorCode}");
                 return View(model);
             }
-            ModelState.AddModelError("", @"新增工程成功");
+            ModelState.AddModelError("Save", @"新增工程成功");
             return View(model);
         }
 

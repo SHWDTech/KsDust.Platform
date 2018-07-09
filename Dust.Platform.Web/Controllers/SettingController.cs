@@ -874,5 +874,64 @@ namespace Dust.Platform.Web.Controllers
                 successed = true
             });
         }
+
+        [HttpGet]
+        public ActionResult DeviceProjectBind(Guid deviceGuid)
+        {
+            var device = _ctx.KsDustDevices.FirstOrDefault(d => d.Id == deviceGuid);
+            ViewBag.Projects = _ctx.KsDustProjects.Where(p => p.Id != Guid.Empty).Select(pro => new SelectListItem
+            {
+                Text = pro.Name,
+                Value = pro.Id.ToString()
+            }).ToList();
+            return View(new ProjectBindViewModel
+            {
+                DeviceGuid = device?.Id,
+                DeviceName = device?.Name,
+                ProjectBindRequestGuid = device?.ProjectBindRequest
+            });
+        }
+
+        [HttpPost]
+        public ActionResult DeviceProjectBind(ProjectBindViewModel model)
+        {
+            var device = _ctx.KsDustDevices.FirstOrDefault(d => d.Id == model.DeviceGuid);
+            ViewBag.Projects = _ctx.KsDustProjects.Where(p => p.Id != Guid.Empty).Select(pro => new SelectListItem
+            {
+                Text = pro.Name,
+                Value = pro.Id.ToString()
+            }).ToList();
+
+            if (device != null)
+            {
+                device.ProjectBindRequest = model.ProjectBindRequestGuid;
+                _ctx.SaveChanges();
+                ModelState.AddModelError("Save", @"申请审核完成，请等待审核结果。");
+            }
+            return View(model);
+        }
+
+        public ActionResult DeviceProjectBindAudit() => View();
+
+        public ActionResult DeviceProjectBindAuditTable(TablePost post)
+        {
+            var query = _ctx.KsDustDevices.Where(dev => dev.ProjectId == Guid.Empty && dev.ProjectBindRequest != null)
+                .OrderBy(dev => dev.Id)
+                .Skip(post.offset)
+                .Take(post.limit);
+            var total = query.Count();
+            var rows = query.Select(q => new
+            {
+                q.Id,
+                q.Name,
+                VendorName = q.Vendor.Name,
+                ProjectName = q.Project.Name
+            }).ToList();
+            return Json(new
+            {
+                total,
+                rows
+            }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

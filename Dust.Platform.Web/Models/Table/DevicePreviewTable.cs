@@ -12,6 +12,8 @@ namespace Dust.Platform.Web.Models.Table
 
         public Guid ProjectGuid { get; set; }
 
+        public bool Audited => ProjectGuid != Guid.Empty;
+
         public string Name { get; set; }
 
         public string VendorName { get; set; }

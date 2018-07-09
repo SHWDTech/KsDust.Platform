@@ -23,7 +23,7 @@
               .Column("联系电话", "Mobile")
               .Column("最后数据时间", "LastDataTime")
               .Column("操作")
-              .Apply(ColumnOption.width, "100")
+              .Apply(ColumnOption.width, "210")
               .Apply(ColumnOption.formatter, "devicePreviewOperater")
               .Apply(ColumnOption.events, "devicePreviewEvents"))
     </div>
@@ -45,10 +45,17 @@
 
 <script type="text/javascript">
     $('#vendorsSelect').select2();
-    var devicePreviewOperater = function () {
-        return [
-            '<a class="preview" href="javascript:void(0)" title="查看历史数据">历史数据</a>'
-        ].join('');
+    var devicePreviewOperater = function (e, row, index) {
+        if (!row.Audited) {
+            return [
+                '<a class="preview" href="javascript:void(0)" title="查看历史数据">历史数据</a>',
+                '<a class="projectBind" href="javascript:void(0)" title="工程绑定" style="margin-left: 15px;">工程绑定</a>'
+            ].join('');
+        } else {
+            return [
+                '<a class="preview" href="javascript:void(0)" title="查看历史数据">历史数据</a>'
+            ].join('');
+        }
     }
 
     window.devicePreviewEvents = {
@@ -56,6 +63,13 @@
             $.get('/Setting/DeviceHistoryData', { deviceGuid: row.Id }, function (ret) {
                 $('#dprModal .modal-body').html(ret);
                 $('#dprModallabel').html(row.Name + ' - 历史数据查询');
+                $('#dprModal').modal();
+            });
+        },
+        'click .projectBind': function (e, value, row) {
+            $.get('/Setting/DeviceProjectBind', { deviceGuid: row.Id }, function (ret) {
+                $('#dprModal .modal-body').html(ret);
+                $('#dprModallabel').html(row.Name + ' - 工程绑定');
                 $('#dprModal').modal();
             });
         }

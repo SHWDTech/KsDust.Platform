@@ -1,0 +1,53 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Ajax
+@using System.Web.Mvc.Html
+@model Dust.Platform.Web.Models.Setting.ProjectBindViewModel
+@{
+    Layout = null;
+    var projects = (List<SelectListItem>) ViewBag.Projects;
+}
+
+<div id="deviceProjectBind">
+    @using (Ajax.BeginForm("DeviceProjectBind", "Setting", null, new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "deviceProjectBind"
+    }, new { @class = "form-group" }))
+    {
+        <div>
+            @Html.HiddenFor(m => m.DeviceGuid)
+            <table class="table table-bordered table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.DeviceName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => m.DeviceName, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.ProjectBindRequestGuid)
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.ProjectBindRequestGuid, projects, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ProjectBindRequestGuid)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            @Html.ValidationSummary()
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="direction: rtl;">
+                            <input type="submit" value="确认" class="btn btn-success" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+

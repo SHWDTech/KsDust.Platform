@@ -1,0 +1,61 @@
+﻿@using System.Web.Mvc
+
+@{
+    Layout = null;
+}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        @(Html.BootstrapTable("deviceProjectBindAudit", "/Setting/DeviceProjectBindAuditTable", TablePaginationOption.server, new
+            {
+                data_page_size = 50,
+                data_cache = false
+            })
+                      .Column("设备名称", "Name")
+                      .Column("供应商", "VendorName")
+                      .Column("设备MN码", "NodeId")
+                      .Column("申请绑定工程", "ProjectName")
+                      .Column("操作")
+                      .Apply(ColumnOption.width, "100")
+                      .Apply(ColumnOption.formatter, "deviceProjectBindAuditOperater")
+                      .Apply(ColumnOption.events, "deviceProjectBindAuditEvents"))
+    </div>
+</div>
+
+<div class="modal fade" id="dprModal" tabindex="-1" role="dialog" aria-labelledby="dprModallabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dprModallabel"></h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var deviceProjectBindAuditOperater = function (e, row, index) {
+        return [
+            '<a class="audit" href="javascript:void(0)" title="审核">审核</a>'
+        ].join('');
+    }
+
+    window.deviceProjectBindAuditEvents = {
+        'click .audit': function (e, value, row) {
+            $.get('/Setting/ProjectBindAudit', { deviceGuid: row.Id }, function (ret) {
+                $('#dprModal .modal-body').html(ret);
+                $('#dprModallabel').html(row.Name + ' - 工程绑定审核');
+                $('#dprModal').modal();
+            });
+        }
+    };
+
+    $(function() {
+        $('#deviceProjectBindAudit').bootstrapTable({
+            height: $('#deviceProjectBindAudit').parents('.tab-content').height() - 100
+        });
+    });
+</script>

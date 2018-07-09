@@ -85,7 +85,8 @@ namespace Dust.Platform.Web.Controllers
             }
 
             foreach (var prj in _ctx.AverageMonitorDatas.Where(obj =>
-            obj.Category == AverageCategory.Project
+            obj.TargetId != Guid.Empty
+            && obj.Category == AverageCategory.Project
             && obj.Type == AverageType.HourAvg
             && obj.AverageDateTime > now)
             .OrderByDescending(item => item.ParticulateMatter).Take(10).ToList())

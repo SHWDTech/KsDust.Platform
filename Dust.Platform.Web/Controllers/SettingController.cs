@@ -938,7 +938,7 @@ namespace Dust.Platform.Web.Controllers
         [HttpGet]
         public ActionResult ProjectBindAudit(Guid deviceGuid)
         {
-            var device = _ctx.KsDustDevices.FirstOrDefault(d => d.Id == deviceGuid);
+            var device = _ctx.KsDustDevices.Include("Vendor").FirstOrDefault(d => d.Id == deviceGuid);
             if (device == null)
             {
                 ModelState.AddModelError("error", @"未找到指定设备");
@@ -951,7 +951,7 @@ namespace Dust.Platform.Web.Controllers
                 return View();
             }
 
-            var project = _ctx.KsDustProjects.FirstOrDefault(p => p.Id == device.ProjectBindRequest);
+            var project = _ctx.KsDustProjects.Include("District").Include("Enterprise").FirstOrDefault(p => p.Id == device.ProjectBindRequest);
             if (project == null)
             {
                 ModelState.AddModelError("error", @"绑定请求工程不存在");

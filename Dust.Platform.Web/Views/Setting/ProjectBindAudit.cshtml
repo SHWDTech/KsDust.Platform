@@ -1,0 +1,88 @@
+﻿@using System.Web.Mvc.Ajax
+@using System.Web.Mvc.Html
+@model Dust.Platform.Web.Models.Setting.ProjectBindAuditViewModel
+@{
+    Layout = null;
+}
+
+<div id="projectBindAuditForm">
+    @using (Ajax.BeginForm("ProjectBindAudit",
+                                         new
+                                         {
+                                             @class = "form"
+                                         },
+                                         new AjaxOptions
+                                         {
+                                             InsertionMode = InsertionMode.Replace,
+                                             UpdateTargetId = "projectBindAuditForm",
+                                             HttpMethod = "POST"
+                                         }))
+    {
+        @Html.HiddenFor(m => m.DeviceGuid)
+        @Html.HiddenFor(m => m.Project.ProjectId)
+        <table class="table table-striped table-bordered table-hover">
+            <tbody>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Device.Name)</td>
+                    <td>
+                        @Html.DisplayFor(m => m.Device.Name, new { @class = "form-control" })
+                    </td>
+                    <td>
+                        @Html.LabelFor(m => m.Device.VendorName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => m.Device.VendorName, new { @class = "form-control" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Device.Longitude)</td>
+                    <td>
+                        @Html.DisplayFor(m => m.Device.Longitude, new { @class = "form-control" })
+                    </td>
+                    <td>@Html.LabelFor(m => m.Device.Latitude)</td>
+                    <td>
+                        @Html.DisplayFor(m => m.Device.Latitude, new { @class = "form-control" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Project.DistrictName)</td>
+                    <td>
+                        @Html.DisplayFor(m => m.Project.DistrictName, new { @class = "form-control" })
+                    <td>@Html.LabelFor(m => m.Project.ContractRecord)</td>
+                    <td>
+                        @Html.DisplayFor(m => m.Project.ContractRecord, new { @class = "form-control" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Project.ConstructionUnit)</td>
+                    <td>
+                        @Html.DisplayFor(m => m.Project.ConstructionUnit, new { @class = "form-control" })
+                    </td>
+                    <td>@Html.LabelFor(m => m.Project.Enterprise)</td>
+                    <td>
+                        @Html.DisplayFor(m => m.Project.Enterprise, new { @class = "form-control" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.Project.Name)</td>
+                    <td>
+                        @Html.DisplayFor(m => m.Project.Name, new { @class = "form-control" })
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        @Html.ValidationMessage("Autid", null, new { @class = "text-danger" })
+                        @Html.ValidationMessage("Save", null, new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <input type="submit" value="审核通过" class="btn btn-primary" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+</div>

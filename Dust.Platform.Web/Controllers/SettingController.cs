@@ -915,6 +915,8 @@ namespace Dust.Platform.Web.Controllers
         public ActionResult DeviceProjectBindAuditTable(TablePost post)
         {
             var query = _ctx.KsDustDevices.Where(dev => dev.ProjectId == Guid.Empty && dev.ProjectBindRequest != null)
+                .Include("Vendor")
+                .Include("Project")
                 .OrderBy(dev => dev.Id)
                 .Skip(post.offset)
                 .Take(post.limit);
@@ -931,6 +933,87 @@ namespace Dust.Platform.Web.Controllers
                 total,
                 rows
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult ProjectBindAudit(Guid deviceGuid)
+        {
+            var device = _ctx.KsDustDevices.FirstOrDefault(d => d.Id == deviceGuid);
+            if (device == null)
+            {
+                ModelState.AddModelError("error", @"未找到指定设备");
+                return View();
+            }
+
+            if (device.ProjectBindRequest == null)
+            {
+                ModelState.AddModelError("error", @"设备无工程绑定请求");
+                return View();
+            }
+
+            var project = _ctx.KsDustProjects.FirstOrDefault(p => p.Id == device.ProjectBindRequest);
+            if (project == null)
+            {
+                ModelState.AddModelError("error", @"绑定请求工程不存在");
+                return View();
+            }
+
+            if (project.Stopped)
+            {
+                ModelState.AddModelError("error", @"绑定请求工程已停工");
+                return View();
+            }
+
+            return View(new ProjectBindAuditViewModel
+            {
+                DeviceGuid = deviceGuid,
+                Device = new AuditDevice
+                {
+                    Name = device.Name,
+                    VendorName = device.Vendor.Name,
+                    Latitude = device.Latitude,
+                    Longitude = device.Longitude
+                },
+                Project = new RequestProject
+                {
+                    ProjectId = device.ProjectBindRequest.Value,
+                    ConstructionUnit = project.ConstructionUnit,
+                    ContractRecord = project.ContractRecord,
+                    DistrictName = project.District.Name,
+                    Enterprise = project.Enterprise.Name
+                }
+            });
+        }
+
+        [HttpPost]
+        public ActionResult ProjectBindAudit(ProjectBindAuditViewModel model)
+        {
+            try
+            {
+                var device = _ctx.KsDustDevices.FirstOrDefault(d => d.Id == model.DeviceGuid);
+                if (device == null)
+                {
+                    ModelState.AddModelError("Save", @"未找到指定设备。");
+                    return View(model);
+                }
+
+                if (device.ProjectBindRequest != model.Project.ProjectId)
+                {
+                    ModelState.AddModelError("Save", @"请求绑定工程ID错误。");
+                    return View(model);
+                }
+
+                device.ProjectId = model.Project.ProjectId;
+                _ctx.SaveChanges();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("Save", @"审核提交失败，请联系管理员。");
+                return View(model);
+            }
+
+            ModelState.AddModelError("Save", @"审核成功。");
+            return View();
         }
     }
 }

@@ -227,6 +227,7 @@
     <Compile Include="Models\Setting\DayWeatherInfo.cs" />
     <Compile Include="Models\Setting\DeviceMantanceViewModel.cs" />
     <Compile Include="Models\Setting\DeviceRegisterViewModel.cs" />
+    <Compile Include="Models\Setting\ProjectBindAuditViewModel.cs" />
     <Compile Include="Models\Setting\ProjectBindViewModel.cs" />
     <Compile Include="Models\Setting\SettingViewModel.cs" />
     <Compile Include="Models\Statistics\HistoryLineChartViewModel.cs" />
@@ -539,6 +540,7 @@
     <Content Include="Views\Profile\Project.cshtml" />
     <Content Include="Views\Setting\DeviceProjectBind.cshtml" />
     <Content Include="Views\Setting\DeviceProjectBindAudit.cshtml" />
+    <Content Include="Views\Setting\ProjectBindAudit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

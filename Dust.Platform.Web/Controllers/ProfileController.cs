@@ -56,45 +56,45 @@ namespace Dust.Platform.Web.Controllers
         [System.Web.Mvc.HttpPost]
         public ActionResult Edit([FromBody] ManualOuterProjectViewModel model)
         {
-            var project = _ctx.KsDustProjects.First(p => p.Id == model.Id.Value);
-            model.Trim();
-            var district = _ctx.Districts.FirstOrDefault(d => d.Id.ToString() == model.District);
-            if (district == null)
-            {
-                ModelState.AddModelError("Save", $@"不存在此区县：{model.District}");
-                return View("Project", model);
-            }
-            var enterprise = _ctx.Enterprises.FirstOrDefault(e => e.OuterId == model.EnterpriseId.Trim());
-            if (enterprise == null)
-            {
-                enterprise = new Enterprise
-                             {
-                                 Id      = Guid.NewGuid(),
-                                 Mobile  = model.Mobile,
-                                 Name    = model.Enterprise,
-                                 OuterId = model.EnterpriseId
-                             };
-                _ctx.Enterprises.Add(enterprise);
-            }
-            else
-            {
-                enterprise.Name = model.Enterprise;
-                enterprise.Mobile = model.Mobile;
-            }
-            project.DistrictId = district.Id;
-            project.ProjectType = model.ProjectType.Value;
-            project.ConstructionUnit = model.ConstructionUnit;
-            project.EnterpriseId = enterprise.Id;
-            project.ContractRecord = model.ContractRecord;
-            project.Address = model.Address;
-            project.CityArea = model.CityArea.Value;
-            project.SuperIntend = model.Superintend;
-            project.Mobile = model.Mobile;
-            project.OccupiedArea = model.OccupiedArea.Value;
-            project.Floorage = model.Floorage.Value;
-
+            LoadSelections();
             try
             {
+                var project = _ctx.KsDustProjects.First(p => p.Id == model.Id.Value);
+                model.Trim();
+                var district = _ctx.Districts.FirstOrDefault(d => d.Id.ToString() == model.District);
+                if (district == null)
+                {
+                    ModelState.AddModelError("Save", $@"不存在此区县：{model.District}");
+                    return View("Project", model);
+                }
+                var enterprise = _ctx.Enterprises.FirstOrDefault(e => e.OuterId == model.EnterpriseId.Trim());
+                if (enterprise == null)
+                {
+                    enterprise = new Enterprise
+                                 {
+                                     Id      = Guid.NewGuid(),
+                                     Mobile  = model.Mobile,
+                                     Name    = model.Enterprise,
+                                     OuterId = model.EnterpriseId
+                                 };
+                    _ctx.Enterprises.Add(enterprise);
+                }
+                else
+                {
+                    enterprise.Name   = model.Enterprise;
+                    enterprise.Mobile = model.Mobile;
+                }
+                project.DistrictId       = district.Id;
+                project.ProjectType      = model.ProjectType.Value;
+                project.ConstructionUnit = model.ConstructionUnit;
+                project.EnterpriseId     = enterprise.Id;
+                project.ContractRecord   = model.ContractRecord;
+                project.Address          = model.Address;
+                project.CityArea         = model.CityArea.Value;
+                project.SuperIntend      = model.Superintend;
+                project.Mobile           = model.Mobile;
+                project.OccupiedArea     = model.OccupiedArea.Value;
+                project.Floorage         = model.Floorage.Value;
                 _ctx.SaveChanges();
             }
             catch (Exception ex)

@@ -34,9 +34,14 @@ namespace Dust.Platform.Web.Controllers
             try
             {
                 var project = _ctx.KsDustProjects.First(p => p.Id == id);
+                if (project == null)
+                {
+                    LogService.Instance.Error($"{id}");
+                    LogService.Instance.Error($"工程为空");
+                }
                 var model = new ManualOuterProjectViewModel
                             {
-                                Id               = id,
+                                Id               = project.Id,
                                 District         = project.District.Name,
                                 ProjectType      = project.ProjectType,
                                 ConstructionUnit = project.ConstructionUnit,

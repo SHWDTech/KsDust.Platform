@@ -74,6 +74,7 @@ namespace Dust.Platform.Web.Controllers
             var total = query.Count();
             var projects = query.OrderBy(obj => obj.Id).Skip(model.offset).Take(model.limit).Select(prj => new
             {
+                prj.Id,
                 prj.Name,
                 prj.Address,
                 prj.ContractRecord,

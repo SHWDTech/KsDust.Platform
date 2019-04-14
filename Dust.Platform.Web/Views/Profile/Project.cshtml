@@ -7,10 +7,19 @@
     var districts = (List<SelectListItem>)ViewBag.Districts;
     var projectType = (List<SelectListItem>)ViewBag.ProjectType;
     var cityArea = (List<SelectListItem>)ViewBag.CityArea;
+    var actionName = string.Empty;
+    if (Model.Id == null)
+    {
+        actionName = "Project";
+    }
+    else
+    {
+        actionName = "Edit";
+    }
 }
 
 <div id="manualProjectRegisterForm">
-    @using (Ajax.BeginForm("Project",
+    @using (Ajax.BeginForm(actionName,
                                          new
                                          {
                                              @class = "form"

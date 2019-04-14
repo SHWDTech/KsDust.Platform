@@ -31,26 +31,34 @@ namespace Dust.Platform.Web.Controllers
         [System.Web.Mvc.HttpGet]
         public ActionResult Edit(Guid id)
         {
-            var project = _ctx.KsDustProjects.First(p => p.Id == id);
-            var model = new ManualOuterProjectViewModel
-                        {
-                            Id = id,
-                            District = project.District.Name,
-                            ProjectType = project.ProjectType,
-                            ConstructionUnit = project.ConstructionUnit,
-                            EnterpriseId = project.EnterpriseId.ToString(),
-                            Enterprise = project.Enterprise.Name,
-                            ContractRecord = project.ContractRecord,
-                            Project = project.Name,
-                            Address = project.Address,
-                            CityArea = project.CityArea,
-                            Superintend = project.SuperIntend,
-                            Mobile = project.Mobile,
-                            OccupiedArea = project.OccupiedArea,
-                            Floorage = project.Floorage
-                        };
-            LoadSelections();
-            return View("Project", model);
+            try
+            {
+                var project = _ctx.KsDustProjects.First(p => p.Id == id);
+                var model = new ManualOuterProjectViewModel
+                            {
+                                Id               = id,
+                                District         = project.District.Name,
+                                ProjectType      = project.ProjectType,
+                                ConstructionUnit = project.ConstructionUnit,
+                                EnterpriseId     = project.EnterpriseId.ToString(),
+                                Enterprise       = project.Enterprise.Name,
+                                ContractRecord   = project.ContractRecord,
+                                Project          = project.Name,
+                                Address          = project.Address,
+                                CityArea         = project.CityArea,
+                                Superintend      = project.SuperIntend,
+                                Mobile           = project.Mobile,
+                                OccupiedArea     = project.OccupiedArea,
+                                Floorage         = project.Floorage
+                            };
+                LoadSelections();
+                return View("Project", model);
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Error($"加载工程失败", ex);
+                throw;
+            }
         }
 
         [System.Web.Mvc.HttpPost]

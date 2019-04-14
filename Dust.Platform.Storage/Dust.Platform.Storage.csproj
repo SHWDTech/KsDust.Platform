@@ -218,12 +218,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WDYunPlatform\SHWDTech.Platform.StorageConstrains\SHWDTech.Platform.StorageConstrains.csproj">
-      <Project>{6b3823b8-0540-43af-9f41-498287d2dd4e}</Project>
-      <Name>SHWDTech.Platform.StorageConstrains</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="AuthMigrations\201704120800384_InitialCreate.resx">
       <DependentUpon>201704120800384_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
@@ -278,6 +272,12 @@
     <EmbeddedResource Include="Migrations\201807080806462_AddDeviceBindProjectRequest.resx">
       <DependentUpon>201807080806462_AddDeviceBindProjectRequest.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\WDYunPlatform\SHWDTech.Platform.StorageConstrains\SHWDTech.Platform.StorageConstrains.csproj">
+      <Project>{6b3823b8-0540-43af-9f41-498287d2dd4e}</Project>
+      <Name>SHWDTech.Platform.StorageConstrains</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

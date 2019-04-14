@@ -37,7 +37,11 @@
                       .Column("联系人", "SuperIntend")
                       .Column("联系电话", "Mobile")
                       .Column("占地面积", "OccupiedArea")
-                      .Column("施工面积", "Floorage"))
+                      .Column("施工面积", "Floorage")
+                      .Column("操作")
+                      .Apply(ColumnOption.width, "210")
+                      .Apply(ColumnOption.formatter, "projectsEditOperator")
+                      .Apply(ColumnOption.events, "projectsEditEvents")))
             </div>
         </div>
     }
@@ -45,4 +49,15 @@
 <script type="text/javascript">
     $('#districtSelecter').select2();
     $('#projectSelecter').select2();
+    var projectsEditOperator = function (e, row, index) {
+        return [
+            '<a class="edit" href="javascript:void(0)" title="编辑">编辑</a>',
+        ].join('');
+    }
+
+    window.projectsEditEvents = {
+        'click .edit': function (e, value, row) {
+            window.tabPopUp(null, null, { id: row.Id, nodetype:'project', ajaxurl:'Profile/Edit/' + row.Id, name:"编辑工程信息 - " + row.Name, tabTailfix:'' });
+        }
+    };
 </script>

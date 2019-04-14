@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Dust.Platform.Storage.Model;
 
 namespace Dust.Platform.Web.Models
 {
     public class ManualOuterProjectViewModel
     {
+        public Guid? Id { get; set; }
+
         [Display(Name = "区县信息")]
         [Required(ErrorMessage = "区县信息不能为空。")]
         public string District { get; set; }

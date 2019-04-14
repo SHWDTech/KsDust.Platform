@@ -28,6 +28,86 @@ namespace Dust.Platform.Web.Controllers
             return View();
         }
 
+        [System.Web.Mvc.HttpGet]
+        public ActionResult Edit(Guid id)
+        {
+            var project = _ctx.KsDustProjects.First(p => p.Id == id);
+            var model = new ManualOuterProjectViewModel
+                        {
+                            Id = id,
+                            District = project.District.Name,
+                            ProjectType = project.ProjectType,
+                            ConstructionUnit = project.ConstructionUnit,
+                            EnterpriseId = project.EnterpriseId.ToString(),
+                            Enterprise = project.Enterprise.Name,
+                            ContractRecord = project.ContractRecord,
+                            Project = project.Name,
+                            Address = project.Address,
+                            CityArea = project.CityArea,
+                            Superintend = project.SuperIntend,
+                            Mobile = project.Mobile,
+                            OccupiedArea = project.OccupiedArea,
+                            Floorage = project.Floorage
+                        };
+            LoadSelections();
+            return View("Project", model);
+        }
+
+        [System.Web.Mvc.HttpGet]
+        public ActionResult Edit([FromBody] ManualOuterProjectViewModel model)
+        {
+            var project = _ctx.KsDustProjects.First(p => p.Id == model.Id.Value);
+            model.Trim();
+            var district = _ctx.Districts.FirstOrDefault(d => d.Id.ToString() == model.District);
+            if (district == null)
+            {
+                ModelState.AddModelError("Save", $@"不存在此区县：{model.District}");
+                return View("Project", model);
+            }
+            var enterprise = _ctx.Enterprises.FirstOrDefault(e => e.OuterId == model.EnterpriseId.Trim());
+            if (enterprise == null)
+            {
+                enterprise = new Enterprise
+                             {
+                                 Id      = Guid.NewGuid(),
+                                 Mobile  = model.Mobile,
+                                 Name    = model.Enterprise,
+                                 OuterId = model.EnterpriseId
+                             };
+                _ctx.Enterprises.Add(enterprise);
+            }
+            else
+            {
+                enterprise.Name = model.Enterprise;
+                enterprise.Mobile = model.Mobile;
+            }
+            project.DistrictId = district.Id;
+            project.ProjectType = model.ProjectType.Value;
+            project.ConstructionUnit = model.ConstructionUnit;
+            project.EnterpriseId = enterprise.Id;
+            project.ContractRecord = model.ContractRecord;
+            project.Address = model.Address;
+            project.CityArea = model.CityArea.Value;
+            project.SuperIntend = model.Superintend;
+            project.Mobile = model.Mobile;
+            project.OccupiedArea = model.OccupiedArea.Value;
+            project.Floorage = model.Floorage.Value;
+
+            try
+            {
+                _ctx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                var errorCode = $"{DateTime.Now: yyyyMMddHHmmss}";
+                LogService.Instance.Error($"更新工程成功，错误号：{errorCode}", ex);
+                ModelState.AddModelError("Save", $@"更新工程成功，错误号：{errorCode}");
+                return View("Project", model);
+            }
+            ModelState.AddModelError("Save", @"更新工程成功");
+            return View("Project", model);
+        }
+
         [System.Web.Mvc.HttpPost]
         public ActionResult Project([FromBody]ManualOuterProjectViewModel model)
         {

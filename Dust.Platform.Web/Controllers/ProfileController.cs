@@ -28,6 +28,7 @@ namespace Dust.Platform.Web.Controllers
             return View();
         }
 
+        [System.Web.Mvc.Route("id")]
         [System.Web.Mvc.HttpGet]
         public ActionResult Edit(Guid id)
         {

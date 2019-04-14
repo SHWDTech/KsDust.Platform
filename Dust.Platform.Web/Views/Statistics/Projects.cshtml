@@ -57,7 +57,7 @@
 
     window.projectsEditEvents = {
         'click .edit': function (e, value, row) {
-            window.tabPopUp(null, null, { id: row.Id, nodetype:'project', ajaxurl:'Profile/Edit/' + row.Id, name:"编辑工程信息 - " + row.Name, tabTailfix:'' });
+            window.tabPopUp(null, null, { id: row.Id, nodetype:'project', ajaxurl:'/Profile/Edit/' + row.Id, name:"编辑工程信息 - " + row.Name, tabTailfix:'' });
         }
     };
 </script>

@@ -53,7 +53,7 @@ namespace Dust.Platform.Web.Controllers
             return View("Project", model);
         }
 
-        [System.Web.Mvc.HttpGet]
+        [System.Web.Mvc.HttpPost]
         public ActionResult Edit([FromBody] ManualOuterProjectViewModel model)
         {
             var project = _ctx.KsDustProjects.First(p => p.Id == model.Id.Value);

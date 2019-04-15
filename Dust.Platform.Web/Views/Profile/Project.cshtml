@@ -8,7 +8,7 @@
     var projectType = (List<SelectListItem>)ViewBag.ProjectType;
     var cityArea = (List<SelectListItem>)ViewBag.CityArea;
     var actionName = string.Empty;
-    if (Model.Id == null)
+    if (Model?.Id == null)
     {
         actionName = "Project";
     }
@@ -121,7 +121,7 @@
                 </tr>
                 <tr>
                     <td colspan="4">
-                        @if (Model.Id == null)
+                        @if (Model?.Id == null)
                         {
                             <input type="submit" value="提交注册" class="btn btn-primary" />
                         }

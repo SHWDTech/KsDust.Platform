@@ -38,7 +38,7 @@ namespace Dust.Platform.Web.Controllers
                             District         = project.District.Name,
                             ProjectType      = project.ProjectType,
                             ConstructionUnit = project.ConstructionUnit,
-                            EnterpriseId     = project.EnterpriseId.ToString(),
+                            EnterpriseId     = project.Enterprise.OuterId,
                             Enterprise       = project.Enterprise.Name,
                             ContractRecord   = project.ContractRecord,
                             Project          = project.Name,
